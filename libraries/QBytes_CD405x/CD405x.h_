@@ -1,0 +1,32 @@
+/*
+  Test.h - Test library for Wiring - description
+  Copyright (c) 2006 John Doe.  All right reserved.
+*/
+
+// ensure this library description is only included once
+#ifndef CD405x_h
+#define CD405x_h
+
+// include types & constants of Wiring core API
+#if defined(ARDUINO) && ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
+
+
+// library interface description
+class CD405x{
+  // user-accessible "public" interface
+  public:
+	CD405x(void);
+	CD405x(int _pinA, int _pinB, int _pinC);
+	void setPins(int _pinA, int _pinB, int _pinC);
+	int analogRead(int _pinX);
+
+  // library-accessible "private" interface
+  private:
+
+};
+
+#endif //CD405x_h

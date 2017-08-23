@@ -1,0 +1,3 @@
+SerialNo,Pass/Fail,Hz ,Socket,ComPort,Date,Time,Flash,f/w version,SVid,Acq Time,Bit Sync,Phase Error,TCXO Offset,TCXO Drift,CNR Mean, CNR Sigma,CTTFF,Reset,NMEA,Total Time
+,Pass,N/A,,COM10,8/18/2017,8:10:14 PM,[AMD] AM29DL640D/G, AM41DL6408G, S29JL064H,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,85
+,Pass,N/A,,COM10,8/18/2017,11:19:51 PM,[AMD] AM29DL640D/G, AM41DL6408G, S29JL064H,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,85

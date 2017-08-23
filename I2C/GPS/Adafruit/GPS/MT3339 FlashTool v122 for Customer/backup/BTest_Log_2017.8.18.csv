@@ -1,0 +1,10 @@
+SerialNo,Pass/Fail,Hz ,Socket,ComPort,Date,Time,Flash,f/w version,SVid,Acq Time,Bit Sync,Phase Error,TCXO Offset,TCXO Drift,CNR Mean, CNR Sigma,CTTFF,Reset,NMEA,Total Time
+,Fail(ComPort),N/A,,COM10,8/18/2017,7:20:59 PM,Failed to open the COM port,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0
+,Fail(ComPort),N/A,,COM10,8/18/2017,7:21:06 PM,Failed to open the COM port,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0
+,Fail(ComPort),N/A,,COM10,8/18/2017,7:22:36 PM,Failed to open the COM port,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0
+,Fail(ComPort),N/A,,COM10,8/18/2017,7:22:59 PM,Failed to open the COM port,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0
+,Fail(Download),N/A,,COM10,8/18/2017,7:24:25 PM,DL_HANDLE error code,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,2
+,Fail(Download),N/A,,COM10,8/18/2017,7:25:25 PM,DL_HANDLE error code,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,1
+,Pass,N/A,,COM10,8/18/2017,7:29:34 PM,[AMD] AM29DL640D/G, AM41DL6408G, S29JL064H,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,89
+,Fail(ComPort),N/A,,COM10,8/18/2017,7:59:42 PM,Failed to open the COM port,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0
+,Pass,N/A,,COM10,8/18/2017,8:01:40 PM,[AMD] AM29DL640D/G, AM41DL6408G, S29JL064H,N/A,29,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,107

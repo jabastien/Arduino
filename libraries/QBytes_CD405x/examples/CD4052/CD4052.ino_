@@ -1,0 +1,204 @@
+
+int pinA=4;
+int pinB=5;
+int pinC=6;
+/*
+ * 
+ * 
+ */
+void setup() {
+  // put your setup code here, to run once:
+
+  // Setup communication
+  Serial.begin(38400);
+  Serial.println("Hello!, testing CD4051 & CD4052");
+
+  //Setup Analog input
+  analogReference(DEFAULT); // VCC
+  //0 to 1023
+
+
+  // Setup Digital output
+  pinMode(pinA, OUTPUT);       // D4 - sets the digital pin as output
+  digitalWrite(pinA, LOW);// sets the pin to 0-low
+  pinMode(pinB, OUTPUT);      // D4 - sets the digital pin as output
+  digitalWrite(pinB, LOW);// sets the pin to 0-low
+  pinMode(pinC, OUTPUT);      // D4 - sets the digital pin as output
+  digitalWrite(pinC, LOW);// sets the pin to 0-low 
+}
+
+
+
+ String format1 = "%1d";
+ String format2 = "%2d";
+ String format3 = "%3d";
+ String format4 = "%4d";
+ String format5 = "%5d";
+ String format6 = "%6d";
+ String fmt;
+ 
+char c[10];        // long enough to hold complete integer string
+//  printInt(1);
+//  Serial.print(" _ ");
+//  printFloat(11.123d,3,2);
+//  Serial.print(" _ ");
+//  printFloat(11.199d,4,1);
+
+/*
+ * 
+ * 
+ */
+void printInt(int n, String format){
+  char charBuf[20];
+  format.toCharArray(charBuf,20);
+//  int m = sprintf(c, " Value: %5d ", n);    // build integer string using C integer formatters  (m is length, and not used in this code)
+  int m = sprintf(c, charBuf, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
+  Serial.print(c);   
+}
+
+/*
+ * 
+ * 
+ */
+void printFloat(float d, int whole, int decimal ){
+
+  dtostrf(d,whole,decimal,c);                          // -n.nnn Use this for a consistent float format
+  Serial.print(c);  
+}
+
+int ADC0=0;
+int ADC1=0;
+int ADC2=0;
+int ADC3=0;
+
+int ADC6_0x = 0;
+int ADC7_0y = 0;
+int ADC6_1x = 0;
+int ADC7_1y = 0;
+int ADC6_2x = 0;
+int ADC7_2y = 0;
+int ADC6_3x = 0;
+int ADC7_3y = 0;
+
+int pinSwitchs = 0b00000000;
+
+int looping = 9;
+
+/*
+ * Set pins
+ */
+void setPins(int A, int B, int C){
+    digitalWrite(pinA, A);// A - sets the pin
+    digitalWrite(pinB, B);// B - sets the pin
+    digitalWrite(pinC, C);// C - sets the pin
+}
+
+/*
+ * 
+ * 
+ */
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  ADC0 = analogRead(A0);
+  ADC1 = analogRead(A1);
+  ADC2 = analogRead(A2);
+  ADC3 = analogRead(A3);
+
+
+switch (looping){
+  case 0:
+  case 4:
+  {
+    setPins(0, 0, looping >= 4); // modulus for Odd/Even (0 or 1)(low or high pin)
+
+    ADC6_0x = analogRead(A6);
+    ADC7_0y = analogRead(A7);
+
+    break;   
+  }
+
+  case 1:
+  case 5:
+  {
+    setPins(1, 0, looping >= 4); // modulus for Odd/Even (0 or 1)(low or high pin)
+
+    ADC6_1x = analogRead(A6);
+    ADC7_1y = analogRead(A7);         
+     
+    break;   
+  }
+  
+  case 2:
+  case 6:
+  {
+    setPins(0, 1, looping >= 4); // modulus for Odd/Even (0 or 1)(low or high pin)
+
+    ADC6_2x = analogRead(A6);
+    ADC7_2y = analogRead(A7);      
+    
+    break;   
+  }
+  case 3:
+  case 7:
+  {
+    setPins( 1, 1, looping >= 4); // modulus for Odd/Even (0 or 1)(low or high pin)
+
+    ADC6_3x = analogRead(A6);
+    ADC7_3y = analogRead(A7);      
+      
+    break;   
+  }
+  default:
+  {
+    looping = 0;  
+    Serial.println("    A0   A1   A2   A3 A60X A70Y A61X A71Y A62X A72Y A63X A73Y x76543210"); 
+    Serial.println("  ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== 1========");     
+  }
+}
+
+  // Get the switch values
+  byte pinmask = ~(1<<looping); 
+  byte readmask = (digitalRead(8)<<looping); 
+//  byte switchmask = ~pinmask
+//  byte mask = pinmask | pinSwitchs;
+  pinSwitchs = (pinSwitchs & pinmask) | readmask;
+
+  // Print looping value
+  printInt(looping,format1);
+
+  // Print ADC0-ADC4
+  String format = format5;
+  printInt(ADC0,format);
+  printInt(ADC1,format);
+  printInt(ADC2,format);
+  printInt(ADC3,format);
+
+  // Print ADC mux (A6-A7 xy 0-4)
+  printInt(ADC6_0x,format);
+  printInt(ADC7_0y,format);
+  printInt(ADC6_1x,format);
+  printInt(ADC7_1y,format);
+  printInt(ADC6_2x,format);
+  printInt(ADC7_2y,format);
+  printInt(ADC6_3x,format);
+  printInt(ADC7_3y,format);
+
+//  // Print switches
+  Serial.print(" ");
+//  Serial.print(" Pin ");  
+//  Serial.print(pinmask + 0x100, BIN);
+//  Serial.print(" Mask ");  
+//  Serial.print(readmask + 0x100, BIN);
+//  Serial.print(" Switch ");  
+  Serial.print(pinSwitchs + 0x100, BIN);
+  
+  
+  // Increment looping
+  looping++;
+  if (looping >=8){
+    looping = 0;  
+    }
+      
+  Serial.println();
+}
