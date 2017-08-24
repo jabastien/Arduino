@@ -9,14 +9,6 @@
 #endif
 
 #include "CD4052.h"
-
-#ifndef CD405x
-#define CD405x
-	int addrA;
-	int addrB;
-	int adcX;
-	int adcY;	
-#endif //CD405x
 	
 /*
  * 
@@ -60,15 +52,15 @@ void CD4052::setChannel(int channel){
 	  }
 	  case 1:
 	  {
-			digitalWrite(addrA, 0);// A - sets the pin
-			digitalWrite(addrB, 1);// B - sets the pin        
+			digitalWrite(addrA, 1);// A - sets the pin
+			digitalWrite(addrB, 0);// B - sets the pin        
 		 
 		break;   
 	  }
 	  case 2:
 	  {
-			digitalWrite(addrA, 1);// A - sets the pin
-			digitalWrite(addrB, 0);// B - sets the pin     
+			digitalWrite(addrA, 0);// A - sets the pin
+			digitalWrite(addrB, 1);// B - sets the pin     
 		
 		break;   
 	  }
@@ -98,4 +90,18 @@ int CD4052::analogReadX(){
  */
 int CD4052::analogReadY(){
 	return analogRead(adcY);
+}
+
+/*
+ * 
+ */
+int CD4052::digitalReadX(){
+	return digitalRead(adcX);
+}
+
+/*
+ * 
+ */
+int CD4052::digitalReadY(){
+	return digitalRead(adcY);
 }

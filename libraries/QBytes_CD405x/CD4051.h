@@ -4,8 +4,8 @@
 */
 
 // ensure this library description is only included once
-#ifndef CD4052_h
-#define CD4052_h
+#ifndef CD4051_h
+#define CD4051_h
 
 // include types & constants of Wiring core API
 #if defined(ARDUINO) && ARDUINO >= 100
@@ -16,23 +16,21 @@
 
 
 // library interface description
-class CD4052{
+class CD4051{
   // user-accessible "public" interface
   public:
-	CD4052(void);
-	CD4052(int _addrA, int _addrB, int _pinX, int _pinY);
+	CD4051(void);
+	CD4051(int _addrA, int _addrB, int _addrC, int _pinC);
 	void setChannel(int channel);
-	int analogReadX();
-	int analogReadY();
-	int digitalReadX();
-	int digitalReadY();
-		
+	int analogReadC();
+	int digitalReadC();
+
   // library-accessible "private" interface
   private:
 	int addrA;
 	int addrB;
-	int adcX;
-	int adcY;
+	int addrC;
+	int pinC;	
 };
 
-#endif //CD4052_h
+#endif //CD4051_h

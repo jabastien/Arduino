@@ -24,30 +24,15 @@ void setup() {
  * 
  */
 void loop() {
-
-  cd4052.setChannel(0);
-  Serial.print(cd4052.analogReadX());
-  Serial.print(" ");
-  Serial.print(cd4052.analogReadY());
-  Serial.print(" ");
-
-  cd4052.setChannel(1);
-  Serial.print(cd4052.analogReadX());
-  Serial.print(" ");
-  Serial.print(cd4052.analogReadY());
-  Serial.print(" ");
-
-  cd4052.setChannel(2);
-  Serial.print(cd4052.analogReadX());
-  Serial.print(" ");
-  Serial.print(cd4052.analogReadY());
-  Serial.print(" ");
-
-  cd4052.setChannel(3);
-  Serial.print(cd4052.analogReadX());
-  Serial.print(" ");
-  Serial.print(cd4052.analogReadY());
-  Serial.print(" ------- ");
       
-  Serial.println();
+  // Increment looping
+  for (int looping = 0; looping <= 4; looping ++){
+	  cd4052.setChannel(looping);
+	  Serial.print(cd4052.analogReadX());
+	  Serial.print(" ");
+	  Serial.print(cd4052.analogReadY());
+	  Serial.print(" "); 
+    }
+	
+  Serial.println("=====");
 }
