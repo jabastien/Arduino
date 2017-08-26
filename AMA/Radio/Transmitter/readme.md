@@ -24,15 +24,15 @@
 | Arduino Pin |  NRF24 Pin  | NRF24 Pin   | Arduino Pin |
 | ----- | ------ | ------ | ------ |
 | GND   | GND    | VCC    | 3v3    |
-| D9    | CE     | CSN    | D10     |
+| D9    | CE     | CSN    | D10    |
 | D13   | SCK    | MOSI   | D11    |
 | D12   | MISO   | IRQ    | N/C    |
 
 
 
 > **Transmitter setup**
->  250K increase range 
->  abc
+> - 250K increase range 
+> - abc
 
 **Free Software, Hell Yeah!**
 
