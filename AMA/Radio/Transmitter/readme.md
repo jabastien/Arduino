@@ -16,7 +16,7 @@
 | CD4051 #1 (trims)| D7     | ADC2  | Pitch    |
 | CD4051 #2 (switch)| D8    | ADC1  | Yaw      |
 | Nrf24 - CE       | D9     | ADC0  | Throttle |
-| Nrf24 - D10      | D10    | Aref  | 5v0      |
+| Nrf24 - CSN      | D10    | Aref  | 5v0      |
 | Nrf24 - MOSI     | D11    | 3v3   | N/C      |
 | Nrf24 - MISO     | D12    | D13   | Nrf24 - CSN|
 
