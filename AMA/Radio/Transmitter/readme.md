@@ -30,6 +30,7 @@
 
 
 
-> **Transmitter setup**
+> **Transmitter performance tuned setup**
 > - 250K increase range 
-> - abc   
+> - AutoAck = false 
+> - Modify pipeOut to be unique for your codebase
