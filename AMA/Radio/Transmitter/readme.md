@@ -32,16 +32,15 @@
 
 > **Transmitter performance tuned setup**
 > - AutoAck = false 
->> - abc
 > - Max power 
-> - - setPALevel( RF24_PA_MAX ) ; 
+>> - setPALevel( RF24_PA_MAX ) ; 
 > - Min speed (for better range I presume)
-> - - setDataRate( RF24_250KBPS ) ; 
+>> - setDataRate( RF24_250KBPS ) ; 
 > - 8 bits CRC
-> - - setCRCLength( RF24_CRC_8 ) ; 
+>> - setCRCLength( RF24_CRC_8 ) ; 
 > - Disable dynamic payloads 
-> -  -write_register(DYNPD,0); 
+>> - write_register(DYNPD,0); 
 > - increase the delay between retries & # of retries 
-> - - setRetries(15,15);
+>> - setRetries(15,15);
 
 > - Modify pipeOut to be unique for your codebase
