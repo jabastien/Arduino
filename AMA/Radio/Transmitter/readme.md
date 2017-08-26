@@ -32,8 +32,9 @@
 
 > **Transmitter performance tuned setup**
 > - AutoAck = false 
+>> - abc
 > - Max power 
-> -- setPALevel( RF24_PA_MAX ) ; 
+> - - setPALevel( RF24_PA_MAX ) ; 
 > - Min speed (for better range I presume)
 > - - setDataRate( RF24_250KBPS ) ; 
 > - 8 bits CRC
