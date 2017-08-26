@@ -5,16 +5,7 @@
 /* First we include the libraries. Download it from 
    my webpage if you donw have the NRF24 library */
 
-//// https://playground.arduino.cc/Main/SoftwareI2CLibrary
-//// https://www.arduino.cc/en/Reference/PortManipulation
-#define SCL_PIN 2 
-#define SCL_PORT PORTD 
-#define SDA_PIN 3 
-#define SDA_PORT PORTD 
-#include <SoftI2CMaster.h>
-
-//#include <SPI.h>
-
+#include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
 
@@ -82,10 +73,7 @@ void setup()
   radio.setAutoAck(false);
   radio.setDataRate(RF24_250KBPS);
   radio.openWritingPipe(pipeOut);
-  resetData();
-
-  i2c_init();
-  
+  resetData();  
 }
 
 /**************************************************/
