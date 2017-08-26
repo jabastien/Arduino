@@ -20,7 +20,7 @@
 | Nrf24 - MOSI     | D11    | 3v3   | N/C      |
 | Nrf24 - MISO     | D12    | D13   | Nrf24 - CSN|
 
-### NRF24 with PA and antenna
+### NRF24 with PA and antenna Pinouts
 | Arduino Pin |  NRF24 Pin  | NRF24 Pin   | Arduino Pin |
 | ----- | ------ | ------ | ------ |
 | GND   | GND    | VCC    | 3v3    |
