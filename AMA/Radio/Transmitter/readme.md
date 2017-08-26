@@ -28,15 +28,24 @@ Dillinger is currently extended with the following plugins. Instructions on how 
 | Gnd   | Gnd    | 5v0   | VOut     |
 |       | D2     | ADC7  | CD4052-Y |
 |       | D3     | ADC6  | CD4052-X |
-|       | D4     | SDC   | LCD SDC  |
-|       | D5     | SDA   | LCD SDA  |
-|       | D6     | ADC3  | Role     |
-|       | D7     | ADC2  | Pitch    |
-|       | D8     | ADC1  | Yaw      |
-| Nrf24 -       | D9     | ADC0  | Throttle |
-| Nrf24 -       | D10    | Aref  | 5v0      |
-| Nrf24 -       | D11    | 3v3   | NC       |
-| Nrf24 -       | D12    | D13   | Nrf24 - CSN  |
+| CD4051-A       | D4     | SDC   | LCD SDC  |
+| CD4051-B       | D5     | SDA   | LCD SDA  |
+| CD4051-C       | D6     | ADC3  | Role     |
+| CD4051-2 (btns)| D7     | ADC2  | Pitch    |
+| CD4051-1 (switch)| D8     | ADC1  | Yaw      |
+| Nrf24 - CE     | D9     | ADC0  | Throttle |
+| Nrf24 - D10    | D10    | Aref  | 5v0      |
+| Nrf24 - MOSI   | D11    | 3v3   | NC       |
+| Nrf24 - MISO   | D12    | D13   | Nrf24 - CSN  |
+
+# NRF24 with PA and antenna
+| Arduino Pin |  NRF24 Pin  | NRF24 Pin   | Arduino Pin |
+| ----- | ------ | ------ | ------ |
+| GND   | GND    | VCC    | 3v3    |
+| D9    | CE     | CSN    | D10     |
+| D13   | SCK    | MOSI   | D11    |
+| D12   | MISO   | IRQ    | N/C    |
+
 
 
 >  a

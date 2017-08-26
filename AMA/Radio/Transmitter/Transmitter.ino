@@ -19,7 +19,7 @@ String versionNum = "v1.01";
   
 const uint64_t pipeOut = 0xE8E8F0F0E1LL;
 
-RF24 radio(9, 10); // select  CSN  pin
+RF24 radio(9, 10); // select  CE & CSN  pin
 
 int debugPin=8; // D8
 
