@@ -32,9 +32,4 @@
 
 > **Transmitter setup**
 > - 250K increase range 
-> - abc
-
-**Free Software, Hell Yeah!**
-
-Online GitHub md editor: http://dillinger.io/
-   
+> - abc   
