@@ -38,11 +38,11 @@
 
 | Connect |  Pin  | Pin   | Connect |
 | ----- | ------ | ------ | ------ |
-| Buzzer           | TX     | Vin   | 7-12VDC  |
-| LED              | RX     | Gnd   | Gnd      |
-| Resister pull-up | Reset  | Reset | Resister pull-up      |
-| Gnd              | Gnd    | 5v0   | VOut     |
-| Open             | D2     | ADC7  | CD4052-Y |
+| Bluetooth RX     | TX     | Vin   | 7-12VDC  |
+| Bluetooth TX     | RX     | Gnd   | Gnd      |
+| Pull-up          | Reset  | Reset | Pull-up  |
+| Gnd              | Gnd    | 5v0   | 5V t     |
+| Buzzer/LED       | D2     | ADC7  | CD4052-Y |
 | CD4051/CD4052-A  | D3     | ADC6  | CD4052-X |
 | CD4051/CD4052-B  | D4     | SDC   | LCD SDC  |
 | CD4051       -C  | D5     | SDA   | LCD SDA  |
