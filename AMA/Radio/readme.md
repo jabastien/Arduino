@@ -10,6 +10,9 @@ Transmitter
 - Gimbal control (uses 3 of the analog)
 - Flight timer
 - DTE timer (must be calculated)
+- Init setup for:
+  - max/min values
+  - reverse analog (transmitter input only)
 
 Receiver
 ========
