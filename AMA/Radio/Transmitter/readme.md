@@ -40,7 +40,7 @@
 | ----- | ------ | ------ | ------ |
 | Buzzer           | TX     | Vin   | 7-12VDC  |
 | LED              | RX     | Gnd   | Gnd      |
-| Resister pull-up | Reset  | Reset | N/C      |
+| Resister pull-up | Reset  | Reset | Resister pull-up      |
 | Gnd              | Gnd    | 5v0   | VOut     |
 | Open             | D2     | ADC7  | CD4052-Y |
 | CD4051/CD4052-A  | D3     | ADC6  | CD4052-X |
