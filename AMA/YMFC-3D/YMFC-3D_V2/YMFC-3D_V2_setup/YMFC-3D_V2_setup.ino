@@ -731,7 +731,12 @@ void wait_sticks_zero(){
 void wait_for_receiver(){
   byte zero = 0;
   timer = millis() + 10000;
+  Serial.println(timer);
+  Serial.println(millis());
+  Serial.println(zero);
+  
   while(timer > millis() && zero < 15){
+    
     if(receiver_input_channel_1 < 2100 && receiver_input_channel_1 > 900)zero |= 0b00000001;
     if(receiver_input_channel_2 < 2100 && receiver_input_channel_2 > 900)zero |= 0b00000010;
     if(receiver_input_channel_3 < 2100 && receiver_input_channel_3 > 900)zero |= 0b00000100;
@@ -739,12 +744,13 @@ void wait_for_receiver(){
     delay(500);
     Serial.print(F("."));
   }
-  if(zero == 0){
-    error = 1;
-    Serial.println(F("."));
-    Serial.println(F("No valid receiver signals found!!! (ERROR 1)"));
-  }
-  else Serial.println(F(" OK"));
+//  if(zero == 0){
+//    error = 1;
+//    Serial.println(F("."));
+//    Serial.println(F("No valid receiver signals found!!! (ERROR 1)"));
+//  }
+//  else 
+  Serial.println(F(" OK"));
 }
 
 //Register the min and max receiver values and exit when the sticks are back in the neutral position

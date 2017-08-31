@@ -10,7 +10,7 @@
 #include <Wire.h>                  // zahrnutie kniznic do programu
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x27,16,2);      // inicializacia kniznice (adresa, znaky, riadky)
+LiquidCrystal_I2C lcd(0x27,20, 4);      // inicializacia kniznice (adresa, znaky, riadky)
 
 
 unsigned long i,                       // premenna cyklu
