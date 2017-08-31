@@ -21,7 +21,7 @@
 | >Channel Select   | 
 | >EXPO  | 
 | >Curves   | 
-| >1st Time Run again   | 
+| >Setup   | 
 | >Reset Factory | 
 
 | Model |  
@@ -42,13 +42,13 @@
 | LED              | RX     | Gnd   | Gnd      |
 | N/C              | Reset  | Reset | N/C      |
 | Gnd              | Gnd    | 5v0   | VOut     |
-| OPen             | D2     | ADC7  | CD4052-Y |
+| Open             | D2     | ADC7  | CD4052-Y |
 | CD4051/CD4052-A  | D3     | ADC6  | CD4052-X |
 | CD4051/CD4052-B  | D4     | SDC   | LCD SDC  |
-| CD4051-C         | D5     | SDA   | LCD SDA  |
-| CD4051 #3 (Menu?)| D6     | ADC3  | Role     |
-| CD4051 #1 (trims)| D7     | ADC2  | Pitch    |
-| CD4051 #2 (switch)| D8    | ADC1  | Yaw      |
+| CD4051       -C  | D5     | SDA   | LCD SDA  |
+| CD4051 #1 (Switch)| D6    | ADC3  | Role     |
+| CD4051 #2 (Trims)| D7     | ADC2  | Pitch    |
+| CD4051 #3 (Menu) | D8     | ADC1  | Yaw      |
 | Nrf24 - CE       | D9     | ADC0  | Throttle |
 | Nrf24 - CSN      | D10    | Aref  | 5v0      |
 | Nrf24 - MOSI     | D11    | 3v3   | N/C      |
