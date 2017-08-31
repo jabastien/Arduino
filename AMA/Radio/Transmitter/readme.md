@@ -79,14 +79,20 @@
 
 > - Modify pipeOut to be unique for your codebase
 
-Here is what I have learned from using these:
-1. careful about the power supply: 
+Here is what I'm using:
+1. Power supply:
+
       a. decouple your LDO properly(it needs 1-2uF ceramic, not 100n + 100u electrolytic!). 
+      
       b. use a decoupling cap next to the module (1-2 uF ceramic).
+      
       c. in-line choke (coil) for 3v3 line.
-2. use a linear instead of a switching power supply
-3. Don’t use polling over SPI to check if there is a received packet like most of the libs out there do. This increases the noise. Use the IRQ pin
+      
+2. Use a linear instead of a switching power supply
+3. Don’t use polling over SPI to check if there is a received packet like most of the libs out there do. This increases the noise. Use the IRQ pin.
 4. 250Kbps does wonders
 5. Careful about cheap connectors, solder it if you can.
 6. A big ground near the module is preferred, like putting it in a metal box with a good contact to antenna ground.
-7. Don’t use long wires to the module, specially cheap stuff. See here: http://www.electrobob.com/bad-wires/
+7. Don’t use long wires to the module, specially cheap stuff.
+
+See here: http://www.electrobob.com/bad-wires/
