@@ -26,6 +26,9 @@ Transmitter
 - Init setup for:
   - max/min values
   - reverse analog (transmitter input only)
+- Channel
+  - scan
+  - select
 
 Receiver
 ========
