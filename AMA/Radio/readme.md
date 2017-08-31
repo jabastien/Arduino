@@ -8,7 +8,8 @@ Transmitter
 - 5 Menu (Up, Down, Left, Right & Enter)
 - GPS
 - Gimbal control (uses 3 of the analog)
-
+- Flight timer
+- DTE timer (must be calculated)
 
 Receiver
 ========
