@@ -26,7 +26,8 @@ Receiver
 Controller
 ==========
 - GPS
-- Headless (mission)
+  - Headless (mission)
+  - Mission
 - Auto takeoff (switch)
 - Auto return (switch)
 - Auto Land (switch)
