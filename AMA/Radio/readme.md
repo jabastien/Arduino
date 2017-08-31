@@ -1,0 +1,38 @@
+Requirements:
+
+Transmitter
+===========
+- 8 Anaglog
+- 8 Digital
+- 8 Trim (fine adj stored on model)
+- 5 Menu (Up, Down, Left, Right & Enter)
+- GPS
+
+Receiver
+========
+- Accept all Trasmitter data 
+- - 8 analog
+- - 8 digital
+- - Trim message (stored on eprom)
+- - Menu data
+- Output to Controller
+- - Servo Pulse
+- - PPM
+- - Raw data
+- GPS to Controller for follow & return home if moving
+
+Controller
+==========
+- GPS
+- Headless (mission)
+- Auto takeoff (switch)
+- Auto return (switch)
+- Auto Land (switch)
+- Auto return & land (lost connection)
+- Follow-me
+- - front
+- - rear
+- - @ degree
+- Altitude Hold
+- Sand Box training (limit X, Y & Z movement to xxx meters[xxx 1-20])
+
