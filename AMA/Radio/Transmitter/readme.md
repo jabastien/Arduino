@@ -41,7 +41,7 @@
 | Bluetooth RX     | TX     | Vin   | 7-12VDC  |
 | Bluetooth TX     | RX     | Gnd   | Gnd      |
 | Pull-up          | Reset  | Reset | Pull-up  |
-| Gnd              | Gnd    | 5v0   | 5V t     |
+| Gnd              | Gnd    | 5v0   | 5v0 Out  |
 | Buzzer/LED       | D2     | ADC7  | CD4052-Y |
 | CD4051/CD4052-A  | D3     | ADC6  | CD4052-X |
 | CD4051/CD4052-B  | D4     | SDC   | LCD SDC  |
