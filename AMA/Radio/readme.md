@@ -13,10 +13,10 @@ Transmitter
 Receiver
 ========
 - Accept all Trasmitter data 
-- - 8 analog
-- - 8 digital
-- - Trim message (stored on eprom)
-- - Menu data
+  - 8 analog
+  - 8 digital
+  - Trim message (stored on eprom)
+  - Menu data
 - Output to Controller
   - Servo Pulse
   - PPM
