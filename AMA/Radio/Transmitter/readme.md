@@ -1,5 +1,39 @@
 # Arduino Nano Transmitter
 
+### Menu
+| Startup |  
+| ----- | 
+| Name   | 
+| Version   | 
+| Voltage: xx.xV | 
+| N/A   | 
+
+| Main |  
+| ----- | 
+| Flight Time MM:SS|
+| Voltage: xx.xV | 
+| >Transmitter   | 
+| >Model   | 
+
+| Transmitter |  
+| ----- | 
+| >Scan for Open | 
+| >Channel Select   | 
+| >EXPO  | 
+| >Curves   | 
+| >1st Time Run again   | 
+| >Reset Factory | 
+
+| Model |  
+| ----- | 
+| >Dip Switches | 
+| >PID - Roll   | 
+| >PID - Pitch   | 
+| >PID - YAW   | 
+
+
+|12345678901234567890|
+
 ### Arduino Nano Pinouts
 
 | Connect |  Pin  | Pin   | Connect |
@@ -27,7 +61,6 @@
 | D9    | CE     | CSN    | D10    |
 | D13   | SCK    | MOSI   | D11    |
 | D12   | MISO   | IRQ    | N/C    |
-
 
 
 > **Transmitter performance tuned setup**
