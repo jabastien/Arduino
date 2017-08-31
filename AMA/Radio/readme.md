@@ -8,6 +8,7 @@ Transmitter
 - 5 Menu (Up, Down, Left, Right & Enter)
 - GPS
 
+
 Receiver
 ========
 - Accept all Trasmitter data 
@@ -35,4 +36,5 @@ Controller
 - - @ degree
 - Altitude Hold
 - Sand Box training (limit X, Y & Z movement to xxx meters[xxx 1-20])
+- Point of no return (% battery distance to home limiter)
 
