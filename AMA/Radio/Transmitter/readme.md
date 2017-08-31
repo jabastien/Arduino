@@ -12,6 +12,7 @@
 | ----- | 
 | Flight Time MM:SS|
 | Voltage: xx.xV | 
+| TPS xxxx | 
 | >Transmitter   | 
 | >Model   | 
 
