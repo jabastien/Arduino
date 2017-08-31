@@ -3,8 +3,21 @@ Requirements:
 Transmitter
 ===========
 - 8 Anaglog
-- 8 Digital
-- 8 Trim (fine adj stored on model)
+  - Throttle
+  - Yaw
+  - Roll
+  - Pitch
+  - Aux 1 
+  - Aux 2
+  - Aux 3
+  - Aux 4
+- 8 Digital switches
+  - landing gear
+  - lights
+  - take picture
+  - record
+  - OSD on/off
+- 8 Trim buttons increments of 1/1023 (fine adj stored on model)
 - 5 Menu (Up, Down, Left, Right & Enter)
 - GPS
 - Gimbal control (uses 3 of the analog)
