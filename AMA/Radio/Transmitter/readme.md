@@ -12,7 +12,7 @@
 | ----- | 
 | Flight Time MM:SS|
 | Voltage: xx.xV | 
-| TPS xxxx | 
+| TPS xxxx GPS xxx| 
 | Channel xxx |
 | >Transmitter   | 
 | >Model   | 
