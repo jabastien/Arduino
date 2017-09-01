@@ -12,6 +12,13 @@
   #include "WProgram.h"
 #endif
 
+
+// ===========================================
+// Vars
+// ===========================================
+String deviceInfo = "2.4G Transmitter";
+String versionNum = "v1.04";
+
 // ===========================================
 // RF24
 // ===========================================
@@ -41,28 +48,31 @@ FormatPrint fmt;
 // ===========================================
 // CD 405x
 // ===========================================
-int looping = 0;
+int digitalLoop = 0;
 
 // ===========================================
 // CD 4051
 // ===========================================
 #include <CD4051.h>
-CD4051 cd4051 = CD4051(4, 5, 6, 8);
+CD4051 switchCD4051 = CD4051(3, 4, 5, 6);
+CD4051 trimCD4051   = CD4051(3, 4, 5, 7);
+CD4051 menuCD4051   = CD4051(3, 4, 5, 8);
 
-int pinSwitchs = 0b00000000;
+int switchPin = 0b00000000;
+int trimPin    = 0b00000000;
+int menuPin    = 0b00000000;
+
+byte pinmask;
+byte readmask;
 
 // ===========================================
 // CD4052
 // ===========================================
 #include <CD4052.h>
 
-CD4052 cd4052 = CD4052(4, 5, A6, A7);
-
-// ===========================================
-// Vars
-// ===========================================
-String deviceInfo = "2.4G Transmitter";
-String versionNum = "v1.03";
+CD4052 cd4052 = CD4052(3, 4, A6, A7);
+int analog[8];
+int analogLoop = 0;
 
 // ===========================================
 // Timing Vars
@@ -121,13 +131,47 @@ void resetData()
 // ===========================================
 // Serial Debug
 // ===========================================
-void SerailDebug(){
-  Serial.print("TX Throttle: "); Serial.print(data.throttle);  Serial.print("    ");
-  Serial.print("TX Yaw: ");      Serial.print(data.yaw);       Serial.print("    ");
-  Serial.print("TX Pitch: ");    Serial.print(data.pitch);     Serial.print("    ");
-  Serial.print("TX Roll: ");     Serial.print(data.roll);      Serial.print("    ");
-  Serial.print("TX Aux1: ");     Serial.print(data.AUX1);      Serial.print("    ");
-  Serial.print("TX Aux2: ");     Serial.print(data.AUX2);      Serial.print("\n");  
+void serialDebug(){
+
+  // New Line every 4 loops
+  if (digitalLoop == 0){
+    Serial.println();
+
+    // Print switches
+    Serial.print(" ");
+    if (false){
+      Serial.print(" Pin ");  
+      Serial.print(pinmask + 0x100, BIN);
+      Serial.print(" Mask ");  
+      Serial.print(readmask + 0x100, BIN);
+      }
+    if (false){
+      Serial.print(" Switch: ");  
+      Serial.print(switchPin + 0x100, BIN);    
+      Serial.print(" Trim: ");  
+      Serial.print(trimPin + 0x100, BIN);    
+      Serial.print(" Menu: ");  
+      Serial.print(menuPin + 0x100, BIN);    
+      }
+    }
+
+  //------------------------------------------------------
+  if (false){
+    //cd4052.setChannel(digitalLoop); // not required, sharing with cd4051
+    printInt(digitalLoop % 4,"<X%1d:");
+    printInt(cd4052.analogReadX(),"%4d> ");
+    printInt(digitalLoop % 4,"<Y%1d:");
+    printInt(cd4052.analogReadY(),"%4d> ");
+    }
+
+  if (false){
+    Serial.print("TX Throttle: "); Serial.print(data.throttle);  Serial.print("    ");
+    Serial.print("TX Yaw: ");      Serial.print(data.yaw);       Serial.print("    ");
+    Serial.print("TX Pitch: ");    Serial.print(data.pitch);     Serial.print("    ");
+    Serial.print("TX Roll: ");     Serial.print(data.roll);      Serial.print("    ");
+    Serial.print("TX Aux1: ");     Serial.print(data.AUX1);      Serial.print("    ");
+    Serial.print("TX Aux2: ");     Serial.print(data.AUX2);      Serial.print("\n");  
+    }
 }
 
 // ===========================================
@@ -190,21 +234,54 @@ int mapJoystickValues(int val, int lower, int middle, int upper, bool reverse)
 // ===========================================
 // Update LCD
 // ===========================================
+long day = 86400000; // 86400000 milliseconds in a day
+long hour = 3600000; // 3600000 milliseconds in an hour
+long minute = 60000; // 60000 milliseconds in a minute
+long second =  1000; // 1000 milliseconds in a second
 void updateLCD(){
-    // check to see if it's time to blink the LED; that is, if the difference
-  // between the current time and last time you blinked the LED is bigger than
+  // check to see if it's time to update LCD; that is, if the difference
+  // between the current time and last time you updated the LCD is bigger than
   // the interval at which you want to blink the LED.
+  currentMillis = millis();
+  
+  if (currentMillis - previousMillis >= interval) {
+      // save the last time you blinked the LED
+      previousMillis = currentMillis;
 
-    lcd.setCursor(0, 2);
-    printVolts();    
+    lcd.setCursor(0, 1);
+    printVolts();    //Voltage: xx.xV
+
 
     if (++cntMillis>=10){
+      // -------------------------------------
+      lcd.setCursor(0, 0);
+      lcd.print("Flight Time: ");
+long timeNow = millis();
+ 
+int days = timeNow / day ;                                //number of days
+int hours = (timeNow % day) / hour;                       //the remainder from days division (in milliseconds) divided by hours, this gives the full hours
+int minutes = ((timeNow % day) % hour) / minute ;         //and so on...
+int seconds = (((timeNow % day) % hour) % minute) / second;      
+     // lcd.print("MM:SS");
+     lcd.print(minutes);
+     lcd.print(":");
+     lcd.print(seconds);
+    
+      // -------------------------------------
+      lcd.setCursor(0, 2);
+      lcd.print("Channel:");
+      lcd.print(" xxx");
+      
+      // -------------------------------------
       lcd.setCursor(0, 3);
-      lcd.print(fps);
+      lcd.print("TPS:");
+      lcd.print(fps);  // ~350 has been the average
+      
+      // -------------------------------------
       fps=0;
       cntMillis=0;
     }
-
+  }
 //------------------------------------------------------
 /*
   // LCD Display
@@ -230,12 +307,10 @@ int printInt(int n, String format){
   return m;
 }
 
-
 // ===========================================
 // Loop
 // ===========================================
-void loop()
-{
+void loop(){
   //------------------------------------------------------
   // The calibration numbers used here should be measured 
   // for your joysticks till they send the correct values.
@@ -246,57 +321,53 @@ void loop()
   data.roll     = mapJoystickValues( analogRead(A3), 34, 522, 1020, true );
 
   //------------------------------------------------------
-  cd4051.setChannel(looping);
+  // Switch address for 4051 (3) and 4052 (1)
+  switchCD4051.setChannel(digitalLoop);
 
-  // Get the switch values
-  byte pinmask = ~(1<<(looping%8)); 
-  byte readmask = (cd4051.digitalReadC()<<(looping%8)); 
-  pinSwitchs = (pinSwitchs & pinmask) | readmask;
+  // Set mask using loop values
+  pinmask = ~(1<<(digitalLoop%8)); 
+
+  // Switch
+  readmask = (switchCD4051.digitalReadC()<<(digitalLoop%8)); 
+  switchPin = (switchPin & pinmask) | readmask;
+  
+  // Trim
+  readmask = (trimCD4051.digitalReadC()<<(digitalLoop%8)); 
+  trimPin = (trimPin & pinmask) | readmask;
+  
+  // Menu
+  readmask = (menuCD4051.digitalReadC()<<(digitalLoop%8)); 
+  menuPin = (menuPin & pinmask) | readmask;
 
   //------------------------------------------------------
-  //cd4052.setChannel(looping);
-  printInt(looping % 4,"<X%1d:");
-  printInt(cd4052.analogReadX(),"%4d> ");
-  printInt(looping % 4,"<Y%1d:");
-  printInt(cd4052.analogReadY(),"%4d> ");
+  // Read Analog
+ // analog[analogLoop]   = cd4052.analogReadX();
+ // analog[analogLoop+1] = cd4052.analogReadY();
 
   //------------------------------------------------------
+  // Send our data
   radio.write(&data, sizeof(MyData));
 
   //------------------------------------------------------
-  currentMillis = millis();
-  if (currentMillis - previousMillis >= interval) {
-      // save the last time you blinked the LED
-      previousMillis = currentMillis;
-
-      updateLCD();
-  }
-  
+  // Update LCD 1/10 seconds
+  updateLCD();
+    
   //------------------------------------------------------
   //------------------------------------------------------
   // Increment looping
-  if (++looping >=8){
-    looping = 0;  
+  if (++digitalLoop >=8){
+    digitalLoop = 0;  
     }
-
-  // New Line every 4 loops
-  if ((looping % 4)==0){
-    Serial.println();
-
-    // Print switches
-    Serial.print(" ");
-    if (false){
-      Serial.print(" Pin ");  
-      Serial.print(pinmask + 0x100, BIN);
-      Serial.print(" Mask ");  
-      Serial.print(readmask + 0x100, BIN);
-      }
-    Serial.print(" Switch ");  
-    Serial.print(pinSwitchs + 0x100, BIN);    
+    
+  if (++analogLoop >=4){
+    analogLoop = 0;  
     }
-
+    
   //------------------------------------------------------
+  // Serial Debugging 
+  serialDebug();
+  
+  //------------------------------------------------------
+  // Increment Frames Per Second
   fps++;
 }
-
-
