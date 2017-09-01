@@ -43,3 +43,9 @@ void FormatPrint::printFloat(float d, int whole, int decimal ){
   dtostrf(d,whole,decimal,c);                          // -n.nnn Use this for a consistent float format
   Serial.print(c);  
 }
+
+char * FormatPrint::getFloat(float d, int whole, int decimal ){
+
+  dtostrf(d,whole,decimal,c);                          // -n.nnn Use this for a consistent float format
+   return c;  
+}
