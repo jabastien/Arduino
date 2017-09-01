@@ -6,7 +6,7 @@
 | Name   | 
 | Version   | 
 | Voltage: xx.xV | 
-| N/A   | 
+| Channel xxx  | 
 
 | Main |  
 | ----- | 
