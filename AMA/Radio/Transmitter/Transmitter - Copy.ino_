@@ -12,13 +12,6 @@
   #include "WProgram.h"
 #endif
 
-
-// ===========================================
-// Vars
-// ===========================================
-String deviceInfo = "2.4G Transmitter";
-String versionNum = "v1.04";
-
 // ===========================================
 // RF24
 // ===========================================
@@ -48,7 +41,7 @@ FormatPrint fmt;
 // ===========================================
 // CD 405x
 // ===========================================
-
+int digitalLoop = 0;
 
 // ===========================================
 // CD 4051
@@ -65,8 +58,6 @@ int menuPin    = 0b00000000;
 byte pinmask;
 byte readmask;
 
-int digitalLoop = 0;
-
 // ===========================================
 // CD4052
 // ===========================================
@@ -75,6 +66,12 @@ int digitalLoop = 0;
 CD4052 cd4052 = CD4052(3, 4, A6, A7);
 int analog[8];
 int analogLoop = 0;
+
+// ===========================================
+// Vars
+// ===========================================
+String deviceInfo = "2.4G Transmitter";
+String versionNum = "v1.03";
 
 // ===========================================
 // Timing Vars
@@ -89,42 +86,29 @@ int cntMillis=0;
 // ===========================================
 // Misc
 // ===========================================
-//int debugPin=8; // D8
+int debugPin=8; // D8
 
 // ===========================================
 // My Data
 // ===========================================
 // The sizeof this struct should not exceed 32 bytes
 // This gives us up to 32 8 bits channals
-struct MyControls {
-  const byte packetType = 0x01;  
+struct MyData {
   byte throttle;
   byte yaw;
   byte pitch;
   byte roll;
-};
-MyControls myControls;
-
-struct MyAux {
-  const byte packetType = 0x02;  
   byte AUX1;
   byte AUX2;
   byte AUX3;
   byte AUX4;
+  byte BITS;
 };
-MyAux myAux;
 
-struct MyButtons {
-  const byte packetType = 0x03;    
-  byte swtch;
-  byte dip;
-  byte menu;
-};
-MyButtons myButtons;
-
+MyData data;
 
 // ===========================================
-// Reset `
+// Reset Data
 // ===========================================
 void resetData() 
 {
@@ -132,19 +116,15 @@ void resetData()
   // Throttle is 0 in order to stop the motors
   //127 is the middle value of the 10ADC.
     
-  myControls.throttle = 0;    // no power
-  myControls.yaw      = 127;  // center control
-  myControls.pitch    = 127;  // center control
-  myControls.roll     = 127;  // center control
-  
-  myAux.AUX1     = 0;
-  myAux.AUX2     = 0;
-  myAux.AUX3     = 0;
-  myAux.AUX4     = 0;
-  
-  myButtons.swtch = 0;
-  myButtons.dip   = 0;
-  myButtons.menu  = 0;
+  data.throttle = 0;
+  data.yaw      = 127;
+  data.pitch    = 127;
+  data.roll     = 127;
+  data.AUX1     = 0;
+  data.AUX2     = 0;
+  data.AUX3     = 0;
+  data.AUX4     = 0;
+  data.BITS     = 0;
 }
 
 // ===========================================
@@ -181,17 +161,14 @@ void serialDebug(){
     printInt(cd4052.analogReadX(),"%4d> ");
     printInt(digitalLoop % 4,"<Y%1d:");
     printInt(cd4052.analogReadY(),"%4d> ");
-    }
-
-  if (false){
-    Serial.print("TX Throttle: "); Serial.print(myControls.throttle);  Serial.print("    ");
-    Serial.print("TX Yaw: ");      Serial.print(myControls.yaw);       Serial.print("    ");
-    Serial.print("TX Pitch: ");    Serial.print(myControls.pitch);     Serial.print("    ");
-    Serial.print("TX Roll: ");     Serial.print(myControls.roll);      Serial.print("    ");
-    
-    Serial.print("TX Aux1: ");     Serial.print(myAux.AUX1);           Serial.print("    ");
-    Serial.print("TX Aux2: ");     Serial.print(myAux.AUX2);           Serial.print("\n");  
-    }
+  }
+        
+  Serial.print("TX Throttle: "); Serial.print(data.throttle);  Serial.print("    ");
+  Serial.print("TX Yaw: ");      Serial.print(data.yaw);       Serial.print("    ");
+  Serial.print("TX Pitch: ");    Serial.print(data.pitch);     Serial.print("    ");
+  Serial.print("TX Roll: ");     Serial.print(data.roll);      Serial.print("    ");
+  Serial.print("TX Aux1: ");     Serial.print(data.AUX1);      Serial.print("    ");
+  Serial.print("TX Aux2: ");     Serial.print(data.AUX2);      Serial.print("\n");  
 }
 
 // ===========================================
@@ -203,7 +180,7 @@ void setup()
 
   // Debug Serial out
   Serial.begin(115200); //Set the speed to 9600 bauds if you want.
-//  pinMode(debugPin, INPUT);      // sets the digital pin as input 
+  pinMode(debugPin, INPUT);      // sets the digital pin as input 
 
   //Start everything up
   radio.begin();
@@ -215,7 +192,12 @@ void setup()
   // LCD setup
   lcd.init();
   lcd.backlight();
-lcdStartup(); 
+  lcd.setCursor(0, 0);
+  lcd.print(deviceInfo);
+  lcd.setCursor(0, 1);
+  lcd.print(versionNum); 
+  lcd.setCursor(0, 2);
+  printVolts();  
   delay(2000);  
   lcd.clear();    
 }
@@ -249,94 +231,32 @@ int mapJoystickValues(int val, int lower, int middle, int upper, bool reverse)
 // ===========================================
 // Update LCD
 // ===========================================
-void lcdStartup(){
-  lcd.setCursor(0, 0);
-  lcd.print(deviceInfo);
-  lcd.setCursor(0, 1);
-  lcd.print(versionNum); 
-  lcd.setCursor(0, 2);
-  printVolts(); 
-}
-// -------------------------------------------
-void lcdMain(){
-  
-}
-// -------------------------------------------
-void lcdMainFlightTime(){
-  
-}
-// -------------------------------------------
-void lcdMainVolts(){
-  
-}
-// -------------------------------------------
-// -------------------------------------------
-// -------------------------------------------
-// -------------------------------------------
-// -------------------------------------------
-// -------------------------------------------
-// -------------------------------------------
-long day = 86400000; // 86400000 milliseconds in a day
-long hour = 3600000; // 3600000 milliseconds in an hour
-long minute = 60000; // 60000 milliseconds in a minute
-long second =  1000; // 1000 milliseconds in a second
 void updateLCD(){
-  // check to see if it's time to update LCD; that is, if the difference
-  // between the current time and last time you updated the LCD is bigger than
+    // check to see if it's time to blink the LED; that is, if the difference
+  // between the current time and last time you blinked the LED is bigger than
   // the interval at which you want to blink the LED.
-  currentMillis = millis();
-  
-  if (currentMillis - previousMillis >= interval) {
-      // save the last time you blinked the LED
-      previousMillis = currentMillis;
 
-    lcd.setCursor(0, 1);
-    printVolts();    //Voltage: xx.xV
-
+    lcd.setCursor(0, 2);
+    printVolts();    
 
     if (++cntMillis>=10){
-      // -------------------------------------
-      lcd.setCursor(0, 0);
-      lcd.print("Flight Time: ");
-long timeNow = millis();
- 
-int days = timeNow / day ;                                //number of days
-int hours = (timeNow % day) / hour;                       //the remainder from days division (in milliseconds) divided by hours, this gives the full hours
-int minutes = ((timeNow % day) % hour) / minute ;         //and so on...
-int seconds = (((timeNow % day) % hour) % minute) / second;      
-     // lcd.print("MM:SS");
-     lcd.print(minutes);
-     lcd.print(":");
-     lcd.print(seconds);
-     lcd.print(" ");
-    
-      // -------------------------------------
-      lcd.setCursor(0, 2);
-      lcd.print("Channel:");
-      lcd.print(" xxx");
-      
-      // -------------------------------------
       lcd.setCursor(0, 3);
-      lcd.print("TPS:");
-      lcd.print(fps);  // ~350 has been the average
-      lcd.print("   GPS: xxx");
-      
-      // -------------------------------------
+      lcd.print(fps);
       fps=0;
       cntMillis=0;
     }
-  }
+
 //------------------------------------------------------
 /*
   // LCD Display
   lcd.setCursor(0, 0);
   lcd.print (" TX-thrtl: ");
-  lcd.print(myControls.throttle);
+  lcd.print(data.throttle);
   lcd.print ("  ");
 
   lcd.setCursor(0, 1);
   lcd.print (" Tx-yaw  : ");
-  lcd.print(myControls.yaw);
+  lcd.print(data.yaw);
   lcd.print ("  ");      
 */
 //------------------------------------------------------     
@@ -354,15 +274,16 @@ int printInt(int n, String format){
 // ===========================================
 // Loop
 // ===========================================
-void loop(){
+void loop()
+{
   //------------------------------------------------------
   // The calibration numbers used here should be measured 
   // for your joysticks till they send the correct values.
   //------------------------------------------------------
-  myControls.throttle = mapJoystickValues( analogRead(A0), 13, 524, 1015, true );
-  myControls.yaw      = mapJoystickValues( analogRead(A1),  1, 505, 1020, true );
-  myControls.pitch    = mapJoystickValues( analogRead(A2), 12, 544, 1021, true );
-  myControls.roll     = mapJoystickValues( analogRead(A3), 34, 522, 1020, true );
+  data.throttle = mapJoystickValues( analogRead(A0), 13, 524, 1015, true );
+  data.yaw      = mapJoystickValues( analogRead(A1),  1, 505, 1020, true );
+  data.pitch    = mapJoystickValues( analogRead(A2), 12, 544, 1021, true );
+  data.roll     = mapJoystickValues( analogRead(A3), 34, 522, 1020, true );
 
   //------------------------------------------------------
   // Switch address for 4051 (3) and 4052 (1)
@@ -385,28 +306,32 @@ void loop(){
 
   //------------------------------------------------------
   // Read Analog
- // analog[analogLoop]   = cd4052.analogReadX();
- // analog[analogLoop+1] = cd4052.analogReadY();
+  analog[analogLoop]   = cd4052.analogReadX();
+  analog[analogLoop+1] = cd4052.analogReadY();
 
   //------------------------------------------------------
   // Send our data
-  radio.write(&myControls, sizeof(MyControls));
+  radio.write(&data, sizeof(MyData));
 
   //------------------------------------------------------
   // Update LCD 1/10 seconds
-  updateLCD();
-    
+  currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+      // save the last time you blinked the LED
+      previousMillis = currentMillis;
+
+      updateLCD();
+  }
+  
   //------------------------------------------------------
   //------------------------------------------------------
   // Increment looping
   if (++digitalLoop >=8){
     digitalLoop = 0;  
     }
-    
   if (++analogLoop >=4){
     analogLoop = 0;  
     }
-    
   //------------------------------------------------------
   // Serial Debugging 
   serialDebug();
