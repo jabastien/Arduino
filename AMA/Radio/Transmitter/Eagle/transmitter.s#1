@@ -4276,8 +4276,8 @@ W = angled&lt;p&gt;
 <part name="U$1" library="jet-lib" deviceset="ARDUINONANO" device=""/>
 <part name="ANALOG1" library="con-lstb" deviceset="MA06-1" device=""/>
 <part name="ANALOG2" library="con-lstb" deviceset="MA06-1" device=""/>
-<part name="DIGITAL1_1" library="con-lstb" deviceset="MA06-1" device=""/>
-<part name="DIGITAL1_2" library="con-lstb" deviceset="MA06-1" device=""/>
+<part name="ANALOG3" library="con-lstb" deviceset="MA06-1" device=""/>
+<part name="ANALOG4" library="con-lstb" deviceset="MA06-1" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -4317,8 +4317,8 @@ W = angled&lt;p&gt;
 <instance part="U$1" gate="G$1" x="93.98" y="30.48"/>
 <instance part="ANALOG1" gate="1" x="91.44" y="83.82"/>
 <instance part="ANALOG2" gate="1" x="91.44" y="63.5"/>
-<instance part="DIGITAL1_1" gate="1" x="20.32" y="73.66" rot="MR0"/>
-<instance part="DIGITAL1_2" gate="1" x="20.32" y="53.34" rot="MR0"/>
+<instance part="ANALOG3" gate="1" x="20.32" y="73.66" rot="MR0"/>
+<instance part="ANALOG4" gate="1" x="20.32" y="53.34" rot="MR0"/>
 </instances>
 <busses>
 </busses>
@@ -4636,7 +4636,7 @@ W = angled&lt;p&gt;
 <segment>
 <pinref part="IC1" gate="A" pin="X0"/>
 <wire x1="-7.62" y1="55.88" x2="-7.62" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="DIGITAL1_2" gate="1" pin="1"/>
+<pinref part="ANALOG4" gate="1" pin="1"/>
 <wire x1="-7.62" y1="45.72" x2="12.7" y2="45.72" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -4645,13 +4645,13 @@ W = angled&lt;p&gt;
 <pinref part="IC1" gate="A" pin="X1"/>
 <wire x1="-7.62" y1="58.42" x2="-5.08" y2="58.42" width="0.1524" layer="91"/>
 <wire x1="-5.08" y1="58.42" x2="-5.08" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="DIGITAL1_2" gate="1" pin="2"/>
+<pinref part="ANALOG4" gate="1" pin="2"/>
 <wire x1="-5.08" y1="48.26" x2="12.7" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$21" class="0">
 <segment>
-<pinref part="DIGITAL1_2" gate="1" pin="3"/>
+<pinref part="ANALOG4" gate="1" pin="3"/>
 <wire x1="12.7" y1="50.8" x2="-2.54" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="-2.54" y1="50.8" x2="-2.54" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="A" pin="X2"/>
@@ -4660,7 +4660,7 @@ W = angled&lt;p&gt;
 </net>
 <net name="N$22" class="0">
 <segment>
-<pinref part="DIGITAL1_2" gate="1" pin="4"/>
+<pinref part="ANALOG4" gate="1" pin="4"/>
 <wire x1="12.7" y1="53.34" x2="0" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="0" y1="53.34" x2="0" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="A" pin="X3"/>

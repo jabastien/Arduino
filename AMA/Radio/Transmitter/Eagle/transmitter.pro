@@ -2,24 +2,24 @@ EAGLE AutoRouter Statistics:
 
 Job           : C:/Users/davidq/Documents/Arduino/AMA/Radio/Transmitter/Eagle/transmitter.brd
 
-Start at      : 12:19:38 (9/1/2017)
-End at        : 12:19:46 (9/1/2017)
-Elapsed time  : 00:00:05
+Start at      : 12:46:17 (9/1/2017)
+End at        : 12:46:22 (9/1/2017)
+Elapsed time  : 00:00:01
 
-Signals       :    14   RoutingGrid: 50 mil  Layers: 1
+Signals       :    14   RoutingGrid: 25 mil  Layers: 2
 Connections   :    35   predefined:  13 ( 0 Vias )
 
-Router memory :   12354
+Router memory :   88976
 
 Passname          :    Busses     Route Optimize1 Optimize2 Optimize3 Optimize4
 
-Time per pass     :  00:00:00  00:00:05  00:00:00  00:00:00  00:00:00  00:00:00
-Number of Ripups  :         0       327         0         0         0         0
-max. Level        :         0         3         0         0         0         0
-max. Total        :         0        13         0         0         0         0
+Time per pass     :  00:00:00  00:00:00  00:00:00  00:00:01  00:00:00  00:00:00
+Number of Ripups  :         0         0         0         0         0         0
+max. Level        :         0         0         0         0         0         0
+max. Total        :         0         0         0         0         0         0
 
-Routed            :         0        20        20        20        20        20
-Vias              :         0         0         0         0         0         0
-Resolution        :    37.1 %    94.3 %    94.3 %    94.3 %    94.3 %    94.3 %
+Routed            :         6        22        22        22        22        22
+Vias              :         0        15         5         6         8         6
+Resolution        :    54.3 %   100.0 %   100.0 %   100.0 %   100.0 %   100.0 %
 
-Final             : 82.9% finished. Polygons may have fallen apart.
+Final             : 100.0% finished
