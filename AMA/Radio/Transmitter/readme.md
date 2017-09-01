@@ -6,13 +6,14 @@
 | Name   | 
 | Version   | 
 | Voltage: xx.xV | 
-| Channel xxx  | 
+| N/A  | 
 
 | Main |  
 | ----- | 
 | Flight Time MM:SS|
 | Voltage: xx.xV | 
 | TPS xxxx | 
+| Channel xxx |
 | >Transmitter   | 
 | >Model   | 
 
