@@ -60,8 +60,8 @@
 | S1a - Takeoff| 
 | S1b - Land   | 
 | S1c - ????   | 
-| S2a - Sandbox     (Holds pilot to range of xxx)| 
-| S2b - Barometer   (throttle sets alttitude (0-400 feet)| 
+| S2a - Sandbox     (Holds pilot to range of x meters and altitude)| 
+| S2b - Barometer   (throttle sets altitude (0-400 feet)| 
 | S2c - Manual   | 
 | S3a - Follow-me |
 | S3b - |
