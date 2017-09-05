@@ -21,33 +21,36 @@
 
 | >Transmitter |  
 | ----- | 
-| >>Channel | 
-| >>EXPO    | 
-| >>Curves  | 
-| >>Setup   | 
+| >Channel | 
+| >EXPO    | 
+| >Curves  | 
+| >Setup   | 
 
 | >>Transmitter Channel|  
 | -----            | 
-| >>Scan for Open  | 
-| >>Channel Select | 
+| >Scan for Open  | 
+| >Channel Select | 
 
-| >Transmitter EXPO|  
+| >>Transmitter EXPO|  
 | ----- | 
-| >> per channel (10%-190%)  | 
+| per channel (10%-190%)  | 
 
-| >Transmitter Curves|  
+| >>Transmitter Curves|  
 | ----- | 
-| >> per channel (10%-190%)  | 
+| per channel (10%-190%)  | 
 
 | >>Transmitter Setup|  
 | ----- | 
-| >>>Battery (Set size in volts) | 
-| >>>Reset Factory | 
+| Min/Max controls | 
+| Reverse surfaces (base on min/max movement)| 
+| Button Ranges (press each for value) | 
+| Battery (Set size in volts) | 
+| >Reset Factory | 
 
 
 | Model |  
 | ----- | 
-| >Dip Switches | 
+| >Dip Switches (reverses)| 
 | >PID - Roll   | 
 | >PID - Pitch   | 
 | >PID - YAW   | 
