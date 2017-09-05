@@ -48,7 +48,7 @@
 | >Reset Factory | 
 
 
-| Model |  
+| >Model |  
 | ----- | 
 | >Dip Switches (reverses)| 
 | >PID - Roll   | 
