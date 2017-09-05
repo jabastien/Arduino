@@ -3,30 +3,47 @@
 ### Menu
 | Startup |  
 | ----- | 
-| Name   | 
-| Version   | 
+| Name           | 
+| Version        | 
 | Voltage: xx.xV | 
-| N/A  | 
+| QBytes-World   | 
 
 | Main |  
 | ----- | 
 | Flight Time MM:SS|
 | Mode: xxxxxxxxxxx| 
-| Message: Xxxxxx (W or E)| 
+| Message: Xxxxxx (Warn or Error)| 
 | Voltage: xx.xV | 
 | TPS xxxx GPS xxx| 
 | Channel xxx |
 | >Transmitter   | 
 | >Model   | 
 
-| Transmitter |  
+| >Transmitter |  
 | ----- | 
-| >Scan for Open | 
-| >Channel Select   | 
-| >EXPO  | 
-| >Curves   | 
-| >Setup   | 
-| >Reset Factory | 
+| >>Channel | 
+| >>EXPO    | 
+| >>Curves  | 
+| >>Setup   | 
+
+| >>Transmitter Channel|  
+| -----            | 
+| >>Scan for Open  | 
+| >>Channel Select | 
+
+| >Transmitter EXPO|  
+| ----- | 
+| >> per channel (10%-190%)  | 
+
+| >Transmitter Curves|  
+| ----- | 
+| >> per channel (10%-190%)  | 
+
+| >>Transmitter Setup|  
+| ----- | 
+| >>>Battery (Set size in volts) | 
+| >>>Reset Factory | 
+
 
 | Model |  
 | ----- | 
@@ -53,7 +70,7 @@
 
 | Mode |  
 | ----- | 
-|  | 
+| ??is this not the switches?? | 
 
 |12345678901234567890|
 
