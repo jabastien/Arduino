@@ -37,7 +37,7 @@
 
 | >>Transmitter Curves|  
 | ----- | 
-| per channel (10%-190%)  | 
+| per channel (Ramp/Sin)  | 
 
 | >>Transmitter Setup|  
 | ----- | 
