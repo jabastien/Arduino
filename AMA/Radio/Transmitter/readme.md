@@ -11,6 +11,8 @@
 | Main |  
 | ----- | 
 | Flight Time MM:SS|
+| Mode: xxxxxxxxxxx| 
+| Message: Xxxxxx (W or E)| 
 | Voltage: xx.xV | 
 | TPS xxxx GPS xxx| 
 | Channel xxx |
