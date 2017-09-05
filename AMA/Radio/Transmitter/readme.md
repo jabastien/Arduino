@@ -35,7 +35,7 @@
 | >PID - Pitch   | 
 | >PID - YAW   | 
 
-| Mode |  
+| Switches |  
 | ----- | 
 | S1a - Takeoff| 
 | S1b - Land   | 
@@ -49,6 +49,11 @@
 | S4a -   | 
 | S4a - Mission  | 
 | S4a - Return Home   | 
+
+
+| Mode |  
+| ----- | 
+|  | 
 
 |12345678901234567890|
 
