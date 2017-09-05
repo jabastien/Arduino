@@ -15,7 +15,7 @@
 | Message: Xxxxxx (Warn or Error)| 
 | Voltage: xx.xV | 
 | TPS xxxx GPS xxx| 
-| Channel xxx |
+| Channel xxx Drop/Sec xxx|
 | >Transmitter   | 
 | >Model   | 
 
