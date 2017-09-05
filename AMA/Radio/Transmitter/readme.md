@@ -35,6 +35,20 @@
 | >PID - Pitch   | 
 | >PID - YAW   | 
 
+| Mode |  
+| ----- | 
+| S1a - Takeoff| 
+| S1b - Land   | 
+| S1c - ????   | 
+| S2a - Sandbox     | 
+| S2b - Barometer   | 
+| S2c - Barometer   | 
+| S3a - Follow-me |
+| S3b - |
+| S3c - |
+| S4a -   | 
+| S4a - Mission  | 
+| S4a - Return Home   | 
 
 |12345678901234567890|
 
@@ -51,8 +65,8 @@
 | CD4051/CD4052-B  | D4     | SDC   | LCD SDC  |
 | CD4051       -C  | D5     | SDA   | LCD SDA  |
 | CD4051 #1 (Switch)| D6    | ADC3  | Role     |
-| CD4051 #2 (Trims)| D7     | ADC2  | Pitch    |
-| CD4051 #3 (Menu) | D8     | ADC1  | Yaw      |
+|?CD4051 #2 (Trims)?| D7     | ADC2  | Pitch    |
+|?CD4051 #3 (Menu) ?| D8     | ADC1  | Yaw      |
 | Nrf24 - CE       | D9     | ADC0  | Throttle |
 | Nrf24 - CSN      | D10    | Aref  | 5v0      |
 | Nrf24 - MOSI     | D11    | 3v3   | N/C      |
