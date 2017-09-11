@@ -3,38 +3,77 @@
 ### Menu
 | Startup |  
 | ----- | 
-| Name   | 
-| Version   | 
+| Name           | 
+| Version        | 
 | Voltage: xx.xV | 
-| N/A  | 
+| QBytes-World   | 
 
 | Main |  
 | ----- | 
 | Flight Time MM:SS|
 | Mode: xxxxxxxxxxx| 
-| Message: Xxxxxx (W or E)| 
+| Message: Xxxxxx (Warn or Error)| 
 | Voltage: xx.xV | 
 | TPS xxxx GPS xxx| 
-| Channel xxx |
+| Channel xxx Drop/Sec xxx|
 | >Transmitter   | 
 | >Model   | 
 
-| Transmitter |  
+| >Transmitter |  
 | ----- | 
-| >Scan for Open | 
-| >Channel Select   | 
-| >EXPO  | 
-| >Curves   | 
+| >Channel | 
+| >EXPO    | 
+| >Curves  | 
 | >Setup   | 
+
+| >>Transmitter Channel|  
+| -----            | 
+| >Scan for Open  | 
+| >Channel Select | 
+
+| >>Transmitter EXPO|  
+| ----- | 
+| per channel (10%-190%)  | 
+
+| >>Transmitter Curves|  
+| ----- | 
+| per channel (Ramp/Sin)  | 
+
+| >>Transmitter Setup|  
+| ----- | 
+| Min/Max controls | 
+| Reverse surfaces (base on min/max movement)| 
+| Button Ranges (press each for value) | 
+| Battery (Set size in volts) | 
 | >Reset Factory | 
 
-| Model |  
+
+| >Model |  
 | ----- | 
-| >Dip Switches | 
+| >Dip Switches (reverses)| 
 | >PID - Roll   | 
 | >PID - Pitch   | 
 | >PID - YAW   | 
 
+| Switches |  
+| ----- | 
+| S1a - Takeoff| 
+| S1b - Land   | 
+| S1c - ????   | 
+| S2a - Sandbox     (Holds pilot to range of x meters and altitude)| 
+| S2b - Barometer   (throttle sets altitude (0-400 feet)| 
+| S2c - Manual   | 
+| S3a - Follow-me |
+| S3b - |
+| S3c - |
+| S4a -   | 
+| S4a - Mission  | 
+| S4a - Return Home   | 
+
+
+| Mode |  
+| ----- | 
+| ??is this not the switches?? | 
 
 |12345678901234567890|
 
@@ -51,8 +90,8 @@
 | CD4051/CD4052-B  | D4     | SDC   | LCD SDC  |
 | CD4051       -C  | D5     | SDA   | LCD SDA  |
 | CD4051 #1 (Switch)| D6    | ADC3  | Role     |
-| CD4051 #2 (Trims)| D7     | ADC2  | Pitch    |
-| CD4051 #3 (Menu) | D8     | ADC1  | Yaw      |
+|?CD4051 #2 (Trims)?| D7     | ADC2  | Pitch    |
+|?CD4051 #3 (Menu) ?| D8     | ADC1  | Yaw      |
 | Nrf24 - CE       | D9     | ADC0  | Throttle |
 | Nrf24 - CSN      | D10    | Aref  | 5v0      |
 | Nrf24 - MOSI     | D11    | 3v3   | N/C      |
