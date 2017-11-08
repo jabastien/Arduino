@@ -5,6 +5,8 @@
 /* First we include the libraries. Download it from 
    my webpage if you donw have the NRF24 library */
 
+#include <EEPROM.h>
+
 
 #if defined(ARDUINO) && ARDUINO >= 100
   #include "Arduino.h"
@@ -18,22 +20,29 @@
 // Vars
 // ===========================================
 String deviceInfo = "2.4G Transmitter";
-String versionNum = "v1.06";
+String versionNum = "v1.07";
+
+unsigned long  screenRefresh = 1000/4; // 4 times per second
+unsigned long  screenLastRefresh = 0;
 
 // ===========================================
 // Volt divide Vars
 // ===========================================
-// Messure (  vPre -  vPost) / Current
-//         (12.867 - 12.836) / 58.8 =  527.211 mOhm
-//                     0.031 / 58.8 =  527.211 mOhm
-//double shunt = 0.727211;   // 0.5  
-double shunt = 0.766327;   // 0.5 
-int Vpre11   = 8042; // 8.2k
-int Vpre12   = 2638; // 2.7k
-int Vpst21  = 8014; // 8.2k
-int Vpst22  = 2637; // 2.7k
-int V5_31    = 2161; // 2.2k
-int V5_32    = 3212; // 3.3k
+
+struct MyVoltsMap {
+  // Messure (  vPre -  vPost) / Current
+  //         (12.867 - 12.836) / 58.8 =  527.211 mOhm
+  //                     0.031 / 58.8 =  527.211 mOhm
+  //double shunt = 0.727211;   // 0.5  
+  double shunt = 0.766327;   // 0.5 
+  int Vpre11   = 8042; // 8.2k
+  int Vpre12   = 2638; // 2.7k
+  int Vpst21  = 8014; // 8.2k
+  int Vpst22  = 2637; // 2.7k
+  int V5_31    = 2161; // 2.2k
+  int V5_32    = 3212; // 3.3k
+};
+MyVoltsMap myVoltsMap;
 
 
 // ===========================================
@@ -134,24 +143,16 @@ struct MyControls {
 MyControls myControls;
 
 struct MyControlsMap {
-  int       throttleMin; // A0
-  int       throttleMid; // A0
-  int       throttleMax; // A0
-  boolean   throttleRev;
-  int       yawMin;      // A1
-  int       yawMid;      // A1
-  int       yawMax;      // A1
-  boolean   yawRev;
-  int       rollMin;     // A2
-  int       rollMid;     // A2
-  int       rollMax;     // A2
-  boolean   rollRev;
-  int       pitchMin;    // A3
-  int       pitchMid;    // A3
-  int       pitchMax;    // A3
-  boolean   pitchRev;
+  int       Min; // A0
+  int       Mid; // A0
+  int       Max; // A0
+  boolean   Rev;
 };
-MyControlsMap myControlsMap;
+
+MyControlsMap myControlsMapThrottle;
+MyControlsMap myControlsMapYaw;
+MyControlsMap myControlsMapRoll;
+MyControlsMap myControlsMapPitch;
 
 struct MyAux {
   const byte packetType = 0x02;  
@@ -263,26 +264,18 @@ void serialDebug(){
 
 
 // ===========================================
-void myControlsMapSet(){
-  myControlsMap.throttleMin = 0;    // A0
-  myControlsMap.throttleMid = 512;  // A0
-  myControlsMap.throttleMax = 1023; // A0
-  myControlsMap.throttleRev = false;
+void myControlsMapSetIt(MyControlsMap item){
+  item.Min = 0;
+  item.Mid = 0;
+  item.Max = 1023;
+  item.Rev = false;
+}
   
-  myControlsMap.yawMin = 0;         // A1
-  myControlsMap.yawMid = 512;       // A1
-  myControlsMap.yawMax = 1023;      // A1
-  myControlsMap.yawRev = false;  
-  
-  myControlsMap.rollMin = 0;        // A2
-  myControlsMap.rollMid = 512;      // A2
-  myControlsMap.rollMax = 1023;     // A2
-  myControlsMap.rollRev = false;  
-  
-  myControlsMap.pitchMin = 0;       // A3
-  myControlsMap.pitchMid = 512;     // A3
-  myControlsMap.pitchMax = 1023;    // A3
-  myControlsMap.pitchRev = false; 
+  void myControlsMapSet(){
+  myControlsMapSetIt(myControlsMapThrottle);  // A0
+  myControlsMapSetIt(myControlsMapYaw);       // A1
+  myControlsMapSetIt(myControlsMapRoll);      // A2
+  myControlsMapSetIt(myControlsMapPitch);     // A3
 }
 
 
@@ -293,37 +286,84 @@ void myControlsMapSet(){
 // ===========================================
 // ===========================================
 // ===========================================
+void initSticksIt(MyControlsMap item){
+  item.Min = 0;    // A0
+  item.Mid = 512;  // A0
+  item.Max = 1023; // A0
+  item.Rev = false;
+}
 void initSticks(){
   lcd.print("Move Throttle up/down");
+  initSticksIt(myControlsMapThrottle);  // A0
 
-  myControlsMap.throttleMin = 0;    // A0
-  myControlsMap.throttleMid = 512;  // A0
-  myControlsMap.throttleMax = 1023; // A0
-  myControlsMap.throttleRev = false;
-  
-
-  
   lcd.print("Move Yaw up/down");
-  myControlsMap.yawMin = 0;         // A1
-  myControlsMap.yawMid = 512;       // A1
-  myControlsMap.yawMax = 1023;      // A1
-  myControlsMap.yawRev = false;  
-  
-  
+  initSticksIt(myControlsMapYaw);       // A1
+
   lcd.print("Move Roll up/down");
-  myControlsMap.rollMin = 0;        // A2
-  myControlsMap.rollMid = 512;      // A2
-  myControlsMap.rollMax = 1023;     // A2
-  myControlsMap.rollRev = false;  
-  
- 
+  initSticksIt(myControlsMapRoll);      // A2
+
   lcd.print("Move Pitch up/down");
-  myControlsMap.pitchMin = 0;       // A3
-  myControlsMap.pitchMid = 512;     // A3
-  myControlsMap.pitchMax = 1023;    // A3
-  myControlsMap.pitchRev = false;  
-    
+  initSticksIt(myControlsMapPitch);     // A3
 }
+
+// ===========================================
+// ===========================================
+// ===========================================
+// EEPROM
+// ===========================================
+// ===========================================
+// ===========================================
+void factoryReset(){
+  for (int i = 0 ; i < EEPROM.length() ; i++) {
+    EEPROM.write(i, 0);
+  }  
+}
+
+void readEEPROM(){
+  int eeAddress = 0;
+  //
+  
+  EEPROM.get(eeAddress, myVoltsMap);
+  eeAddress += sizeof(myVoltsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+
+  //
+  EEPROM.get(eeAddress, myControlsMapThrottle);
+  eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+//  eeAddress += sizeof(myControlsMapThrottle); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+
+  EEPROM.get(eeAddress, myControlsMapYaw);
+  eeAddress += sizeof(myControlsMapThrottle); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+  
+  EEPROM.get(eeAddress, myControlsMapRoll);
+  eeAddress += sizeof(myControlsMapThrottle); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+  
+  EEPROM.get(eeAddress, myControlsMapPitch);
+  eeAddress += sizeof(myControlsMapThrottle); //Move address to the next byte after MyControlsMap 'myControlsMap'.  
+}
+
+
+void writeEEPROM(){
+  int eeAddress = 0;
+
+  //
+  EEPROM.put(eeAddress, myVoltsMap);
+  eeAddress += sizeof(myVoltsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+
+  //
+  //eeAddress += sizeof(myControlsMapSet);
+  EEPROM.put(eeAddress, myControlsMapThrottle);
+  eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+  
+  EEPROM.put(eeAddress, myControlsMapYaw);
+  eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+  
+  EEPROM.put(eeAddress, myControlsMapRoll);
+  eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+  
+  EEPROM.put(eeAddress, myControlsMapPitch);
+  eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+}
+
 
 
 // Declare variables
@@ -379,6 +419,11 @@ void setup()
   Serial.begin(115200); //Set the speed to 9600 bauds if you want.
 //  pinMode(debugPin, INPUT);      // sets the digital pin as input 
 
+  //Print length of data to run CRC on.
+  Serial.print("EEPROM length: ");
+  Serial.println(EEPROM.length());
+
+  
   setMenu("menuOptions00", menuOptions00,menuOptions00SIZE);
   setMenu("menuOptions10", menuOptions10,menuOptions10SIZE );
   setMenu("menuOptions99", menuOptions99,menuOptions99SIZE );
@@ -444,15 +489,6 @@ double vPre = 0.0;
 double vPst = 0.0;
 double v5_0 = 0.0;
 double vKey = 0.0;
-
-
-
-
-typedef struct menuItems{
-  byte o1;
-  byte o2;
-  byte o3;
-} menuItemsSet;
 
 void updateLCD(){
   if (menuCurrent != menuSelected){
@@ -564,7 +600,7 @@ void lcdMainVolts(){
   lcd.print  ("mV ");  
   
   //Ein = (Eo/R2) * (R1+R2)    
-  lcd.print ((avgSum/avgSize)/shunt);
+  lcd.print ((avgSum/avgSize)/myVoltsMap.shunt);
   lcd.print  ("mA");  
   
   if (false){
@@ -697,7 +733,7 @@ void printCD4052Volts(){
   Serial.print (" Current ");
   Serial.print (avgSum/avgSize);
   Serial.print ("mV ");
-  Serial.print ((avgSum/avgSize)/shunt);
+  Serial.print ((avgSum/avgSize)/myVoltsMap.shunt);
   Serial.print ("mA");  
 
   Serial.println(""); 
@@ -793,10 +829,10 @@ void loop(){
   // The calibration numbers used here should be measured 
   // for your joysticks till they send the correct values.
   //------------------------------------------------------
-  myControls.throttle = mapJoystickValues( analogRead(A0), myControlsMap.throttleMin, myControlsMap.throttleMid, myControlsMap.throttleMax, myControlsMap.throttleRev);
-  myControls.yaw      = mapJoystickValues( analogRead(A1), myControlsMap.yawMin,      myControlsMap.yawMid,      myControlsMap.yawMax,      myControlsMap.yawRev);
-  myControls.roll     = mapJoystickValues( analogRead(A2), myControlsMap.rollMin,     myControlsMap.rollMid,     myControlsMap.rollMax,     myControlsMap.rollRev);
-  myControls.pitch    = mapJoystickValues( analogRead(A3), myControlsMap.pitchMin,    myControlsMap.pitchMid,    myControlsMap.pitchMax,    myControlsMap.pitchRev);
+  myControls.throttle = mapJoystickValues( analogRead(A0), myControlsMapThrottle.Min, myControlsMapThrottle.Mid, myControlsMapThrottle.Max, myControlsMapThrottle.Rev);
+  myControls.yaw      = mapJoystickValues( analogRead(A1), myControlsMapYaw.Min,      myControlsMapYaw.Mid,      myControlsMapYaw.Max,      myControlsMapYaw.Rev);
+  myControls.roll     = mapJoystickValues( analogRead(A2), myControlsMapRoll.Min,     myControlsMapRoll.Mid,     myControlsMapRoll.Max,     myControlsMapRoll.Rev);
+  myControls.pitch    = mapJoystickValues( analogRead(A3), myControlsMapPitch.Min,    myControlsMapPitch.Mid,    myControlsMapPitch.Max,    myControlsMapPitch.Rev);
 
   //------------------------------------------------------
   // Read Analog
@@ -807,17 +843,24 @@ void loop(){
     analog[(analogLoop * 2) + 1] = cd4052.analogReadY();
   }
 
+  
+   myAux.AUX1 = analog[0];
+   myAux.AUX2 = analog[2];
+   myAux.AUX3 = analog[4];
+   myAux.AUX4 = analog[8];
+   
   // V Pre
-  vPre = (((refValue * analog[7]) / Vpre12) * (Vpre11 + Vpre12));
+  vPre = (((refValue * analog[7]) / myVoltsMap.Vpre12) * (myVoltsMap.Vpre11 + myVoltsMap.Vpre12));
 
   // V Post
-  vPst = (((refValue * analog[1]) / Vpst22) * (Vpst21 + Vpst22));
+  vPst = (((refValue * analog[1]) /  myVoltsMap.Vpst22) * ( myVoltsMap.Vpst21 +  myVoltsMap.Vpst22));
   
   // 5.0V
-  v5_0 = (((refValue * analog[5]) / V5_32) * (V5_31 + V5_32));
+  v5_0 = (((refValue * analog[5]) /  myVoltsMap.V5_32) * ( myVoltsMap.V5_31 +  myVoltsMap.V5_32));
   
   // 5.0V
   vKey =    refValue * analog[3];
+
 
   //
   avgList[avgCnt++] = (vPre - vPst) * 1000;
@@ -857,7 +900,21 @@ void loop(){
 
   //------------------------------------------------------
   // Update LCD 1/10 seconds
-  updateLCD();
+  //------------------------------------------------------
+  unsigned long currentMillis = millis();
+  if (screenLastRefresh + screenRefresh < currentMillis){
+    screenLastRefresh = currentMillis;
+    updateLCD();
+  } else {
+    if (false){
+      Serial.print  (currentMillis);
+      Serial.print  (" ");
+      Serial.print  (screenLastRefresh);
+      Serial.print  (" ");
+      Serial.println(screenRefresh);
+    }
+  }
+  
     
   //------------------------------------------------------
   // Button pressed?
