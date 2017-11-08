@@ -1,14 +1,11 @@
 #include <SoftWire.h>
 #include <AsyncDelay.h>
 
-//SoftWire sw(SDA, SCL);
-SoftWire sw(2, 3);
+SoftWire sw(SDA, SCL);
 
-  const uint8_t firstAddr = 1;
-  const uint8_t lastAddr = 0x7F;
 void setup(void)
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
   sw.setTimeout_ms(40);
   sw.begin();
 
@@ -17,10 +14,9 @@ void setup(void)
 
   // Set how long we are willing to wait for a device to respond
   sw.setTimeout_ms(200);
-}
 
-void loop(void)
-{
+  const uint8_t firstAddr = 1;
+  const uint8_t lastAddr = 0x7F;
   Serial.println();
   Serial.print("Interrogating all addresses in range 0x");
   Serial.print(firstAddr, HEX);
@@ -45,4 +41,10 @@ void loop(void)
     delay(50);
   }
   Serial.println("Finished");
+
+}
+
+void loop(void)
+{
+  ;
 }
