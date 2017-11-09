@@ -14,13 +14,13 @@
   #include "WProgram.h"
 #endif
 
-#include <string.h>
+//#include <string.h>
 
 // ===========================================
 // Vars
 // ===========================================
 String deviceInfo = "2.4G Transmitter";
-String versionNum = "v1.07";
+String versionNum = "v1.08";
 
 unsigned long  screenRefresh = 1000/4; // 4 times per second
 unsigned long  screenLastRefresh = 0;
@@ -37,8 +37,8 @@ struct MyVoltsMap {
   double shunt = 0.766327;   // 0.5 
   int Vpre11   = 8042; // 8.2k
   int Vpre12   = 2638; // 2.7k
-  int Vpst21  = 8014; // 8.2k
-  int Vpst22  = 2637; // 2.7k
+  int Vpst21   = 8014; // 8.2k
+  int Vpst22   = 2637; // 2.7k
   int V5_31    = 2161; // 2.2k
   int V5_32    = 3212; // 3.3k
 };
@@ -95,14 +95,14 @@ CD4051 switchCD4051 = CD4051(3, 4, 5, 6);
 CD4051 trimCD4051   = CD4051(3, 4, 5, 7);
 CD4051 menuCD4051   = CD4051(3, 4, 5, 8);
 
-int switchPin = 0b00000000;
-int trimPin   = 0b00000000;
-int menuPin   = 0b00000000;
+byte switchPin = 0b00000000;
+byte trimPin   = 0b00000000;
+byte menuPin   = 0b00000000;
 
 byte pinmask;
 byte readmask;
 
-int digitalLoop = 0;
+byte digitalLoop = 0;
 
 // ===========================================
 // CD4052
@@ -111,7 +111,7 @@ int digitalLoop = 0;
 
 CD4052 cd4052 = CD4052(5, 4, A7, A6);
 int analog[8];
-int analogLoop = 0;
+byte analogLoop = 0;
 
 // ===========================================
 // Timing Vars
@@ -171,7 +171,6 @@ struct MyButtons {
 };
 MyButtons myButtons;
 
-
 // ===========================================
 // Reset
 // ===========================================
@@ -196,11 +195,11 @@ void resetData()
   myButtons.menu  = 0;
 }
 
-int avgSize=100;
-double avgList[100];
-int    avgCnt=0;
-double avgSum = 0.0;
-double avg = 0.0;
+byte    avgSize=100;
+double  avgList[100];
+int     avgCnt=0;
+double  avgSum = 0.0;
+double  avg = 0.0;
 
 // ===========================================
 // Serial Debug
@@ -292,6 +291,7 @@ void initSticksIt(MyControlsMap item){
   item.Max = 1023; // A0
   item.Rev = false;
 }
+
 void initSticks(){
   lcd.print("Move Throttle up/down");
   initSticksIt(myControlsMapThrottle);  // A0
@@ -364,24 +364,27 @@ void writeEEPROM(){
   eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
 }
 
+#define membersof(x) (sizeof(x) / sizeof(x[0]))
 
 
 // Declare variables
 //https://arduino.stackexchange.com/questions/19748/copy-content-of-array
 //https://arduino.stackexchange.com/questions/21095/how-to-write-array-of-functions-in-arduino-library
-byte menuOptions00 [5] = {0x00, 0x01, 0x02, 0x03, 0x04};
+byte menuOptions00 [4] = {0x00, 0x01, 0x02, 0x03};
 byte menuOptions10 [4] = {0x00, 0x10, 0x11, 0x12};
-byte menuOptions99 [11] = {0x00, 0x80, 0x81, 0x00, 0x80, 0x81, 0x00, 0x80, 0x81, 0x05, 0x09};
+byte menuOptions90 [4] = {0x10, 0x13, 0x14, 0x15};
+byte menuOptions91 [4] = {0x90, 0x95, 0x96};
 
 byte menuOptions[10];
 
-#define menuOptions10SIZE (sizeof(menuOptions10) / sizeof(byte))
-#define menuOptions00SIZE (sizeof(menuOptions00) / sizeof(byte))
-#define menuOptions99SIZE (sizeof(menuOptions99) / sizeof(byte))
+const byte menuOptions00SIZE = membersof(menuOptions00);
+const byte menuOptions10SIZE = membersof(menuOptions10);
+const byte menuOptions90SIZE = membersof(menuOptions90);
+//#define menuOptions10SIZE (sizeof(menuOptions10) / sizeof(byte))
 
 void setMenu(String menuOpt, byte menuValues[], int sizeIs){
   if (sizeIs > sizeof(menuOptions)){
-    Serial.print  ("Err: setMenu size ");
+    Serial.print  ("Err: setMenu ");
     Serial.print  (sizeIs);
     Serial.print  (" for ");
     Serial.print  (menuOpt);
@@ -394,7 +397,7 @@ void setMenu(String menuOpt, byte menuValues[], int sizeIs){
   memcpy(menuOptions,menuValues,sizeIs);
 
   if (false){
-    for (int loop = 0; loop < sizeof(menuOptions); loop++){
+    for (byte loop = 0; loop < sizeof(menuOptions); loop++){
       Serial.print  (menuOptions[loop]);
       Serial.print  (", ");
     }
@@ -426,7 +429,7 @@ void setup()
   
   setMenu("menuOptions00", menuOptions00,menuOptions00SIZE);
   setMenu("menuOptions10", menuOptions10,menuOptions10SIZE );
-  setMenu("menuOptions99", menuOptions99,menuOptions99SIZE );
+  setMenu("menuOptions90", menuOptions90,menuOptions90SIZE );
 
   //Start everything up
 //  radio.begin();
@@ -434,7 +437,6 @@ void setup()
 //  radio.setDataRate(RF24_250KBPS);
 //  radio.openWritingPipe(pipeOut);
 //  resetData();
-
   
   // LCD setup
   updateLCD(); //lcdStartup(); 
@@ -465,14 +467,14 @@ void printVolts(){
 // ===========================================
 // Returns a corrected value for a joystick position that takes into account
 // the values of the outer extents and the middle of the joystick range.
-int mapJoystickValues(int val, int minimum, int middle, int maximum, bool reverse)
+int mapJoystickValues(int value, int minimum, int middle, int maximum, bool reverse)
 {
-  val = constrain(val, minimum, maximum);
-  if ( val < middle )
-    val = map(val, minimum, middle, 0, 128);
+  value = constrain(value, minimum, maximum);
+  if ( value < middle )
+    value = map(value, minimum, middle, 0, 128);
   else
-    val = map(val, middle, maximum, 128, 255);
-  return ( reverse ? 255 - val : val );
+    value = map(value, middle, maximum, 128, 255);
+  return ( reverse ? 255 - value : value );
 }
 
 // ===========================================
@@ -481,8 +483,7 @@ int mapJoystickValues(int val, int minimum, int middle, int maximum, bool revers
 int menuCurrent  = -1;
 int menuSelected =  0;
 
-
-double refV = 5.0105;
+double refV = 5.0115;
 double refValue = refV / 1023.0;
 
 double vPre = 0.0;
@@ -492,8 +493,9 @@ double vKey = 0.0;
 
 void updateLCD(){
   if (menuCurrent != menuSelected){
-//    menuCurrent = menuSelected;
-//    menuOptions = menuOptions00;
+    menuCurrent = menuSelected;
+//  menuOptions = menuOptions00;
+    Serial.print(".");
     lcd.clear();    
   }
 
@@ -817,13 +819,10 @@ int printInt(int n, String format){
 // ===========================================
 // ===========================================
 // ===========================================
-// ;\loop
+// loop
 // ===========================================
 // ===========================================
 // ===========================================
-
-
-  
 void loop(){
   //------------------------------------------------------
   // The calibration numbers used here should be measured 
