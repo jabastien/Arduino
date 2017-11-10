@@ -903,7 +903,7 @@ void doKeys(){
         line--;
     }
     if (keyPress == 3){
-      if (line < 3)
+      if (line < 4)
         line++;
     }
     
