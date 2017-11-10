@@ -5,25 +5,49 @@
 /* First we include the libraries. Download it from 
    my webpage if you donw have the NRF24 library */
 
-#include <EEPROM.h>
-
-
 #if defined(ARDUINO) && ARDUINO >= 100
   #include "Arduino.h"
 #else
   #include "WProgram.h"
 #endif
 
+#include <EEPROM.h>
+
+// ===========================================
+// Format Print
+// ===========================================
+#include <FormatPrint.h>
+FormatPrint fmt;
+
+byte repeatCount = 0;
+
+byte line = 0;
 //#include <string.h>
 
 // ===========================================
 // Vars
 // ===========================================
-String deviceInfo = "2.4G Transmitter";
-String versionNum = "v1.08";
+String qBytesWorld = "Q-Bytes World";
+String deviceInfo  = "2.4G Transmitter";
+String versionNum  = "v1.08";
 
 unsigned long  screenRefresh = 1000/4; // 4 times per second
 unsigned long  screenLastRefresh = 0;
+
+
+// ===========================================
+// Update LCD
+// ===========================================
+int menuCurrent  =  -1;
+int menuSelected = 255;
+
+double refV = 5.0115;
+double refValue = refV / 1023.0;
+
+double vPre = 0.0;
+double vPst = 0.0;
+double v5_0 = 0.0;
+double vKey = 0.0;
 
 // ===========================================
 // Volt divide Vars
@@ -76,11 +100,7 @@ const uint64_t pipeOut = 0xE8E8F0F0E1LL;
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27,20,4);      // Initialization of the book (address, characters, rows)
 
-// ===========================================
-// Format Print
-// ===========================================
-#include <FormatPrint.h>
-FormatPrint fmt;
+
 
 // ===========================================
 // CD 405x
@@ -209,29 +229,26 @@ void serialDebug(){
 // Print controls
 //------------------------------------------------------
   if (false){
-    Serial.print  ("   T: ");
+    Serial.print  (" T: ");
     Serial.print  (myControls.throttle);
-    Serial.print  (" :: ");
+    Serial.print  (" : ");
     Serial.print  (analogRead(A0));
   
-    Serial.print  ("   Y: ");
+    Serial.print  (" Y: ");
     Serial.print  (myControls.yaw);
-    Serial.print  (" :: ");
+    Serial.print  (" : ");
     Serial.print  (analogRead(A1));
   
-    Serial.print  ("   R: ");
+    Serial.print  (" R: ");
     Serial.print  (myControls.roll);
-    Serial.print  (" :: ");
+    Serial.print  (" : ");
     Serial.print  (analogRead(A2));
   
-    Serial.print  ("   P: ");
+    Serial.print  (" P: ");
     Serial.print  (myControls.pitch);
-    Serial.print  (" :: ");
+    Serial.print  (" : ");
     Serial.print  (analogRead(A3));
-    
-    Serial.println("");
-    }
-    
+
 //    // -----------------------------------------------
 //    // KEY
 //    Serial.print  ("Key: ");
@@ -239,7 +256,10 @@ void serialDebug(){
 //    Serial.print  ("  ");  
 //    Serial.print  (analog[3] * (refV/1023.0));
 //    Serial.print  ("V ");
-
+    
+    Serial.println("");
+    }
+    
 
 
 //------------------------------------------------------
@@ -276,7 +296,6 @@ void myControlsMapSetIt(MyControlsMap item){
   myControlsMapSetIt(myControlsMapRoll);      // A2
   myControlsMapSetIt(myControlsMapPitch);     // A3
 }
-
 
 // ===========================================
 // ===========================================
@@ -370,16 +389,31 @@ void writeEEPROM(){
 // Declare variables
 //https://arduino.stackexchange.com/questions/19748/copy-content-of-array
 //https://arduino.stackexchange.com/questions/21095/how-to-write-array-of-functions-in-arduino-library
-byte menuOptions00 [4] = {0x00, 0x01, 0x02, 0x03};
-byte menuOptions10 [4] = {0x00, 0x10, 0x11, 0x12};
-byte menuOptions90 [4] = {0x10, 0x13, 0x14, 0x15};
-byte menuOptions91 [4] = {0x90, 0x95, 0x96};
+byte menuOptions00 [2] = {0, 10};
+byte menuOptions10 [5] = {0, 11, 12, 13, 14};
+
+byte menuOptions11 [1] = {10};
+byte menuOptions12 [1] = {10};
+byte menuOptions13 [1] = {10};
+byte menuOptions14 [1] = {10};
+
+//byte menuOptions90 [4] = {0, 0x13, 0x14, 0x15};
+//byte menuOptions91 [4] = {0x90, 0x95, 0x96};
 
 byte menuOptions[10];
 
 const byte menuOptions00SIZE = membersof(menuOptions00);
 const byte menuOptions10SIZE = membersof(menuOptions10);
-const byte menuOptions90SIZE = membersof(menuOptions90);
+const byte menuOptions11SIZE = membersof(menuOptions11);
+const byte menuOptions12SIZE = membersof(menuOptions12);
+const byte menuOptions13SIZE = membersof(menuOptions13);
+const byte menuOptions14SIZE = membersof(menuOptions14);
+
+//const byte menuOptions90SIZE = membersof(menuOptions90);
+//  setMenu("mo00", menuOptions00,menuOptions00SIZE);
+//  setMenu("mo10", menuOptions10,menuOptions10SIZE );
+//  setMenu("mo90", menuOptions90,menuOptions90SIZE );
+
 //#define menuOptions10SIZE (sizeof(menuOptions10) / sizeof(byte))
 
 void setMenu(String menuOpt, byte menuValues[], int sizeIs){
@@ -396,7 +430,8 @@ void setMenu(String menuOpt, byte menuValues[], int sizeIs){
   memset(menuOptions, 0x0, sizeof(menuOptions)); // for automatically-allocated arrays  
   memcpy(menuOptions,menuValues,sizeIs);
 
-  if (false){
+  if (true){
+      Serial.print  (" ");
     for (byte loop = 0; loop < sizeof(menuOptions); loop++){
       Serial.print  (menuOptions[loop]);
       Serial.print  (", ");
@@ -425,11 +460,7 @@ void setup()
   //Print length of data to run CRC on.
   Serial.print("EEPROM length: ");
   Serial.println(EEPROM.length());
-
   
-  setMenu("menuOptions00", menuOptions00,menuOptions00SIZE);
-  setMenu("menuOptions10", menuOptions10,menuOptions10SIZE );
-  setMenu("menuOptions90", menuOptions90,menuOptions90SIZE );
 
   //Start everything up
 //  radio.begin();
@@ -439,7 +470,7 @@ void setup()
 //  resetData();
   
   // LCD setup
-  updateLCD(); //lcdStartup(); 
+  //updateLCD();
 
   // set levels
   myControlsMapSet();
@@ -448,16 +479,132 @@ void setup()
   initSticks();
 }
 
+// ===========================================
+// Main Menu
+// ===========================================
+void lcdMain000(){
+  if (repeatCount == 0){
+    Serial.print  (" -> lcdMain000");
+    lcd.setCursor(0, 0);
+    lcd.print("Main");
+    lcd.setCursor(0, 1);
+    lcd.print("Repeat: ");
 
+    setMenu("mo00", menuOptions00,menuOptions00SIZE);
+  }
+      
+  lcd.setCursor(9, 1);
+  lcd.print(repeatCount);
+  lcd.print(" ");
+}
+
+// ===========================================
+// lcdMenuX10
+// ===========================================
+void lcdMenuX10(){
+  if (repeatCount == 0){
+    Serial.print  (" -> lcdMenuX10");
+    lcd.setCursor(0, 0);
+    lcd.print("10 -> 11");
+    lcd.setCursor(0, 1);
+    lcd.print("10 -> 12");
+    lcd.setCursor(0, 2);
+    lcd.print("10 -> 13");
+    lcd.setCursor(0, 3);
+    lcd.print("10 -> 14");
+    lcd.print(" Repeat: ");
+
+    setMenu("mo10", menuOptions10,menuOptions10SIZE);
+  }
+      
+//  lcd.setCursor(17, 1);
+//  lcd.print(repeatCount);
+//  lcd.print(" ");  
+}
+
+
+// ===========================================
+// lcdMenuX11
+// ===========================================
+void lcdMenuX11(){
+  if (repeatCount == 0){
+    Serial.print  (" -> lcdMenuX11");
+    lcd.setCursor(0, 0);
+    lcd.print("x11");
+    lcd.setCursor(0, 1);
+    lcd.print("Repeat: ");
+
+    setMenu("mo11", menuOptions11,menuOptions11SIZE);    
+  }
+      
+//  lcd.setCursor(9, 1);
+//  lcd.print(repeatCount);
+//  lcd.print(" ");  
+}
+
+// ===========================================
+// lcdMenuX12
+// ===========================================
+void lcdMenuX12(){
+  if (repeatCount == 0){
+    Serial.print  (" -> lcdMenuX12");
+    lcd.setCursor(0, 0);
+    lcd.print("x12");
+    lcd.setCursor(0, 1);
+    lcd.print("Repeat: ");
+
+    setMenu("mo12", menuOptions12,menuOptions12SIZE);    
+  }
+      
+  lcd.setCursor(9, 1);
+  lcd.print(repeatCount);
+  lcd.print(" ");  
+}
+
+// ===========================================
+// lcdMenuX13
+// ===========================================
+void lcdMenuX13(){
+  if (repeatCount == 0){
+    Serial.print  (" -> lcdMenuX13");
+    lcd.setCursor(0, 0);
+    lcd.print("x13");
+    lcd.setCursor(0, 1);
+    lcd.print("Repeat: ");
+
+    setMenu("mo13", menuOptions13,menuOptions13SIZE);    
+  }
+      
+  lcd.setCursor(9, 1);
+  lcd.print(repeatCount);
+  lcd.print(" ");  
+}
+
+// ===========================================
+// lcdMenuX14
+// ===========================================
+void lcdMenuX14(){
+  if (repeatCount == 0){
+    Serial.print  (" -> lcdMenuX14");
+    lcd.setCursor(0, 0);
+    lcd.print("x14");
+    lcd.setCursor(0, 1);
+    lcd.print("Repeat: ");
+  }
+      
+  lcd.setCursor(9, 1);
+  lcd.print(repeatCount);
+  lcd.print(" ");  
+}
 
 // ===========================================
 // Print Volts
 // ===========================================
 void printVolts(){
-  lcd.print("Volts:");
-  float sensorValue = (float)analogRead(A0);
-  sensorValue *= (5.0 / 1023.0);
-  lcd.print(fmt.getFloat(sensorValue, 6, 3));
+//  float sensorValue = (float)analogRead(A0);
+//  sensorValue *= (5.0 / 1023.0);
+  //lcd.print(fmt.getFloat(sensorValue, 6, 3));
+  lcd.print(fmt.getFloat(v5_0, 6, 3));
   lcd.print("V");
 }
 /**************************************************/
@@ -477,69 +624,42 @@ int mapJoystickValues(int value, int minimum, int middle, int maximum, bool reve
   return ( reverse ? 255 - value : value );
 }
 
-// ===========================================
-// Update LCD
-// ===========================================
-int menuCurrent  = -1;
-int menuSelected =  0;
-
-double refV = 5.0115;
-double refValue = refV / 1023.0;
-
-double vPre = 0.0;
-double vPst = 0.0;
-double v5_0 = 0.0;
-double vKey = 0.0;
-
-void updateLCD(){
-  if (menuCurrent != menuSelected){
-    menuCurrent = menuSelected;
-//  menuOptions = menuOptions00;
-    Serial.print(".");
-    lcd.clear();    
-  }
-
-  switch (menuSelected) {
-    case 0:
-      lcdStartup();
-      menuSelected = 2;
-      break;
-    case 1:
-      lcdMainVolts();
-      break;
-    case 2:
-      lcdKeyVolts();
-      break;      
-    // ---------------------------------------
-    default:
-      // catch N/A
-      menuSelected = 0;
-      break;
-  }
-
-  if (keyPress != 0){
-    keyPress = 0;    
-//    lcd.blink();
-//    delay(100);
-//    lcd.noBlink();
-  }
-}
 
 // -------------------------------------------
-// -------------------------------------------
-// -------------------------------------------
-
-void lcdStartup(){
-  lcd.init();
-  lcd.backlight();
+void lcdKeyVolts(){
+  //--------------------
+  //
+  //--------------------  
   lcd.setCursor(0, 0);
-  lcd.print(deviceInfo);
+  lcd.print("KeyV: ");
+
+  lcd.print  (refValue * analog[3]);
+  lcd.print  ("V ");   
+
   lcd.setCursor(0, 1);
-  lcd.print(versionNum); 
+  lcd.print("Value: ");
+  lcd.print  (analog[3]);   
+  lcd.print("   ");
+
   lcd.setCursor(0, 2);
-  printVolts(); 
-  delay(2000);  
+  lcd.print("Key Down: "); 
+  lcd.print  (keyDown);
+
+  lcd.setCursor(0, 3);
+  lcd.print("Key Pressed: "); 
+  lcd.print  (keyPress);
+
+  
+  //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  if (false){
+    printCD4052();
+  }
+
+  if (keyPress == 1){
+    menuSelected = 0;
+  }
 }
+
 
 // -------------------------------------------
 void lcdMainVolts(){
@@ -614,41 +734,148 @@ void lcdMainVolts(){
   }
 }
 
-
-
-void lcdKeyVolts(){
-  //--------------------
-  //
-  //--------------------  
-  lcd.setCursor(0, 0);
-  lcd.print("KeyV: ");
-
-  lcd.print  (refValue * analog[3]);
-  lcd.print  ("V ");   
-
-  lcd.setCursor(0, 1);
-  lcd.print("Value: ");
-  lcd.print  (analog[3]);   
-  lcd.print("   ");
-
-  lcd.setCursor(0, 2);
-  lcd.print("Key Down: "); 
-  lcd.print  (keyDown);
-
-  lcd.setCursor(0, 3);
-  lcd.print("Key Pressed: "); 
-  lcd.print  (keyPress);
-
+// -------------------------------------------
+void lcdInit254(){
+  if (repeatCount == 0){
+    Serial.print  (" -> lcdInit254");
+    lcd.setCursor(0, 0);
+    lcd.print(qBytesWorld);
+    lcd.setCursor(0, 1);
+    lcd.print(deviceInfo);
+    lcd.setCursor(0, 2);
+    lcd.print(versionNum); 
+    lcd.setCursor(0, 3);
+    lcd.print("Volts:");
+  }  
   
-  //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  if (false){
-    printCD4052();
+  lcd.setCursor(7, 3);
+  printVolts(); 
+
+  if (repeatCount > 8){ //  //delay(2000);
+    menuSelected = 0;
+  }
+}
+
+// -------------------------------------------
+void lcdInit255(){
+  Serial.print  (" -> lcdInit255");
+  lcd.init();
+  lcd.backlight();
+//  lcd.blink();
+  lcd.noBlink();  
+  menuSelected = 254;
+}
+
+void updateLCD(){
+
+  // Detect Menu change
+  if (menuCurrent != menuSelected){
+    lcd.clear();    
+    repeatCount = 0;
+    line = 0;
+    menuCurrent = menuSelected;
+
+    if (menuSelected == 0 || menuSelected >= 250){
+      lcd.noBlink();  
+    } else {
+      lcd.blink();
+    }
   }
 
   if (keyPress == 1){
-    menuSelected = 1;
+    Serial.println("10");
+    menuSelected = menuOptions[line];
+  }    
+      
+  switch (menuSelected) {
+    // ---------------------------------------
+    case 0:
+      lcdMain000();
+
+      break;
+    // ---------------------------------------
+    case 1:
+      lcdMainVolts();
+      break;
+    // ---------------------------------------
+    case 2:
+      lcdKeyVolts();
+      break;
+
+      
+    // ---------------------------------------
+    case 10:
+      lcdMenuX10();
+      
+      break;
+    // ---------------------------------------
+    case 11:
+      lcdMenuX11();
+   
+      break;
+    // ---------------------------------------
+    case 12:
+      lcdMenuX12();
+   
+      break;
+    // ---------------------------------------
+    case 13:
+      lcdMenuX13();
+   
+      break;
+    // ---------------------------------------
+    case 14:
+      lcdMenuX14();
+ 
+      break;
+
+      
+    // ---------------------------------------
+    case 254:
+      lcdInit254();
+      break;
+    // ---------------------------------------
+    case 255:
+      lcdInit255();
+      break;
+    // ---------------------------------------
+    default:
+      // catch all - N/A
+      Serial.print  ("Not found: " );
+      Serial.println(menuSelected);
+      menuSelected = 255;
+      break;
   }
+
+  keyPress = 0;
+
+  // Set Repeat Count
+  repeatCount++;
+  if (repeatCount > 32){
+    repeatCount = 0;
+  }
+
+//////////////////////////////////////
+//  if (keyPress != 0){
+//
+//    if (keyPress == 5){
+//      if (line > 0)
+//        line--;
+//    }
+//    if (keyPress == 3){
+//      if (line <= 3)
+//        line++;
+//    }
+//
+//    lcd.setCursor(0, line);
+///////////////////////////////////////    
+//    keyPress = 0;   
+//  }
+ // Serial.println();
 }
+
+// -------------------------------------------
+// -------------------------------------------
 
 void doKeys(){
   int analogvalue = analog[3]; // read the pushbutton input pin
@@ -667,6 +894,34 @@ void doKeys(){
   delay(5);                       // wait for a second
   digitalWrite(2, LOW);    // turn the LED off by making the voltage LOW
   keyPress = keyDown;
+
+////////////////////////////////////
+  if (keyPress != 0){
+
+    if (keyPress == 5){
+      if (line > 0)
+        line--;
+    }
+    if (keyPress == 3){
+      if (line < 3)
+        line++;
+    }
+    
+    lcd.setCursor(0, line);
+  
+    Serial.print  ("Repeat: ");
+    Serial.print  (repeatCount);
+    Serial.print  (" ");
+    Serial.print  (menuCurrent);
+    Serial.print  (" ");
+    Serial.print  (menuSelected);
+    Serial.print(" Line: ");
+    Serial.println(line);
+    
+/////////////////////////////////////    
+
+  }
+    
         }
       }      
   lastanalogvalue = analogvalue;  
@@ -683,15 +938,16 @@ void doKeys(){
 //------------------------------------------------------
 void printCD4052(){
   for (analogLoop = 0 ;analogLoop < 4; analogLoop++){
-      printInt(analogLoop,"<X%1d:");
-      printInt(analogLoop*2,"%1d:");
-      printInt(analog[(analogLoop * 2)    ],"%4d> ");
-      printInt(analogLoop,"<Y%1d:");
-      printInt((analogLoop * 2) + 1,"%1d:");
-      printInt(analog[(analogLoop * 2) + 1],"%4d> ");
+      fmt.printInt(analogLoop,"<X%1d:");
+      fmt.printInt(analogLoop*2,"%1d:");
+      fmt.printInt(analog[(analogLoop * 2)    ],"%4d> ");
+      fmt.printInt(analogLoop,"<Y%1d:");
+      fmt.printInt((analogLoop * 2) + 1,"%1d:");
+      fmt.printInt(analog[(analogLoop * 2) + 1],"%4d> ");
       }
-  Serial.println("");      
+//  Serial.println("");      
 }        
+
 //------------------------------------------------------
 // Print CD4052 volts (analog)
 //------------------------------------------------------
@@ -738,8 +994,9 @@ void printCD4052Volts(){
   Serial.print ((avgSum/avgSize)/myVoltsMap.shunt);
   Serial.print ("mA");  
 
-  Serial.println(""); 
+//  Serial.println(""); 
 }
+
 // -------------------------------------------
 // -------------------------------------------
 // -------------------------------------------
@@ -747,6 +1004,7 @@ void printCD4052Volts(){
 void lcdMain(){
   
 }
+
 // -------------------------------------------
 void lcdMainFlightTime(){
   
@@ -807,14 +1065,14 @@ int seconds = (((timeNow % day) % hour) % minute) / second;
   }
 }
 
-int printInt(int n, String format){
-  char c[10];        // long enough to hold complete integer string
-  char charBuf[20];
-  format.toCharArray(charBuf,20);
-  int m = sprintf(c, charBuf, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
-  Serial.print(c);   
-  return m;
-}
+//int printInt(int n, String format){
+//  char c[10];        // long enough to hold complete integer string
+//  char charBuf[20];
+//  format.toCharArray(charBuf,20);
+//  int m = sprintf(c, charBuf, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
+//  Serial.print(c);   
+//  return m;
+//}
 
 // ===========================================
 // ===========================================
