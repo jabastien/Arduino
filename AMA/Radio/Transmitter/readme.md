@@ -1,6 +1,6 @@
 # Arduino Nano Transmitter
 
-### Menu
+## Menus
 | Startup |  
 | ----- | 
 | Name           | 
