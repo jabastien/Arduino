@@ -14,7 +14,7 @@
 | Mode: xxxxxxxxxxx| 
 | Message: Xxxxxx (Warn or Error)| 
 | Voltage: xx.xV | 
-| TPS xxxx GPS xxx| 
+| FPS xxxx GPS xxx| 
 | Channel xxx Drop/Sec xxx|
 | >Transmitter   | 
 | >Model   | 
