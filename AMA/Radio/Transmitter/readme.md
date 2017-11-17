@@ -5,7 +5,7 @@
 | ----- | 
 | Name           | 
 | Version        | 
-| Voltage: xx.xV | 
+| Voltage: xx.xxV | 
 | QBytes-World   | 
 
 | Main |  
