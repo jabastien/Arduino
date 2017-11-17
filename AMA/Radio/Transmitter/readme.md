@@ -13,7 +13,7 @@
 | Flight Time MM:SS|
 | Mode: xxxxxxxxxxx| 
 | Message: Xxxxxx (Warn or Error)| 
-| Voltage: xx.xV | 
+| Voltage: xx.xxV | 
 | FPS xxxx GPS xxx| 
 | Channel xxx Drop/Sec xxx|
 | >Transmitter   | 
