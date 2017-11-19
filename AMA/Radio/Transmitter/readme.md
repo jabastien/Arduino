@@ -1,11 +1,11 @@
 # Arduino Nano Transmitter
 
-### Menu
+## Menus
 | Startup |  
 | ----- | 
 | Name           | 
 | Version        | 
-| Voltage: xx.xV | 
+| Voltage: xx.xxV | 
 | QBytes-World   | 
 
 | Main |  
@@ -13,8 +13,8 @@
 | Flight Time MM:SS|
 | Mode: xxxxxxxxxxx| 
 | Message: Xxxxxx (Warn or Error)| 
-| Voltage: xx.xV | 
-| TPS xxxx GPS xxx| 
+| Voltage: xx.xxV | 
+| FPS xxxx GPS xxx| 
 | Channel xxx Drop/Sec xxx|
 | >Transmitter   | 
 | >Model   | 
