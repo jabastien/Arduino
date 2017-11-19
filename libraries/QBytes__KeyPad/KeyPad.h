@@ -41,7 +41,6 @@ class KeyPad {
 
 		byte numberOfKeys;	// Max value 255
 
-		//int	 lowAnalog;
 		int	 halfLowAnalog;
 		
 		byte pin;

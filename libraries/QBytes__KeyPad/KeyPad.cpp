@@ -21,8 +21,6 @@ void KeyPad::printIt(){
 		Serial.print  (" ");
 		Serial.print  (halfLowAnalog);
 		Serial.print  (" ");
-		//Serial.print  (lowAnalog);	
-		//Serial.print  (" ");
 		Serial.print  (intervalBeep);	
 		Serial.print  ("");	
 		Serial.print  (intervalRepeat);
@@ -56,8 +54,6 @@ KeyPad::KeyPad(byte _pin, byte _numberOfKeys, unsigned long _intervalBeep, unsig
 	// Number of keys
 	numberOfKeys = _numberOfKeys;	
 	halfLowAnalog = -(1023 / numberOfKeys / 2);
-	//lowAnalog     = 1023 / numberOfKeys;
-	//halfLowAnalog = lowAnalog / 2;
 	
 	// Delay for led on after key release
 	intervalBeep = _intervalBeep;
@@ -82,9 +78,6 @@ byte KeyPad::getKeyPressed(){
 		keyUpMillis = millis();
 		
 		digitalWrite(pin, HIGH);   // turn the LED/sound on
-		
-		// Clear array
-		//memset(arr, 0x0, sizeof(arr)); 
 		
 		blocking = true;
 		printIt();
