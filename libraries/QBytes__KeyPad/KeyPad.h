@@ -27,27 +27,27 @@ class KeyPad {
    */		
    private:
 
-		unsigned long keyUpMillis = 0; 
-		unsigned long intervalBeep = 25; // beep
-		unsigned long intervalRepeat = 250; // repeat
+		unsigned long keyUpMillis;		// Time from key release
+		int intervalBeep;		// beep
+		int intervalRepeat ;	// repeat
 
-		byte arr [5]	= {0, 0, 0, 0, 0};
-		byte arrSize	= sizeof( arr ) / sizeof( byte );
-		byte arrCntr	= 0;	// Max value 255
+		byte arr [5];
+		byte arrSize = sizeof( arr ) / sizeof( byte );
+		byte arrCntr;		// Max value 255
 
-		byte keyDown	= 0;	// Max value 255
-		byte keyPress	= 0;	// Max value 255
-		byte noKey		= 0;	// Max value 255
+		byte keyDown;		// Max value 255
+		byte keyPress;		// Max value 255
+		byte noKey;			// Max value 255
 
-		byte numberOfKeys = 5;	// Max value 255
+		byte numberOfKeys;	// Max value 255
 
-		int	 lowAnalog    ;// = 1023 / numberOfKeys;
-		int	 halfLowAnalog;// = 1023 / numberOfKeys / 2;
+		//int	 lowAnalog;
+		int	 halfLowAnalog;
 		
 		byte pin;
 		
-		boolean eligible = true;
-		boolean blocking = false;
+		boolean eligible;
+		boolean blocking;
   /*
    * protected members / functions / class variables
    */

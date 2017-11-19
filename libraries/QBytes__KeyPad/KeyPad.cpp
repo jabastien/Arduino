@@ -21,13 +21,13 @@ void KeyPad::printIt(){
 		Serial.print  (" ");
 		Serial.print  (halfLowAnalog);
 		Serial.print  (" ");
-		Serial.print  (lowAnalog);	
-		Serial.print  (" ");
+		//Serial.print  (lowAnalog);	
+		//Serial.print  (" ");
 		Serial.print  (intervalBeep);	
 		Serial.print  ("");	
 		Serial.print  (intervalRepeat);
 		Serial.print  ("");	
-		Serial.println(keyUpMillis);		
+		Serial.print  (keyUpMillis);		
 		Serial.println("");	
 	}
 }
@@ -43,7 +43,7 @@ KeyPad::KeyPad(void)
 // ===========================================
 // KeyPad Constructor
 // ===========================================
-//KeyPad::KeyPad(byte _pin=2, byte _numberOfKeys=5, unsigned long _intervalBeep=25 ){
+//KeyPad::KeyPad(byte _pin=2, byte _numberOfKeys=5, unsigned long _intervalBeep=25 ){  //provide default values?
 KeyPad::KeyPad(byte _pin, byte _numberOfKeys, unsigned long _intervalBeep, unsigned long _intervalRepeat ){	
 	
 	//Serial.println("Constructor");
@@ -55,8 +55,9 @@ KeyPad::KeyPad(byte _pin, byte _numberOfKeys, unsigned long _intervalBeep, unsig
 	
 	// Number of keys
 	numberOfKeys = _numberOfKeys;	
-	halfLowAnalog = 1023 / numberOfKeys / 2;
-	lowAnalog     = 1023 / numberOfKeys;
+	halfLowAnalog = -(1023 / numberOfKeys / 2);
+	//lowAnalog     = 1023 / numberOfKeys;
+	//halfLowAnalog = lowAnalog / 2;
 	
 	// Delay for led on after key release
 	intervalBeep = _intervalBeep;
@@ -80,10 +81,10 @@ byte KeyPad::getKeyPressed(){
 		
 		keyUpMillis = millis();
 		
-		digitalWrite(pin, HIGH);   // turn the LED on (HIGH is the voltage level)
+		digitalWrite(pin, HIGH);   // turn the LED/sound on
 		
 		// Clear array
-		memset(arr, 0x0, sizeof(arr)); 
+		//memset(arr, 0x0, sizeof(arr)); 
 		
 		blocking = true;
 		printIt();
@@ -102,7 +103,8 @@ void KeyPad::doKeys(int analogvalue){
 	// If KeyPad just released, delay long enough to make sound/show LED and delay for repeat.
 	//----------------------------	
 	if (blocking){
-		unsigned long diffMillis = millis() - keyUpMillis;
+		// Get the millis since key released.
+		int diffMillis = millis() - keyUpMillis;
 		
 		// turn the LED/sound off
 		if(diffMillis > intervalBeep){		  
@@ -121,7 +123,7 @@ void KeyPad::doKeys(int analogvalue){
 	//----------------------------	
 	// Calculate which key is pressed.
 	//----------------------------	
-	keyDown = map(analogvalue, -(halfLowAnalog), 1023 - halfLowAnalog, 0, numberOfKeys);
+	keyDown = map(analogvalue, halfLowAnalog, 1023 + halfLowAnalog, 0, numberOfKeys);
 
 	// Reset loop counter?
 	if (++arrCntr >= arrSize){
