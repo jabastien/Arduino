@@ -17,10 +17,6 @@ void setup() {
   Serial.flush() ;
   Serial.println("KeyPad starting");
   
-  analogReference(EXTERNAL); 
-
-  pinMode(A0, INPUT);
-  
   if (false){
     for (int num = 0; num < 1023; num++){
       keyPad.doKeys(num);
@@ -28,6 +24,9 @@ void setup() {
     Serial.println("Holding here.");
     while(true){} // display only: hold here.
   }
+
+  analogReference(EXTERNAL); 
+  pinMode(A0, INPUT);
 
   Serial.println("KeyPad running");
 }
