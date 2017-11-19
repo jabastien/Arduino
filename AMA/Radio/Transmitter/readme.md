@@ -139,5 +139,3 @@ Here is what I'm using:
 7. Don’t use long wires to the module, specially cheap stuff.
 
 See here: http://www.electrobob.com/bad-wires/
-
-test
