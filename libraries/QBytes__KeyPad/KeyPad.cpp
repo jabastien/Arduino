@@ -13,6 +13,8 @@ void KeyPad::printIt(){
 	if (false){
 		// Display it
 		Serial.print  (" ");
+		Serial.print  (blocking);
+		Serial.print  (" ");
 		Serial.print  (pin);
 		Serial.print  (" ");
 		Serial.print  (numberOfKeys);
@@ -21,7 +23,11 @@ void KeyPad::printIt(){
 		Serial.print  (" ");
 		Serial.print  (lowAnalog);	
 		Serial.print  (" ");
-		Serial.print  (interval);	
+		Serial.print  (intervalBeep);	
+		Serial.print  ("");	
+		Serial.print  (intervalRepeat);
+		Serial.print  ("");	
+		Serial.println(keyUpMillis);		
 		Serial.println("");	
 	}
 }
@@ -29,8 +35,7 @@ void KeyPad::printIt(){
 // KeyPad empty Constructor
 // ===========================================
 KeyPad::KeyPad(void)
-	: KeyPad(LED_BUILTIN, 5, 100) // call empty constructor
-{
+	: KeyPad(LED_BUILTIN, 5, 10, 250){ // call empty constructor
 	//Serial.println("Default Constructor");
 	printIt();
 }
@@ -38,8 +43,8 @@ KeyPad::KeyPad(void)
 // ===========================================
 // KeyPad Constructor
 // ===========================================
-//KeyPad::KeyPad(byte _pin=2, byte _numberOfKeys=5, unsigned long _interval=25 ){
-KeyPad::KeyPad(byte _pin, byte _numberOfKeys, unsigned long _interval ){	
+//KeyPad::KeyPad(byte _pin=2, byte _numberOfKeys=5, unsigned long _intervalBeep=25 ){
+KeyPad::KeyPad(byte _pin, byte _numberOfKeys, unsigned long _intervalBeep, unsigned long _intervalRepeat ){	
 	
 	//Serial.println("Constructor");
 	
@@ -54,8 +59,9 @@ KeyPad::KeyPad(byte _pin, byte _numberOfKeys, unsigned long _interval ){
 	lowAnalog     = 1023 / numberOfKeys;
 	
 	// Delay for led on after key release
-	interval = _interval;
-
+	intervalBeep = _intervalBeep;
+	intervalRepeat = _intervalRepeat;
+	
 	printIt();
 }
 
@@ -72,12 +78,14 @@ byte KeyPad::getKeyPressed(){
 		// Clear key Presses (return it only once).
 		keyPress = noKey;
 		
-		previousMillis = millis();
+		keyUpMillis = millis();
+		
 		digitalWrite(pin, HIGH);   // turn the LED on (HIGH is the voltage level)
 		
 		// Clear array
 		memset(arr, 0x0, sizeof(arr)); 
 		
+		blocking = true;
 		printIt();
 	}
 	
@@ -89,41 +97,25 @@ byte KeyPad::getKeyPressed(){
 // Do Keys calculation
 // ===========================================
 void KeyPad::doKeys(int analogvalue){
-//printIt();
-	//----------------------------	
-	// If KeyPad just released, delay long enough to make sound and show LED.
-	//----------------------------	
-	if (digitalRead(pin) == HIGH);
-	{
-	  //unsigned long currentMillis = millis();
-      if(millis() - previousMillis > interval) 
-		{		  
-			digitalWrite(pin, LOW);    // turn the LED off by making the voltage LOW
-		} else {
-			// Wait for led/sound off
-			return;
-		}
-	}
 
 	//----------------------------	
-	// Calculate if key was released.
+	// If KeyPad just released, delay long enough to make sound/show LED and delay for repeat.
 	//----------------------------	
-	if (eligible && analogvalue < halfLowAnalog){
-		// Key Up/Released
-		if (keyDown == arrAvg){
-			keyPress = keyDown;
-		} else {
-			keyPress = noKey;
+	if (blocking){
+		unsigned long diffMillis = millis() - keyUpMillis;
+		
+		// turn the LED/sound off
+		if(diffMillis > intervalBeep){		  
+			digitalWrite(pin, LOW);    
 		}
-		// Clear array
-		//memset(arr, 0x0, sizeof(arr));  
-	} 
-	
-	//----------------------------	
-	// Reset loop counter?
-	//----------------------------	
-	if (++arrCntr >= arrSize){
-	  arrCntr = 0;
+		
+		// Allow repeat to work
+		if(diffMillis > intervalRepeat) {			
+			blocking = false;
+		}
+		
+		// Blocking, so return
+		return;
 	}
 
 	//----------------------------	
@@ -131,27 +123,27 @@ void KeyPad::doKeys(int analogvalue){
 	//----------------------------	
 	keyDown = map(analogvalue, -(halfLowAnalog), 1023 - halfLowAnalog, 0, numberOfKeys);
 
+	// Reset loop counter?
+	if (++arrCntr >= arrSize){
+	  arrCntr = 0;
+	}		
 	arr[arrCntr] = keyDown;
 
 	eligible = true;
 	
-	arrAvg = 0;
 	for (byte b = 0; b < arrSize; b++){
-		arrAvg  += arr[b];
 		if (keyDown != arr[b]){
 			eligible = false;
 		}
 	}
-	arrAvg /= arrSize;
 
 	//----------------------------	
-	//reset, if nothing good can happen
+	// If eligible, make key available.
 	//----------------------------	
-	// if (keyDown < arrAvg){
-		// // Clear array
-		// memset(arr, 0x0, sizeof(arr));  
-		// keyDown = noKey;	
-		// keyPress = noKey;	
-		// Serial.println("< clr"); 		
-	// }
+	if (eligible){
+		// Key Up/Released
+			keyPress = keyDown;
+		} else {
+			keyPress = noKey;
+	}	
 }

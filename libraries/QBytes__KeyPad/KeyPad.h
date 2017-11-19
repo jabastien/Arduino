@@ -16,7 +16,7 @@ class KeyPad {
    public:
 
 		KeyPad(void);
-		KeyPad(byte, byte, unsigned long);
+		KeyPad(byte, byte, unsigned long, unsigned long);
 		
 		void printIt();
 		void doKeys(int);
@@ -27,13 +27,13 @@ class KeyPad {
    */		
    private:
 
-		unsigned long previousMillis = 0; 
-		unsigned long interval = 25;
+		unsigned long keyUpMillis = 0; 
+		unsigned long intervalBeep = 25; // beep
+		unsigned long intervalRepeat = 250; // repeat
 
 		byte arr [5]	= {0, 0, 0, 0, 0};
 		byte arrSize	= sizeof( arr ) / sizeof( byte );
 		byte arrCntr	= 0;	// Max value 255
-		int  arrAvg		= 0;
 
 		byte keyDown	= 0;	// Max value 255
 		byte keyPress	= 0;	// Max value 255
@@ -47,6 +47,7 @@ class KeyPad {
 		byte pin;
 		
 		boolean eligible = true;
+		boolean blocking = false;
   /*
    * protected members / functions / class variables
    */

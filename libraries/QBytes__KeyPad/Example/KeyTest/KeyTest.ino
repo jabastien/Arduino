@@ -8,13 +8,12 @@
 
 #include <KeyPad.h>
 
-KeyPad keyPad(LED_BUILTIN, 5, 10);
 //KeyPad keyPad;  // Empty constructor does not require ().
 //KeyPad keyPad(); // this is an error
-
+KeyPad keyPad(2, 5, 10, 200);
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.flush() ;
   Serial.println("KeyPad starting");
   
