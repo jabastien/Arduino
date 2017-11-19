@@ -24,13 +24,12 @@ class FormatPrint{
    */
     public: 
      FormatPrint(); // constructor
+
      int  printInt  (int n, String format);
+     char * getInt  (int n, String format);
 
      void printFloat(float d, int whole, int decimal);
      char * getFloat(float d, int whole, int decimal);
-     
-
-	
 	
 //     String fmt;  
 
