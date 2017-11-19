@@ -5,12 +5,19 @@
 /* First we include the libraries. Download it from 
    my webpage if you donw have the NRF24 library */
 
-#if defined(ARDUINO) && ARDUINO >= 100
+//#if defined(ARDUINO) && ARDUINO >= 100
+#if ARDUINO >= 100
   #include "Arduino.h"
 #else
   #include "WProgram.h"
+  #include "pins_arduino.h"
+  #include "WConstants.h"
 #endif
 
+
+// ===========================================
+// EEPROM
+// ===========================================
 #include <EEPROM.h>
 
 // ===========================================
@@ -21,7 +28,6 @@ FormatPrint fmt;
 
 byte repeatCount = 0;
 
-byte line = 0;
 //#include <string.h>
 
 // ===========================================
@@ -29,11 +35,10 @@ byte line = 0;
 // ===========================================
 String qBytesWorld = "Q-Bytes World";
 String deviceInfo  = "2.4G Transmitter";
-String versionNum  = "v1.08";
+String versionNum  = "v1.09";
 
 unsigned long  screenRefresh = 1000/4; // 4 times per second
 unsigned long  screenLastRefresh = 0;
-
 
 // ===========================================
 // Update LCD
@@ -69,16 +74,17 @@ struct MyVoltsMap {
 MyVoltsMap myVoltsMap;
 
 
-// ===========================================
-// Keypad
-// ===========================================
-int lastanalogvalue = 0;
+//// ===========================================
+//// Keypad
+//// ===========================================
+#include <KeyPad.h>
 
-long previousMillisX = 0; 
-long intervalX = 100;
+//KeyPad keyPad;  // Empty constructor does not require ().
+//KeyPad keyPad(); // this is an error
+KeyPad keyPad(2, 5, 10, 200);
 
-int keyDown = 0;
-int keyPress = 0;
+byte keyPress;
+byte line = 0;
 
 // ===========================================
 // RF24
@@ -99,8 +105,6 @@ const uint64_t pipeOut = 0xE8E8F0F0E1LL;
 // ===========================================
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27,20,4);      // Initialization of the book (address, characters, rows)
-
-
 
 // ===========================================
 // CD 405x
@@ -130,7 +134,9 @@ byte digitalLoop = 0;
 #include <CD4052.h>
 
 CD4052 cd4052 = CD4052(5, 4, A7, A6);
+
 int analog[8];
+
 byte analogLoop = 0;
 
 // ===========================================
@@ -290,7 +296,8 @@ void myControlsMapSetIt(MyControlsMap item){
   item.Rev = false;
 }
   
-  void myControlsMapSet(){
+// ===========================================
+void myControlsMapSet(){
   myControlsMapSetIt(myControlsMapThrottle);  // A0
   myControlsMapSetIt(myControlsMapYaw);       // A1
   myControlsMapSetIt(myControlsMapRoll);      // A2
@@ -340,7 +347,6 @@ void factoryReset(){
 
 void readEEPROM(){
   int eeAddress = 0;
-  //
   
   EEPROM.get(eeAddress, myVoltsMap);
   eeAddress += sizeof(myVoltsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
@@ -537,9 +543,9 @@ void lcdMenuX11(){
     setMenu("mo11", menuOptions11,menuOptions11SIZE);    
   }
       
-//  lcd.setCursor(9, 1);
-//  lcd.print(repeatCount);
-//  lcd.print(" ");  
+  lcd.setCursor(9, 1);
+  lcd.print(repeatCount);
+  lcd.print(" ");  
 }
 
 // ===========================================
@@ -584,12 +590,15 @@ void lcdMenuX13(){
 // lcdMenuX14
 // ===========================================
 void lcdMenuX14(){
-  if (repeatCount == 0){
+//  if (repeatCount == 0)
+  {
     Serial.print  (" -> lcdMenuX14");
     lcd.setCursor(0, 0);
     lcd.print("x14");
     lcd.setCursor(0, 1);
     lcd.print("Repeat: ");
+
+    setMenu("mo14", menuOptions14,menuOptions14SIZE);  
   }
       
   lcd.setCursor(9, 1);
@@ -641,9 +650,9 @@ void lcdKeyVolts(){
   lcd.print  (analog[3]);   
   lcd.print("   ");
 
-  lcd.setCursor(0, 2);
-  lcd.print("Key Down: "); 
-  lcd.print  (keyDown);
+//  lcd.setCursor(0, 2);
+//  lcd.print("Key Down: "); 
+//  lcd.print  (keyDown);
 
   lcd.setCursor(0, 3);
   lcd.print("Key Pressed: "); 
@@ -781,9 +790,28 @@ void updateLCD(){
       lcd.blink();
     }
   }
+  
+  if (keyPress > 0){
 
+    if (keyPress == 5){
+      if (line > 0)
+        line--;
+    }
+    
+    if (keyPress == 3){
+      if (line <= 3)
+        line++;
+    }
+
+    Serial.print  (keyPress);
+    Serial.print  (" ");
+    Serial.println(line);
+
+    lcd.setCursor(0, line);
+  }
+  
   if (keyPress == 1){
-    Serial.println("10");
+    Serial.println(menuOptions[line]);
     menuSelected = menuOptions[line];
   }    
       
@@ -825,11 +853,10 @@ void updateLCD(){
       break;
     // ---------------------------------------
     case 14:
-      lcdMenuX14();
- 
+//      lcdMenuX14();
+updateFPS(); 
       break;
 
-      
     // ---------------------------------------
     case 254:
       lcdInit254();
@@ -847,89 +874,15 @@ void updateLCD(){
       break;
   }
 
-  keyPress = 0;
-
   // Set Repeat Count
   repeatCount++;
   if (repeatCount > 32){
     repeatCount = 0;
   }
 
-//////////////////////////////////////
-//  if (keyPress != 0){
-//
-//    if (keyPress == 5){
-//      if (line > 0)
-//        line--;
-//    }
-//    if (keyPress == 3){
-//      if (line <= 3)
-//        line++;
-//    }
-//
-//    lcd.setCursor(0, line);
-///////////////////////////////////////    
-//    keyPress = 0;   
-//  }
- // Serial.println();
+
 }
 
-// -------------------------------------------
-// -------------------------------------------
-
-void doKeys(){
-  int analogvalue = analog[3]; // read the pushbutton input pin
-  int difference = abs(lastanalogvalue - analogvalue);
-  if (difference > 5 ) { // button has either been pressed or released
-      unsigned long currentMillis = millis();
-      if(currentMillis - previousMillisX > intervalX) 
-      {
-        previousMillisX = currentMillis;
-        
-        if (analogvalue > 102){          
-          Serial.println (analogvalue); 
-        } else {
-          // Turn on D2
-  digitalWrite(2, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(5);                       // wait for a second
-  digitalWrite(2, LOW);    // turn the LED off by making the voltage LOW
-  keyPress = keyDown;
-
-////////////////////////////////////
-  if (keyPress != 0){
-
-    if (keyPress == 5){
-      if (line > 0)
-        line--;
-    }
-    if (keyPress == 3){
-      if (line < 4)
-        line++;
-    }
-    
-    lcd.setCursor(0, line);
-  
-    Serial.print  ("Repeat: ");
-    Serial.print  (repeatCount);
-    Serial.print  (" ");
-    Serial.print  (menuCurrent);
-    Serial.print  (" ");
-    Serial.print  (menuSelected);
-    Serial.print(" Line: ");
-    Serial.println(line);
-    
-/////////////////////////////////////    
-
-  }
-    
-        }
-      }      
-  lastanalogvalue = analogvalue;  
-  }  
-  
-  // 202, 403, 606, 812, 1023
-  keyDown = map(analog[3], -101, 1023, 0, 5);  
-}
 
 // -------------------------------------------
 // -------------------------------------------
@@ -1002,7 +955,10 @@ void printCD4052Volts(){
 // -------------------------------------------
 
 void lcdMain(){
-  
+
+  //------------------------------------------------------
+  // Increment Frames Per Second
+//  updateFPS();  
 }
 
 // -------------------------------------------
@@ -1017,24 +973,26 @@ long minute = 60000; // 60000 milliseconds in a minute
 long second =  1000; // 1000 milliseconds in a second
 
 
-void updateLCD2(){
+void updateFPS(){
   // check to see if it's time to update LCD; that is, if the difference
   // between the current time and last time you updated the LCD is bigger than
   // the interval at which you want to blink the LED.
+//  fps++;
   currentMillis = millis();
   
-  if (currentMillis - previousMillis >= interval) {
+  if (currentMillis - previousMillis >= screenRefresh) {
       // save the last time you blinked the LED
       previousMillis = currentMillis;
 
-    lcd.setCursor(0, 1);
-    printVolts();    //Voltage: xx.xV
+//    lcd.setCursor(0, 1);
+//    printVolts();    //Voltage: xx.xV
 
 
-    if (++cntMillis>=10){
+    if (++cntMillis>=(1000/screenRefresh))
+    {
       // -------------------------------------
       lcd.setCursor(0, 0);
-      lcd.print("Flight Time: ");
+      lcd.print("Flight: ");
 long timeNow = millis();
  
 int days = timeNow / day ;                                //number of days
@@ -1042,6 +1000,11 @@ int hours = (timeNow % day) / hour;                       //the remainder from d
 int minutes = ((timeNow % day) % hour) / minute ;         //and so on...
 int seconds = (((timeNow % day) % hour) % minute) / second;      
      // lcd.print("MM:SS");
+fmt.printInt(days,"%2d:");     
+     lcd.print(days);
+     lcd.print(":");
+     lcd.print(hours);
+     lcd.print(":");
      lcd.print(minutes);
      lcd.print(":");
      lcd.print(seconds);
@@ -1054,7 +1017,7 @@ int seconds = (((timeNow % day) % hour) % minute) / second;
       
       // -------------------------------------
       lcd.setCursor(0, 3);
-      lcd.print("TPS:");
+      lcd.print("FPS:");
       lcd.print(fps);  // ~350 has been the average
       lcd.print("   GPS: xxx");
       
@@ -1063,6 +1026,9 @@ int seconds = (((timeNow % day) % hour) % minute) / second;
       cntMillis=0;
     }
   }
+  lcd.setCursor(9, 1);
+  lcd.print(repeatCount);
+  lcd.print(" ");   
 }
 
 //int printInt(int n, String format){
@@ -1084,7 +1050,7 @@ int seconds = (((timeNow % day) % hour) % minute) / second;
 void loop(){
   //------------------------------------------------------
   // The calibration numbers used here should be measured 
-  // for your joysticks till they send the correct values.
+  // for your joysticks so they send the correct values.
   //------------------------------------------------------
   myControls.throttle = mapJoystickValues( analogRead(A0), myControlsMapThrottle.Min, myControlsMapThrottle.Mid, myControlsMapThrottle.Max, myControlsMapThrottle.Rev);
   myControls.yaw      = mapJoystickValues( analogRead(A1), myControlsMapYaw.Min,      myControlsMapYaw.Mid,      myControlsMapYaw.Max,      myControlsMapYaw.Rev);
@@ -1092,74 +1058,76 @@ void loop(){
   myControls.pitch    = mapJoystickValues( analogRead(A3), myControlsMapPitch.Min,    myControlsMapPitch.Mid,    myControlsMapPitch.Max,    myControlsMapPitch.Rev);
 
   //------------------------------------------------------
-  // Read Analog
+  // 4051 (3x) Switch address
+  //------------------------------------------------------
+  for (digitalLoop = 0; digitalLoop <8 ; digitalLoop++){
+    switchCD4051.setChannel(digitalLoop);
+  
+    // Set mask using loop values
+    pinmask   = ~(1<<(digitalLoop%8)); 
+  
+    // Switch
+    readmask  = (switchCD4051.digitalReadC()<<(digitalLoop%8)); 
+    switchPin = (switchPin & pinmask) | readmask;
+    
+    // Trim
+    readmask  = (trimCD4051.digitalReadC()<<(digitalLoop%8)); 
+    trimPin   = (trimPin & pinmask) | readmask;
+    
+    // Menu
+    readmask  = (menuCD4051.digitalReadC()<<(digitalLoop%8)); 
+    menuPin   = (menuPin & pinmask) | readmask;
+   }
+   
+  //------------------------------------------------------
+  // 4052 (x1) Read Analog
+  //------------------------------------------------------
   for (analogLoop = 0 ;analogLoop < 4; analogLoop++){
     // Switch address for 4052 (1x)
     cd4052.setChannel(analogLoop);
     analog[(analogLoop * 2)    ] = cd4052.analogReadX();  
     analog[(analogLoop * 2) + 1] = cd4052.analogReadY();
   }
-
   
    myAux.AUX1 = analog[0];
    myAux.AUX2 = analog[2];
    myAux.AUX3 = analog[4];
    myAux.AUX4 = analog[8];
    
-  // V Pre
-  vPre = (((refValue * analog[7]) / myVoltsMap.Vpre12) * (myVoltsMap.Vpre11 + myVoltsMap.Vpre12));
-
-  // V Post
-  vPst = (((refValue * analog[1]) /  myVoltsMap.Vpst22) * ( myVoltsMap.Vpst21 +  myVoltsMap.Vpst22));
-  
-  // 5.0V
-  v5_0 = (((refValue * analog[5]) /  myVoltsMap.V5_32) * ( myVoltsMap.V5_31 +  myVoltsMap.V5_32));
-  
-  // 5.0V
-  vKey =    refValue * analog[3];
-
+  vPst = (((refValue * analog[1]) / myVoltsMap.Vpst22) * (myVoltsMap.Vpst21 + myVoltsMap.Vpst22));  // V Post
+  vKey =    refValue * analog[3];                                                                   // Key
+  v5_0 = (((refValue * analog[5]) / myVoltsMap.V5_32 ) * (myVoltsMap.V5_31  + myVoltsMap.V5_32 ));  // 5.0V
+  vPre = (((refValue * analog[7]) / myVoltsMap.Vpre12) * (myVoltsMap.Vpre11 + myVoltsMap.Vpre12));  // V Pre
 
   //
-  avgList[avgCnt++] = (vPre - vPst) * 1000;
   if (avgCnt >= avgSize){
     avgCnt=0;
   }
+  avgList[avgCnt++] = (vPre - vPst) * 1000;
 
   avgSum=0;
   for (int lp = 0; lp < avgSize; lp++){
     avgSum += avgList[lp];
   }
 
-  //------------------------------------------------------
-  // Switch address for 4051 (3x)
-  for (digitalLoop = 0; digitalLoop <8 ; digitalLoop++){
-    switchCD4051.setChannel(digitalLoop);
-  
-    // Set mask using loop values
-    pinmask = ~(1<<(digitalLoop%8)); 
-  
-    // Switch
-    readmask = (switchCD4051.digitalReadC()<<(digitalLoop%8)); 
-    switchPin = (switchPin & pinmask) | readmask;
-    
-    // Trim
-    readmask = (trimCD4051.digitalReadC()<<(digitalLoop%8)); 
-    trimPin = (trimPin & pinmask) | readmask;
-    
-    // Menu
-    readmask = (menuCD4051.digitalReadC()<<(digitalLoop%8)); 
-    menuPin = (menuPin & pinmask) | readmask;
-   }
-   
+
   //------------------------------------------------------
   // Send our data
 //  radio.write(&myControls, sizeof(MyControls));
 
+    
+  //------------------------------------------------------
+  // Button pressed?
+  //keyPad.doKeys(analogRead(A0));
+  keyPad.doKeys(analog[3]);
+  keyPress = keyPad.getKeyPressed();
+
   //------------------------------------------------------
   // Update LCD 1/10 seconds
   //------------------------------------------------------
+  fps++;
   unsigned long currentMillis = millis();
-  if (screenLastRefresh + screenRefresh < currentMillis){
+  if ((keyPress > 0) || (currentMillis > (screenLastRefresh + screenRefresh))){
     screenLastRefresh = currentMillis;
     updateLCD();
   } else {
@@ -1171,17 +1139,8 @@ void loop(){
       Serial.println(screenRefresh);
     }
   }
-  
-    
-  //------------------------------------------------------
-  // Button pressed?
-  doKeys();
-  
+
   //------------------------------------------------------
   // Serial Debugging 
   serialDebug();
-
-  //------------------------------------------------------
-  // Increment Frames Per Second
-  fps++;
 }
