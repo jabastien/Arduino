@@ -17,7 +17,9 @@
 
 // library interface description
 class CD4051{
-  // user-accessible "public" interface
+  /*
+   * public members / functions / class variables
+   */
   public:
 	CD4051(void);
 	CD4051(int _addrA, int _addrB, int _addrC, int _pinC);
@@ -25,12 +27,19 @@ class CD4051{
 	int analogReadC();
 	int digitalReadC();
 
-  // library-accessible "private" interface
+  /*
+   * private members / functions / class variables
+   */	
   private:
 	int addrA;
 	int addrB;
 	int addrC;
-	int pinC;	
+	int pinC;
+	
+  /*
+   * protected members / functions / class variables
+   */
+    protected:	
 };
 
 #endif //CD4051_h

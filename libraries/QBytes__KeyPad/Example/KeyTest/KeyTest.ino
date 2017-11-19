@@ -1,19 +1,36 @@
+#if ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+  #include "pins_arduino.h"
+  #include "WConstants.h"
+#endif
+
 #include <KeyPad.h>
 
+KeyPad keyPad(LED_BUILTIN, 5, 10);
+//KeyPad keyPad;  // Empty constructor does not require ().
+//KeyPad keyPad(); // this is an error
+
+
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
+  Serial.flush() ;
+  Serial.println("KeyPad starting");
   
-  pinMode(A0, INPUT);
-  
-  pinMode(2, OUTPUT);
-  digitalWrite (2, LOW);
   analogReference(EXTERNAL); 
 
+  pinMode(A0, INPUT);
+  
+  if (false){
+    for (int num = 0; num < 1023; num++){
+      keyPad.doKeys(num);
+    }
+    Serial.println("Holding here.");
+    while(true){} // display only: hold here.
+  }
 
-//  for (int num = 0; num < 1023; num++){
-//    keyPad.doKeys(num);
-//  }
-//  while(true){}
+  Serial.println("KeyPad running");
 }
 
 void loop() {

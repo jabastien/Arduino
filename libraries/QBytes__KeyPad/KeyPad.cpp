@@ -1,28 +1,64 @@
 
-#if defined(ARDUINO) && ARDUINO >= 100
+#if ARDUINO >= 100
   #include "Arduino.h"
 #else
   #include "WProgram.h"
+  #include "pins_arduino.h"
+  #include "WConstants.h"
 #endif
 
 #include "KeyPad.h"
 
-unsigned long previousMillis = 0; 
-unsigned long interval = 25;
+void KeyPad::printIt(){
+	if (false){
+		// Display it
+		Serial.print  (" ");
+		Serial.print  (pin);
+		Serial.print  (" ");
+		Serial.print  (numberOfKeys);
+		Serial.print  (" ");
+		Serial.print  (halfLowAnalog);
+		Serial.print  (" ");
+		Serial.print  (lowAnalog);	
+		Serial.print  (" ");
+		Serial.print  (interval);	
+		Serial.println("");	
+	}
+}
+// ===========================================
+// KeyPad empty Constructor
+// ===========================================
+KeyPad::KeyPad(void)
+	: KeyPad(LED_BUILTIN, 5, 100) // call empty constructor
+{
+	//Serial.println("Default Constructor");
+	printIt();
+}
 
-byte arr [5]	= {0, 0, 0, 0, 0};
-byte arrSize	= sizeof( arr ) / sizeof( byte );
-byte arrCntr	= 0;	// Max value 255
-int  arrAvg		= 0;
+// ===========================================
+// KeyPad Constructor
+// ===========================================
+//KeyPad::KeyPad(byte _pin=2, byte _numberOfKeys=5, unsigned long _interval=25 ){
+KeyPad::KeyPad(byte _pin, byte _numberOfKeys, unsigned long _interval ){	
+	
+	//Serial.println("Constructor");
+	
+	// Output LED/Sound
+	pin = _pin;
+	pinMode(pin, OUTPUT);
+	digitalWrite (pin, LOW);
+	
+	// Number of keys
+	numberOfKeys = _numberOfKeys;	
+	halfLowAnalog = 1023 / numberOfKeys / 2;
+	lowAnalog     = 1023 / numberOfKeys;
+	
+	// Delay for led on after key release
+	interval = _interval;
 
-byte keyDown	= 0;	// Max value 255
-byte keyPress	= 0;	// Max value 255
-byte noKey		= 0;	// Max value 255
+	printIt();
+}
 
-byte numberOfKeys = 5;	// Max value 255
-
-int	 lowAnalog     = 1023 / numberOfKeys;
-int	 halfLowAnalog = 1023 / numberOfKeys / 2;
 
 // ===========================================
 // Key Pressed
@@ -37,7 +73,12 @@ byte KeyPad::getKeyPressed(){
 		keyPress = noKey;
 		
 		previousMillis = millis();
-		digitalWrite(2, HIGH);   // turn the LED on (HIGH is the voltage level)
+		digitalWrite(pin, HIGH);   // turn the LED on (HIGH is the voltage level)
+		
+		// Clear array
+		memset(arr, 0x0, sizeof(arr)); 
+		
+		printIt();
 	}
 	
 	// Return keyPressed
@@ -45,28 +86,19 @@ byte KeyPad::getKeyPressed(){
 }
 
 // ===========================================
-// Set Number of Keys
-// ===========================================
-void KeyPad::setNumberOfKeys(byte keys){
-	numberOfKeys = keys;
-	lowAnalog     = 1023 / numberOfKeys;
-	halfLowAnalog = 1023 / numberOfKeys / 2;
-}
-
-// ===========================================
 // Do Keys calculation
 // ===========================================
 void KeyPad::doKeys(int analogvalue){
-
+//printIt();
 	//----------------------------	
 	// If KeyPad just released, delay long enough to make sound and show LED.
 	//----------------------------	
-	if (digitalRead(2) == HIGH);
+	if (digitalRead(pin) == HIGH);
 	{
 	  //unsigned long currentMillis = millis();
       if(millis() - previousMillis > interval) 
 		{		  
-			digitalWrite(2, LOW);    // turn the LED off by making the voltage LOW
+			digitalWrite(pin, LOW);    // turn the LED off by making the voltage LOW
 		} else {
 			// Wait for led/sound off
 			return;
@@ -76,13 +108,15 @@ void KeyPad::doKeys(int analogvalue){
 	//----------------------------	
 	// Calculate if key was released.
 	//----------------------------	
-	if (analogvalue < halfLowAnalog){
+	if (eligible && analogvalue < halfLowAnalog){
 		// Key Up/Released
 		if (keyDown == arrAvg){
 			keyPress = keyDown;
+		} else {
+			keyPress = noKey;
 		}
 		// Clear array
-		memset(arr, 0x0, sizeof(arr));  
+		//memset(arr, 0x0, sizeof(arr));  
 	} 
 	
 	//----------------------------	
@@ -99,38 +133,25 @@ void KeyPad::doKeys(int analogvalue){
 
 	arr[arrCntr] = keyDown;
 
+	eligible = true;
+	
 	arrAvg = 0;
 	for (byte b = 0; b < arrSize; b++){
 		arrAvg  += arr[b];
+		if (keyDown != arr[b]){
+			eligible = false;
+		}
 	}
 	arrAvg /= arrSize;
 
 	//----------------------------	
 	//reset, if nothing good can happen
 	//----------------------------	
-	if (keyDown < arrAvg){
-		// Clear array
-		memset(arr, 0x0, sizeof(arr));  
-		keyDown = noKey;	
-		keyPress = noKey;	
-		//Serial.println("<"); 		
-	}
-
-	/*
-	Serial.print  (analogvalue); 
-	Serial.print  (" "); 
-	Serial.print  (halfLowAnalog); 
-	Serial.print  (" "); 
-	Serial.print  (arrAvg); 
-	Serial.print  (" "); 
-	Serial.print  (keyDown); 
-	Serial.print  (" "); 
-	Serial.print  (keyPress); 
-	Serial.println(""); 
-	*/	
+	// if (keyDown < arrAvg){
+		// // Clear array
+		// memset(arr, 0x0, sizeof(arr));  
+		// keyDown = noKey;	
+		// keyPress = noKey;	
+		// Serial.println("< clr"); 		
+	// }
 }
-
-// ===========================================
-// ===========================================
-// ===========================================
-KeyPad keyPad;
