@@ -160,6 +160,53 @@ int cntMillis = 0;
 // ===========================================
 // The sizeof this struct should not exceed 32 bytes
 // This gives us up to 32 8 bits channals
+
+
+// ===========================================
+// Custom Char (Max is 8 (0-7))
+// 255 is a solid block
+// 254 is an empty block
+/*
+//  The user must call, one of the funtions 
+      lcd.home()or lcd.setCursor(x,x)
+      after the character creation.
+*/
+// ===========================================
+// Sequence must be
+// /// lcd.createChar(0,testChar0);
+// /// lcd.createChar(1,testChar1);
+// /// 
+// /// lcd.home();
+// /// 
+// /// lcd.print((char)0);
+// /// lcd.print((char)1);
+// 
+// https://omerk.github.io/lcdchargen/
+
+//byte  testChar0[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // = 254 (empty)
+  byte  testChar0[8] = {0x1f, 0x00, 0x0a, 0x04, 0x0a, 0x00, 0x11, 0x1f};
+  byte  testChar1[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f};
+  byte  testChar2[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0x1f};
+  byte  testChar3[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0x1f, 0x1f};
+  byte  testChar4[8] = {0x00, 0x00, 0x00, 0x00, 0x1f, 0x1f, 0x1f, 0x1f};
+  byte  testChar5[8] = {0x00, 0x00, 0x00, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f};
+  byte  testChar6[8] = {0x00, 0x00, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f};
+  byte  testChar7[8] = {0x00, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f};
+//byte  testChar7[8] = {0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f}; // = 255 (full)
+  
+//  byte  testChar[8] = {0x00, 0x00, 0x0a, 0x00, 0x04, 0x11, 0x0e, 0x00}; // smile
+//  byte  testChar[8] = {  // degree F
+//      B01000,
+//      B10100,
+//      B01000,
+//      B00000,
+//      B00111,
+//      B00100,
+//      B00110,
+//      B00100
+//    };
+
+
 struct MyControls {
   const byte packetType = 0x01;
   byte throttle; // A0
@@ -360,6 +407,7 @@ byte menuOptions[5];
 byte menuSize;
 
 const byte menuOptions00SIZE = membersof(menuOptions00);
+
 const byte menuOptions01SIZE = membersof(menuOptions01);
 const byte menuOptions02SIZE = membersof(menuOptions02);
 
@@ -377,7 +425,7 @@ const byte menuOptions254SIZE = membersof(menuOptions254);
 const byte menuOptions255SIZE = membersof(menuOptions255);
 
 //const byte menuOptions90SIZE = membersof(menuOptions90);
-//  setMenu("mo00", menuOptions00,menuOptions00SIZE);
+//setMenu("mo00", menuOptions00,menuOptions00SIZE);
 
 
 //#define menuOptions10SIZE (sizeof(menuOptions10) / sizeof(byte))
@@ -405,10 +453,11 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
 
   if (true) {
     Serial.print  (menuOpt);
-    Serial.print  (": (");
+    Serial.print  (" (");
     Serial.print  (menuSize);
-    Serial.print  (") :");
-    for (byte loop = 0; loop < sizeof(menuOptions); loop++) {
+    Serial.print  (") ");
+    //for (byte loop = 0; loop < sizeof(menuOptions); loop++) {
+    for (byte loop = 0; loop < menuSize; loop++) {
       Serial.print  (menuOptions[loop]);
       Serial.print  (", ");
     }
@@ -822,6 +871,7 @@ void lcdInit252() {
 }
 
 
+
 // -------------------------------------------
 void lcdInit253() {
   if (repeatCount == 0) {
@@ -829,11 +879,27 @@ void lcdInit253() {
     lcd.setCursor(0, 0);
     lcd.print("Pre Ohms");    
   }
+
+  // test print custom char.
+  lcd.setCursor(3, 3); 
+   
+  lcd.print((char)0);
+  lcd.print((char)254);
+  lcd.print((char)1);
+  lcd.print((char)2);
+  lcd.print((char)3);
+  lcd.print((char)4);
+  lcd.print((char)5);
+  lcd.print((char)6);
+  lcd.print((char)7);
+  lcd.print((char)255);
+  
   
 //  if (repeatCount > 1) {//delay(500);
 //    menuSelected = 252;
 //  }
 }
+
 
 // -------------------------------------------
 void lcdInit254() {
@@ -868,12 +934,25 @@ void lcdInit255() {
   if (repeatCount == 0) {
     setMenu("x255", menuOptions255, menuOptions255SIZE);
     lcd.init();
+    lcd.begin(20,4);
     lcd.backlight();
   //lcd.blink();
     lcd.noBlink();
     
     lcd.setCursor(0, 0);
     lcd.print("Startup");
+
+    lcd.createChar(0, testChar0);  
+    lcd.createChar(1, testChar1);   
+    lcd.createChar(2, testChar2);   
+    lcd.createChar(3, testChar3);   
+    lcd.createChar(4, testChar4);   
+    lcd.createChar(5, testChar5);   
+    lcd.createChar(6, testChar6);   
+    lcd.createChar(7, testChar7);   
+
+    //lcd.home();
+    lcd.setCursor(0,0); 
   }
   
   if (repeatCount > 1) {//delay(500);
