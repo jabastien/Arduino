@@ -1,9 +1,16 @@
 /*A basic 4 channel transmitter using the nRF24L01 module.*/
 /* Like, share and subscribe, ELECTRONOOBS */
-/* http://www.youtube/c/electronoobs */
+/* ref help from: http://www.youtube/c/electronoobs */
 
 /* First we include the libraries. Download it from
    my webpage if you donw have the NRF24 library */
+
+/*
+ AVR Libc Reference Manual
+ http://www.atmel.com/webdoc/avrlibcreferencemanual/index.html
+ http://www.atmel.com/webdoc/avrlibcreferencemanual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
+*/
+
 
 //#if defined(ARDUINO) && ARDUINO >= 100
 #if ARDUINO >= 100
@@ -14,31 +21,58 @@
   #include "WConstants.h"
 #endif
 
-
-// ===========================================
-// Format Print
-// ===========================================
-#include <FormatPrint.h>
-FormatPrint fmt;
-
-byte repeatCount = 0;
-
-//#include <string.h>
+#include <stdlib.h>
 
 // ===========================================
 // Vars
 // ===========================================
 String qBytesWorld = "Q-Bytes World";
 String deviceInfo  = "2.4G Transmitter";
-String versionNum  = "v1.10";
+String versionNum  = "v1.12";
 
 unsigned long  screenRefresh = 1000 / 4; // 4 times per second
 unsigned long  screenLastRefresh = 0;
 
+
+float changeMe = 987.654321;
+
+// require ::: stdlib.h
+//char buffer[7];         //the ASCII of the integer will be stored in this char array
+//itoa(changeMe,buffer,10); //(integer, yourBuffer, base)   
+char buffer[10];  //  Hold The Convert Data
+
+// ===========================================
+// Menu
+// ===========================================
+
+byte row = 0;
+byte col = 0;
+
+byte rowEdit = 0;
+byte colEdit = 0;
+
+byte mainmenu = 001;
+byte function = 255;
+
+byte returnToCurrent = mainmenu;
+
+byte repeatCount = 0;
+
+//// ===========================================
+//// Format Print
+//// ===========================================
+//#include <FormatPrint.h>
+////FormatPrint fmt;
+//
+
+//
+////#include <string.h>
+
+
 // ===========================================
 // Update LCD
 // ===========================================
-byte menuCurrent  = 000;
+byte menuCurrent  = mainmenu;
 byte menuSelected = 254;
 
 double refV = 5.0115;
@@ -80,19 +114,7 @@ KeyPad keyPad(2, 5, 10, 200);
 
 byte keyPress;
 
-// ===========================================
-// Menu
-// ===========================================
 
-byte row = 0;
-byte col = 0;
-
-byte rowEdit = 0;
-byte colEdit = 0;
-
-byte returnToCurrent = 0;
-
-byte function = 255;
 
 // ===========================================
 // RF24
@@ -101,8 +123,7 @@ byte function = 255;
 #include <nRF24L01.h>
 #include <RF24.h>
 
-/*Create a unique pipe out. The receiver has to
-  wear the same unique code*/
+/*Create a unique pipe out. The receiver has to wear the same unique code*/
 
 const uint64_t pipeOut = 0xE8E8F0F0E1LL;
 
@@ -287,8 +308,8 @@ void resetData()
   myButtons.menu  = 0;
 }
 
-byte    avgSize = 100;
-double  avgList[100];
+byte    avgSize = 50;
+double  avgList[50];
 int     avgCnt = 0;
 double  avgSum = 0.0;
 double  avg = 0.0;
@@ -301,24 +322,24 @@ void serialDebug() {
   // Print controls
   //------------------------------------------------------
   if (false) {
-    Serial.print  (" T: ");
+    Serial.print  (F(" T: "));
     Serial.print  (myControls.throttle);
-    Serial.print  (" : ");
+    Serial.print  (F(" : "));
     Serial.print  (analogRead(A0));
 
-    Serial.print  (" Y: ");
+    Serial.print  (F(" Y: "));
     Serial.print  (myControls.yaw);
-    Serial.print  (" : ");
+    Serial.print  (F(" : "));
     Serial.print  (analogRead(A1));
 
-    Serial.print  (" R: ");
+    Serial.print  (F(" R: "));
     Serial.print  (myControls.roll);
-    Serial.print  (" : ");
+    Serial.print  (F(" : "));
     Serial.print  (analogRead(A2));
 
-    Serial.print  (" P: ");
+    Serial.print  (F(" P: "));
     Serial.print  (myControls.pitch);
-    Serial.print  (" : ");
+    Serial.print  (F(" : "));
     Serial.print  (analogRead(A3));
 
     //    // -----------------------------------------------
@@ -419,7 +440,7 @@ void printVolts() {
   //  float sensorValue = (float)analogRead(A0);
   //  sensorValue *= (5.0 / 1023.0);
   //lcd.print(fmt.getFloat(sensorValue, 6, 3));
-  lcd.print(fmt.getFloat(v5_0, 6, 3));
+ // lcd.print(fmt.getFloat(v5_0, 6, 3));
   lcd.print("V");
 }
 /**************************************************/
@@ -478,22 +499,25 @@ int mapJoystickValues(int value, int minimum, int middle, int maximum, bool reve
 // Declare variables
 //https://arduino.stackexchange.com/questions/19748/copy-content-of-array
 //https://arduino.stackexchange.com/questions/21095/how-to-write-array-of-functions-in-arduino-library
-byte menuOptions000 [4] = {0, 1, 2, 10};
+//https://arduino.stackexchange.com/questions/21095/how-to-write-array-of-functions-in-arduino-library
 
-byte menuOptions001 [1] = {000};
-byte menuOptions002 [1] = {000};
+byte menuOptions001 [4] = {mainmenu, 2, 3, 10};
 
-byte menuOptions010 [5] = {000, 011, 012, 013, 014};
-byte menuOptions011 [1] = {010};
-byte menuOptions012 [1] = {010};
-byte menuOptions013 [1] = {010};
-byte menuOptions014 [1] = {010};
+byte menuOptions002 [1] = {mainmenu};
+byte menuOptions003 [1] = {mainmenu};
+
+byte menuOptions010 [5] = {mainmenu, 11, 12, 13, 14};
+byte menuOptions011 [1] = {10};
+byte menuOptions012 [1] = {10};
+byte menuOptions013 [1] = {10};
+byte menuOptions014 [1] = {10};
 
 byte menuOptions200 [1] = {function}; // Function for number edit
 byte menuOptions201 [1] = {function}; // Function for number edit
 
 
-byte menuOptions244 [2] = {000,201};      // Menu
+byte menuOptions240 [1] = {mainmenu};          // Control Check
+byte menuOptions244 [2] = {240,201};      // Menu
 byte menuOptions245 [2] = {244,201};      // Trim
 byte menuOptions246 [2] = {245,201};      // Switch
 byte menuOptions247 [2] = {246,201};      // Joystick
@@ -508,31 +532,31 @@ byte menuOptions254 [1] = {253};          // Starting   [click (select) out to 2
 byte menuOptions[5];
 byte menuSize;
 
-const byte menuOptions000SIZE = membersof(menuOptions000);
+//const byte menuOptions000SIZE = membersof(menuOptions000);
 
-const byte menuOptions001SIZE = membersof(menuOptions001);
-const byte menuOptions002SIZE = membersof(menuOptions002);
-
-const byte menuOptions010SIZE = membersof(menuOptions010);
-const byte menuOptions011SIZE = membersof(menuOptions011);
-const byte menuOptions012SIZE = membersof(menuOptions012);
-const byte menuOptions013SIZE = membersof(menuOptions013);
-const byte menuOptions014SIZE = membersof(menuOptions014);
-
-const byte menuOptions200SIZE = membersof(menuOptions200);
-const byte menuOptions201SIZE = membersof(menuOptions201);
-
-const byte menuOptions244SIZE = membersof(menuOptions244);
-const byte menuOptions245SIZE = membersof(menuOptions245);
-const byte menuOptions246SIZE = membersof(menuOptions246);
-const byte menuOptions247SIZE = membersof(menuOptions247);
-const byte menuOptions248SIZE = membersof(menuOptions248);
-const byte menuOptions249SIZE = membersof(menuOptions249);
-const byte menuOptions250SIZE = membersof(menuOptions250);
-const byte menuOptions251SIZE = membersof(menuOptions251);
-const byte menuOptions252SIZE = membersof(menuOptions252);
-const byte menuOptions253SIZE = membersof(menuOptions253);
-const byte menuOptions254SIZE = membersof(menuOptions254);
+//const byte menuOptions001SIZE = membersof(menuOptions001);
+//const byte menuOptions002SIZE = membersof(menuOptions002);
+//
+//const byte menuOptions010SIZE = membersof(menuOptions010);
+//const byte menuOptions011SIZE = membersof(menuOptions011);
+//const byte menuOptions012SIZE = membersof(menuOptions012);
+//const byte menuOptions013SIZE = membersof(menuOptions013);
+//const byte menuOptions014SIZE = membersof(menuOptions014);
+//
+//const byte menuOptions200SIZE = membersof(menuOptions200);
+//const byte menuOptions201SIZE = membersof(menuOptions201);
+//
+//const byte menuOptions244SIZE = membersof(menuOptions244);
+//const byte menuOptions245SIZE = membersof(menuOptions245);
+//const byte menuOptions246SIZE = membersof(menuOptions246);
+//const byte menuOptions247SIZE = membersof(menuOptions247);
+//const byte menuOptions248SIZE = membersof(menuOptions248);
+//const byte menuOptions249SIZE = membersof(menuOptions249);
+//const byte menuOptions250SIZE = membersof(menuOptions250);
+//const byte menuOptions251SIZE = membersof(menuOptions251);
+//const byte menuOptions252SIZE = membersof(menuOptions252);
+//const byte menuOptions253SIZE = membersof(menuOptions253);
+//const byte menuOptions254SIZE = membersof(menuOptions254);
 
 //const byte menuOptions90SIZE = membersof(menuOptions90);
 //setMenu("mo00", menuOptions00,menuOptions00SIZE);
@@ -545,6 +569,7 @@ const byte menuOptions254SIZE = membersof(menuOptions254);
 //
 //PROGMEM const String sampleMenu_2_1_1 = "1 Sub item A";
 //PROGMEM const String sampleMenu_2_1_2 = "2 Sub item B";
+
 
 void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   
@@ -581,16 +606,16 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
     // Clear current menu
     memset(menuOptions, 0x00, sizeof(menuOptions)); // for automatically-allocated arrays
     memcpy(menuOptions, menuValues, menuSize);
-//    Serial.println("*** menuValue [0]");
+    Serial.println("*** menuValue [0]");
   } else {    
-    if (returnToCurrent != 0){
+    if (returnToCurrent != mainmenu){
       // Clear current menu
       memset(menuOptions, 0x00, sizeof(menuOptions)); // for automatically-allocated arrays
-//      Serial.println("*** menuValue [1]");
+      Serial.println("*** menuValue [1]");
       menuOptions[0] = returnToCurrent;//tempReturnToCurrent;  --- fix this......
       //    }
     } else {
-//      Serial.println("*** menuValue [2]");
+      Serial.println("*** menuValue [2]");
       returnToCurrent = menuOptions[0];
     }
   }
@@ -616,15 +641,26 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   }
 
   // Clear return to current   
-  returnToCurrent = 0;
+  returnToCurrent = mainmenu;
+}
+
+
+// ===========================================
+// Reserved
+// ===========================================
+void lcdMenuX000() { // this is an error, 000 is reserved  
+  while (true){
+    Serial.println("ER000");
+  }
 }
 
 // ===========================================
 // Main Menu
 // ===========================================
-void lcdMainX000() {
+void lcdMenuX001() {
   if (repeatCount == 0) {
-    setMenu("x000", menuOptions000, menuOptions000SIZE);
+//    setMenu("x001", menuOptions001, menuOptions001SIZE);
+setMenu("x001", menuOptions001, membersof(menuOptions001));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("Main");
     lcd.setCursor(0, 1); //   row >    column ^
@@ -645,9 +681,9 @@ void lcdMainX000() {
 // ===========================================
 // lcdMenuX01
 // ===========================================
-void lcdMenuX001() {
+void lcdMenuX002() {
   if (repeatCount == 0) {
-    setMenu("x001", menuOptions001, menuOptions001SIZE);
+    setMenu("x002", menuOptions002, membersof(menuOptions002));
 //    lcd.setCursor(0, 0); //   row >    column ^
 //    lcd.print("10 -> 11");
 //    lcd.setCursor(0, 1); //   row >    column ^
@@ -739,11 +775,11 @@ void lcdMenuX001() {
 }
 
 // ===========================================
-// lcdMenuX02
+// lcdMenuX03
 // ===========================================
-void lcdMenuX002() {
+void lcdMenuX003() {
   if (repeatCount == 0) {
-    setMenu("x002", menuOptions002, menuOptions002SIZE);
+    setMenu("x003", menuOptions003, membersof(menuOptions003));
 //    lcd.setCursor(0, 0); //   row >    column ^
 //    lcd.print("10 -> 11");
 //    lcd.setCursor(0, 1); //   row >    column ^
@@ -764,34 +800,28 @@ void lcdMenuX002() {
   //
   //--------------------
   lcd.setCursor(0, 0); //   row >    column ^
-  lcd.print("KeyV: ");
+  lcd.print(F("KeyV: "));
 
   lcd.print  (refValue * analog[3]);
-  lcd.print  ("V ");
+  lcd.print  (F("V "));
 
   lcd.setCursor(0, 1); //   row >    column ^
-  lcd.print("Value: ");
+  lcd.print(F("Value: "));
   lcd.print  (analog[3]);
-  lcd.print("   ");
+  lcd.print(F("   "));
 
   //  lcd.setCursor(0, 2); //   row >    column ^
   //  lcd.print("Key Down: ");
   //  lcd.print  (keyDown);
 
   lcd.setCursor(0, 3); //   row >    column ^
-  lcd.print("Key Pressed: ");
+  lcd.print(F("Key Pressed: "));
   lcd.print  (keyPress);
-
 
   //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   if (false) {
     printCD4052();
   }
-
-  if (keyPress == 1) {
-    menuSelected = 0;
-  }
-
 }
 
 // ===========================================
@@ -799,7 +829,7 @@ void lcdMenuX002() {
 // ===========================================
 void lcdMenuX010() {
   if (repeatCount == 0) {
-    setMenu("x010", menuOptions010, menuOptions010SIZE);
+    setMenu("x010", menuOptions010, membersof(menuOptions010));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("10 -> 11");
     lcd.setCursor(0, 1); //   row >    column ^
@@ -822,7 +852,7 @@ void lcdMenuX010() {
 // ===========================================
 void lcdMenuX011() {
   if (repeatCount == 0) {
-    setMenu("x011", menuOptions011, menuOptions011SIZE);
+    setMenu("x011", menuOptions011, membersof(menuOptions011));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("x11");
     lcd.setCursor(0, 1); //   row >    column ^
@@ -839,7 +869,7 @@ void lcdMenuX011() {
 // ===========================================
 void lcdMenuX012() {
   if (repeatCount == 0) {
-    setMenu("x012", menuOptions012, menuOptions012SIZE);
+    setMenu("x012", menuOptions012, membersof(menuOptions012));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("x12");
     lcd.setCursor(0, 1); //   row >    column ^
@@ -856,7 +886,7 @@ void lcdMenuX012() {
 // ===========================================
 void lcdMenuX013() {
   if (repeatCount == 0) {
-    setMenu("x013", menuOptions013, menuOptions013SIZE);
+    setMenu("x013", menuOptions013, membersof(menuOptions013));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("x13");
     lcd.setCursor(0, 1); //   row >    column ^
@@ -886,7 +916,7 @@ void lcdMenuX014() {
 
   if (repeatCount == 0)
   {
-    setMenu("x014", menuOptions014, menuOptions014SIZE);
+    setMenu("x014", menuOptions014, membersof(menuOptions014));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("x014");
     lcd.setCursor(0, 1); //   row >    column ^
@@ -913,16 +943,13 @@ void lcdMenuX014() {
       int hours = (timeNow % day) / hour;                       //the remainder from days division (in milliseconds) divided by hours, this gives the full hours
       int minutes = ((timeNow % day) % hour) / minute ;         //and so on...
       int seconds = (((timeNow % day) % hour) % minute) / second;
-      // lcd.print("MM:SS");
-      //fmt.printInt(days,"%2d:");
-      lcd.print(days);
-      lcd.print(":");
-      lcd.print(hours);
-      lcd.print(":");
-      lcd.print(minutes);
-      lcd.print(":");
-      lcd.print(seconds);
-      lcd.print(" ");
+
+
+char dateFormat[] = "%02d:%02d:%02d:%02d";
+
+//    sprintf(buffer, dateFormat[3], days, hours, minutes, seconds); ///< This has 4 2-digit integers with leading zeros, separated by ":" . The list of parameters, hour, min, sec, provides the numbers the sprintf prints out with.
+//    lcd.print(buffer);    
+    //Serial.println(buffer); ///< You will get something like"01:13:02:09"       
 
       // -------------------------------------
       lcd.setCursor(0, 2); //   row >    column ^
@@ -951,30 +978,68 @@ void lcdMenuX014() {
 // Int number edit
 void lcdFunc200() { // Int number edit
   if (repeatCount == 0) {
-    setMenu("x200", menuOptions200, menuOptions200SIZE);
-    lcd.setCursor(0, 0); //   row >    column ^
+    setMenu("x200", menuOptions200, membersof(menuOptions200));
+    lcd.setCursor(0, 3); //   row >    column ^
     lcd.print("Int number edit");
   }
 
+//  char buffer[10];         //the ASCII of the integer will be stored in this char array
+  itoa((int)changeMe,buffer,10); //(integer, yourBuffer, base)   
+
   lcd.blink();
-  lcd.setCursor(row+1, col+4); //   row >    column ^
+  lcd.setCursor(5, 2); //   row >    column ^
+  lcd.print(buffer);
+  lcd.setCursor(5 + row, 2); //   row >    column ^
+
 }
 
 void lcdFunc201() { //Double number edit
   if (repeatCount == 0) {
-    setMenu("x201", menuOptions201, menuOptions201SIZE);
+    setMenu("x201", menuOptions201, membersof(menuOptions201));
     lcd.setCursor(0, 3); //   row >    column ^
     lcd.print("Double number edit");
   }
+  // #include<stdlib.h>
+  //  dtostrf(FLOAT,WIDTH,PRECSISION,BUFFER);
 
-  lcd.blink();
-  lcd.setCursor(row+1, col+4); //   row >    column ^
+  char *r = dtostrf(changeMe, 8, 2, buffer);
+  if (true){
+    Serial.print  (buffer);
+    Serial.print  (" r:");
+    Serial.print  (r);
+    Serial.println(":");
+  }
+  lcd.setCursor(3, 1); //   row >    column ^
+         
+  lcd.print(buffer);
+
+  lcd.setCursor(3 + row, 1); //   row >    column ^
+}
+
+// -------------------------------------------
+void lcdInit240() { // Control check
+  if (repeatCount == 0) {
+    setMenu("x240", menuOptions240, membersof(menuOptions240));
+    lcd.setCursor(0, 0); //   row >    column ^
+    lcd.print("Control check");
+  }
+  if (repeatCount > 3) {//delay(2000);
+
+// DAQ finish this....
+// DAQ finish this....
+// DAQ finish this....
+
+     // If Controls not home, wait.
+    if (true){
+      menuSelected = mainmenu; // Main
+    }
+  }  
 }
 
 // -------------------------------------------
 void lcdInit244() { // Menu
   if (repeatCount == 0) {
-    setMenu("x244", menuOptions244, menuOptions244SIZE);
+    setMenu("x244", menuOptions244, membersof(menuOptions244));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("Menu");
   }
@@ -983,7 +1048,7 @@ void lcdInit244() { // Menu
 // -------------------------------------------
 void lcdInit245() { // Trim
   if (repeatCount == 0) {
-    setMenu("x245", menuOptions245, menuOptions245SIZE);
+    setMenu("x245", menuOptions245, membersof(menuOptions245));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("Trim");
   }
@@ -992,7 +1057,7 @@ void lcdInit245() { // Trim
 // -------------------------------------------
 void lcdInit246() { // Switch
   if (repeatCount == 0) {
-    setMenu("x246", menuOptions246, menuOptions246SIZE);
+    setMenu("x246", menuOptions246, membersof(menuOptions246));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("Switch");
   }
@@ -1001,7 +1066,7 @@ void lcdInit246() { // Switch
 // -------------------------------------------
 void lcdInit247() { // Joystick
   if (repeatCount == 0) {
-    setMenu("x247", menuOptions247, menuOptions247SIZE);
+    setMenu("x247", menuOptions247, membersof(menuOptions247));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("Joystick");
   }
@@ -1010,7 +1075,7 @@ void lcdInit247() { // Joystick
 // -------------------------------------------
 void lcdInit248() { // Shunt ohms
   if (repeatCount == 0) {
-    setMenu("x248", menuOptions248, menuOptions248SIZE);
+    setMenu("x248", menuOptions248, membersof(menuOptions248));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("Shunt");
     lcd.setCursor(2, 1); //   row >    column ^
@@ -1021,7 +1086,7 @@ void lcdInit248() { // Shunt ohms
 // -------------------------------------------
 void lcdInit249() { // Vin pre 1.1 & 1.2 ohms
   if (repeatCount == 0) {
-    setMenu("x249", menuOptions249, menuOptions249SIZE);
+    setMenu("x249", menuOptions249, membersof(menuOptions249));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("Vin pre ohms");
     lcd.setCursor(2, 1); //   row >    column ^
@@ -1034,7 +1099,7 @@ void lcdInit249() { // Vin pre 1.1 & 1.2 ohms
 // -------------------------------------------
 void lcdInit250() { // Vin pst 2.1 & 2.2 ohms
   if (repeatCount == 0) {
-    setMenu("x250", menuOptions250, menuOptions250SIZE);
+    setMenu("x250", menuOptions250, membersof(menuOptions250));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("Vin post ohms");
     lcd.setCursor(2, 1); //   row >    column ^
@@ -1047,7 +1112,7 @@ void lcdInit250() { // Vin pst 2.1 & 2.2 ohms
 // -------------------------------------------
 void lcdInit251() { // V5.0    3.1 & 3.2 ohms
   if (repeatCount == 0) {
-    setMenu("x251", menuOptions251, menuOptions251SIZE);
+    setMenu("x251", menuOptions251, membersof(menuOptions251));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("V5.0 ohm");
     lcd.setCursor(2, 1); //   row >    column ^
@@ -1060,11 +1125,11 @@ void lcdInit251() { // V5.0    3.1 & 3.2 ohms
 // -------------------------------------------
 void lcdInit252() {  // V5.0    Regulator Voltage
   if (repeatCount == 0) {
-    setMenu("x252", menuOptions252, menuOptions252SIZE);
+    setMenu("x252", menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("V5.0 volts");
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print("V ");       
+    lcd.print("V ");        
   }
 
   rowEdit = 0; //   row >    column ^  
@@ -1078,7 +1143,7 @@ void lcdInit252() {  // V5.0    Regulator Voltage
 // -------------------------------------------
 void lcdInit253() { // Splash     [no click (select) out to 253]
   if (repeatCount == 0) {
-    setMenu("x253", menuOptions253, menuOptions253SIZE);    
+    setMenu("x253", menuOptions253, membersof(menuOptions253));    
     lcd.setCursor(0, 0);//   row >    column ^
     lcd.print(qBytesWorld);
     lcd.setCursor(0, 1);//   row >    column ^
@@ -1102,7 +1167,7 @@ void lcdInit253() { // Splash     [no click (select) out to 253]
     if (true){
       menuSelected = 252; // Initialize values
     } else {
-      menuSelected = 0;   // Go to Main Menu
+      menuSelected = 240;   // Go to Control check befor Main Menu 
     }
   }
 }
@@ -1110,7 +1175,7 @@ void lcdInit253() { // Splash     [no click (select) out to 253]
 // -------------------------------------------
 void lcdInit254() {  // Starting   [click (select) out to 254]
   if (repeatCount == 0) {
-    setMenu("x254", menuOptions254, menuOptions254SIZE);
+    setMenu("x254", menuOptions254, membersof(menuOptions254));
     lcd.init();
     lcd.begin(20,4);
     lcd.backlight();
@@ -1139,7 +1204,7 @@ void lcdInit254() {  // Starting   [click (select) out to 254]
 }
 
 // -------------------------------------------
-void lcdInit255() { // this is an error, 255 if for FUNCTIONS  
+void lcdInit255() { // this is an error, 255 is reserved 
   while (true){
     Serial.println("ER255");
   }
@@ -1149,25 +1214,31 @@ void updateLCD() {
   // Detect Menu change
 
   if (menuCurrent != menuSelected) {
+    Serial.print ("C:");
+    Serial.print (menuCurrent);
+    Serial.print (" S:");
+    Serial.print (menuSelected);
     returnToCurrent = menuCurrent;
-    if (false){
-      Serial.print ("Cur ");
+    if (true){
+      Serial.print (" Cur:");
       Serial.print (menuCurrent);
-      Serial.print ("Sel ");
+      Serial.print (" Sel:");
       Serial.print (menuSelected);
-      Serial.print ("RTC ");
+      Serial.print (" RTC:");
       Serial.print (returnToCurrent);
       Serial.println();
     }
 
-    if (!(menuSelected >200 && menuSelected < 240)){// Don't clear the screen
+    // Don't clear the screen for functions
+    if (!(menuSelected > 200 && menuSelected <= 239)){
       lcd.clear();
     }
+    
     repeatCount = 0;
     col = 0;
     menuCurrent = menuSelected;
 
-    if (menuCurrent == 0 || menuCurrent >= 250) {
+    if (menuCurrent == mainmenu || menuCurrent >= 250) {
       lcd.noBlink();
     } else {
       lcd.blink();
@@ -1178,10 +1249,12 @@ void updateLCD() {
     if (keyPress == 5) {// up
       if (col > 0)
         col--;
+        changeMe += 1.0;
     }
     if (keyPress == 3) {// down
       if (col < (menuSize-1))
         col++;
+        changeMe -= 1.0;
     }
     if (keyPress == 4) {// right
       if (row < 5)
@@ -1191,7 +1264,7 @@ void updateLCD() {
       if (row > 0)
         row--;
     }    
-
+    
     Serial.print  (keyPress);
     Serial.print  (" R>:");
     Serial.print  (row);
@@ -1202,41 +1275,45 @@ void updateLCD() {
   }
 
   if (keyPress == 1) {
-//    Serial.println(menuOptions[col]);
+    Serial.print (" MS1:");
+    Serial.print (menuSelected);
     menuSelected = menuOptions[col];
+    Serial.print (" MS2:");
+    Serial.println(menuSelected);
   }
 
+    
   switch (menuSelected) {
     // ---------------------------------------
-    case 000:
-      lcdMainX000();
+    case 1: //mainmenu
+      lcdMenuX001();
       break;
     // ---------------------------------------
-    case 001: //lcdMainVolts();
-      lcdMenuX001();      
-      break;
-    // ---------------------------------------
-    case 002: //lcdKeyVolts();
+    case 2: //lcdMainVolts();
       lcdMenuX002();      
       break;
     // ---------------------------------------
-    case 010:
+    case 3: //lcdKeyVolts();
+      lcdMenuX003();      
+      break;
+    // ---------------------------------------
+    case 10:
       lcdMenuX010();
       break;
     // ---------------------------------------
-    case 011:
+    case 11:
       lcdMenuX011();
       break;
     // ---------------------------------------
-    case 012:
+    case 12:
       lcdMenuX012();
       break;
     // ---------------------------------------
-    case 013:
+    case 13:
       lcdMenuX013();
       break;
     // ---------------------------------------
-    case 014:      //  updateFPS();
+    case 14:      //  updateFPS();
       lcdMenuX014();
       break;
     // ---------------------------------------
@@ -1251,6 +1328,10 @@ void updateLCD() {
       break;
     // ---------------------------------------
     // ---------------------------------------
+    // ---------------------------------------
+    case 240: // Control Check
+      lcdInit240();
+      break;
     // ---------------------------------------
     case 244: // Joysticks
       lcdInit244();
@@ -1302,6 +1383,7 @@ void updateLCD() {
       Serial.print  (menuSelected);
       Serial.println(" - reset");
       menuSelected = 254;
+      while(true){};
       break;
   }
 
@@ -1320,12 +1402,12 @@ void updateLCD() {
 //------------------------------------------------------
 void printCD4052() {
   for (analogLoop = 0 ; analogLoop < 4; analogLoop++) {
-    fmt.printInt(analogLoop, "<X%1d:");
-    fmt.printInt(analogLoop * 2, "%1d:");
-    fmt.printInt(analog[(analogLoop * 2)    ], "%4d> ");
-    fmt.printInt(analogLoop, "<Y%1d:");
-    fmt.printInt((analogLoop * 2) + 1, "%1d:");
-    fmt.printInt(analog[(analogLoop * 2) + 1], "%4d> ");
+//    fmt.printInt(analogLoop, "<X%1d:");
+//    fmt.printInt(analogLoop * 2, "%1d:");
+//    fmt.printInt(analog[(analogLoop * 2)    ], "%4d> ");
+//    fmt.printInt(analogLoop, "<Y%1d:");
+ //   fmt.printInt((analogLoop * 2) + 1, "%1d:");
+ //   fmt.printInt(analog[(analogLoop * 2) + 1], "%4d> ");
   }
   //  Serial.println("");
 }
@@ -1387,6 +1469,7 @@ void printCD4052() {
 // ===========================================
 // ===========================================
 // ===========================================
+
 void setup()
 {
   pinMode(2, OUTPUT);
@@ -1414,6 +1497,24 @@ void setup()
 
   // Setup the Min, Mid & Max values for the sticks
   initSticks();
+
+//  // Test code to be deleted
+//  // Test code to be deleted
+//  // Test code to be deleted
+
+// dtostrf( floatVar, 
+//          minStringWidthIncDecimalPoint,
+//          numVarsAfterDecimal, 
+//          charBuf);
+//       dtostrf(x, 10, i, buffer2); // avr-libc function for floats
+//       Serial.print(buffer2);
+//       Serial.println("");
+
+//sprintf(buffer, "String value: %08d.%02d", (int)changeMe, abs((int)(changeMe*100)%100));
+//Serial.println(buffer);
+//  // Test code to be deleted
+//  // Test code to be deleted
+//  // Test code to be deleted
 }
 
 // ===========================================
