@@ -30,9 +30,12 @@
 
 #include "CustomChar.h"
 #include "Data.h"
+#include "Display.h"
+
 
 CustomChar customChar = CustomChar();
 Data data = Data();
+Display disp = Display();
 
 // ===========================================
 // Vars
@@ -424,6 +427,12 @@ int lcdUnLong6D(unsigned long n){
   return m;
 }
 
+//char digit10000   (uint16_t v) {return '0' + v / 10000                   ;}
+//char digit1000    (uint16_t v) {return '0' + v / 1000  - (v/10000) * 10;}
+//char digit100     (uint16_t v) {return '0' + v / 100   - (v/1000)  * 10;}
+//char digit10      (uint16_t v) {return '0' + v / 10    - (v/100)   * 10;}
+//char digit1       (uint16_t v) {return '0' + v / 1     - (v/10)    * 10;}
+
 //void lcdprint_uint32(uint32_t v) {
 void lcdprint_ulong(unsigned long v) {
   static char line[14] = "-,---,---,---";
@@ -437,7 +446,7 @@ void lcdprint_ulong(unsigned long v) {
   line[8]  = '0' + v  / 1000      - (v/10000)      * 10;
   line[10] = '0' + v  / 100       - (v/1000)       * 10;
   line[11] = '0' + v  / 10        - (v/100)        * 10;
-  line[12] = '0' + v              - (v/10)         * 10;
+  line[12] = '0' + v  / 1         - (v/10)         * 10;
 
   lcd.print(line);  
 }
@@ -1095,14 +1104,19 @@ void lcdInit251() { // V5.0    3.1 & 3.2 ohms
     lcd.print("3.2 ");    
   }
 
-unsigned long nx;
+  //nx = 65535;  // I know, max resistor size is 65535...
+  //lcd.print(disp.formatUnsignedInt(nx, true));
+unsigned int nx;
 nx = 65535;
+
+  disp.formatUnsignedInt(nx, false); 
   lcd.setCursor(6, 1); //   row >    column ^
-  //lcdUnLong6D(nx);
-  lcdprint_uint(nx);
+  lcd.print(disp.formatUnsignedInt(nx, false));
   lcd.setCursor(6, 2); //   row >    column ^
-nx = 65537;  
-  lcdprint_uint(nx);
+
+  int nx1;
+  nx1 = -32535;
+  lcd.print(disp.formatInt(nx1));
 }
 
 /*

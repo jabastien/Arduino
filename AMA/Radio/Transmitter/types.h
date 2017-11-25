@@ -46,16 +46,18 @@ MyButtons myButtons;
 // ===========================================
 struct MyVoltsMap {
   // Messure (  vPre -  vPost) / Current
-  //         (12.867 - 12.836) / 58.8 =  527.211 mOhm
-  //                     0.031 / 58.8 =  527.211 mOhm
-  //double shunt = 0.727211;   // 0.5
+  //         (12.867 - 12.836) / 58.8 =  0.527211 Ohm
+  //                    0.031  / 58.8 =  0.527211 Ohm
+//double shunt = 0.727211;   // 0.5
   double shunt = 0.766327;   // 0.5
-  int Vpre11   = 8042; // 8.2k
-  int Vpre12   = 2638; // 2.7k
-  int Vpst21   = 8014; // 8.2k
-  int Vpst22   = 2637; // 2.7k
-  int V5_31    = 2161; // 2.2k
-  int V5_32    = 3212; // 3.3k
+
+  // Max resistor size is 32767 witch is 1/2 of 65,535.
+  unsigned int Vpre11   = 8042; // 8.2k
+  unsigned int Vpre12   = 2638; // 2.7k
+  unsigned int Vpst21   = 8014; // 8.2k
+  unsigned int Vpst22   = 2637; // 2.7k
+  unsigned int V5_31    = 2161; // 2.2k
+  unsigned int V5_32    = 3212; // 3.3k
 };
 MyVoltsMap myVoltsMap;
 
