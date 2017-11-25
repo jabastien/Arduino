@@ -1,14 +1,14 @@
-/*A basic 4 channel transmitter using the nRF24L01 module.*/
-/* Like, share and subscribe, ELECTRONOOBS */
-/* ref help from: http://www.youtube/c/electronoobs */
-
-/* First we include the libraries. Download it from
-   my webpage if you donw have the NRF24 library */
+/*A basic 16 channel transmitter using the nRF24L01 module based on ELECTRONOOBS. */
 
 /*
  AVR Libc Reference Manual
  http://www.atmel.com/webdoc/avrlibcreferencemanual/index.html
  http://www.atmel.com/webdoc/avrlibcreferencemanual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
+*/
+
+/*
+ Reference: Like, share and subscribe, ELECTRONOOBS
+ ref help from: http://www.youtube/c/electronoobs 
 */
 
 
@@ -22,45 +22,22 @@
 #endif
 
 #include <stdlib.h>
+#include <avr/pgmspace.h>
 
 #include "config.h"
 #include "def.h"
 #include "types.h"
+
+#include "CustomChar.h"
 #include "Data.h"
 
+CustomChar customChar = CustomChar();
+Data data = Data();
 
-//#include "Test1.h"
-//Test1 myTest = Test1(2);
-
-/*
-#include <Test.h>
-
-// Doing Something
-// by John Doe <http://www.yourwebsite.com>
-
-// Demostrates how to do something with the Test library
-
-// Created 1 April 2006
-
-Test myTest = Test(2);
-
-void setup()
-{
-}
-
-void loop()
-{
-  myTest.doSomething();
-  delay(500);
-}
-
- */
 // ===========================================
 // Vars
 // ===========================================
-String qBytesWorld = "Q-Bytes World";
-String deviceInfo  = "2.4G Transmitter";
-String versionNum  = "v1.12";
+
 
 unsigned long  screenRefresh = 1000 / 4; // 4 times per second
 unsigned long  screenLastRefresh = 0;
@@ -73,13 +50,7 @@ float changeMe = 987.654321;
 //itoa(changeMe,buffer,10); //(integer, yourBuffer, base)   
 char buffer[10];  //  Hold The Convert Data
 
-//const String err = "Err:
 
-//PROGMEM const String sampleMenu_back = "Back";
-//PROGMEM const String sampleMenu_exit = "Exit";
-//
-//PROGMEM const String sampleMenu_2_1_1 = "1 Sub item A";
-//PROGMEM const String sampleMenu_2_1_2 = "2 Sub item B";
 // ===========================================
 // Menu
 // ===========================================
@@ -130,8 +101,6 @@ double vKey = 0.0;
 KeyPad keyPad(13, 5, 10, 200);
 
 byte keyPress;
-
-
 
 // ===========================================
 // RF24
@@ -207,60 +176,6 @@ int cntMillis = 0;
 // This gives us up to 32 8 bits channals
 
 
-// ===========================================
-// Custom Char (Max is 8 [0-7])
-// 255 is a solid block
-// 254 is an empty block
-/*
-//  The user must call, one of the funtions 
-      lcd.home()or lcd.setCursor(x,x) //   row >    column ^
-      after the character creation.
-*/
-// ===========================================
-// Sequence must be
-// /// lcd.createChar(0,testChar0);
-// /// lcd.createChar(1,testChar1);
-// /// 
-// /// lcd.home();
-// /// 
-// /// lcd.print((char)0);
-// /// lcd.print((char)1);
-// 
-// https://omerk.github.io/lcdchargen/
-
-//byte  testChar0[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // = 254 (empty)
-  byte  testChar0[8] = {0x1f, 0x00, 0x0a, 0x04, 0x0a, 0x00, 0x11, 0x1f};
-  byte  testChar1[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f};
-  byte  testChar2[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0x1f};
-  byte  testChar3[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0x1f, 0x1f};
-  byte  testChar4[8] = {0x00, 0x00, 0x00, 0x00, 0x1f, 0x1f, 0x1f, 0x1f};
-  byte  testChar5[8] = {0x00, 0x00, 0x00, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f};
-  byte  testChar6[8] = {0x00, 0x00, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f};
-  byte  testChar7[8] = {0x00, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f};
-//byte  testChar7[8] = {0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f}; // = 255 (full)
-
-//  byte testChar7[8] = {
-//  0b01110,
-//  0b11011,
-//  0b10001,
-//  0b10001,
-//  0b10001,
-//  0b11111,
-//  0b11111,
-//  0b11111
-//};
-
-//  byte  testChar[8] = {0x00, 0x00, 0x0a, 0x00, 0x04, 0x11, 0x0e, 0x00}; // smile
-//  byte  testChar[8] = {  // degree F
-//      B01000,
-//      B10100,
-//      B01000,
-//      B00000,
-//      B00111,
-//      B00100,
-//      B00110,
-//      B00100
-//    };
 
 // ===========================================
 // Reset
@@ -269,12 +184,12 @@ void resetData()
 {
   //This are the start values of each channal
   // Throttle is 0 in order to stop the motors
-  //127 is the middle value of the 10ADC.
+  //128 is the middle value of the 10 bit ADC.
 
   myControls.throttle = 0;    // no power
-  myControls.yaw      = 127;  // center control
-  myControls.pitch    = 127;  // center control
-  myControls.roll     = 127;  // center control
+  myControls.yaw      = MID;  // center control
+  myControls.pitch    = MID;  // center control
+  myControls.roll     = MID;  // center control
 
   myAux.AUX1     = 0;
   myAux.AUX2     = 0;
@@ -362,18 +277,8 @@ void serialDebug() {
 // Print CD4052 analog
 //------------------------------------------------------
 #ifdef DEBUG_CD4052
-  for (analogLoop = 0 ; analogLoop < 4; analogLoop++) {
-//    fmt.printInt(analogLoop, "<X%1d:");
-//    fmt.printInt(analogLoop * 2, "%1d:");
-//    fmt.printInt(analog[(analogLoop * 2)    ], "%4d> ");
-//    fmt.printInt(analogLoop, "<Y%1d:");
- //   fmt.printInt((analogLoop * 2) + 1, "%1d:");
- //   fmt.printInt(analog[(analogLoop * 2) + 1], "%4d> ");
-  }
-  //  Serial.println("");
 
-
-char bufferD[50];  //  Hold The Convert Data
+char bufferD[30];  //  Hold The Convert Data
 char CD4052Format[] = "<X%1d:%1d:%4d> <Y%1d:%1d:%4d> ";
 
   for (analogLoop = 0 ; analogLoop < 4; analogLoop++) {
@@ -490,25 +395,100 @@ void initSticks() {
 //===============================================================================
 //===============================================================================
 //===============================================================================
+//int lcdInt(int n, String format){
+//char charBuf[10];
+//  format.toCharArray(charBuf,10); 
+//  int m = sprintf (buffer, charBuf, n);
+//  lcd.print(buffer);
+//  return m;
+//}
+//int lcdInt(int n, String format){
+//  int m = sprintf (buffer, "%6d", n);
+//  lcd.print(buffer);
+//  return m;
+//}
+//int lcdInt(int n, const char format){
+//  //    lcd.print(PGMSTR(qBytesWorld));
+//  int m = sprintf (buffer, format, n);
+//  lcd.print(buffer);
+//  return m;
+//}
+////// ===========================================
+////// LCD Print DDDDDD
+////// ===========================================
+int lcdUnLong6D(unsigned long n){
+  Serial.println(n);
+  //int m = sprintf (buffer, "%06d", n);
+  int m = sprintf (buffer, "%06lu", n);
+  lcd.print(buffer);
+  return m;
+}
 
+//void lcdprint_uint32(uint32_t v) {
+void lcdprint_ulong(unsigned long v) {
+  static char line[14] = "-,---,---,---";
+  //                      0 2 4 6 8   12
+  line[0]  = '0' + v  / 1000000000;
+  line[2]  = '0' + v  / 100000000 - (v/1000000000) * 10;
+  line[3]  = '0' + v  / 10000000  - (v/100000000)  * 10;
+  line[4]  = '0' + v  / 1000000   - (v/10000000)   * 10;
+  line[6]  = '0' + v  / 100000    - (v/1000000)    * 10;
+  line[7]  = '0' + v  / 10000     - (v/100000)     * 10;
+  line[8]  = '0' + v  / 1000      - (v/10000)      * 10;
+  line[10] = '0' + v  / 100       - (v/1000)       * 10;
+  line[11] = '0' + v  / 10        - (v/100)        * 10;
+  line[12] = '0' + v              - (v/10)         * 10;
+
+  lcd.print(line);  
+}
+//void lcdprint_uint32(uint32_t v) {
+void lcdprint_uint(unsigned int v) {
+  static char line[14] = "--,---";
+  //                      01 345
+
+  line[0] = '0' + v / 10000;
+  line[1] = '0' + v / 1000      - (v/10000)      * 10;
+  line[3] = '0' + v / 100       - (v/1000)       * 10;
+  line[4] = '0' + v / 10        - (v/100)        * 10;
+  line[5] = '0' + v             - (v/10)         * 10;
+
+  lcd.print(line);  
+}
+
+////// ===========================================
+////// LCD Print NNN.DDD
+////// ===========================================
 //int printInt(int n, String format){
-//  char c[10];        // long enough to hold complete integer string
-//  char charBuf[20];
-//  format.toCharArray(charBuf,20);
-//  int m = sprintf(c, charBuf, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
+//
+
+//  char buffer[10];         //the ASCII of the integer will be stored in this char array
+//  itoa((int)changeMe,buffer,10); //(integer, yourBuffer, base)
+  
+////char dateFormat[] = "%02d:%02d:%02d:%02d";
+////    sprintf(buffer, dateFormat[3], days, hours, minutes, seconds); ///< This has 4 2-digit integers with leading zeros, separated by ":" . The list of parameters, hour, min, sec, provides the numbers the sprintf prints out with.
+////    lcd.print(buffer);    
+//    //Serial.println(buffer); ///< You will get something like"01:13:02:09" 
+//    
+//char format[] = "ddddd";
+//      
+////  char c[10];        // long enough to hold complete integer string
+////  char charBuf[20];
+//  format.toCharArray(buffer,10);
+//  int m = sprintf(c, buffer, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
 //  Serial.print(c);
 //  return m;
 //}
 
-// ===========================================
-// Print Volts
-// ===========================================
-void printVolts() {
-  //  float sensorValue = (float)analogRead(A0);
-  //  sensorValue *= (5.0 / 1023.0);
-  //lcd.print(fmt.getFloat(sensorValue, 6, 3));
- // lcd.print(fmt.getFloat(v5_0, 6, 3));
+//// ===========================================
+//// LCD Print NNN.DDD
+//// ===========================================
+void lcdDouble63(double dbl) {
+  char *r = dtostrf(dbl, 6, 3, buffer);
+//  lcd.print(buffer);
+  lcd.print(r);
   lcd.print("V");
+//  lcd.print(dtostrf(v5_0, 6, 3, buffer));
+//  lcd.print("V");
 }
 /**************************************************/
 
@@ -521,42 +501,17 @@ int mapJoystickValues(int value, int minimum, int middle, int maximum, bool reve
 {
   value = constrain(value, minimum, maximum);
   if ( value < middle )
-    value = map(value, minimum, middle, 0, 128);
+    value = map(value, minimum, middle, 0, MID);
   else
-    value = map(value, middle, maximum, 128, 255);
-  return ( reverse ? 255 - value : value );
+    value = map(value, middle, maximum, MID, MAX);
+  return ( reverse ? MAX - value : value );
 }
 
 //===============================================================================
 //===============================================================================
 //===============================================================================
 //===============================================================================
-// -------------------------------------------
-//void lcdInit253() {
-//  if (repeatCount == 0) {
-//    setMenu("x253", menuOptions252, menuOptions252SIZE);
-//    lcd.setCursor(0, 0); //   row >    column ^
-//    lcd.print("Pre Ohms");    
-//  }
-//
-//  if (row>0){
-//    returnToCurrent = true;
-//  }
-//  
-//  // test print custom char.
-//  lcd.setCursor(3, 3);  //   row >    column ^
-//   
-//  lcd.print((char)0);
-//  lcd.print((char)254);
-//  lcd.print((char)1);
-//  lcd.print((char)2);
-//  lcd.print((char)3);
-//  lcd.print((char)4);
-//  lcd.print((char)5);
-//  lcd.print((char)6);
-//  lcd.print((char)7);
-//  lcd.print((char)255);
-//}
+
 //===============================================================================
 //===============================================================================
 //===============================================================================
@@ -699,6 +654,14 @@ setMenu("x001", menuOptions001, membersof(menuOptions001));
     lcd.setCursor(9, 3); //   row >    column ^
     lcd.print("Repeat: ");
   }
+
+  int numb = (int)((double)repeatCount*3.5);
+  customChar.percent(numb);
+  lcd.setCursor(10, 0); //   row >    column ^
+  
+  lcd.print("Bat:");  
+  customChar.showChar();
+  lcd.print(numb);
 
   lcd.setCursor(17, 3); //   row >    column ^
   lcd.print(repeatCount);
@@ -1131,43 +1094,65 @@ void lcdInit251() { // V5.0    3.1 & 3.2 ohms
     lcd.setCursor(2, 2); //   row >    column ^
     lcd.print("3.2 ");    
   }
+
+unsigned long nx;
+nx = 65535;
+  lcd.setCursor(6, 1); //   row >    column ^
+  //lcdUnLong6D(nx);
+  lcdprint_uint(nx);
+  lcd.setCursor(6, 2); //   row >    column ^
+nx = 65537;  
+  lcdprint_uint(nx);
 }
 
+/*
+struct MyVoltsMap {
+  // Messure (  vPre -  vPost) / Current
+  //         (12.867 - 12.836) / 58.8 =  527.211 mOhm
+  //                     0.031 / 58.8 =  527.211 mOhm
+  //double shunt = 0.727211;   // 0.5
+  double shunt = 0.766327;   // 0.5
+  int Vpre11   = 8042; // 8.2k
+  int Vpre12   = 2638; // 2.7k
+  int Vpst21   = 8014; // 8.2k
+  int Vpst22   = 2637; // 2.7k
+  int V5_31    = 2161; // 2.2k
+  int V5_32    = 3212; // 3.3k
+ */
 // -------------------------------------------
 void lcdInit252() {  // V5.0    Regulator Voltage
   if (repeatCount == 0) {
     setMenu("x252", menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print("V5.0 volts");
-    lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print("V ");        
+    rowEdit = 2; //   row >    column ^  
+    colEdit = 1; //   row >    column ^  
   }
 
-  rowEdit = 0; //   row >    column ^  
-  colEdit = 0; //   row >    column ^  
-  
-  // test print custom char.
-  //lcd.setCursor(3, 3); //   row >    column ^
-   
+  lcd.setCursor(2, 1); //   row >    column ^
+  lcdDouble63(v5_0);//printVolts();   
 }
 
+
+//#define PGMSTR(x) (__FlashStringHelper*)(x)
 // -------------------------------------------
 void lcdInit253() { // Splash     [no click (select) out to 253]
   if (repeatCount == 0) {
     setMenu("x253", menuOptions253, membersof(menuOptions253));    
     lcd.setCursor(0, 0);//   row >    column ^
-    lcd.print(qBytesWorld);
+    lcd.print(PGMSTR(qBytesWorld));
     lcd.setCursor(0, 1);//   row >    column ^
-    lcd.print(deviceInfo);
+    lcd.print(PGMSTR(deviceInfo));
     lcd.setCursor(0, 2);//   row >    column ^
-    lcd.print(versionNum);
+    lcd.print(PGMSTR(versionNum));
     lcd.setCursor(0, 3);//   row >    column ^
-    lcd.print("Volts:");
+    lcd.print(PGMSTR(volts));
+
   }
 
   lcd.setCursor(7, 3);//   row >    column ^
-  printVolts();
-
+  lcdDouble63(v5_0);//printVolts();
+  
   if (repeatCount > 7) {//delay(2000);
 
 // DAQ finish this....
@@ -1196,17 +1181,17 @@ void lcdInit254() {  // Starting   [click (select) out to 254]
     lcd.setCursor(0, 0);//   row >    column ^
     lcd.print("Startup");
 
-    lcd.createChar(0, testChar0);  
-    lcd.createChar(1, testChar1);   
-    lcd.createChar(2, testChar2);   
-    lcd.createChar(3, testChar3);   
-    lcd.createChar(4, testChar4);   
-    lcd.createChar(5, testChar5);   
-    lcd.createChar(6, testChar6);   
-    lcd.createChar(7, testChar7);   
-
-    lcd.home();
-    lcd.setCursor(0,0); //   row >    column ^
+//    lcd.createChar(0, testChar0);  
+//    lcd.createChar(1, testChar1);   
+//    lcd.createChar(2, testChar2);   
+//    lcd.createChar(3, testChar3);   
+//    lcd.createChar(4, testChar4);   
+//    lcd.createChar(5, testChar5);   
+//    lcd.createChar(6, testChar6);   
+//    lcd.createChar(7, testChar7);   
+//
+//    lcd.home();
+//    lcd.setCursor(0,0); //   row >    column ^
   }
   
   if (repeatCount > 1) { // ~delay(250);
@@ -1404,8 +1389,6 @@ void updateLCD() {
   }
 }
 
-
-
 // ===========================================
 // ===========================================
 // ===========================================
@@ -1422,16 +1405,11 @@ void setup()
 
   // Debug Serial out
   Serial.begin(115200); //Set the speed to 9600 bauds if you want.
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
-  }
-    
+//  while (!Serial) {
+//    ; // wait for serial port to connect. Needed for native USB port only
+//  }
+
   //  pinMode(debugPin, INPUT);      // sets the digital pin as input
-
-//  //Print length of data to run CRC on.
-//  Serial.print("EEPROM length: ");
-//  Serial.println(EEPROM.length());
-
 
   //Start everything up
   //  radio.begin();
@@ -1460,19 +1438,13 @@ void setup()
 
 //sprintf(buffer, "String value: %08d.%02d", (int)changeMe, abs((int)(changeMe*100)%100));
 //Serial.println(buffer);
+    
 //  // Test code to be deleted
 //  // Test code to be deleted
 //  // Test code to be deleted
 
-//  int addr = 0;
-//  int val = analogRead(0) / 4;
-//  EEPROM.write(addr, val);
-
-  //myTest.doSomething();
   //data.factoryReset();
 }
-
-Data data = Data();
 
 // ===========================================
 // ===========================================

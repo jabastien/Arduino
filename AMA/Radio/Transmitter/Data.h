@@ -27,7 +27,7 @@ class Data
 
   // library-accessible "private" interface
   private:
-    int value;
+   // int value;
     
 };
 
