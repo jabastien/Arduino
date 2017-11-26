@@ -6,10 +6,7 @@
  http://www.atmel.com/webdoc/avrlibcreferencemanual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
 */
 
-/*
- Reference: Like, share and subscribe, ELECTRONOOBS
- ref help from: http://www.youtube/c/electronoobs 
-*/
+
 
 
 //#if defined(ARDUINO) && ARDUINO >= 100
@@ -915,20 +912,20 @@ void lcdMenu014() {
     //    printVolts();    //Voltage: xx.xV
 
 
-    if (++cntMillis >= (1000 / screenRefresh))
+    if (cntMillis >= (1000 / screenRefresh))
     {
       // -------------------------------------
       lcd.setCursor(0, 0); //   row >    column ^
       lcd.print("Flight: ");
-      long timeNow = millis();
-
-      int days = timeNow / day ;                                //number of days
-      int hours = (timeNow % day) / hour;                       //the remainder from days division (in milliseconds) divided by hours, this gives the full hours
-      int minutes = ((timeNow % day) % hour) / minute ;         //and so on...
-      int seconds = (((timeNow % day) % hour) % minute) / second;
-
-
-char dateFormat[] = "%02d:%02d:%02d:%02d";
+//      long timeNow = millis();
+//
+//      int days = timeNow / day ;                                //number of days
+//      int hours = (timeNow % day) / hour;                       //the remainder from days division (in milliseconds) divided by hours, this gives the full hours
+//      int minutes = ((timeNow % day) % hour) / minute ;         //and so on...
+//      int seconds = (((timeNow % day) % hour) % minute) / second;
+//
+//
+//char dateFormat[] = "%02d:%02d:%02d:%02d";
 
 //    sprintf(buffer, dateFormat[3], days, hours, minutes, seconds); ///< This has 4 2-digit integers with leading zeros, separated by ":" . The list of parameters, hour, min, sec, provides the numbers the sprintf prints out with.
 //    lcd.print(buffer);    
@@ -1092,6 +1089,8 @@ void lcdInit250() { // Vin pst 2.1 & 2.2 ohms
   }
 }
 
+
+uint32_t tm=0;
 // -------------------------------------------
 void lcdInit251() { // V5.0    3.1 & 3.2 ohms
   if (repeatCount == 0) {
@@ -1105,18 +1104,30 @@ void lcdInit251() { // V5.0    3.1 & 3.2 ohms
   }
 
   //nx = 65535;  // I know, max resistor size is 65535...
-  //lcd.print(disp.formatUnsignedInt(nx, true));
+  //lcd.print(disp.outputDigitsU16(nx, true));
 unsigned int nx;
-nx = 65535;
+nx = 50;
+tm+=123;
 
-  disp.formatUnsignedInt(nx, false); 
+  disp.outputDigitsU16(nx); 
   lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(disp.formatUnsignedInt(nx, false));
+  lcd.print(disp.outputDigitsS16(nx));
   lcd.setCursor(6, 2); //   row >    column ^
 
-  int nx1;
-  nx1 = -32535;
-  lcd.print(disp.formatInt(nx1));
+//  int nx1;
+//  nx1 = -65539;
+//  lcd.print(disp.outputDigitsS16(nx1));
+
+  lcd.print(disp.outputOnTime(millis()));
+
+  lcd.setCursor(6, 3); //   row >    column ^
+
+ long ul = 2147483647;
+ lcd.print(disp.outputDigitsS32(ul));
+
+//lcd.print(disp.outputServiceTime(millis()/1000));
+
+//lcd.print(disp.outputServiceTime(4294967294));
 }
 
 /*
@@ -1133,6 +1144,7 @@ struct MyVoltsMap {
   int V5_31    = 2161; // 2.2k
   int V5_32    = 3212; // 3.3k
  */
+ 
 // -------------------------------------------
 void lcdInit252() {  // V5.0    Regulator Voltage
   if (repeatCount == 0) {
