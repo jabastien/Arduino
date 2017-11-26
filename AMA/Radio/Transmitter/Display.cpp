@@ -16,6 +16,7 @@
 #include <avr/pgmspace.h>
 
 // include this library's description file
+#include "Def.h"
 #include "Display.h"
 
 
@@ -104,17 +105,18 @@ Display::Display(){
 // ===========================================
 // PROGMEM
 // ===========================================
-const char PROGMEM  digits8 []     = " ---";
-const char PROGMEM  digits16[]     = " --,---";
-const char PROGMEM  digits32[]     = " -,---,---,---";
+PROGMEM const char  digits8 []     = " ---";
+PROGMEM const char  digits16[]     = " --,---";
+PROGMEM const char  digits32[]     = " -,---,---,---";
 
-const char PROGMEM  timer[]        = "--:--:--";
-const char PROGMEM  timerDay[]     = "----:--:--:--";
+PROGMEM const char  timer[]        = "--:--:--";
+PROGMEM const char  timerDay[]     = "----:--:--:--";
 
-const char PROGMEM  volts_xx_xV[]  = " --.-V";
-const char PROGMEM  volts_x_xxxV[] = " -.---V";
+PROGMEM const char  volts_xx_xV[]  = " --.-V";
+PROGMEM const char  volts_x_xxxV[] = " -.---V";
 
 static char line [15];
+static char buffer [20];
   
 // ===========================================
 // Misc Methods
@@ -410,6 +412,48 @@ char * Display::output_x_xxxV(uint16_t volts) {
   
   return line;
 }
+
+
+
+// Usage: concatBytesPGM(lcd_param_common_set,lcd_param_lcdInit252_5V);
+char * Display::concatBytesPGM(const char* pgm1, const char* pgm2) {
+  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated a clean arrays
+  int c = 0;
+
+  for (int k = 0; k < strlen_P(pgm1); k++){
+    buffer[c++]=pgm_read_byte_near(pgm1 + k);
+  }
+  
+  buffer[c++]=' ';
+  
+  for (int k = 0; k < strlen_P(pgm2); k++){
+    buffer[c++]=pgm_read_byte_near(pgm2 + k);
+  }
+  
+  buffer[c]=0;
+  
+  buffer[sizeof(buffer)] = 0;          // end with a null terminator.
+
+  if (false){
+    Serial.println(buffer);
+  }
+    
+  return buffer;
+}
+
+// Usage: concatBytesPGMSTR(qBytesWorld, versionNum);  
+char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
+//  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated arrays (clear the array);
+    memcpy(buffer, PGMSTR(pgmstr1), strlen_P(pgmstr1)+1);
+    buffer[strlen_P(pgmstr1)] = ' ';
+    memcpy(buffer+strlen_P(pgmstr1)+1, PGMSTR(pgmstr2), strlen_P(pgmstr2)+1);
+
+    if (false){
+      Serial.println(buffer);
+    }
+  return buffer;    
+}
+
 
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library

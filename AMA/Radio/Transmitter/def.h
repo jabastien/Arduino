@@ -5,6 +5,18 @@
 
 #define PGMSTR(x) (__FlashStringHelper*)(x)
 
+/*
+  review these again:
+
+    http://www.nongnu.org/avr-libc/user-manual/group__avr__pgmspace.html
+    http://arduino-esp8266.readthedocs.io/en/latest/PROGMEM.html
+    
+PROGMEM const char   sampleMenu_back = "Back";
+PROGMEM const String sampleMenu_exit = "Exit";
+
+const String err = "Err:
+ */
+ 
 /**************************************************************************************/
 /***************      Serail Debug test configurations             ********************/
 /**************************************************************************************/
@@ -19,22 +31,9 @@
 /**************************************************************************************/
 /***************          constants configurations                 ********************/
 /**************************************************************************************/
-const char PROGMEM  qBytesWorld[] = "Q-Bytes World";
-const char PROGMEM  deviceInfo [] = {"2.4G Transmitter"};
-const char PROGMEM  versionNum [] = {"v1.15"};
-
-const char PROGMEM  volts      [] = {"Volts: "};
-
-
-//const String err = "Err:
-
-//PROGMEM const String sampleMenu_back = "Back";
-//PROGMEM const String sampleMenu_exit = "Exit";
-//
-//PROGMEM const String sampleMenu_2_1_1 = "1 Sub item A";
-//PROGMEM const String sampleMenu_2_1_2 = "2 Sub item B";
-
-//const char PROGMEM  D6      [] = {"%6d"};
+PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
+PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
+PROGMEM const char  versionNum [] = {"v1.16"};
 
 /**************************************************************************************/
 /***************           defaults configurations                 ********************/
@@ -50,6 +49,25 @@ const char PROGMEM  volts      [] = {"Volts: "};
 /**************************************************************************************/
 /***************             Proc specific definitions             ********************/
 /**************************************************************************************/
+// Common
+//                                           123456789012 
+PROGMEM const char lcd_param_common_set [] = "(Set)";
+
+
+
+//
+// X240
+// Check controls
+//                                               123456789012 
+PROGMEM const char lcd_param_lcdInit240_volts [] = {"Volts"};
+
+//
+// X252
+//5.0V Regulator
+//                                               123456789012 
+PROGMEM const char lcd_param_lcdInit252_5V [] = "5V Regulator";
+
+
 //// Proc auto detection
 //#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
 //  #define PROMINI
@@ -75,7 +93,5 @@ const char PROGMEM  volts      [] = {"Volts: "};
 //#if GPS && !defined(NMEA) && !defined(UBLOX)
 //  #error "when using GPS you must specify the protocol NMEA, UBLOX..."
 //#endif
-
-
 
 #endif /* DEF_H_ */

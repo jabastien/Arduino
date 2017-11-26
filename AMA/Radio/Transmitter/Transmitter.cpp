@@ -46,10 +46,13 @@ unsigned long  screenLastRefresh = 0;
 // require ::: stdlib.h
 //char buffer[7];         //the ASCII of the integer will be stored in this char array
 //itoa(changeMe,buffer,10); //(integer, yourBuffer, base)   
-char buffer[10];  //  Hold The Convert Data
+char buffer[20];  //  Hold The Convert Data (width of the LCD)
 
-unsigned int *pUInt1;// = null;
-unsigned int *pUInt2;// = null;
+unsigned int *pUInt1;
+unsigned int *pUInt2;
+
+unsigned int *pUInt[4];
+void *pVoid[4];
 
 // ===========================================
 // Menu
@@ -58,8 +61,8 @@ unsigned int *pUInt2;// = null;
 byte menuRow = 0;
 byte menuCol = 0;
 
-byte rowEdit = 0;
-byte colEdit = 0;
+byte editRow = 0;
+byte editCol = 0;
 
 byte returnToCurrent = MAINMENU;
 
@@ -500,8 +503,8 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
     if (returnToCurrent != MAINMENU){
       // Clear current menu
       memset(menuOptions, 0x00, sizeof(menuOptions)); // for automatically-allocated arrays
-      Serial.println(F("*** menuValue [1]"));
       menuOptions[0] = returnToCurrent;//tempReturnToCurrent;  --- fix this......
+      Serial.println(F("*** menuValue [1]"));
       //    }
     } else {
       Serial.println(F("*** menuValue [2]"));
@@ -533,6 +536,10 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   returnToCurrent = MAINMENU;
 }
 
+void setVisible(){
+    lcd.setCursor(15, 0); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_common_set));
+}
 
 // ===========================================
 // Reserved
@@ -858,26 +865,30 @@ void lcdMenu014() {
 void lcdFunc200() { // UInt number edit
   if (repeatCount == 0) {
     setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
+
+    setVisible();
+
     lcd.setCursor(0, 3); //   row >    column ^
     lcd.print(F("Int number edit"));
+    
   }
 
   if (keyPress > 0) {
     if (keyPress == 5) {// up
-      if (colEdit > 0)
-        colEdit--;
+      if (editCol > 0)
+        editCol--;
     }
     if (keyPress == 3) {// down
-      if (colEdit < (menuSize-1))
-        colEdit++;
+      if (editCol < (menuSize-1))
+        editCol++;
     }
     if (keyPress == 4) {// right
-      if (rowEdit < 5)
-        rowEdit++;
+      if (editRow < 5)
+        editRow++;
     }
     if (keyPress == 2) {// left
-      if (rowEdit > 0)
-        rowEdit--;
+      if (editRow > 0)
+        editRow--;
     }
   }   
     
@@ -894,6 +905,9 @@ void lcdFunc200() { // UInt number edit
 void lcdFunc201() { //Double number edit
   if (repeatCount == 0) {
     setMenu(F("x201"), menuOptions201, membersof(menuOptions201));
+
+    setVisible();
+    
     lcd.setCursor(0, 3); //   row >    column ^
     lcd.print(F("Double number edit"));
   }
@@ -931,7 +945,14 @@ void lcdInit240() { // Control check
     if (true){
       menuSelected = MAINMENU; // Main
     }
-  }  
+  } 
+
+    lcd.setCursor(0, 3);//   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdInit240_volts));
+  lcd.setCursor(7, 3);//   row >    column ^
+  //lcdDouble63(v5_0);//printVolts();
+  lcd.print(display.output_x_xxxV(v5_0 * 1000));    
+
 }
 
 // -------------------------------------------
@@ -1033,13 +1054,13 @@ void lcdInit250() { // Vin pst 2.1 & 2.2 ohms
 
 }
 
-uint32_t tm=0;
+//uint32_t tm=0;
 // -------------------------------------------
 void lcdInit251() { // V5.0    3.1 & 3.2 ohms
   if (repeatCount == 0) {
     setMenu(F("x251"), menuOptions251, membersof(menuOptions251));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("V5.0 ohm"));
+    lcd.print(F("5V ohm divider"));
     lcd.setCursor(2, 1); //   row >    column ^
     lcd.print(F("3.1 "));    
     lcd.setCursor(2, 2); //   row >    column ^
@@ -1056,52 +1077,51 @@ void lcdInit251() { // V5.0    3.1 & 3.2 ohms
 
 }
 
+//// Usage: concatBytesPGM(lcd_param_common_set,lcd_param_lcdInit252_5V);
+//char * concatBytesPGM(const char* pgm1, const char* pgm2) {
+//  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated a clean arrays
+//  int c = 0;
+//
+//  for (int k = 0; k < strlen_P(pgm1); k++){
+//    buffer[c++]=pgm_read_byte_near(pgm1 + k);
+//  }
+//  
+//  buffer[c++]=' ';
+//  
+//  for (int k = 0; k < strlen_P(pgm2); k++){
+//    buffer[c++]=pgm_read_byte_near(pgm2 + k);
+//  }
+//  
+//  buffer[c]=0;
+//  
+//  buffer[sizeof(buffer)] = 0;          // end with a null terminator.
+//
+//  if (false){
+//    Serial.println(buffer);
+//  }
+//    
+//  return buffer;
+//}
+//
+//// Usage: concatBytesPGMSTR(qBytesWorld, versionNum);  
+//char * concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
+////  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated arrays (clear the array);
+//    memcpy(buffer, PGMSTR(pgmstr1), strlen_P(pgmstr1)+1);
+//    buffer[strlen_P(pgmstr1)] = ' ';
+//    memcpy(buffer+strlen_P(pgmstr1)+1, PGMSTR(pgmstr2), strlen_P(pgmstr2)+1);
+//
+//    if (false){
+//      Serial.println(buffer);
+//    }
+//  return buffer;    
+//}
 
-  //nx = 65535;  // I know, max resistor size is 65535...
-  //lcd.print(display.outputDigitsU16(nx, true));
-//unsigned int nx;
-//nx = 50;
-//tm+=123;
-
-//  display.outputDigitsU16(nx); 
-
-
-//  int nx1;
-//  nx1 = -65539;
-//  lcd.print(display.outputDigitsS16(nx1));
-
-//  lcd.print(display.outputOnTime(millis()/1000));
-
-// long ul = 2147483647;
-// lcd.print(display.outputDigitsS32(ul));
-
-//lcd.print(display.outputServiceTime(millis()/1000));
-
-//lcd.print(display.outputServiceTime(4294967294));
-
-
-
-/*
-struct MyVoltsMap {
-  // Messure (  vPre -  vPost) / Current
-  //         (12.867 - 12.836) / 58.8 =  527.211 mOhm
-  //                     0.031 / 58.8 =  527.211 mOhm
-  //double shunt = 0.727211;   // 0.5
-  double shunt = 0.766327;   // 0.5
-  int Vpre11   = 8042; // 8.2k
-  int Vpre12   = 2638; // 2.7k
-  int Vpst21   = 8014; // 8.2k
-  int Vpst22   = 2637; // 2.7k
-  int V5_31    = 2161; // 2.2k
-  int V5_32    = 3212; // 3.3k
- */
- 
 // -------------------------------------------
 void lcdInit252() {  // V5.0    Regulator Voltage
   if (repeatCount == 0) {
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("V5.0 volts"));
+    lcd.print(PGMSTR(lcd_param_lcdInit252_5V));
   }
 
   lcd.setCursor(2, 1); //   row >    column ^
@@ -1109,8 +1129,6 @@ void lcdInit252() {  // V5.0    Regulator Voltage
   lcd.print(display.output_x_xxxV(v5_0 * 1000));
 }
 
-
-//#define PGMSTR(x) (__FlashStringHelper*)(x)
 // -------------------------------------------
 void lcdInit253() { // Splash     [no click (select) out to 253]
   if (repeatCount == 0) {
@@ -1121,15 +1139,8 @@ void lcdInit253() { // Splash     [no click (select) out to 253]
     lcd.print(PGMSTR(deviceInfo));
     lcd.setCursor(0, 2);//   row >    column ^
     lcd.print(PGMSTR(versionNum));
-    lcd.setCursor(0, 3);//   row >    column ^
-    lcd.print(PGMSTR(volts));
-
   }
 
-  lcd.setCursor(7, 3);//   row >    column ^
-  //lcdDouble63(v5_0);//printVolts();
-  lcd.print(display.output_x_xxxV(v5_0 * 1000));
-  
   if (repeatCount > 7) {//delay(2000);
 
 // DAQ finish this....
@@ -1157,18 +1168,6 @@ void lcdInit254() {  // Starting   [click (select) out to 254]
     
     lcd.setCursor(0, 0);//   row >    column ^
     lcd.print("Startup");
-
-//    lcd.createChar(0, testChar0);  
-//    lcd.createChar(1, testChar1);   
-//    lcd.createChar(2, testChar2);   
-//    lcd.createChar(3, testChar3);   
-//    lcd.createChar(4, testChar4);   
-//    lcd.createChar(5, testChar5);   
-//    lcd.createChar(6, testChar6);   
-//    lcd.createChar(7, testChar7);   
-//
-//    lcd.home();
-//    lcd.setCursor(0,0); //   row >    column ^
   }
   
   if (repeatCount > 1) { // ~delay(250);
@@ -1313,7 +1312,7 @@ void updateLCD() {
       lcdMenu014();
       break;
     // ---------------------------------------
-    // ---------------------------------------
+    // ------------  Functions  --------------
     // ---------------------------------------
     case 200: // Int number edit
       lcdFunc200();
@@ -1323,7 +1322,7 @@ void updateLCD() {
       lcdFunc201();
       break;
     // ---------------------------------------
-    // ---------------------------------------
+    // -----------  Initialize   -------------
     // ---------------------------------------
     case 240: // Control Check
       lcdInit240();
