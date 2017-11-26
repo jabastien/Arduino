@@ -132,6 +132,8 @@ static char line [15];
 //}
 
 // -------------------------------------------
+// https://forum.arduino.cc/index.php?topic=439117.0
+// -------------------------------------------
 template <typename T> T setSign (T number) 
   {
   if (number < 0){ // Can't be negative.
@@ -325,7 +327,7 @@ char * Display::outputOnTime(uint16_t seconds) {
   line[6] = u8Digit10  (s);
   line[7] = u8Digit1   (s);
 
-  if (line[1] == '1' && line[1] == '0'){ // Should not get here, maybe someday?
+  if (line[1] == '0' && line[1] == '0'){ // Should not get here, maybe someday?
     line[0]=' ';
     line[1]=' ';
     line[2]=' ';
@@ -374,7 +376,7 @@ char * Display::output_xx_xV(uint16_t volts) {
 
 // volts can be between -32,768 and 32,767 (12300 = 12.3v)
 //static char line[5] = "012345"; // Digit possition (+1 for terminator /0.
-//static char line[5] = " --.-V";
+//static char line[5] = " --.-V"
 
   strcpy_P(line, volts_xx_xV);
 
@@ -384,6 +386,9 @@ char * Display::output_xx_xV(uint16_t volts) {
   line[2] =  u16Digit1000  (volts);
   line[4] =  u16Digit100   (volts);
 
+  if (line[1] == '0'){ // Should not get here, maybe someday?
+    line[1]=' ';
+  }
   return line;
 }
 
@@ -391,19 +396,18 @@ char * Display::output_x_xxxV(uint16_t volts) {
 
 // volts can be between -32,768 and 32,767 (5246 = 5.246v)
 //static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
-//static char line[5] = " -.---V";
+//static char line[5] = " -.---V;
 
-  strcpy_P(line, volts_xx_xV);
+  strcpy_P(line, volts_x_xxxV);
 
   volts = setSign(volts);
     
-  line[1] =  u16Digit10000 (volts);
-  line[2] =  u16Digit1000  (volts);
+  line[1] =  u16Digit1000  (volts);
   // .
-  line[4] =  u16Digit100   (volts);
-  line[5] =  u16Digit10    (volts);
-  line[6] =  u16Digit1     (volts);
-
+  line[3] =  u16Digit100   (volts);
+  line[4] =  u16Digit10    (volts);
+  line[5] =  u16Digit1     (volts);
+  
   return line;
 }
 
