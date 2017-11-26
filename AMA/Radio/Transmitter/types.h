@@ -49,7 +49,8 @@ struct MyVoltsMap {
   //         (12.867 - 12.836) / 58.8 =  0.527211 Ohm
   //                    0.031  / 58.8 =  0.527211 Ohm
 //double shunt = 0.727211;   // 0.5
-  double shunt = 0.766327;   // 0.5
+//  double shunt = 0.766327;   // 0.5
+  unsigned int  shunt = (0.766327*10000);   // 0.5
 
   // Max resistor size is 32767 witch is 1/2 of 65,535.
   unsigned int Vpre11   = 8042; // 8.2k

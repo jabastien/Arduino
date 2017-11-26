@@ -30,7 +30,6 @@
 #include "Display.h"
 #include "Edit.h"
 
-
 CustomChar customChar = CustomChar();
 Data data = Data();
 Display display = Display();
@@ -44,20 +43,20 @@ unsigned long  screenRefresh = 1000 / 4; // 4 times per second
 unsigned long  screenLastRefresh = 0;
 
 
-float changeMe = 987.654321;
-
 // require ::: stdlib.h
 //char buffer[7];         //the ASCII of the integer will be stored in this char array
 //itoa(changeMe,buffer,10); //(integer, yourBuffer, base)   
 char buffer[10];  //  Hold The Convert Data
 
+unsigned int *pUInt1;// = null;
+unsigned int *pUInt2;// = null;
 
 // ===========================================
 // Menu
 // ===========================================
 
-byte row = 0;
-byte col = 0;
+byte menuRow = 0;
+byte menuCol = 0;
 
 byte rowEdit = 0;
 byte colEdit = 0;
@@ -337,7 +336,7 @@ char CD4052Format[] = "<X%1d:%1d:%4d> <Y%1d:%1d:%4d> ";
   Serial.print (" Current ");
   Serial.print (avgSum/avgSize);
   Serial.print ("mV ");
-  Serial.print ((avgSum/avgSize)/myVoltsMap.shunt);
+  Serial.print ((avgSum/avgSize)/(myVoltsMap.shunt);
   Serial.print ("mA");
 
   // -----------------------------------------------
@@ -428,6 +427,7 @@ int mapJoystickValues(int value, int minimum, int middle, int maximum, bool reve
 //https://arduino.stackexchange.com/questions/21095/how-to-write-array-of-functions-in-arduino-library
 //https://arduino.stackexchange.com/questions/21095/how-to-write-array-of-functions-in-arduino-library
 
+//byte menuOptions000 [0] = {}; // Do NOT use: reserved
 byte menuOptions001 [4] = {MAINMENU, 2, 3, 10};
 
 byte menuOptions002 [1] = {MAINMENU};
@@ -443,7 +443,7 @@ byte menuOptions200 [1] = {FUNCTION}; // Function for number edit
 byte menuOptions201 [1] = {FUNCTION}; // Function for number edit
 
 
-byte menuOptions240 [1] = {MAINMENU};     // Control Check
+byte menuOptions240 [1] = {MAINMENU};     // Control Check (make sure all surfaces & switches are homed. (Prevent flight)
 byte menuOptions244 [2] = {240,201};      // Menu
 byte menuOptions245 [2] = {244,201};      // Trim
 byte menuOptions246 [2] = {245,201};      // Switch
@@ -455,6 +455,7 @@ byte menuOptions251 [3] = {250,200,200};  // V5.0    3.1 & 3.2 ohms
 byte menuOptions252 [2] = {251,201};      // V5.0    Regulator Voltage 
 byte menuOptions253 [1] = {253};          // Splash     [no click (select) out to 253]
 byte menuOptions254 [1] = {253};          // Starting   [click (select) out to 254]
+//byte menuOptions255 [0] = {}; // Do NOT use: reserved
 
 byte menuOptions[5];
 byte menuSize;
@@ -483,12 +484,12 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
     Serial.println(sizeIs);
   }
   
-  // Need to find a way to retain 'col' when returning?
+  // Need to find a way to retain 'menuCol' when returning?
 //  byte tempReturnToCurrent = menuOptions[0];
   
   menuSize = sizeIs;
 
-    // Need to find a way to retain 'col' when returning?
+    // Need to find a way to retain 'menuCol' when returning?
 
   if (menuValues[0] != FUNCTION){
     // Clear current menu
@@ -853,21 +854,40 @@ void lcdMenu014() {
 // -------------------------------------------
 // -------------------------------------------
 // -------------------------------------------
-// Int number edit
-void lcdFunc200() { // Int number edit
+// UInt number edit
+void lcdFunc200() { // UInt number edit
   if (repeatCount == 0) {
     setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
     lcd.setCursor(0, 3); //   row >    column ^
     lcd.print(F("Int number edit"));
   }
 
+  if (keyPress > 0) {
+    if (keyPress == 5) {// up
+      if (colEdit > 0)
+        colEdit--;
+    }
+    if (keyPress == 3) {// down
+      if (colEdit < (menuSize-1))
+        colEdit++;
+    }
+    if (keyPress == 4) {// right
+      if (rowEdit < 5)
+        rowEdit++;
+    }
+    if (keyPress == 2) {// left
+      if (rowEdit > 0)
+        rowEdit--;
+    }
+  }   
+    
 //  char buffer[10];         //the ASCII of the integer will be stored in this char array
-  itoa((int)changeMe,buffer,10); //(integer, yourBuffer, base)   
+//  itoa((int)changeMe,buffer,10); //(integer, yourBuffer, base)   
 
   lcd.blink();
   lcd.setCursor(5, 2); //   row >    column ^
-  lcd.print(buffer);
-  lcd.setCursor(5 + row, 2); //   row >    column ^
+//  lcd.print(buffer);
+  lcd.setCursor(5 + menuRow, 2); //   row >    column ^
 
 }
 
@@ -880,18 +900,18 @@ void lcdFunc201() { //Double number edit
   // #include<stdlib.h>
   //  dtostrf(FLOAT,WIDTH,PRECSISION,BUFFER);
 
-  char *r = dtostrf(changeMe, 8, 2, buffer);
-  if (true){
-    Serial.print  (buffer);
-    Serial.print  (" r:");
-    Serial.print  (r);
-    Serial.println(":");
-  }
+//  char *r = dtostrf(changeMe, 8, 2, buffer);
+//  if (true){
+//    Serial.print  (buffer);
+//    Serial.print  (" r:");
+//    Serial.print  (r);
+//    Serial.println(":");
+//  }
   lcd.setCursor(3, 1); //   row >    column ^
          
-  lcd.print(buffer);
+  //lcd.print(buffer);
 
-  lcd.setCursor(3 + row, 1); //   row >    column ^
+  lcd.setCursor(3 + menuRow, 1); //   row >    column ^
 }
 
 // -------------------------------------------
@@ -957,8 +977,17 @@ void lcdInit248() { // Shunt ohms
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("Shunt"));
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("ohms "));      
+    lcd.print(F("ohms "));    
+
+//  double shunt = 0.766327;   // 0.5   
+    pUInt1 = &myVoltsMap.shunt; // = (0.766327*10000);   // 0.5
+    pUInt2 = 0;  // = 2638; // 2.7k
   }
+
+  lcd.setCursor(6, 1); //   row >    column ^
+  lcd.print(display.outputDigitsU16(*pUInt1));
+//  lcd.setCursor(6, 2); //   row >    column ^
+//  lcd.print(display.outputDigitsU16(*pUInt2));
 }
 
 // -------------------------------------------
@@ -971,7 +1000,15 @@ void lcdInit249() { // Vin pre 1.1 & 1.2 ohms
     lcd.print(F("1.1 "));    
     lcd.setCursor(2, 2); //   row >    column ^
     lcd.print(F("1.2 "));          
+  
+    pUInt1 = &myVoltsMap.Vpre11;  // = 8042; // 8.2k
+    pUInt2 = &myVoltsMap.Vpre12;  // = 2638; // 2.7k
   }
+
+  lcd.setCursor(6, 1); //   row >    column ^
+  lcd.print(display.outputDigitsU16(*pUInt1));
+  lcd.setCursor(6, 2); //   row >    column ^
+  lcd.print(display.outputDigitsU16(*pUInt2));
 }
 
 // -------------------------------------------
@@ -984,7 +1021,16 @@ void lcdInit250() { // Vin pst 2.1 & 2.2 ohms
     lcd.print(F("2.1 "));    
     lcd.setCursor(2, 2); //   row >    column ^
     lcd.print(F("2.2 "));    
+  
+    pUInt1 = &myVoltsMap.Vpst21;  // = 8014; // 8.2k
+    pUInt2 = &myVoltsMap.Vpst22;  // = 2637; // 2.7k 
   }
+
+  lcd.setCursor(6, 1); //   row >    column ^
+  lcd.print(display.outputDigitsU16(*pUInt1));
+  lcd.setCursor(6, 2); //   row >    column ^
+  lcd.print(display.outputDigitsU16(*pUInt2));
+
 }
 
 uint32_t tm=0;
@@ -998,34 +1044,42 @@ void lcdInit251() { // V5.0    3.1 & 3.2 ohms
     lcd.print(F("3.1 "));    
     lcd.setCursor(2, 2); //   row >    column ^
     lcd.print(F("3.2 "));    
+
+    pUInt1 = &myVoltsMap.V5_31;  //   = 2161; // 2.2k   
+    pUInt2 = &myVoltsMap.V5_32;  //   = 3212; // 3.3k 
   }
+
+  lcd.setCursor(6, 1); //   row >    column ^
+  lcd.print(display.outputDigitsU16(*pUInt1));
+  lcd.setCursor(6, 2); //   row >    column ^
+  lcd.print(display.outputDigitsU16(*pUInt2));
+
+}
+
 
   //nx = 65535;  // I know, max resistor size is 65535...
   //lcd.print(display.outputDigitsU16(nx, true));
-unsigned int nx;
-nx = 50;
+//unsigned int nx;
+//nx = 50;
 //tm+=123;
 
-  display.outputDigitsU16(nx); 
-  lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(display.outputDigitsS16(nx));
-  lcd.setCursor(6, 2); //   row >    column ^
+//  display.outputDigitsU16(nx); 
+
 
 //  int nx1;
 //  nx1 = -65539;
 //  lcd.print(display.outputDigitsS16(nx1));
 
-  lcd.print(display.outputOnTime(millis()/1000));
-
-  lcd.setCursor(6, 3); //   row >    column ^
+//  lcd.print(display.outputOnTime(millis()/1000));
 
 // long ul = 2147483647;
 // lcd.print(display.outputDigitsS32(ul));
 
-lcd.print(display.outputServiceTime(millis()/1000));
+//lcd.print(display.outputServiceTime(millis()/1000));
 
 //lcd.print(display.outputServiceTime(4294967294));
-}
+
+
 
 /*
 struct MyVoltsMap {
@@ -1048,8 +1102,6 @@ void lcdInit252() {  // V5.0    Regulator Voltage
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("V5.0 volts"));
-    rowEdit = 2; //   row >    column ^  
-    colEdit = 1; //   row >    column ^  
   }
 
   lcd.setCursor(2, 1); //   row >    column ^
@@ -1131,14 +1183,18 @@ void lcdInit255() { // this is an error, 255 is reserved
   }
 }
 
+boolean function = false;
+
 void updateLCD() {
   // Detect Menu change
 
   if (menuCurrent != menuSelected) {
-    Serial.print (F("C:"));
-    Serial.print (menuCurrent);
-    Serial.print (F(" S:"));
-    Serial.print (menuSelected);
+    if (true){
+      Serial.print (F("C:"));
+      Serial.print (menuCurrent);
+      Serial.print (F(" S:"));
+      Serial.print (menuSelected);
+    }
     returnToCurrent = menuCurrent;
     if (true){
       Serial.print (F(" Cur:"));
@@ -1151,12 +1207,15 @@ void updateLCD() {
     }
 
     // Don't clear the screen for FUNCTIONs
-    if (!(menuSelected > 200 && menuSelected <= 239)){
+    if (menuSelected > 200 && menuSelected <= 239){
+      function = true;
+    } else {
+      function = false;
       lcd.clear();
     }
     
     repeatCount = 0;
-    col = 0;
+    menuCol = 0;
     menuCurrent = menuSelected;
 
     if (menuCurrent == MAINMENU || menuCurrent >= 250) {
@@ -1166,43 +1225,60 @@ void updateLCD() {
     }
   }
 
-  if (keyPress > 0) {
+  if (!function && keyPress > 0){
     if (keyPress == 5) {// up
-      if (col > 0)
-        col--;
-        changeMe += 1.0;
+      if (menuCol > 0)
+        menuCol--;
     }
     if (keyPress == 3) {// down
-      if (col < (menuSize-1))
-        col++;
-        changeMe -= 1.0;
+      if (menuCol < (menuSize-1))
+        menuCol++;
     }
     if (keyPress == 4) {// right
-      if (row < 5)
-        row++;
+      if (menuRow < 5)
+        menuRow++;
     }
     if (keyPress == 2) {// left
-      if (row > 0)
-        row--;
-    }    
-    
-    Serial.print  (keyPress);
-    Serial.print  (F(" R>:"));
-    Serial.print  (row);
-    Serial.print  (F(" C^:"));
-    Serial.println(col);
+      if (menuRow > 0)
+        menuRow--;
+    }
 
-  //  lcd.setCursor(row - 1, col);//   row >    column ^
+    if (true){
+      Serial.print  (keyPress);
+      Serial.print  (F(" R>:"));
+      Serial.print  (menuRow);
+      Serial.print  (F(" C^:"));
+      Serial.println(menuCol);
+    }
+
+    // Carrot for menu select.
+    if (menuCurrent != MAINMENU){
+      for (byte b = 1; b<4;b++){
+        lcd.setCursor(0, b);//   row >    column ^
+        lcd.print (" ");
+      }
+      if (menuCol > 0){
+        lcd.setCursor(0, menuCol);//   row >    column ^
+        lcd.print (">");
+      }
+    }
+    
   }
 
+
+//  if (function && keyPress == 1) {
   if (keyPress == 1) {
     Serial.print (F(" MS1:"));
     Serial.print (menuSelected);
-    menuSelected = menuOptions[col];
+    menuSelected = menuOptions[menuCol];
     Serial.print (F(" MS2:"));
     Serial.println(menuSelected);
   }
-    
+
+
+  //  lcd.setCursor(menuRow - 1, menuCol);//   row >    column ^
+
+
   switch (menuSelected) {
     // ---------------------------------------
     case 1: //MAINMENU
