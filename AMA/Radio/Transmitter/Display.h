@@ -14,13 +14,15 @@
 #else
   #include "WProgram.h"
   #include "pins_arduino.h"
-//  #include "WConstants.h"
+  #include "WConstants.h"
 #endif
 
-
-
+#include <avr/pgmspace.h>
 
 // library interface description
+
+
+
 class Display
 {
   // user-accessible "public" interface
@@ -38,7 +40,6 @@ class Display
 
     char *output_xx_xV(uint16_t);
     char *output_x_xxxV(uint16_t);
-    
     
   // library-accessible "private" interface
   private:

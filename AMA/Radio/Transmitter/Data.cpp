@@ -31,7 +31,7 @@ Data::Data(){
 
 
   //Print length of data to run CRC on.
-  Serial.print("EEPROM length: ");
+  Serial.print(F("EEPROM length: "));
   Serial.println(EEPROM.length());  
 }
 

@@ -28,11 +28,12 @@
 #include "CustomChar.h"
 #include "Data.h"
 #include "Display.h"
+#include "Edit.h"
 
 
 CustomChar customChar = CustomChar();
 Data data = Data();
-Display disp = Display();
+Display display = Display();
 
 // ===========================================
 // Vars
@@ -378,125 +379,23 @@ void initSticksIt(MyControlsMap item) {
 }
 
 void initSticks() {
-  lcd.print("Move Throttle up/down");
+  lcd.print(F("Move Throttle up/down"));
   initSticksIt(myControlsMapThrottle);  // A0
 
-  lcd.print("Move Yaw up/down");
+  lcd.print(F("Move Yaw up/down"));
   initSticksIt(myControlsMapYaw);       // A1
 
-  lcd.print("Move Roll up/down");
+  lcd.print(F("Move Roll up/down"));
   initSticksIt(myControlsMapRoll);      // A2
 
-  lcd.print("Move Pitch up/down");
+  lcd.print(F("Move Pitch up/down"));
   initSticksIt(myControlsMapPitch);     // A3
 }
 
 //===============================================================================
 //===============================================================================
 //===============================================================================
-//===============================================================================
-//int lcdInt(int n, String format){
-//char charBuf[10];
-//  format.toCharArray(charBuf,10); 
-//  int m = sprintf (buffer, charBuf, n);
-//  lcd.print(buffer);
-//  return m;
-//}
-//int lcdInt(int n, String format){
-//  int m = sprintf (buffer, "%6d", n);
-//  lcd.print(buffer);
-//  return m;
-//}
-//int lcdInt(int n, const char format){
-//  //    lcd.print(PGMSTR(qBytesWorld));
-//  int m = sprintf (buffer, format, n);
-//  lcd.print(buffer);
-//  return m;
-//}
-////// ===========================================
-////// LCD Print DDDDDD
-////// ===========================================
-int lcdUnLong6D(unsigned long n){
-  Serial.println(n);
-  //int m = sprintf (buffer, "%06d", n);
-  int m = sprintf (buffer, "%06lu", n);
-  lcd.print(buffer);
-  return m;
-}
 
-//char digit10000   (uint16_t v) {return '0' + v / 10000                   ;}
-//char digit1000    (uint16_t v) {return '0' + v / 1000  - (v/10000) * 10;}
-//char digit100     (uint16_t v) {return '0' + v / 100   - (v/1000)  * 10;}
-//char digit10      (uint16_t v) {return '0' + v / 10    - (v/100)   * 10;}
-//char digit1       (uint16_t v) {return '0' + v / 1     - (v/10)    * 10;}
-
-//void lcdprint_uint32(uint32_t v) {
-void lcdprint_ulong(unsigned long v) {
-  static char line[14] = "-,---,---,---";
-  //                      0 2 4 6 8   12
-  line[0]  = '0' + v  / 1000000000;
-  line[2]  = '0' + v  / 100000000 - (v/1000000000) * 10;
-  line[3]  = '0' + v  / 10000000  - (v/100000000)  * 10;
-  line[4]  = '0' + v  / 1000000   - (v/10000000)   * 10;
-  line[6]  = '0' + v  / 100000    - (v/1000000)    * 10;
-  line[7]  = '0' + v  / 10000     - (v/100000)     * 10;
-  line[8]  = '0' + v  / 1000      - (v/10000)      * 10;
-  line[10] = '0' + v  / 100       - (v/1000)       * 10;
-  line[11] = '0' + v  / 10        - (v/100)        * 10;
-  line[12] = '0' + v  / 1         - (v/10)         * 10;
-
-  lcd.print(line);  
-}
-//void lcdprint_uint32(uint32_t v) {
-void lcdprint_uint(unsigned int v) {
-  static char line[14] = "--,---";
-  //                      01 345
-
-  line[0] = '0' + v / 10000;
-  line[1] = '0' + v / 1000      - (v/10000)      * 10;
-  line[3] = '0' + v / 100       - (v/1000)       * 10;
-  line[4] = '0' + v / 10        - (v/100)        * 10;
-  line[5] = '0' + v             - (v/10)         * 10;
-
-  lcd.print(line);  
-}
-
-////// ===========================================
-////// LCD Print NNN.DDD
-////// ===========================================
-//int printInt(int n, String format){
-//
-
-//  char buffer[10];         //the ASCII of the integer will be stored in this char array
-//  itoa((int)changeMe,buffer,10); //(integer, yourBuffer, base)
-  
-////char dateFormat[] = "%02d:%02d:%02d:%02d";
-////    sprintf(buffer, dateFormat[3], days, hours, minutes, seconds); ///< This has 4 2-digit integers with leading zeros, separated by ":" . The list of parameters, hour, min, sec, provides the numbers the sprintf prints out with.
-////    lcd.print(buffer);    
-//    //Serial.println(buffer); ///< You will get something like"01:13:02:09" 
-//    
-//char format[] = "ddddd";
-//      
-////  char c[10];        // long enough to hold complete integer string
-////  char charBuf[20];
-//  format.toCharArray(buffer,10);
-//  int m = sprintf(c, buffer, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
-//  Serial.print(c);
-//  return m;
-//}
-
-//// ===========================================
-//// LCD Print NNN.DDD
-//// ===========================================
-void lcdDouble63(double dbl) {
-  char *r = dtostrf(dbl, 6, 3, buffer);
-//  lcd.print(buffer);
-  lcd.print(r);
-  lcd.print("V");
-//  lcd.print(dtostrf(v5_0, 6, 3, buffer));
-//  lcd.print("V");
-}
-/**************************************************/
 
 // ===========================================
 // Map Joystick Values
@@ -564,23 +463,23 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   
   // Make sure we don't have an error.
   if (sizeIs > sizeof(menuOptions)) {
-    Serial.print  ("Err: setMenu ");
+    Serial.print  (F("Err: setMenu "));
     Serial.print  (sizeIs);
-    Serial.print  (" for ");
+    Serial.print  (F(" for "));
     Serial.print  (menuOpt);
     sizeIs = sizeof(menuOptions); // degrade to prevent Array Overflow error
-    Serial.print  (" s/b <= "); // increase " byte menuOptions[x] " size
+    Serial.print  (F(" s/b <= ")); // increase " byte menuOptions[x] " size
     Serial.println(sizeIs);
   }
 
   // Make sure FUNCTIONs don't have a child.
   if (menuValues[0] == FUNCTION && sizeIs > 1) {
-    Serial.print  ("Err: setMenu ");
+    Serial.print  (F("Err: setMenu "));
     Serial.print  (sizeIs);
-    Serial.print  (" for ");
+    Serial.print  (F(" for "));
     Serial.print  (menuOpt);
     sizeIs = 1; // degrade to prevent Array Overflow error
-    Serial.print  (" funcion s/b = ");
+    Serial.print  (F(" funcion s/b = "));
     Serial.println(sizeIs);
   }
   
@@ -595,16 +494,16 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
     // Clear current menu
     memset(menuOptions, 0x00, sizeof(menuOptions)); // for automatically-allocated arrays
     memcpy(menuOptions, menuValues, menuSize);
-    Serial.println("*** menuValue [0]");
+    Serial.println(F("*** menuValue [0]"));
   } else {    
     if (returnToCurrent != MAINMENU){
       // Clear current menu
       memset(menuOptions, 0x00, sizeof(menuOptions)); // for automatically-allocated arrays
-      Serial.println("*** menuValue [1]");
+      Serial.println(F("*** menuValue [1]"));
       menuOptions[0] = returnToCurrent;//tempReturnToCurrent;  --- fix this......
       //    }
     } else {
-      Serial.println("*** menuValue [2]");
+      Serial.println(F("*** menuValue [2]"));
       returnToCurrent = menuOptions[0];
     }
   }
@@ -612,13 +511,13 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   // Show what we did?
   if (true) {
     Serial.print  (menuOpt);
-    Serial.print  (" RTC=");
+    Serial.print  (F(" RTC="));
     Serial.print  (returnToCurrent);
  //   Serial.print  (" T/F=");
  //   Serial.print  (returnToCurrent);
-    Serial.print  (" Size [");
+    Serial.print  (F(" Size ["));
     Serial.print  (menuSize);
-    Serial.print  ("] menuOptions[...] ");
+    Serial.print  (F("] menuOptions[...] "));
     //for (byte loop = 0; loop < sizeof(menuOptions); loop++) {
     for (byte loop = 0; loop < menuSize; loop++) {
       Serial.print  (menuOptions[loop]);
@@ -626,7 +525,7 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
         Serial.print  (", ");
       }
     }
-    Serial.println("");
+    Serial.println();
   }
 
   // Clear return to current   
@@ -639,7 +538,7 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
 // ===========================================
 void lcdMenu000() { // this is an error, 000 is reserved  
   while (true){
-    Serial.println("ER000");
+    Serial.println(F("ER000"));
   }
 }
 
@@ -648,30 +547,30 @@ void lcdMenu000() { // this is an error, 000 is reserved
 // ===========================================
 void lcdMenu001() {
   if (repeatCount == 0) {
-setMenu("x001", menuOptions001, membersof(menuOptions001));
+setMenu(F("x001"), menuOptions001, membersof(menuOptions001));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("Main");
+    lcd.print(F("Main"));
     lcd.setCursor(0, 1); //   row >    column ^
-    lcd.print("lcdMainVolts: ");
+    lcd.print(F("lcdMainVolts: "));
     lcd.setCursor(0, 2); //   row >    column ^
-    lcd.print("lcdKeyVolts: ");  
+    lcd.print(F("lcdKeyVolts: "));  
     lcd.setCursor(0, 3); //   row >    column ^
-    lcd.print("Misc: ");
+    lcd.print(F("Misc: "));
     lcd.setCursor(9, 3); //   row >    column ^
-    lcd.print("Repeat: ");
+    lcd.print(F("Repeat: "));
   }
 
   int numb = (int)((double)repeatCount*3.5);
   customChar.percent(numb);
   lcd.setCursor(10, 0); //   row >    column ^
   
-  lcd.print("Bat:");  
+  lcd.print(F("Bat:"));  
   customChar.showChar();
   lcd.print(numb);
 
   lcd.setCursor(17, 3); //   row >    column ^
   lcd.print(repeatCount);
-  lcd.print(" ");
+  lcd.print(F(" "));
 }
 
 // ===========================================
@@ -679,7 +578,7 @@ setMenu("x001", menuOptions001, membersof(menuOptions001));
 // ===========================================
 void lcdMenu002() {
   if (repeatCount == 0) {
-    setMenu("x002", menuOptions002, membersof(menuOptions002));
+    setMenu(F("x002"), menuOptions002, membersof(menuOptions002));
 //    lcd.setCursor(0, 0); //   row >    column ^
 //    lcd.print("10 -> 11");
 //    lcd.setCursor(0, 1); //   row >    column ^
@@ -710,53 +609,53 @@ void lcdMenu002() {
   //
   //--------------------
   lcd.setCursor(0, 0); //   row >    column ^
-  lcd.print("PreV: ");
+  lcd.print(F("PreV: "));
 
   lcd.print  (refValue * analog[7]);
   lcd.print  ("V   ");
 
   //Ein = (Eo/R2) * (R1+R2)
   lcd.print (vPre);
-  lcd.print  ("V");
+  lcd.print  (F("V"));
 
   //--------------------
   //
   //--------------------
   lcd.setCursor(0, 1); //   row >    column ^
-  lcd.print("PstV: ");
+  lcd.print(F("PstV: "));
 
   lcd.print  (refValue * analog[1]);
-  lcd.print  ("V   ");
+  lcd.print  (F("V   "));
 
   //Ein = (Eo/R2) * (R1+R2)
   lcd.print (vPst);
-  lcd.print  ("V");
+  lcd.print  (F("V"));
 
   //--------------------
   //
   //--------------------
   lcd.setCursor(0, 2); //   row >    column ^
-  lcd.print("5.0V: ");
+  lcd.print(F("5.0V: "));
 
   lcd.print  (refValue * analog[5]);
   lcd.print  ("V    ");
 
   //Ein = (Eo/R2) * (R1+R2)
   lcd.print (v5_0);
-  lcd.print  ("V");
+  lcd.print  (F("V"));
 
   //--------------------
   //
   //--------------------
   lcd.setCursor(0, 3); //   row >    column ^
-  lcd.print("Shnt:");
+  lcd.print(F("Shnt:"));
 
   lcd.print  (avgSum / avgSize);
-  lcd.print  ("mV ");
+  lcd.print  (F("mV "));
 
   //Ein = (Eo/R2) * (R1+R2)
   lcd.print ((avgSum / avgSize) / myVoltsMap.shunt);
-  lcd.print  ("mA");
+  lcd.print  (F("mA"));
 }
 
 // ===========================================
@@ -764,7 +663,7 @@ void lcdMenu002() {
 // ===========================================
 void lcdMenu003() {
   if (repeatCount == 0) {
-    setMenu("x003", menuOptions003, membersof(menuOptions003));
+    setMenu(F("x003"), menuOptions003, membersof(menuOptions003));
 //    lcd.setCursor(0, 0); //   row >    column ^
 //    lcd.print("10 -> 11");
 //    lcd.setCursor(0, 1); //   row >    column ^
@@ -809,16 +708,16 @@ void lcdMenu003() {
 // ===========================================
 void lcdMenu010() {
   if (repeatCount == 0) {
-    setMenu("x010", menuOptions010, membersof(menuOptions010));
+    setMenu(F("x010"), menuOptions010, membersof(menuOptions010));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("10 -> 11");
+    lcd.print(F("10 -> 11"));
     lcd.setCursor(0, 1); //   row >    column ^
-    lcd.print("10 -> 12");
+    lcd.print(F("10 -> 12"));
     lcd.setCursor(0, 2); //   row >    column ^
-    lcd.print("10 -> 13");
+    lcd.print(F("10 -> 13"));
     lcd.setCursor(0, 3); //   row >    column ^
-    lcd.print("10 -> 14");
-    lcd.print(" Repeat: ");
+    lcd.print(F("10 -> 14"));
+    lcd.print(F(" Repeat: "));
   }
 
   //  lcd.setCursor(17, 1); //   row >    column ^
@@ -826,22 +725,21 @@ void lcdMenu010() {
   //  lcd.print(" ");
 }
 
-
 // ===========================================
 // lcdMenu011
 // ===========================================
 void lcdMenu011() {
   if (repeatCount == 0) {
-    setMenu("x011", menuOptions011, membersof(menuOptions011));
+    setMenu(F("x011"), menuOptions011, membersof(menuOptions011));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("x11");
+    lcd.print(F("x11"));
     lcd.setCursor(0, 1); //   row >    column ^
-    lcd.print("Repeat: ");
+    lcd.print(F("Repeat: "));
   }
 
   lcd.setCursor(9, 1); //   row >    column ^
   lcd.print(repeatCount);
-  lcd.print(" ");
+  lcd.print(F(" "));
 }
 
 // ===========================================
@@ -849,16 +747,16 @@ void lcdMenu011() {
 // ===========================================
 void lcdMenu012() {
   if (repeatCount == 0) {
-    setMenu("x012", menuOptions012, membersof(menuOptions012));
+    setMenu(F("x012"), menuOptions012, membersof(menuOptions012));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("x12");
+    lcd.print(F("x12"));
     lcd.setCursor(0, 1); //   row >    column ^
-    lcd.print("Repeat: ");
+    lcd.print(F("Repeat: "));
   }
 
   lcd.setCursor(9, 1); //   row >    column ^
   lcd.print(repeatCount);
-  lcd.print(" ");
+  lcd.print(F(" "));
 }
 
 // ===========================================
@@ -866,11 +764,11 @@ void lcdMenu012() {
 // ===========================================
 void lcdMenu013() {
   if (repeatCount == 0) {
-    setMenu("x013", menuOptions013, membersof(menuOptions013));
+    setMenu(F("x013"), menuOptions013, membersof(menuOptions013));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("x13");
+    lcd.print(F("x13"));
     lcd.setCursor(0, 1); //   row >    column ^
-    lcd.print("Repeat: ");
+    lcd.print(F("Repeat: "));
   }
 
   lcd.setCursor(9, 1); //   row >    column ^
@@ -896,11 +794,11 @@ void lcdMenu014() {
 
   if (repeatCount == 0)
   {
-    setMenu("x014", menuOptions014, membersof(menuOptions014));
+    setMenu(F("x014"), menuOptions014, membersof(menuOptions014));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("x014");
+    lcd.print(F("x014"));
     lcd.setCursor(0, 1); //   row >    column ^
-    lcd.print("Repeat: ");
+    lcd.print(F("Repeat: "));
   }
   currentMillis = millis();
 
@@ -916,7 +814,7 @@ void lcdMenu014() {
     {
       // -------------------------------------
       lcd.setCursor(0, 0); //   row >    column ^
-      lcd.print("Flight: ");
+      lcd.print(F("Flight: "));
 //      long timeNow = millis();
 //
 //      int days = timeNow / day ;                                //number of days
@@ -933,14 +831,14 @@ void lcdMenu014() {
 
       // -------------------------------------
       lcd.setCursor(0, 2); //   row >    column ^
-      lcd.print("Channel:");
-      lcd.print(" xxx");
+      lcd.print(F("Channel:"));
+      lcd.print(F(" xxx"));
 
       // -------------------------------------
       lcd.setCursor(0, 3); //   row >    column ^
-      lcd.print("FPS:");
+      lcd.print(F("FPS:"));
       lcd.print(fps);  // ~300 has been the average
-      lcd.print("   GPS: xxx");
+      lcd.print(F("   GPS: xxx"));
 
       // -------------------------------------
       fps = 0;
@@ -949,7 +847,7 @@ void lcdMenu014() {
   }
   lcd.setCursor(9, 1); //   row >    column ^
   lcd.print(repeatCount);
-  lcd.print(" ");
+  lcd.print(F(" "));
 }
 
 // -------------------------------------------
@@ -958,9 +856,9 @@ void lcdMenu014() {
 // Int number edit
 void lcdFunc200() { // Int number edit
   if (repeatCount == 0) {
-    setMenu("x200", menuOptions200, membersof(menuOptions200));
+    setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
     lcd.setCursor(0, 3); //   row >    column ^
-    lcd.print("Int number edit");
+    lcd.print(F("Int number edit"));
   }
 
 //  char buffer[10];         //the ASCII of the integer will be stored in this char array
@@ -975,9 +873,9 @@ void lcdFunc200() { // Int number edit
 
 void lcdFunc201() { //Double number edit
   if (repeatCount == 0) {
-    setMenu("x201", menuOptions201, membersof(menuOptions201));
+    setMenu(F("x201"), menuOptions201, membersof(menuOptions201));
     lcd.setCursor(0, 3); //   row >    column ^
-    lcd.print("Double number edit");
+    lcd.print(F("Double number edit"));
   }
   // #include<stdlib.h>
   //  dtostrf(FLOAT,WIDTH,PRECSISION,BUFFER);
@@ -999,9 +897,9 @@ void lcdFunc201() { //Double number edit
 // -------------------------------------------
 void lcdInit240() { // Control check
   if (repeatCount == 0) {
-    setMenu("x240", menuOptions240, membersof(menuOptions240));
+    setMenu(F("x240"), menuOptions240, membersof(menuOptions240));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("Control check");
+    lcd.print(F("Control check"));
   }
   if (repeatCount > 3) {//delay(2000);
 
@@ -1019,115 +917,114 @@ void lcdInit240() { // Control check
 // -------------------------------------------
 void lcdInit244() { // Menu
   if (repeatCount == 0) {
-    setMenu("x244", menuOptions244, membersof(menuOptions244));
+    setMenu(F("x244"), menuOptions244, membersof(menuOptions244));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("Menu");
+    lcd.print(F("Menu"));
   }
 }
 
 // -------------------------------------------
 void lcdInit245() { // Trim
   if (repeatCount == 0) {
-    setMenu("x245", menuOptions245, membersof(menuOptions245));
+    setMenu(F("x245"), menuOptions245, membersof(menuOptions245));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("Trim");
+    lcd.print(F("Trim"));
   }
 }
 
 // -------------------------------------------
 void lcdInit246() { // Switch
   if (repeatCount == 0) {
-    setMenu("x246", menuOptions246, membersof(menuOptions246));
+    setMenu(F("x246"), menuOptions246, membersof(menuOptions246));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("Switch");
+    lcd.print(F("Switch"));
   }
 }
 
 // -------------------------------------------
 void lcdInit247() { // Joystick
   if (repeatCount == 0) {
-    setMenu("x247", menuOptions247, membersof(menuOptions247));
+    setMenu(F("x247"), menuOptions247, membersof(menuOptions247));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("Joystick");
+    lcd.print(F("Joystick"));
   }
 }
 
 // -------------------------------------------
 void lcdInit248() { // Shunt ohms
   if (repeatCount == 0) {
-    setMenu("x248", menuOptions248, membersof(menuOptions248));
+    setMenu(F("x248"), menuOptions248, membersof(menuOptions248));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("Shunt");
+    lcd.print(F("Shunt"));
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print("ohms ");      
+    lcd.print(F("ohms "));      
   }
 }
 
 // -------------------------------------------
 void lcdInit249() { // Vin pre 1.1 & 1.2 ohms
   if (repeatCount == 0) {
-    setMenu("x249", menuOptions249, membersof(menuOptions249));
+    setMenu(F("x249"), menuOptions249, membersof(menuOptions249));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("Vin pre ohms");
+    lcd.print(F("Vin pre ohms"));
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print("1.1 ");    
+    lcd.print(F("1.1 "));    
     lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print("1.2 ");          
+    lcd.print(F("1.2 "));          
   }
 }
 
 // -------------------------------------------
 void lcdInit250() { // Vin pst 2.1 & 2.2 ohms
   if (repeatCount == 0) {
-    setMenu("x250", menuOptions250, membersof(menuOptions250));
+    setMenu(F("x250"), menuOptions250, membersof(menuOptions250));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("Vin post ohms");
+    lcd.print(F("Vin post ohms"));
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print("2.1 ");    
+    lcd.print(F("2.1 "));    
     lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print("2.2 ");    
+    lcd.print(F("2.2 "));    
   }
 }
-
 
 uint32_t tm=0;
 // -------------------------------------------
 void lcdInit251() { // V5.0    3.1 & 3.2 ohms
   if (repeatCount == 0) {
-    setMenu("x251", menuOptions251, membersof(menuOptions251));
+    setMenu(F("x251"), menuOptions251, membersof(menuOptions251));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("V5.0 ohm");
+    lcd.print(F("V5.0 ohm"));
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print("3.1 ");    
+    lcd.print(F("3.1 "));    
     lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print("3.2 ");    
+    lcd.print(F("3.2 "));    
   }
 
   //nx = 65535;  // I know, max resistor size is 65535...
-  //lcd.print(disp.outputDigitsU16(nx, true));
+  //lcd.print(display.outputDigitsU16(nx, true));
 unsigned int nx;
 nx = 50;
-tm+=123;
+//tm+=123;
 
-  disp.outputDigitsU16(nx); 
+  display.outputDigitsU16(nx); 
   lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(disp.outputDigitsS16(nx));
+  lcd.print(display.outputDigitsS16(nx));
   lcd.setCursor(6, 2); //   row >    column ^
 
 //  int nx1;
 //  nx1 = -65539;
-//  lcd.print(disp.outputDigitsS16(nx1));
+//  lcd.print(display.outputDigitsS16(nx1));
 
-  lcd.print(disp.outputOnTime(millis()));
+  lcd.print(display.outputOnTime(millis()/1000));
 
   lcd.setCursor(6, 3); //   row >    column ^
 
- long ul = 2147483647;
- lcd.print(disp.outputDigitsS32(ul));
+// long ul = 2147483647;
+// lcd.print(display.outputDigitsS32(ul));
 
-//lcd.print(disp.outputServiceTime(millis()/1000));
+lcd.print(display.outputServiceTime(millis()/1000));
 
-//lcd.print(disp.outputServiceTime(4294967294));
+//lcd.print(display.outputServiceTime(4294967294));
 }
 
 /*
@@ -1148,15 +1045,16 @@ struct MyVoltsMap {
 // -------------------------------------------
 void lcdInit252() {  // V5.0    Regulator Voltage
   if (repeatCount == 0) {
-    setMenu("x252", menuOptions252, membersof(menuOptions252));
+    setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print("V5.0 volts");
+    lcd.print(F("V5.0 volts"));
     rowEdit = 2; //   row >    column ^  
     colEdit = 1; //   row >    column ^  
   }
 
   lcd.setCursor(2, 1); //   row >    column ^
-  lcdDouble63(v5_0);//printVolts();   
+  //lcdDouble63(v5_0);//printVolts();   
+  lcd.print(display.output_x_xxxV(v5_0 * 1000));
 }
 
 
@@ -1164,7 +1062,7 @@ void lcdInit252() {  // V5.0    Regulator Voltage
 // -------------------------------------------
 void lcdInit253() { // Splash     [no click (select) out to 253]
   if (repeatCount == 0) {
-    setMenu("x253", menuOptions253, membersof(menuOptions253));    
+    setMenu(F("x253"), menuOptions253, membersof(menuOptions253));    
     lcd.setCursor(0, 0);//   row >    column ^
     lcd.print(PGMSTR(qBytesWorld));
     lcd.setCursor(0, 1);//   row >    column ^
@@ -1177,7 +1075,8 @@ void lcdInit253() { // Splash     [no click (select) out to 253]
   }
 
   lcd.setCursor(7, 3);//   row >    column ^
-  lcdDouble63(v5_0);//printVolts();
+  //lcdDouble63(v5_0);//printVolts();
+  lcd.print(display.output_x_xxxV(v5_0 * 1000));
   
   if (repeatCount > 7) {//delay(2000);
 
@@ -1197,7 +1096,7 @@ void lcdInit253() { // Splash     [no click (select) out to 253]
 // -------------------------------------------
 void lcdInit254() {  // Starting   [click (select) out to 254]
   if (repeatCount == 0) {
-    setMenu("x254", menuOptions254, membersof(menuOptions254));
+    setMenu(F("x254"), menuOptions254, membersof(menuOptions254));
     lcd.init();
     lcd.begin(20,4);
     lcd.backlight();
@@ -1228,7 +1127,7 @@ void lcdInit254() {  // Starting   [click (select) out to 254]
 // -------------------------------------------
 void lcdInit255() { // this is an error, 255 is reserved 
   while (true){
-    Serial.println("ER255");
+    Serial.println(F("ER255"));
   }
 }
 
@@ -1236,17 +1135,17 @@ void updateLCD() {
   // Detect Menu change
 
   if (menuCurrent != menuSelected) {
-    Serial.print ("C:");
+    Serial.print (F("C:"));
     Serial.print (menuCurrent);
-    Serial.print (" S:");
+    Serial.print (F(" S:"));
     Serial.print (menuSelected);
     returnToCurrent = menuCurrent;
     if (true){
-      Serial.print (" Cur:");
+      Serial.print (F(" Cur:"));
       Serial.print (menuCurrent);
-      Serial.print (" Sel:");
+      Serial.print (F(" Sel:"));
       Serial.print (menuSelected);
-      Serial.print (" RTC:");
+      Serial.print (F(" RTC:"));
       Serial.print (returnToCurrent);
       Serial.println();
     }
@@ -1288,19 +1187,19 @@ void updateLCD() {
     }    
     
     Serial.print  (keyPress);
-    Serial.print  (" R>:");
+    Serial.print  (F(" R>:"));
     Serial.print  (row);
-    Serial.print  (" C^:");
+    Serial.print  (F(" C^:"));
     Serial.println(col);
 
   //  lcd.setCursor(row - 1, col);//   row >    column ^
   }
 
   if (keyPress == 1) {
-    Serial.print (" MS1:");
+    Serial.print (F(" MS1:"));
     Serial.print (menuSelected);
     menuSelected = menuOptions[col];
-    Serial.print (" MS2:");
+    Serial.print (F(" MS2:"));
     Serial.println(menuSelected);
   }
     
@@ -1400,7 +1299,7 @@ void updateLCD() {
     // ---------------------------------------
     default:
       // catch all - N/A
-      Serial.print  ("Menu not found Error: " );
+      Serial.print  (F("Menu not found Error: " ));
       Serial.print  (menuSelected);
       Serial.println(" - reset");
       menuSelected = 254;

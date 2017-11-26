@@ -10,7 +10,7 @@
 #else
   #include "WProgram.h"
   #include "pins_arduino.h"
-//  #include "WConstants.h"
+  #include "WConstants.h"
 #endif
 
 #include <avr/pgmspace.h>
@@ -325,14 +325,11 @@ char * Display::outputOnTime(uint16_t seconds) {
   line[6] = u8Digit10  (s);
   line[7] = u8Digit1   (s);
 
-  if (line[0] == '0' && line[1] == '0'){ // Should not get here, maybe someday.
+  if (line[1] == '1' && line[1] == '0'){ // Should not get here, maybe someday?
     line[0]=' ';
     line[1]=' ';
     line[2]=' ';
-  } 
-//  else {
-//    line[2]=':';
-//  }
+  }
   
   return line;
 }
@@ -414,3 +411,118 @@ char * Display::output_x_xxxV(uint16_t volts) {
 // Functions only available to other functions in this library
 
 
+
+/*
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+//===============================================================================
+//int lcdInt(int n, String format){
+//char charBuf[10];
+//  format.toCharArray(charBuf,10); 
+//  int m = sprintf (buffer, charBuf, n);
+//  lcd.print(buffer);
+//  return m;
+//}
+//int lcdInt(int n, String format){
+//  int m = sprintf (buffer, "%6d", n);
+//  lcd.print(buffer);
+//  return m;
+//}
+//int lcdInt(int n, const char format){
+//  //    lcd.print(PGMSTR(qBytesWorld));
+//  int m = sprintf (buffer, format, n);
+//  lcd.print(buffer);
+//  return m;
+//}
+//////// ===========================================
+//////// LCD Print DDDDDD
+//////// ===========================================
+//int lcdUnLong6D(unsigned long n){
+//  Serial.println(n);
+//  //int m = sprintf (buffer, "%06d", n);
+//  int m = sprintf (buffer, "%06lu", n);
+//  lcd.print(buffer);
+//  return m;
+//}
+//
+////char digit10000   (uint16_t v) {return '0' + v / 10000                   ;}
+////char digit1000    (uint16_t v) {return '0' + v / 1000  - (v/10000) * 10;}
+////char digit100     (uint16_t v) {return '0' + v / 100   - (v/1000)  * 10;}
+////char digit10      (uint16_t v) {return '0' + v / 10    - (v/100)   * 10;}
+////char digit1       (uint16_t v) {return '0' + v / 1     - (v/10)    * 10;}
+//
+////void lcdprint_uint32(uint32_t v) {
+//void lcdprint_ulong(unsigned long v) {
+//  static char line[14] = "-,---,---,---";
+//  //                      0 2 4 6 8   12
+//  line[0]  = '0' + v  / 1000000000;
+//  line[2]  = '0' + v  / 100000000 - (v/1000000000) * 10;
+//  line[3]  = '0' + v  / 10000000  - (v/100000000)  * 10;
+//  line[4]  = '0' + v  / 1000000   - (v/10000000)   * 10;
+//  line[6]  = '0' + v  / 100000    - (v/1000000)    * 10;
+//  line[7]  = '0' + v  / 10000     - (v/100000)     * 10;
+//  line[8]  = '0' + v  / 1000      - (v/10000)      * 10;
+//  line[10] = '0' + v  / 100       - (v/1000)       * 10;
+//  line[11] = '0' + v  / 10        - (v/100)        * 10;
+//  line[12] = '0' + v  / 1         - (v/10)         * 10;
+//
+//  lcd.print(line);  
+//}
+////void lcdprint_uint32(uint32_t v) {
+//void lcdprint_uint(unsigned int v) {
+//  static char line[14] = "--,---";
+//  //                      01 345
+//
+//  line[0] = '0' + v / 10000;
+//  line[1] = '0' + v / 1000      - (v/10000)      * 10;
+//  line[3] = '0' + v / 100       - (v/1000)       * 10;
+//  line[4] = '0' + v / 10        - (v/100)        * 10;
+//  line[5] = '0' + v             - (v/10)         * 10;
+//
+//  lcd.print(line);  
+//}
+//
+//////// ===========================================
+//////// LCD Print NNN.DDD
+//////// ===========================================
+////int printInt(int n, String format){
+////
+//
+////  char buffer[10];         //the ASCII of the integer will be stored in this char array
+////  itoa((int)changeMe,buffer,10); //(integer, yourBuffer, base)
+//  
+//////char dateFormat[] = "%02d:%02d:%02d:%02d";
+//////    sprintf(buffer, dateFormat[3], days, hours, minutes, seconds); ///< This has 4 2-digit integers with leading zeros, separated by ":" . The list of parameters, hour, min, sec, provides the numbers the sprintf prints out with.
+//////    lcd.print(buffer);    
+////    //Serial.println(buffer); ///< You will get something like"01:13:02:09" 
+////    
+////char format[] = "ddddd";
+////      
+//////  char c[10];        // long enough to hold complete integer string
+//////  char charBuf[20];
+////  format.toCharArray(buffer,10);
+////  int m = sprintf(c, buffer, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
+////  Serial.print(c);
+////  return m;
+////}
+//
+////// ===========================================
+////// LCD Print NNN.DDD
+////// ===========================================
+//void lcdDouble63(double dbl) {
+//  char *r = dtostrf(dbl, 6, 3, buffer);
+////  lcd.print(buffer);
+//  lcd.print(r);
+//  lcd.print("V");
+////  lcd.print(dtostrf(v5_0, 6, 3, buffer));
+////  lcd.print("V");
+//}
+///**************************************************/
