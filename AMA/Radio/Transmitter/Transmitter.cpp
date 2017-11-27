@@ -1078,10 +1078,13 @@ void lcdInit252() {  // V5.0    Regulator Voltage
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_5V));
+
     lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_5Vmes));
-    lcd.setCursor(1, 2); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit252_5Vsys));
+    
+//    lcd.setCursor(1, 2); //   row >    column ^
+//    lcd.print(PGMSTR(lcd_param_lcdInit252_5Vsys));
+    
     lcd.setCursor(1, 3); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
@@ -1089,8 +1092,8 @@ void lcdInit252() {  // V5.0    Regulator Voltage
   lcd.setCursor(13, 1); //   row >    column ^
   lcd.print(display.output_x_xxxV(v5_Measured));
 
-  lcd.setCursor(13, 2); //   row >    column ^
-  lcd.print(display.output_x_xxxV(v5_System));
+//  lcd.setCursor(13, 2); //   row >    column ^
+//  lcd.print(display.output_x_xxxV(v5_System));
 
   lcd.setCursor(11, 3); //   row >    column ^
   lcd.print(display.output_voltPerBit(v5_voltPerBit));
