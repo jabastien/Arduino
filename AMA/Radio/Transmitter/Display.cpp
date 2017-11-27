@@ -115,6 +115,10 @@ PROGMEM const char  timerDay[]     = "----:--:--:--";
 PROGMEM const char  volts_xx_xV[]  = " --.-V";
 PROGMEM const char  volts_x_xxxV[] = " -.---V";
 
+PROGMEM const char  volts_0_00xxxxV[] = "0.0-----V";
+
+PROGMEM const char  ohm_x_xxxx[] = "-.----^";
+
 static char line [15];
 static char buffer [20];
   
@@ -414,6 +418,28 @@ char * Display::output_x_xxxV(uint16_t volts) {
 }
 
 
+char * Display::output_voltPerBit(uint16_t volts) {
+
+// volts can be between  65,535 (05246 = 0.0005246v)
+//static char line[5] = "01234567890"; // Digit possition (+1 for terminator /0.
+//static char line[5] = "0.00-----V;
+
+  strcpy_P(line, volts_0_00xxxxV);
+
+  line[0] = '0';     
+  // .
+  line[2] = '0';     
+  line[3] = u16Digit10000 (volts); 
+  line[4] = u16Digit1000  (volts);
+  line[5] = u16Digit100   (volts);
+  line[6] = u16Digit10    (volts);
+  line[7] = u16Digit1     (volts);
+//  line[9] = 0xF4; OHM
+  
+  return line;
+}
+
+
 
 // Usage: concatBytesPGM(lcd_param_common_set,lcd_param_lcdInit252_5V);
 char * Display::concatBytesPGM(const char* pgm1, const char* pgm2) {
@@ -570,7 +596,6 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 ////  lcd.print(buffer);
 //  lcd.print(r);
 //  lcd.print("V");
-////  lcd.print(dtostrf(v5_0, 6, 3, buffer));
+////  lcd.print(dtostrf(v5_System, 6, 3, buffer));
 ////  lcd.print("V");
 //}
-///**************************************************/

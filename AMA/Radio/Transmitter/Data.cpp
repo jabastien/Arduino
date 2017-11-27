@@ -56,8 +56,8 @@ void Data::factoryReset() {
 //void readEEPROM() {
 //  int eeAddress = 0;
 //
-//  EEPROM.get(eeAddress, myVoltsMap);
-//  eeAddress += sizeof(myVoltsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+//  EEPROM.get(eeAddress, myResistorMap);
+//  eeAddress += sizeof(myResistorMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
 //
 //  //
 //  EEPROM.get(eeAddress, myControlsMapThrottle);
@@ -79,8 +79,8 @@ void Data::factoryReset() {
 //  int eeAddress = 0;
 //
 //  //
-//  EEPROM.put(eeAddress, myVoltsMap);
-//  eeAddress += sizeof(myVoltsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+//  EEPROM.put(eeAddress, myResistorMap);
+//  eeAddress += sizeof(myResistorMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
 //
 //  //
 //  //eeAddress += sizeof(myControlsMapSet);

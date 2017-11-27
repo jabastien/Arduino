@@ -65,7 +65,18 @@ PROGMEM const char lcd_param_lcdInit240_volts [] = {"Volts"};
 // X252
 //5.0V Regulator
 //                                               123456789012 
-PROGMEM const char lcd_param_lcdInit252_5V [] = "5V Regulator";
+PROGMEM const char lcd_param_lcdInit252_5V    [] = "5V Regulator";
+PROGMEM const char lcd_param_lcdInit252_5Vmes [] = "Measure";
+PROGMEM const char lcd_param_lcdInit252_5Vsys [] = "System";
+PROGMEM const char lcd_param_lcdInit252_v5bit [] = "Volt/Bit";
+
+
+//
+// X254: 
+// Start up
+//                                                    123456789012 
+PROGMEM const char lcd_param_lcdInit254_startUp [] = "Start up";
+
 
 
 //// Proc auto detection

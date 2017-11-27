@@ -6,9 +6,6 @@
  http://www.atmel.com/webdoc/avrlibcreferencemanual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
 */
 
-
-
-
 //#if defined(ARDUINO) && ARDUINO >= 100
 #if ARDUINO >= 100
   #include "Arduino.h"
@@ -85,12 +82,12 @@ byte repeatCount = 0;
 byte menuCurrent  = MAINMENU;
 byte menuSelected = 254;
 
-double refV = 5.0115;
-double refValue = refV / 1023.0;
+uint16_t v5_System = 0000;
+uint16_t v5_Measured = 5011;
+uint16_t v5_voltPerBit = (v5_Measured / 1023.0)*1000.0;
 
 double vPre = 0.0;
 double vPst = 0.0;
-double v5_0 = 0.0;
 double vKey = 0.0;
 
 // ===========================================
@@ -248,7 +245,7 @@ void serialDebug() {
     Serial.print  ("Key: ");
     Serial.print  (analog[3]);
     Serial.print  ("  ");
-    Serial.print  (analog[3] * (refV/1023.0));
+    Serial.print  (analog[3] * (v5_Measured/1023.0));
     Serial.print  ("V ");
 
     Serial.println();
@@ -306,10 +303,10 @@ char CD4052Format[] = "<X%1d:%1d:%4d> <Y%1d:%1d:%4d> ";
   Serial.print  ("5V: ");
   Serial.print  (analog[5]);
   Serial.print  ("  ");
-  Serial.print  (refValue * analog[5]);
+  Serial.print  (v5_voltPerBit * analog[5]);
   Serial.print  ("V  ");
 //Ein = (Eo/R2) * (R1+R2)
-  Serial.print  (v5_0);
+  Serial.print  (v5_System);
   Serial.print  ("V ");
 
   // -----------------------------------------------
@@ -317,7 +314,7 @@ char CD4052Format[] = "<X%1d:%1d:%4d> <Y%1d:%1d:%4d> ";
   Serial.print  (" xxxxx  Pre: ");
   Serial.print  (analog[7]);
   Serial.print  ("  ");
-  Serial.print  (refValue * analog[7]);
+  Serial.print  (v5_voltPerBit * analog[7]);
   Serial.print  ("V  ");
 //Ein = (Eo/R2) * (R1+R2)
   Serial.print  (vPre);
@@ -328,7 +325,7 @@ char CD4052Format[] = "<X%1d:%1d:%4d> <Y%1d:%1d:%4d> ";
   Serial.print  (" xxxxx  Post: ");
   Serial.print  (analog[1]);
   Serial.print  ("  ");
-  Serial.print  (refValue * analog[1]);
+  Serial.print  (v5_voltPerBit * analog[1]);
   Serial.print  ("V  ");
 //Ein = (Eo/R2) * (R1+R2)
   Serial.print  (vPst);
@@ -339,7 +336,7 @@ char CD4052Format[] = "<X%1d:%1d:%4d> <Y%1d:%1d:%4d> ";
   Serial.print (" Current ");
   Serial.print (avgSum/avgSize);
   Serial.print ("mV ");
-  Serial.print ((avgSum/avgSize)/(myVoltsMap.shunt);
+  Serial.print ((avgSum/avgSize)/(myResistorMap.shunt);
   Serial.print ("mA");
 
   // -----------------------------------------------
@@ -619,7 +616,7 @@ void lcdMenu002() {
   lcd.setCursor(0, 0); //   row >    column ^
   lcd.print(F("PreV: "));
 
-  lcd.print  (refValue * analog[7]);
+  lcd.print  (v5_voltPerBit * analog[7]);
   lcd.print  ("V   ");
 
   //Ein = (Eo/R2) * (R1+R2)
@@ -632,7 +629,7 @@ void lcdMenu002() {
   lcd.setCursor(0, 1); //   row >    column ^
   lcd.print(F("PstV: "));
 
-  lcd.print  (refValue * analog[1]);
+  lcd.print  (v5_voltPerBit * analog[1]);
   lcd.print  (F("V   "));
 
   //Ein = (Eo/R2) * (R1+R2)
@@ -645,11 +642,11 @@ void lcdMenu002() {
   lcd.setCursor(0, 2); //   row >    column ^
   lcd.print(F("5.0V: "));
 
-  lcd.print  (refValue * analog[5]);
+  lcd.print  (v5_voltPerBit * analog[5]);
   lcd.print  ("V    ");
 
   //Ein = (Eo/R2) * (R1+R2)
-  lcd.print (v5_0);
+  lcd.print (v5_System);
   lcd.print  (F("V"));
 
   //--------------------
@@ -662,7 +659,7 @@ void lcdMenu002() {
   lcd.print  (F("mV "));
 
   //Ein = (Eo/R2) * (R1+R2)
-  lcd.print ((avgSum / avgSize) / myVoltsMap.shunt);
+  lcd.print ((avgSum / avgSize) / myResistorMap.shunt);
   lcd.print  (F("mA"));
 }
 
@@ -694,7 +691,7 @@ void lcdMenu003() {
   lcd.setCursor(0, 0); //   row >    column ^
   lcd.print(F("KeyV: "));
 
-  lcd.print  (refValue * analog[3]);
+  lcd.print  (v5_voltPerBit * analog[3]);
   lcd.print  (F("V "));
 
   lcd.setCursor(0, 1); //   row >    column ^
@@ -868,8 +865,8 @@ void lcdFunc200() { // UInt number edit
 
     setVisible();
 
-    lcd.setCursor(0, 3); //   row >    column ^
-    lcd.print(F("Int number edit"));
+//    lcd.setCursor(0, 3); //   row >    column ^
+//    lcd.print(F("Int number edit"));
     
   }
 
@@ -908,8 +905,8 @@ void lcdFunc201() { //Double number edit
 
     setVisible();
     
-    lcd.setCursor(0, 3); //   row >    column ^
-    lcd.print(F("Double number edit"));
+//    lcd.setCursor(0, 3); //   row >    column ^
+//    lcd.print(F("Double number edit"));
   }
   // #include<stdlib.h>
   //  dtostrf(FLOAT,WIDTH,PRECSISION,BUFFER);
@@ -947,11 +944,10 @@ void lcdInit240() { // Control check
     }
   } 
 
-    lcd.setCursor(0, 3);//   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit240_volts));
+  lcd.setCursor(0, 3);//   row >    column ^
+  lcd.print(PGMSTR(lcd_param_lcdInit240_volts));
   lcd.setCursor(7, 3);//   row >    column ^
-  //lcdDouble63(v5_0);//printVolts();
-  lcd.print(display.output_x_xxxV(v5_0 * 1000));    
+  lcd.print(display.output_x_xxxV(v5_System * 1000));    
 
 }
 
@@ -1001,7 +997,7 @@ void lcdInit248() { // Shunt ohms
     lcd.print(F("ohms "));    
 
 //  double shunt = 0.766327;   // 0.5   
-    pUInt1 = &myVoltsMap.shunt; // = (0.766327*10000);   // 0.5
+    pUInt1 = &myResistorMap.shunt; // = (0.766327*10000);   // 0.5
     pUInt2 = 0;  // = 2638; // 2.7k
   }
 
@@ -1022,8 +1018,8 @@ void lcdInit249() { // Vin pre 1.1 & 1.2 ohms
     lcd.setCursor(2, 2); //   row >    column ^
     lcd.print(F("1.2 "));          
   
-    pUInt1 = &myVoltsMap.Vpre11;  // = 8042; // 8.2k
-    pUInt2 = &myVoltsMap.Vpre12;  // = 2638; // 2.7k
+    pUInt1 = &myResistorMap.Vpre11;  // = 8042; // 8.2k
+    pUInt2 = &myResistorMap.Vpre12;  // = 2638; // 2.7k
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
@@ -1043,8 +1039,8 @@ void lcdInit250() { // Vin pst 2.1 & 2.2 ohms
     lcd.setCursor(2, 2); //   row >    column ^
     lcd.print(F("2.2 "));    
   
-    pUInt1 = &myVoltsMap.Vpst21;  // = 8014; // 8.2k
-    pUInt2 = &myVoltsMap.Vpst22;  // = 2637; // 2.7k 
+    pUInt1 = &myResistorMap.Vpst21;  // = 8014; // 8.2k
+    pUInt2 = &myResistorMap.Vpst22;  // = 2637; // 2.7k 
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
@@ -1066,55 +1062,15 @@ void lcdInit251() { // V5.0    3.1 & 3.2 ohms
     lcd.setCursor(2, 2); //   row >    column ^
     lcd.print(F("3.2 "));    
 
-    pUInt1 = &myVoltsMap.V5_31;  //   = 2161; // 2.2k   
-    pUInt2 = &myVoltsMap.V5_32;  //   = 3212; // 3.3k 
+    pUInt1 = &myResistorMap.V5_31;  //   = 2161; // 2.2k   
+    pUInt2 = &myResistorMap.V5_32;  //   = 3212; // 3.3k 
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
   lcd.print(display.outputDigitsU16(*pUInt1));
   lcd.setCursor(6, 2); //   row >    column ^
   lcd.print(display.outputDigitsU16(*pUInt2));
-
 }
-
-//// Usage: concatBytesPGM(lcd_param_common_set,lcd_param_lcdInit252_5V);
-//char * concatBytesPGM(const char* pgm1, const char* pgm2) {
-//  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated a clean arrays
-//  int c = 0;
-//
-//  for (int k = 0; k < strlen_P(pgm1); k++){
-//    buffer[c++]=pgm_read_byte_near(pgm1 + k);
-//  }
-//  
-//  buffer[c++]=' ';
-//  
-//  for (int k = 0; k < strlen_P(pgm2); k++){
-//    buffer[c++]=pgm_read_byte_near(pgm2 + k);
-//  }
-//  
-//  buffer[c]=0;
-//  
-//  buffer[sizeof(buffer)] = 0;          // end with a null terminator.
-//
-//  if (false){
-//    Serial.println(buffer);
-//  }
-//    
-//  return buffer;
-//}
-//
-//// Usage: concatBytesPGMSTR(qBytesWorld, versionNum);  
-//char * concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
-////  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated arrays (clear the array);
-//    memcpy(buffer, PGMSTR(pgmstr1), strlen_P(pgmstr1)+1);
-//    buffer[strlen_P(pgmstr1)] = ' ';
-//    memcpy(buffer+strlen_P(pgmstr1)+1, PGMSTR(pgmstr2), strlen_P(pgmstr2)+1);
-//
-//    if (false){
-//      Serial.println(buffer);
-//    }
-//  return buffer;    
-//}
 
 // -------------------------------------------
 void lcdInit252() {  // V5.0    Regulator Voltage
@@ -1122,11 +1078,22 @@ void lcdInit252() {  // V5.0    Regulator Voltage
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_5V));
+    lcd.setCursor(1, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdInit252_5Vmes));
+    lcd.setCursor(1, 2); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdInit252_5Vsys));
+    lcd.setCursor(1, 3); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
 
-  lcd.setCursor(2, 1); //   row >    column ^
-  //lcdDouble63(v5_0);//printVolts();   
-  lcd.print(display.output_x_xxxV(v5_0 * 1000));
+  lcd.setCursor(13, 1); //   row >    column ^
+  lcd.print(display.output_x_xxxV(v5_Measured));
+
+  lcd.setCursor(13, 2); //   row >    column ^
+  lcd.print(display.output_x_xxxV(v5_System));
+
+  lcd.setCursor(11, 3); //   row >    column ^
+  lcd.print(display.output_voltPerBit(v5_voltPerBit));
 }
 
 // -------------------------------------------
@@ -1143,9 +1110,9 @@ void lcdInit253() { // Splash     [no click (select) out to 253]
 
   if (repeatCount > 7) {//delay(2000);
 
-// DAQ finish this....
-// DAQ finish this....
-// DAQ finish this....
+// DAQ finish this....need to read the EEPROM data to know if it is 1st time
+// DAQ finish this....need to read the EEPROM data to know if it is 1st time
+// DAQ finish this....need to read the EEPROM data to know if it is 1st time
 
      // If first time run (no EEPROM data)
     if (true){
@@ -1166,8 +1133,8 @@ void lcdInit254() {  // Starting   [click (select) out to 254]
   //lcd.blink();
     lcd.noBlink();
     
-    lcd.setCursor(0, 0);//   row >    column ^
-    lcd.print("Startup");
+    lcd.setCursor(6, 1);//   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdInit254_startUp));    
   }
   
   if (repeatCount > 1) { // ~delay(250);
@@ -1500,10 +1467,10 @@ void loop() {
   myAux.AUX3 = analog[4];
   myAux.AUX4 = analog[8];
 
-  vPst = (((refValue * analog[1]) / myVoltsMap.Vpst22) * (myVoltsMap.Vpst21 + myVoltsMap.Vpst22));  // V Post
-  vKey =    refValue * analog[3];                                                                   // Key
-  v5_0 = (((refValue * analog[5]) / myVoltsMap.V5_32 ) * (myVoltsMap.V5_31  + myVoltsMap.V5_32 ));  // 5.0V
-  vPre = (((refValue * analog[7]) / myVoltsMap.Vpre12) * (myVoltsMap.Vpre11 + myVoltsMap.Vpre12));  // V Pre
+  vPst = (((v5_voltPerBit * analog[1]) / myResistorMap.Vpst22) * (myResistorMap.Vpst21 + myResistorMap.Vpst22));  // V Post
+  vKey =    v5_voltPerBit * analog[3];                                                                   // Key
+  v5_System = (((v5_voltPerBit * analog[5]) / myResistorMap.V5_32 ) * (myResistorMap.V5_31  + myResistorMap.V5_32 ));  // 5.0V
+  vPre = (((v5_voltPerBit * analog[7]) / myResistorMap.Vpre12) * (myResistorMap.Vpre11 + myResistorMap.Vpre12));  // V Pre
 
   //
   if (avgCnt >= avgSize) {

@@ -44,7 +44,7 @@ MyButtons myButtons;
 // ===========================================
 // Volt divide Vars
 // ===========================================
-struct MyVoltsMap {
+struct MyResistorMap {
   // Messure (  vPre -  vPost) / Current
   //         (12.867 - 12.836) / 58.8 =  0.527211 Ohm
   //                    0.031  / 58.8 =  0.527211 Ohm
@@ -60,6 +60,6 @@ struct MyVoltsMap {
   unsigned int V5_31    = 2161; // 2.2k
   unsigned int V5_32    = 3212; // 3.3k
 };
-MyVoltsMap myVoltsMap;
+MyResistorMap myResistorMap;
 
 #endif /* TYPES_H_ */
