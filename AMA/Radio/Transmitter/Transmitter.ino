@@ -22,4 +22,3 @@
   * Avoid FLOAT and DOUBLE, instead, use whole numbers and display knowing it's a whold number
   * IE: Volts = 120, print as 12.0V
   */
-  
