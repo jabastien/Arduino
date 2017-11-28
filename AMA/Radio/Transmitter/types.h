@@ -62,8 +62,6 @@ struct MyResistorMap {
 };
 MyResistorMap myResistorMap;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 // ===========================================
 // Editor Data
 // ===========================================
@@ -76,8 +74,4 @@ struct MyEditor {
 MyEditor myEditor;
 
 
-=======
->>>>>>> parent of 64f394d... Seperating code
-=======
->>>>>>> parent of 64f394d... Seperating code
 #endif /* TYPES_H_ */

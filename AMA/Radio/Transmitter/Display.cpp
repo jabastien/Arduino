@@ -16,7 +16,7 @@
 #include <avr/pgmspace.h>
 
 // include this library's description file
-#include "def.h"
+#include "Def.h"
 #include "Display.h"
 
 

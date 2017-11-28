@@ -19,8 +19,6 @@
 
 #include <avr/pgmspace.h>
 
-#include "def.h"
-
 // library interface description
 
 class Display
