@@ -1,5 +1,5 @@
 /*
-  DataStore.h - 
+  Data.h - 
 */
 
 // ensure this library description is only included once
@@ -18,11 +18,11 @@
 
 
 // library interface description
-class DataStore
+class Data
 {
   // user-accessible "public" interface
   public:
-    DataStore(void);
+    Data(void);
     void factoryReset(void);
 
   // library-accessible "private" interface

@@ -50,7 +50,7 @@ struct MyResistorMap {
   //                    0.031  / 58.8 =  0.527211 Ohm
 //double shunt = 0.727211;   // 0.5
 //  double shunt = 0.766327;   // 0.5
-  unsigned int  shunt = (07663);//*10000);   // 0.5
+  unsigned int  shunt = (0.766327*10000);   // 0.5
 
   // Max resistor size is 32767 witch is 1/2 of 65,535.
   unsigned int Vpre11   = 8042; // 8.2k
@@ -67,21 +67,13 @@ MyResistorMap myResistorMap;
 // ===========================================
 // Editor Data
 // ===========================================
-struct DataStoreInfo {
-  char * buffer;
-  const char * pgmData;
-};
-DataStoreInfo myDataStoreInfo;
-
-struct MyEditorData {
+struct MyEditor {
     byte row[4];      // row > (Start pos for the item to edit.
 //  byte col[4];         // column ^
-//    const char * pgmData[4]; &address of the pgmem for mask  ( [0] should always be null (title line))
-struct DataStoreInfo DataStoreInfo[4];
+    char * mask[4];   // & of the pgmem (0 shuld always be null (title line))
     void * pVoid[4];  //  Data element address to edit
-    byte returnTo;
 };
-MyEditorData myEditorData;
+MyEditor myEditor;
 
 
 =======
