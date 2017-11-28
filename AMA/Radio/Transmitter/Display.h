@@ -20,11 +20,21 @@
 #include <avr/pgmspace.h>
 
 // library interface description
+//#include "types.h"
+
+struct angles {
+   double a;
+   double b;
+};
 
 class Display
 {
   // user-accessible "public" interface
   public:
+
+    struct angles TestMethod(uint8_t);
+
+    
     Display(void);
     char *outputDigitsU8 ( uint8_t);
     char *outputDigitsS8 (  int8_t);

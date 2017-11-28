@@ -23,12 +23,12 @@
 #include "types.h"
 
 #include "CustomChar.h"
-#include "Data.h"
+#include "DataStore.h"
 #include "Display.h"
 #include "Edit.h"
 
 CustomChar customChar = CustomChar();
-Data data = Data();
+DataStore dataStore = DataStore();
 Display display = Display();
 
 // ===========================================
@@ -58,17 +58,6 @@ byte editCol = 0;
 byte returnToCurrent = MAINMENU;
 
 byte repeatCount = 0;
-
-//// ===========================================
-//// Format Print
-//// ===========================================
-//#include <FormatPrint.h>
-////FormatPrint fmt;
-//
-
-//
-////#include <string.h>
-
 
 // ===========================================
 // Update LCD
@@ -479,7 +468,7 @@ void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   }
   
   // Need to find a way to retain 'menuCol' when returning?
-//  byte tempReturnToCurrent = menuOptions[0];
+  //  byte tempReturnToCurrent = menuOptions[0];
   
   menuSize = sizeIs;
 
@@ -578,21 +567,8 @@ setMenu(F("x001"), menuOptions001, membersof(menuOptions001));
 void lcdMenu002() {
   if (repeatCount == 0) {
     setMenu(F("x002"), menuOptions002, membersof(menuOptions002));
-//    lcd.setCursor(0, 0); //   row >    column ^
-//    lcd.print("10 -> 11");
-//    lcd.setCursor(0, 1); //   row >    column ^
-//    lcd.print("10 -> 12");
-//    lcd.setCursor(0, 2); //   row >    column ^
-//    lcd.print("10 -> 13");
-//    lcd.setCursor(0, 3); //   row >    column ^
-//    lcd.print("10 -> 14");
-//    lcd.print(" Repeat: ");
   }
 
-  //  lcd.setCursor(17, 1); //   row >    column ^
-  //  lcd.print(repeatCount);
-  //  lcd.print(" ");
-  // -------------------------------------------
 
   // 0 = x0 = Aux0,
   // 2 = x1 = Aux1,
@@ -663,22 +639,8 @@ void lcdMenu002() {
 void lcdMenu003() {
   if (repeatCount == 0) {
     setMenu(F("x003"), menuOptions003, membersof(menuOptions003));
-//    lcd.setCursor(0, 0); //   row >    column ^
-//    lcd.print("10 -> 11");
-//    lcd.setCursor(0, 1); //   row >    column ^
-//    lcd.print("10 -> 12");
-//    lcd.setCursor(0, 2); //   row >    column ^
-//    lcd.print("10 -> 13");
-//    lcd.setCursor(0, 3); //   row >    column ^
-//    lcd.print("10 -> 14");
-//    lcd.print(" Repeat: ");
   }
 
-  //  lcd.setCursor(17, 1); //   row >    column ^
-  //  lcd.print(repeatCount);
-  //  lcd.print(" ");
-  //// -------------------------------------------
-//void lcdKeyVolts() {
   //--------------------
   //
   //--------------------
@@ -1359,7 +1321,7 @@ void setup()
 //  // Test code to be deleted
 //  // Test code to be deleted
 
-  //data.factoryReset();
+  //dataStore.factoryReset();
 }
 
 // ===========================================
