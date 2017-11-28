@@ -39,6 +39,12 @@ Display display = Display();
 unsigned long  screenRefresh = 1000 / 4; // 4 times per second
 unsigned long  screenLastRefresh = 0;
 
+
+// require ::: stdlib.h
+//char buffer[7];         //the ASCII of the integer will be stored in this char array
+//itoa(changeMe,buffer,10); //(integer, yourBuffer, base)   
+char buffer[20];  //  Hold The Convert Data (width of the LCD)
+
 unsigned int *pUInt1;
 unsigned int *pUInt2;
 
@@ -743,6 +749,10 @@ void lcdMenu013() {
 //void lcdMainFlightTime(){
 //void updateFPS(){
 
+long day = 86400000; // 86400000 milliseconds in a day
+long hour = 3600000; // 3600000 milliseconds in an hour
+long minute = 60000; // 60000 milliseconds in a minute
+long second =  1000; // 1000 milliseconds in a second
 
 void lcdMenu014() {
   // check to see if it's time to update LCD; that is, if the difference
@@ -772,6 +782,19 @@ void lcdMenu014() {
       // -------------------------------------
       lcd.setCursor(0, 0); //   row >    column ^
       lcd.print(F("Flight: "));
+//      long timeNow = millis();
+//
+//      int days = timeNow / day ;                                //number of days
+//      int hours = (timeNow % day) / hour;                       //the remainder from days division (in milliseconds) divided by hours, this gives the full hours
+//      int minutes = ((timeNow % day) % hour) / minute ;         //and so on...
+//      int seconds = (((timeNow % day) % hour) % minute) / second;
+//
+//
+//char dateFormat[] = "%02d:%02d:%02d:%02d";
+
+//    sprintf(buffer, dateFormat[3], days, hours, minutes, seconds); ///< This has 4 2-digit integers with leading zeros, separated by ":" . The list of parameters, hour, min, sec, provides the numbers the sprintf prints out with.
+//    lcd.print(buffer);    
+    //Serial.println(buffer); ///< You will get something like"01:13:02:09"       
 
       // -------------------------------------
       lcd.setCursor(0, 2); //   row >    column ^
@@ -801,7 +824,12 @@ void lcdMenu014() {
 void lcdFunc200() { // UInt number edit
   if (repeatCount == 0) {
     setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
-    setVisible();  
+
+    setVisible();
+
+//    lcd.setCursor(0, 3); //   row >    column ^
+//    lcd.print(F("Int number edit"));
+    
   }
 
   if (keyPress > 0) {
@@ -822,8 +850,13 @@ void lcdFunc200() { // UInt number edit
         editRow--;
     }
   }   
+    
+//  char buffer[10];         //the ASCII of the integer will be stored in this char array
+//  itoa((int)changeMe,buffer,10); //(integer, yourBuffer, base)   
 
+  lcd.blink();
   lcd.setCursor(5, 2); //   row >    column ^
+//  lcd.print(buffer);
   lcd.setCursor(5 + menuRow, 2); //   row >    column ^
 
 }
@@ -831,10 +864,26 @@ void lcdFunc200() { // UInt number edit
 void lcdFunc201() { //Double number edit
   if (repeatCount == 0) {
     setMenu(F("x201"), menuOptions201, membersof(menuOptions201));
-    setVisible();
-  }
 
+    setVisible();
+    
+//    lcd.setCursor(0, 3); //   row >    column ^
+//    lcd.print(F("Double number edit"));
+  }
+  // #include<stdlib.h>
+  //  dtostrf(FLOAT,WIDTH,PRECSISION,BUFFER);
+
+//  char *r = dtostrf(changeMe, 8, 2, buffer);
+//  if (true){
+//    Serial.print  (buffer);
+//    Serial.print  (" r:");
+//    Serial.print  (r);
+//    Serial.println(":");
+//  }
   lcd.setCursor(3, 1); //   row >    column ^
+         
+  //lcd.print(buffer);
+
   lcd.setCursor(3 + menuRow, 1); //   row >    column ^
 }
 
@@ -915,7 +964,7 @@ void lcdInit248() { // Shunt ohms
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(display.output_ohm_x_xxxxO(*pUInt1));
+  lcd.print(display.outputDigitsU16(*pUInt1));
 //  lcd.setCursor(6, 2); //   row >    column ^
 //  lcd.print(display.outputDigitsU16(*pUInt2));
 }
@@ -936,9 +985,9 @@ void lcdInit249() { // Vin pre 1.1 & 1.2 ohms
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(display.output_ohm_xx_xxxO(*pUInt1));
+  lcd.print(display.outputDigitsU16(*pUInt1));
   lcd.setCursor(6, 2); //   row >    column ^
-  lcd.print(display.output_ohm_xx_xxxO(*pUInt2));
+  lcd.print(display.outputDigitsU16(*pUInt2));
 }
 
 // -------------------------------------------
@@ -957,9 +1006,9 @@ void lcdInit250() { // Vin pst 2.1 & 2.2 ohms
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(display.output_ohm_xx_xxxO(*pUInt1));
+  lcd.print(display.outputDigitsU16(*pUInt1));
   lcd.setCursor(6, 2); //   row >    column ^
-  lcd.print(display.output_ohm_xx_xxxO(*pUInt2));
+  lcd.print(display.outputDigitsU16(*pUInt2));
 
 }
 
@@ -980,9 +1029,9 @@ void lcdInit251() { // V5.0    3.1 & 3.2 ohms
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(display.output_ohm_xx_xxxO(*pUInt1));
+  lcd.print(display.outputDigitsU16(*pUInt1));
   lcd.setCursor(6, 2); //   row >    column ^
-  lcd.print(display.output_ohm_xx_xxxO(*pUInt2));
+  lcd.print(display.outputDigitsU16(*pUInt2));
 }
 
 // -------------------------------------------
@@ -1001,7 +1050,7 @@ void lcdInit252() {  // V5.0    Regulator Voltage
     lcd.setCursor(1, 3); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
-  
+
   lcd.setCursor(13, 1); //   row >    column ^
   lcd.print(display.output_x_xxxV(v5_Measured));
 
@@ -1089,30 +1138,22 @@ void updateLCD() {
     }
 
     // Don't clear the screen for FUNCTIONs
-    if (menuSelected >= 200 && menuSelected <= 239){
+    if (menuSelected > 200 && menuSelected <= 239){
       function = true;
-      lcd.blink();
     } else {
       function = false;
-      lcd.noBlink();
       lcd.clear();
-    }
-    
-    // Carrot for menu select.
-    if (menuCurrent != MAINMENU){
-      for (byte b = 1; b<4;b++){
-        lcd.setCursor(0, b);//   row >    column ^
-        lcd.print (" ");
-      }
-      if (menuCol > 0){
-        lcd.setCursor(0, menuCol);//   row >    column ^
-        lcd.print (">");
-      }
     }
     
     repeatCount = 0;
     menuCol = 0;
     menuCurrent = menuSelected;
+
+    if (menuCurrent == MAINMENU || menuCurrent >= 250) {
+      lcd.noBlink();
+    } else {
+      lcd.blink();
+    }
   }
 
   if (!function && keyPress > 0){
@@ -1140,6 +1181,19 @@ void updateLCD() {
       Serial.print  (F(" C^:"));
       Serial.println(menuCol);
     }
+
+    // Carrot for menu select.
+    if (menuCurrent != MAINMENU){
+      for (byte b = 1; b<4;b++){
+        lcd.setCursor(0, b);//   row >    column ^
+        lcd.print (" ");
+      }
+      if (menuCol > 0){
+        lcd.setCursor(0, menuCol);//   row >    column ^
+        lcd.print (">");
+      }
+    }
+    
   }
 
 

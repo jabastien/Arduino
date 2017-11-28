@@ -1,6 +1,6 @@
 /*
-  Display.h - 
-
+  Display.h - Test library for Wiring - implementation
+  Copyright (c) 2006 John Doe.  All right reserved.
 */
 
 // include core Wiring API
@@ -20,6 +20,20 @@
 #include "Display.h"
 //#include "types.h"
 
+
+// include description files for other libraries used (if any)
+//#include <limits.h>
+// https://github.com/esp8266/Arduino/blob/master/tools/sdk/libc/xtensa-lx106-elf/include/limits.h
+
+#define DAY  86400 // 86400000 milliseconds in a  day
+#define HOUR  3600 //  3600000 milliseconds in an hour
+#define MINUTE  60 //    60000 milliseconds in a  minute
+#define SECOND   1 //     1000 milliseconds in a  second
+ 
+#define DD(seconds) (   seconds / DAY)                   //number of days
+#define HH(seconds) ((  seconds % DAY) / HOUR)           //the remainder from days division divided by hours, this gives the full hours
+#define MM(seconds) ((( seconds % DAY) % HOUR) / MINUTE) //and so on...
+#define SS(seconds) ((((seconds % DAY) % HOUR) % MINUTE) / SECOND)
 
 // ===========================================
 // Macros
@@ -77,8 +91,6 @@ char s32Digit10         ( int32_t v) {return '0' + v / 10         - (v/100)     
 char s32Digit1          ( int32_t v) {return '0' + v / 1          - (v/10)          * 10;} 
 
 
-static char line [20];
-
 // ===========================================
 // Constructor
 // Function that handles the creation and setup of instances
@@ -91,25 +103,90 @@ Display::Display(){
 
 }
 
+// ===========================================
+// PROGMEM
+// ===========================================
+PROGMEM const char  digits8 []     = " ---";
+PROGMEM const char  digits16[]     = " --,---";
+PROGMEM const char  digits32[]     = " -,---,---,---";
+
+PROGMEM const char  timer[]        = "--:--:--";
+PROGMEM const char  timerDay[]     = "----:--:--:--";
+
+PROGMEM const char  volts_xx_xV[]  = " --.-V";
+PROGMEM const char  volts_x_xxxV[] = " -.---V";
+
+PROGMEM const char  volts_0_00xxxxV[] = "0.0-----V";
+
+PROGMEM const char  ohm_x_xxxx[] = "-.----^";
+
+static char line [15];
+static char buffer [20];
   
 // ===========================================
 // Misc Methods
 // ===========================================
 
 // -------------------------------------------
+//void setSign(type T number){
+//  if (number < 0 ) { // Can't be negative.
+//    number = -number;
+//    line[0] = '-';
+//  } else {
+//    number = number;
+//    line[0] = ' ';
+//  }  
+//}
+
+// -------------------------------------------
 // https://forum.arduino.cc/index.php?topic=439117.0
 // -------------------------------------------
-//void setSign(type T number){              // No return value
-template <typename T> T setSign (T number){ // Return value of 'T'
+template <typename T> T setSign (T number) 
+  {
   if (number < 0){ // Can't be negative.
     number = -number;
     line[0] = '-';
   }
 //  else{
-//    line[0]=' ';
+//    line[0]='p';
 //  }
   return number;
   }  // end of setSign
+  
+// -------------------------------------------
+//// generic minimum
+//template <typename T> T minimum (T a, T b) 
+//  {
+//  if (a < b)
+//    return a;
+//  return b;
+//  }  // end of minimum
+
+// generic setSign
+
+// -------------------------------------------
+//#define MACRO(num, str) {\
+//            printf("%d", num);\
+//            printf(" is");\
+//            printf(" %s number", str);\
+//            printf("\n");\
+//           }
+
+// -------------------------------------------
+//  if (half){
+//    if (number > SHRT_MAX){
+//        number = SHRT_MAX;
+//    }
+//  }
+
+// -------------------------------------------
+//char *itoa(int n)
+//  {
+//  static char retbuf[25];
+//  sprintf(retbuf, "%d", n);
+//  return retbuf;
+//  }
+
 
 
 /*
@@ -358,7 +435,7 @@ char * Display::output_xx_xV(uint16_t volts) {
 
 char * Display::output_x_xxxV(uint16_t volts) {
 
-// volts can be between -32,768 and 32,767 (5016 = 5.016v)
+// volts can be between -32,768 and 32,767 (5246 = 5.246v)
 //static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
 //static char line[5] = " -.---V;
 
@@ -374,6 +451,7 @@ char * Display::output_x_xxxV(uint16_t volts) {
   
   return line;
 }
+
 
 char * Display::output_voltPerBit(uint16_t volts) {
 
@@ -391,92 +469,50 @@ char * Display::output_voltPerBit(uint16_t volts) {
   line[5] = u16Digit100   (volts);
   line[6] = u16Digit10    (volts);
   line[7] = u16Digit1     (volts);
+//  line[9] = 0xF4; OHM
   
   return line;
 }
 
-// ===========================================
-// OHMs Functions
-// ===========================================
-char * Display::output_ohm_xx_xxxO(uint16_t ohms) {
 
-// volts can be between 65,535 (12300 = 12,300 Ohms)
-//static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
-//static char line[5] = "--,---^"
 
-  strcpy_P(line, ohm_xx_xxxO);
-
-  line[0] =  u16Digit10000 (ohms);
-  line[1] =  u16Digit1000  (ohms);
-  //,
-  line[3] =  u16Digit100   (ohms);
-  line[4] =  u16Digit10    (ohms);
-  line[5] =  u16Digit1     (ohms);
-  // ohms
-  line[6] = 0xF4; //OHM
-  
-  return line;
-}
-
-char * Display::output_ohm_x_xxxxO(uint16_t ohms) {
-
-// volts can be between  65,535 (05389 = 0.5389 Ohms)
-//static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
-//static char line[5] = "-,----^"
-
-  strcpy_P(line, ohm_x_xxxxO);
-
-  line[0] =  u16Digit10000 (ohms);
-  //.
-  line[2] =  u16Digit1000  (ohms);
-  line[3] =  u16Digit100   (ohms);
-  line[4] =  u16Digit10    (ohms);
-  line[5] =  u16Digit1     (ohms);
-  // ohms
-  line[6] = 0xF4; //OHM
-  
-  return line;
-}
-
-// ===========================================
-// Concatenate PGM string/char
-// ===========================================
 // Usage: concatBytesPGM(lcd_param_common_set,lcd_param_lcdInit252_5V);
 char * Display::concatBytesPGM(const char* pgm1, const char* pgm2) {
-  memset(line, 0x00, sizeof(line)); // for automatically-allocated a clean arrays
+  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated a clean arrays
   int c = 0;
 
   for (int k = 0; k < strlen_P(pgm1); k++){
-    line[c++]=pgm_read_byte_near(pgm1 + k);
+    buffer[c++]=pgm_read_byte_near(pgm1 + k);
   }
   
-  line[c++]=' ';
+  buffer[c++]=' ';
   
   for (int k = 0; k < strlen_P(pgm2); k++){
-    line[c++]=pgm_read_byte_near(pgm2 + k);
+    buffer[c++]=pgm_read_byte_near(pgm2 + k);
   }
   
-  line[c]=0;  
-  line[sizeof(line)] = 0;          // end with a null terminator.
+  buffer[c]=0;
+  
+  buffer[sizeof(buffer)] = 0;          // end with a null terminator.
 
   if (false){
-    Serial.println(line);
+    Serial.println(buffer);
   }
     
-  return line;
+  return buffer;
 }
 
 // Usage: concatBytesPGMSTR(qBytesWorld, versionNum);  
 char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
-//  memset(line, 0x00, sizeof(line)); // for automatically-allocated arrays (clear the array);
-    memcpy(line, PGMSTR(pgmstr1), strlen_P(pgmstr1)+1);
-    line[strlen_P(pgmstr1)] = ' ';
-    memcpy(line+strlen_P(pgmstr1)+1, PGMSTR(pgmstr2), strlen_P(pgmstr2)+1);
+//  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated arrays (clear the array);
+    memcpy(buffer, PGMSTR(pgmstr1), strlen_P(pgmstr1)+1);
+    buffer[strlen_P(pgmstr1)] = ' ';
+    memcpy(buffer+strlen_P(pgmstr1)+1, PGMSTR(pgmstr2), strlen_P(pgmstr2)+1);
 
     if (false){
-      Serial.println(line);
+      Serial.println(buffer);
     }
-  return line;    
+  return buffer;    
 }
 
 
@@ -495,48 +531,24 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
  * 
  */
 
-// require ::: stdlib.h
-//char buffer[20]; //  Hold The Convert Data (width of the LCD)
-//itoa(changeMe,buffer,10); //(integer, yourBuffer, base)   
- 
-// -------------------------------------------
-//char *itoa(int n)
-//  {
-//  static char retbuf[25];
-//  sprintf(retbuf, "%d", n);
-//  return retbuf;
-//  }
 
 //===============================================================================
-
-  // #include<stdlib.h>
-  //  dtostrf(FLOAT,WIDTH,PRECSISION,BUFFER);
-
-//  char *r = dtostrf(changeMe, 8, 2, buffer);
-//  if (true){
-//    Serial.print  (buffer);
-//    Serial.print  (" r:");
-//    Serial.print  (r);
-//    Serial.println(":");
-//  }
-
-//==============================================================================
 //int lcdInt(int n, String format){
 //char charBuf[10];
 //  format.toCharArray(charBuf,10); 
-//  int m = sprintf (line, charBuf, n);
-//  lcd.print(line);
+//  int m = sprintf (buffer, charBuf, n);
+//  lcd.print(buffer);
 //  return m;
 //}
 //int lcdInt(int n, String format){
-//  int m = sprintf (line, "%6d", n);
-//  lcd.print(line);
+//  int m = sprintf (buffer, "%6d", n);
+//  lcd.print(buffer);
 //  return m;
 //}
 //int lcdInt(int n, const char format){
 //  //    lcd.print(PGMSTR(qBytesWorld));
-//  int m = sprintf (line, format, n);
-//  lcd.print(line);
+//  int m = sprintf (buffer, format, n);
+//  lcd.print(buffer);
 //  return m;
 //}
 //////// ===========================================
@@ -544,9 +556,9 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 //////// ===========================================
 //int lcdUnLong6D(unsigned long n){
 //  Serial.println(n);
-//  //int m = sprintf (line, "%06d", n);
-//  int m = sprintf (line, "%06lu", n);
-//  lcd.print(line);
+//  //int m = sprintf (buffer, "%06d", n);
+//  int m = sprintf (buffer, "%06lu", n);
+//  lcd.print(buffer);
 //  return m;
 //}
 //
@@ -593,20 +605,20 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 ////int printInt(int n, String format){
 ////
 //
-////  char line[10];         //the ASCII of the integer will be stored in this char array
-////  itoa((int)changeMe,line,10); //(integer, yourline, base)
+////  char buffer[10];         //the ASCII of the integer will be stored in this char array
+////  itoa((int)changeMe,buffer,10); //(integer, yourBuffer, base)
 //  
 //////char dateFormat[] = "%02d:%02d:%02d:%02d";
-//////    sprintf(line, dateFormat[3], days, hours, minutes, seconds); ///< This has 4 2-digit integers with leading zeros, separated by ":" . The list of parameters, hour, min, sec, provides the numbers the sprintf prints out with.
-//////    lcd.print(line);    
-////    //Serial.println(line); ///< You will get something like"01:13:02:09" 
+//////    sprintf(buffer, dateFormat[3], days, hours, minutes, seconds); ///< This has 4 2-digit integers with leading zeros, separated by ":" . The list of parameters, hour, min, sec, provides the numbers the sprintf prints out with.
+//////    lcd.print(buffer);    
+////    //Serial.println(buffer); ///< You will get something like"01:13:02:09" 
 ////    
 ////char format[] = "ddddd";
 ////      
 //////  char c[10];        // long enough to hold complete integer string
 //////  char charBuf[20];
-////  format.toCharArray(line,10);
-////  int m = sprintf(c, line, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
+////  format.toCharArray(buffer,10);
+////  int m = sprintf(c, buffer, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
 ////  Serial.print(c);
 ////  return m;
 ////}
@@ -615,10 +627,10 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 ////// LCD Print NNN.DDD
 ////// ===========================================
 //void lcdDouble63(double dbl) {
-//  char *r = dtostrf(dbl, 6, 3, line);
-////  lcd.print(line);
+//  char *r = dtostrf(dbl, 6, 3, buffer);
+////  lcd.print(buffer);
 //  lcd.print(r);
 //  lcd.print("V");
-////  lcd.print(dtostrf(v5_System, 6, 3, line));
+////  lcd.print(dtostrf(v5_System, 6, 3, buffer));
 ////  lcd.print("V");
 //}
