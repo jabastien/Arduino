@@ -62,4 +62,16 @@ struct MyResistorMap {
 };
 MyResistorMap myResistorMap;
 
+// ===========================================
+// Editor Data
+// ===========================================
+struct MyEditor {
+    byte row[4];      // row > (Start pos for the item to edit.
+//  byte col[4];         // column ^
+    char * mask[4];   // & of the pgmem (0 shuld always be null (title line))
+    void * pVoid[4];  //  Data element address to edit
+};
+MyEditor myEditor;
+
+
 #endif /* TYPES_H_ */

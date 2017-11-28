@@ -16,7 +16,20 @@ PROGMEM const String sampleMenu_exit = "Exit";
 
 const String err = "Err:
  */
+
+/*
+ include description files for other libraries used (if any)
+#include <limits.h>
+ https://github.com/esp8266/Arduino/blob/master/tools/sdk/libc/xtensa-lx106-elf/include/limits.h
+
+  if (half){
+    if (number > SHRT_MAX){
+        number = SHRT_MAX;
+    }
+  }
  
+*/
+
 /**************************************************************************************/
 /***************      Serail Debug test configurations             ********************/
 /**************************************************************************************/
@@ -27,13 +40,30 @@ const String err = "Err:
 //#define DEBUG_KEY
 //#define DEBUG_MyControls
 
-
 /**************************************************************************************/
 /***************          constants configurations                 ********************/
 /**************************************************************************************/
 PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
 PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
-PROGMEM const char  versionNum [] = {"v1.16"};
+PROGMEM const char  versionNum [] = {"v1.17"};
+
+/**************************************************************************************/
+/***************          date & time configurations               ********************/
+/**************************************************************************************/
+//const long day = 86400000; // 86400000 milliseconds in a day
+//const long hour = 3600000; // 3600000 milliseconds in an hour
+//const long minute = 60000; // 60000 milliseconds in a minute
+//const long second =  1000; // 1000 milliseconds in a second
+
+#define DAY  86400 // 86400000 milliseconds in a  day
+#define HOUR  3600 //  3600000 milliseconds in an hour
+#define MINUTE  60 //    60000 milliseconds in a  minute
+#define SECOND   1 //     1000 milliseconds in a  second
+ 
+#define DD(seconds) (   seconds / DAY)                   //number of days
+#define HH(seconds) ((  seconds % DAY) / HOUR)           //the remainder from days division divided by hours, this gives the full hours
+#define MM(seconds) ((( seconds % DAY) % HOUR) / MINUTE) //and so on...
+#define SS(seconds) ((((seconds % DAY) % HOUR) % MINUTE) / SECOND)
 
 /**************************************************************************************/
 /***************           defaults configurations                 ********************/
@@ -52,8 +82,6 @@ PROGMEM const char  versionNum [] = {"v1.16"};
 // Common
 //                                           123456789012 
 PROGMEM const char lcd_param_common_set [] = "(Set)";
-
-
 
 //
 // X240
@@ -90,6 +118,23 @@ PROGMEM const char lcd_param_lcdInit254_startUp [] = "Start up";
 //  #define MEGA
 //#endif
 
+// ===========================================
+// Display
+// ===========================================
+PROGMEM const char  digits8 []     = " ---";
+PROGMEM const char  digits16[]     = " --,---";
+PROGMEM const char  digits32[]     = " -,---,---,---";
+
+PROGMEM const char  timer[]        = "--:--:--";
+PROGMEM const char  timerDay[]     = "----:--:--:--";
+
+PROGMEM const char  volts_xx_xV[]  = " --.-V";
+PROGMEM const char  volts_x_xxxV[] = " -.---V";
+
+PROGMEM const char  volts_0_00xxxxV[] = "0.0-----V";
+
+PROGMEM const char  ohm_xx_xxxO[] = "--,---^"; // K OHMs
+PROGMEM const char  ohm_x_xxxxO[] = "-.----^"; // milla OHMs
 
 /**************************************************************************************/
 /***************             motor and servo numbers               ********************/

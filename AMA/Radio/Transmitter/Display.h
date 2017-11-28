@@ -21,8 +21,6 @@
 
 // library interface description
 
-
-
 class Display
 {
   // user-accessible "public" interface
@@ -41,11 +39,16 @@ class Display
     char *output_xx_xV(uint16_t);
     char *output_x_xxxV(uint16_t);
 
+    char *output_ohm_xx_xxxO(uint16_t);
+    char *output_ohm_x_xxxxO(uint16_t);
+
     char *output_voltPerBit(uint16_t);
     
 
-    char * concatBytesPGM(const char* , const char* );
-    char * concatBytesPGMSTR(const char* , const char* );
+    char *concatBytesPGM(const char* , const char* );
+    char *concatBytesPGMSTR(const char* , const char* );
+
+
     
   // library-accessible "private" interface
   private:
