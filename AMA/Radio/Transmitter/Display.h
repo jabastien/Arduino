@@ -19,6 +19,8 @@
 
 #include <avr/pgmspace.h>
 
+#include "def.h"
+
 // library interface description
 //#include "types.h"
 
@@ -26,8 +28,6 @@ struct angles {
    double a;
    double b;
 };
-
-
 
 class Display
 {
@@ -51,11 +51,16 @@ class Display
     char *output_xx_xV(uint16_t);
     char *output_x_xxxV(uint16_t);
 
+    char *output_ohm_xx_xxxO(uint16_t);
+    char *output_ohm_x_xxxxO(uint16_t);
+
     char *output_voltPerBit(uint16_t);
     
 
-    char * concatBytesPGM(const char* , const char* );
-    char * concatBytesPGMSTR(const char* , const char* );
+    char *concatBytesPGM(const char* , const char* );
+    char *concatBytesPGMSTR(const char* , const char* );
+
+
     
   // library-accessible "private" interface
   private:
