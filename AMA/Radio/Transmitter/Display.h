@@ -22,19 +22,15 @@
 #include "def.h"
 
 // library interface description
-//#include "types.h"
+#include "types.h"
 
-struct angles {
-   double a;
-   double b;
-};
 
 class Display
 {
   // user-accessible "public" interface
   public:
 
-    struct angles TestMethod(uint8_t);
+    struct DisplayInfo TestMethod(unsigned int);
 
     
     Display(void);

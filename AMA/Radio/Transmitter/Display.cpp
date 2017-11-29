@@ -123,25 +123,37 @@ struct DataStoreInfo {
 
 
 //char * Display::TestMethod(uint8_t number){
-struct angles Display::TestMethod(uint8_t number){
+struct DisplayInfo Display::TestMethod(unsigned int number){
 // Number can be between 255
 //static char line[5] = "0123"; // Digit possition (+1 for terminator /0.
 //static char line[5] = " ---";
 
-  strcpy_P(line, digits8);
+//  strcpy_P(line, digits8);
+//  
+//  line[1] =  u8Digit100   (number);
+//  line[2] =  u8Digit10    (number);
+//  line[3] =  u8Digit1     (number);
+  strcpy_P(line, digits16);
   
-  line[1] =  u8Digit100   (number);
-  line[2] =  u8Digit10    (number);
-  line[3] =  u8Digit1     (number);
-
+  line[1] =  u16Digit10000 (number);
+  line[2] =  u16Digit1000  (number);
+  line[4] =  u16Digit100   (number);
+  line[5] =  u16Digit10    (number);
+  line[6] =  u16Digit1     (number);
   //  return line;
 //  DataStoreInfo myDataStoreInfo = new DataStoreInfo();
 //  return  myDataStoreInfo;
+  struct DisplayInfo displayInfo;
+  displayInfo.buffer = line;
+  displayInfo.pgmData = digits16;
+//  char * buffer;
+//  const char * pgmData;  
+  return displayInfo;
    
-   struct angles ang;
-   ang.a = 3.14;
-   ang.b = 10.0;
-   return ang;
+//   struct DisplayInfo displayInfo;
+//   displayInfo.a = 3.14;
+//   displayInfo.b = 10.0;
+//   return displayInfo;
 }
 
 // ===========================================

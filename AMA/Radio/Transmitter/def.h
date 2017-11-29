@@ -45,7 +45,7 @@ const String err = "Err:
 /**************************************************************************************/
 PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
 PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
-PROGMEM const char  versionNum [] = {"v1.20"};
+PROGMEM const char  versionNum [] = {"v1.22"};
 
 /**************************************************************************************/
 /***************          date & time configurations               ********************/

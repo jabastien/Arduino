@@ -1,6 +1,10 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
+// Do not instance variables in this file.  It will create:
+//  error: redefinition of 'variable name'
+//  sketch\types.h:xx:xx: note: 'variable name' previously declared here
+
 // ===========================================
 // Transmission Packages
 // ===========================================
@@ -11,7 +15,6 @@ struct MyControls {
   byte roll;     // A2
   byte pitch;    // A3
 };
-//MyControls myControls;
 
 struct MyControlsMap {
   int       Min; // A0
@@ -19,10 +22,6 @@ struct MyControlsMap {
   int       Max; // A0
   boolean   Rev;
 };
-//MyControlsMap myControlsMapThrottle;
-//MyControlsMap myControlsMapYaw;
-//MyControlsMap myControlsMapRoll;
-//MyControlsMap myControlsMapPitch;
 
 struct MyAux {
   const byte packetType = 0x02;
@@ -31,7 +30,6 @@ struct MyAux {
   byte AUX3;
   byte AUX4;
 };
-//MyAux myAux;
 
 struct MyButtons {
   const byte packetType = 0x03;
@@ -39,7 +37,6 @@ struct MyButtons {
   byte dip;
   byte menu;
 };
-//MyButtons myButtons;
 
 // ===========================================
 // Volt divide Vars
@@ -60,27 +57,26 @@ struct MyResistorMap {
   unsigned int V5_31    = 2161; // 2.2k
   unsigned int V5_32    = 3212; // 3.3k
 };
-//MyResistorMap myResistorMap;
 
 // ===========================================
-// Editor Data
+// Display Info
 // ===========================================
-struct DataStoreInfo {
+struct DisplayInfo {
   char * buffer;
-  const char * pgmData;
+  const char * pgmData;   
 };
-//DataStoreInfo myDataStoreInfo;
+
+//// ===========================================
+//// Editor Data
+//// ===========================================
 
 struct MyEditorData {
     byte row[4];      // row > (Start pos for the item to edit.
 //  byte col[4];         // column ^
 //    const char * pgmData[4]; &address of the pgmem for mask  ( [0] should always be null (title line))
-struct DataStoreInfo DataStoreInfo[4];
+struct DisplayInfo displayInfo[4];
     void * pVoid[4];  //  Data element address to edit
     byte returnTo;
 };
-//MyEditorData myEditorData;
-
-
 
 #endif /* TYPES_H_ */
