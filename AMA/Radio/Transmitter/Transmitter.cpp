@@ -27,6 +27,24 @@
 #include "Display.h"
 #include "Edit.h"
 
+
+// solve the duplicate error:
+//    http://forum.arduino.cc/index.php?topic=47992.0
+//    http://forum.arduino.cc/index.php/topic,47992.0.html#1
+
+
+// Global Type Vars
+MyControls myControls = MyControls();
+MyEditor myEditor;
+MyResistorMap myResistorMap;
+MyButtons myButtons;
+MyAux myAux;
+MyControlsMap myControlsMapThrottle;
+MyControlsMap myControlsMapYaw;
+MyControlsMap myControlsMapRoll;
+MyControlsMap myControlsMapPitch;   
+
+// Global Class Vars  
 CustomChar customChar = CustomChar();
 Data data = Data();
 Display display = Display();

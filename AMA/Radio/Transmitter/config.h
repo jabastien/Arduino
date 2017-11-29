@@ -1,5 +1,5 @@
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef config_h
+#define config_h
 
 /*************************************************************************************************/
 /****           CONFIGURABLE PARAMETERS                                                       ****/
@@ -45,4 +45,4 @@
 /****           END OF CONFIGURABLE PARAMETERS                                                ****/
 /*************************************************************************************************/
 
-#endif /* CONFIG_H_ */
+#endif /* config_h */

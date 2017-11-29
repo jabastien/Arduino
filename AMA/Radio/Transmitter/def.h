@@ -1,5 +1,5 @@
-#ifndef DEF_H_
-#define DEF_H_
+#ifndef def_h
+#define def_h
 
 #include <avr/pgmspace.h>
 
@@ -150,4 +150,4 @@ PROGMEM const char  ohm_x_xxxxO[] = "-.----^"; // milla OHMs
 //  #error "when using GPS you must specify the protocol NMEA, UBLOX..."
 //#endif
 
-#endif /* DEF_H_ */
+#endif /* dev_h */

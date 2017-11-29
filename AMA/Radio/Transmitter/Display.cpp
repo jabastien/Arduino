@@ -16,9 +16,9 @@
 #include <avr/pgmspace.h>
 
 // include this library's description file
-#include "Def.h"
+#include "def.h"
 #include "Display.h"
-
+#include "types.h"
 
 // ===========================================
 // Macros
