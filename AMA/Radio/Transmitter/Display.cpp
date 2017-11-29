@@ -18,7 +18,7 @@
 // include this library's description file
 #include "def.h"
 #include "Display.h"
-#include "types.h"
+
 
 // ===========================================
 // Macros
@@ -110,6 +110,40 @@ template <typename T> T setSign (T number){ // Return value of 'T'
   return number;
   }  // end of setSign
 
+
+/*
+struct DataStoreInfo {
+  char * buffer;
+  const char * pgmData;
+}
+
+ */
+//struct DataStoreInfo myDataStoreInfo; 
+
+
+
+//char * Display::TestMethod(uint8_t number){
+struct angles Display::TestMethod(uint8_t number){
+// Number can be between 255
+//static char line[5] = "0123"; // Digit possition (+1 for terminator /0.
+//static char line[5] = " ---";
+
+  strcpy_P(line, digits8);
+  
+  line[1] =  u8Digit100   (number);
+  line[2] =  u8Digit10    (number);
+  line[3] =  u8Digit1     (number);
+
+  //  return line;
+//  DataStoreInfo myDataStoreInfo = new DataStoreInfo();
+//  return  myDataStoreInfo;
+   
+   struct angles ang;
+   ang.a = 3.14;
+   ang.b = 10.0;
+   return ang;
+}
+
 // ===========================================
 // Digits
 // ===========================================
@@ -133,7 +167,7 @@ char * Display::outputDigitsS8(int8_t number){
 //static char line[5] = "0123"; // Digit possition (+1 for terminator /0.
 //static char line[5] = " ---";
 
-  strcpy_P(line, digits8);
+//  strcpy_P(line, digits8);
 
   number = setSign(number);
   

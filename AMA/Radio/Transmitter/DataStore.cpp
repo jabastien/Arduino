@@ -1,5 +1,5 @@
 /*
-  Data.cpp - Data for the Transmitter
+  DataStore.cpp - Data for the Transmitter
 */
 
 // include core Arduino API
@@ -13,7 +13,7 @@
 #endif
 
 // include this library's description file
-#include "Data.h"
+#include "DataStore.h"
 
 // include description files for other libraries used (if any)
 #include "HardwareSerial.h"
@@ -24,7 +24,7 @@
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
 
-Data::Data(){
+DataStore::DataStore(){
   // initialize this instance's variables
 
   // do whatever is required to initialize the library
@@ -46,7 +46,7 @@ Data::Data(){
 // ===========================================
 // ===========================================
 
-void Data::factoryReset() {
+void DataStore::factoryReset() {
   for (int i = 0 ; i < EEPROM.length() ; i++) {
     EEPROM.write(i, 0);
   }
