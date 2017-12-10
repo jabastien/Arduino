@@ -19,76 +19,25 @@
 #include "def.h"
 #include "Display.h"
 
+// ===========================================
+// Data
+// ===========================================
+static char line [14];
 
 // ===========================================
 // Macros
 // ===========================================
 
-// 8 bit intiger -------------------------------------------
-// Unsigned+255
-char u8Digit100        (uint8_t v) {return '0' + v / 100;} //   - (v/1000)        * 10;}
-char u8Digit10         (uint8_t v) {return '0' + v / 10         - (v/100)         * 10;}
-char u8Digit1          (uint8_t v) {return '0' + v / 1          - (v/10)          * 10;} 
-
-// Signed  -128/+127
-char s8Digit100        ( int8_t v) {return '0' + v / 100;}  //  - (v/1000)        * 10;}
-char s8Digit10         ( int8_t v) {return '0' + v / 10         - (v/100)         * 10;}
-char s8Digit1          ( int8_t v) {return '0' + v / 1          - (v/10)          * 10;} 
-
-// 16 bit intiger -------------------------------------------
-// Unsigned +65535
-char u16Digit10000      (uint16_t v) {return '0' + v / 10000;} // - (v/100000)      * 10;}
-char u16Digit1000       (uint16_t v) {return '0' + v / 1000       - (v/10000)       * 10;}
-char u16Digit100        (uint16_t v) {return '0' + v / 100        - (v/1000)        * 10;}
-char u16Digit10         (uint16_t v) {return '0' + v / 10         - (v/100)         * 10;}
-char u16Digit1          (uint16_t v) {return '0' + v / 1          - (v/10)          * 10;} 
-
-// Signed -32768/+32767
-char s16Digit10000      ( int16_t v) {return '0' + v / 10000;} // - (v/100000)      * 10;}
-char s16Digit1000       ( int16_t v) {return '0' + v / 1000       - (v/10000)       * 10;}
-char s16Digit100        ( int16_t v) {return '0' + v / 100        - (v/1000)        * 10;}
-char s16Digit10         ( int16_t v) {return '0' + v / 10         - (v/100)         * 10;}
-char s16Digit1          ( int16_t v) {return '0' + v / 1          - (v/10)          * 10;} 
-
-// 32 bit intiger -------------------------------------------
-// Unsigned  4294967294
-char u32Digit1000000000 (uint32_t v) {return '0' + v / 1000000000;}// - (v/10000000000) * 10;}
-char u32Digit100000000  (uint32_t v) {return '0' + v / 100000000  - (v/1000000000)  * 10;}
-char u32Digit10000000   (uint32_t v) {return '0' + v / 10000000   - (v/100000000)   * 10;}
-char u32Digit1000000    (uint32_t v) {return '0' + v / 1000000    - (v/10000000)    * 10;}
-char u32Digit100000     (uint32_t v) {return '0' + v / 100000     - (v/1000000)     * 10;}
-char u32Digit10000      (uint32_t v) {return '0' + v / 10000      - (v/100000)      * 10;}
-char u32Digit1000       (uint32_t v) {return '0' + v / 1000       - (v/10000)       * 10;}
-char u32Digit100        (uint32_t v) {return '0' + v / 100        - (v/1000)        * 10;}
-char u32Digit10         (uint32_t v) {return '0' + v / 10         - (v/100)         * 10;}
-char u32Digit1          (uint32_t v) {return '0' + v / 1          - (v/10)          * 10;} 
-
-// Signed   -2147483648/+2147483647
-char s32Digit1000000000 ( int32_t v) {return '0' + v / 1000000000;}// - (v/10000000000) * 10;}
-char s32Digit100000000  ( int32_t v) {return '0' + v / 100000000  - (v/1000000000)  * 10;}
-char s32Digit10000000   ( int32_t v) {return '0' + v / 10000000   - (v/100000000)   * 10;}
-char s32Digit1000000    ( int32_t v) {return '0' + v / 1000000    - (v/10000000)    * 10;}
-char s32Digit100000     ( int32_t v) {return '0' + v / 100000     - (v/1000000)     * 10;}
-char s32Digit10000      ( int32_t v) {return '0' + v / 10000      - (v/100000)      * 10;}
-char s32Digit1000       ( int32_t v) {return '0' + v / 1000       - (v/10000)       * 10;}
-char s32Digit100        ( int32_t v) {return '0' + v / 100        - (v/1000)        * 10;}
-char s32Digit10         ( int32_t v) {return '0' + v / 10         - (v/100)         * 10;}
-char s32Digit1          ( int32_t v) {return '0' + v / 1          - (v/10)          * 10;} 
-
-
-static char line [20];
-
 // ===========================================
 // Constructor
 // Function that handles the creation and setup of instances
 // ===========================================
-Display::Display(){
-  // initialize this instance's variables
-
-
-  // do whatever is required to initialize the library
-
-}
+//Display::Display(){
+//  // initialize this instance's variables
+//
+//  // do whatever is required to initialize the library
+//
+//}
 
   
 // ===========================================
@@ -101,184 +50,243 @@ Display::Display(){
 //void setSign(type T number){              // No return value
 template <typename T> T setSign (T number){ // Return value of 'T'
   if (number < 0){ // Can't be negative.
-    number = -number;
+    number *= -1;
     line[0] = '-';
   }
-//  else{
-//    line[0]=' ';
-//  }
+  else{
+    line[0]=' ';
+  }
   return number;
   }  // end of setSign
-
-
-/*
-struct DataStoreInfo {
-  char * buffer;
-  const char * pgmData;
-}
-
- */
-//struct DataStoreInfo myDataStoreInfo; 
-
-
-
-//char * Display::TestMethod(uint8_t number){
-struct DisplayInfo Display::TestMethod(unsigned int number){
-// Number can be between 255
-//static char line[5] = "0123"; // Digit possition (+1 for terminator /0.
-//static char line[5] = " ---";
-
-//  strcpy_P(line, digits8);
-//  
-//  line[1] =  u8Digit100   (number);
-//  line[2] =  u8Digit10    (number);
-//  line[3] =  u8Digit1     (number);
-  strcpy_P(line, digits16);
-  
-  line[1] =  u16Digit10000 (number);
-  line[2] =  u16Digit1000  (number);
-  line[4] =  u16Digit100   (number);
-  line[5] =  u16Digit10    (number);
-  line[6] =  u16Digit1     (number);
-  //  return line;
-//  DataStoreInfo myDataStoreInfo = new DataStoreInfo();
-//  return  myDataStoreInfo;
-  struct DisplayInfo displayInfo;
-  displayInfo.buffer = line;
-  displayInfo.pgmData = digits16;
-//  char * buffer;
-//  const char * pgmData;  
-  return displayInfo;
-   
-//   struct DisplayInfo displayInfo;
-//   displayInfo.a = 3.14;
-//   displayInfo.b = 10.0;
-//   return displayInfo;
-}
 
 // ===========================================
 // Digits
 // ===========================================
 
-char * Display::outputDigitsU8(uint8_t number){
-// Number can be between 255
-//static char line[5] = "0123"; // Digit possition (+1 for terminator /0.
-//static char line[5] = " ---";
+// -------------------------------------------
+// Number can be between 0 and 255
+char * Display::outputDigitsU8(uint8_t number, const char * pattern){
 
-  strcpy_P(line, digits8);
-  
-  line[1] =  u8Digit100   (number);
-  line[2] =  u8Digit10    (number);
-  line[3] =  u8Digit1     (number);
+  Display digits;
+  strcpy_P(line, pattern );
 
-  return line;
+Serial.print  (line);
+Serial.print  (number);
+Serial.println("");
+  number = setSign(number);
+
+  int digit = 0;
+
+  for (int pos = 0; line[pos] != '\0'; pos++)
+    {
+      if (line[pos] == '#'){
+        
+        // get member function pointer from array
+        Display::u8Digit f = digits.Display::u8Digit_Array [digit];
+        
+        // call the function
+        line[pos]=( (digits.*f) (number));
+        
+        digit++;   
+      }
+    }  // end of for loop
+  return line;  
 }
 
-char * Display::outputDigitsS8(int8_t number){
+// -------------------------------------------
 // Number can be between -128 and 127
-//static char line[5] = "0123"; // Digit possition (+1 for terminator /0.
-//static char line[5] = " ---";
+char * Display::outputDigitsS8( int8_t number, const char * pattern){
 
-//  strcpy_P(line, digits8);
-
-  number = setSign(number);
-  
-  line[1] =  s8Digit100   (number);
-  line[2] =  s8Digit10    (number);
-  line[3] =  s8Digit1     (number);
-
-  return line;
-}
-
-char * Display::outputDigitsU16(uint16_t number){
-// Number can be between 0 and 65,535
-//static char line[8] = "+65,535"; // Max number
-//static char line[8] = "012,456"; // Digit possition (+1 for terminator /0.
-//static char line[8] = " --,---";
-
-  strcpy_P(line, digits16);
-  
-  line[1] =  u16Digit10000 (number);
-  line[2] =  u16Digit1000  (number);
-  line[4] =  u16Digit100   (number);
-  line[5] =  u16Digit10    (number);
-  line[6] =  u16Digit1     (number);
-
-  return line;
-}
-
-char * Display::outputDigitsS16(int16_t number){
-
-// Number can be between -32,768 and 32,767
-//static char line[8] = "+32,768"; // Max number
-//static char line[8] = "-32,767"; // Half number
-//static char line[8] = "012,456"; // Digit possition (+1 for /0 terminator).
-//static char line[8] = " --,---";
-
-  strcpy_P(line, digits16);
+  Display digits;
+  strcpy_P(line, pattern );
 
   number = setSign(number);
-  
-  line[1] =  s16Digit10000 (number);
-  line[2] =  s16Digit1000  (number);
-  line[4] =  s16Digit100   (number);
-  line[5] =  s16Digit10    (number);
-  line[6] =  s16Digit1     (number);
 
-  return line;
+  int digit = 0;
+
+  for (int pos = 0; line[pos] != '\0'; pos++)
+    {
+      if (line[pos] == '#'){
+        
+        // get member function pointer from array
+        Display::s8Digit f = digits.Display::s8Digit_Array [digit];
+        
+        // call the function
+        line[pos]=( (digits.*f) (number));
+        
+        digit++;   
+      }
+    }  // end of for loop
+  return line;  
 }
 
-char * Display::outputDigitsU32(uint32_t number){
+// -------------------------------------------
 // Number can be between 0 and 65,535
-//static char line[15] = "+4,294,967,294"; // Max number
-//static char line[15] = "01234567890123"; // Digit possition (+1 for terminator /0.
-//static char line[15] = " -,---,---,---";
+char * Display::outputDigitsU16(uint16_t number, const char * pattern){
 
-  strcpy_P(line, digits32);
+  Display digits;
+  strcpy_P(line, pattern );
 
-  line[1]  =  u32Digit1000000000 (number);
-  //,
-  line[3]  =  u32Digit100000000  (number);
-  line[4]  =  u32Digit10000000   (number);
-  line[5]  =  u32Digit1000000    (number);
-  //,
-  line[7]  =  u32Digit100000     (number);
-  line[8]  =  u32Digit10000      (number);
-  line[9]  =  u32Digit1000       (number);
-  //,
-  line[11] =  u32Digit100        (number);
-  line[12] =  u32Digit10         (number);
-  line[13] =  u32Digit1          (number);
+//  number = setSign(number);
 
-  return line;
-}
+  int digit = 0;
 
-char * Display::outputDigitsS32( int32_t number){
-// Number can be between 0 and 65,535
-//static char line[15] = "+4,294,967,294"; // Max number
-//static char line[15] = "01234567890123"; // Digit possition (+1 for terminator /0.
-//static char line[15] = " -,---,---,---";
-
-  strcpy_P(line, digits32);
-
-  number = setSign(number);
+  for (int pos = 0; line[pos] != '\0'; pos++)
+    {
+      if (line[pos] == '#'){
+        
+        // get member function pointer from array
+        Display::u16Digit f = digits.Display::u16Digit_Array [digit];
+        
+        // call the function
+        line[pos]=( (digits.*f) (number));
+        digit++;   
+      }
+    }  // end of for loop
     
-  line[1]  =  s32Digit1000000000 (number);
-  //,
-  line[3]  =  s32Digit100000000  (number);
-  line[4]  =  s32Digit10000000   (number);
-  line[5]  =  s32Digit1000000    (number);
-  //,
-  line[7]  =  s32Digit100000     (number);
-  line[8]  =  s32Digit10000      (number);
-  line[9]  =  s32Digit1000       (number);
-  //,
-  line[11] =  s32Digit100        (number);
-  line[12] =  s32Digit10         (number);
-  line[13] =  s32Digit1          (number);
-
-  return line;
+  return line;  
 }
+
+// -------------------------------------------
+// Number can be between -32,768 and 32,767
+char * Display::outputDigitsS16( int16_t number, const char * pattern){
+
+  Display digits;
+  strcpy_P(line, pattern );
+
+  number = setSign(number);
+
+  int digit = 0;
+
+  for (int pos = 0; line[pos] != '\0'; pos++)
+    {
+      if (line[pos] == '#'){
+        
+        // get member function pointer from array
+        Display::s16Digit f = digits.Display::s16Digit_Array [digit];
+        
+        // call the function
+        line[pos]=( (digits.*f) (number));
+        
+        digit++;   
+      }
+    }  // end of for loop
+  return line;  
+}
+
+// -------------------------------------------
+//static char line[15] = "+4,294,967,294"; // Max number
+char * Display::outputDigitsU32(uint32_t number, const char * pattern){
+
+  Display digits;
+  strcpy_P(line, pattern );
+
+  number = setSign(number);
+
+  int digit = 0;
+
+  for (int pos = 0; line[pos] != '\0'; pos++)
+    {
+      if (line[pos] == '#'){
+        
+        // get member function pointer from array
+        Display::u32Digit f = digits.Display::u32Digit_Array [digit];
+        
+        // call the function
+        line[pos]=( (digits.*f) (number));
+        digit++;   
+      }
+    }  // end of for loop
+  return line;  
+}
+
+// -------------------------------------------
+//static char line[15] = "+4,294,967,294"; // Max number
+char * Display::outputDigitsS32( int32_t number, const char * pattern){
+
+  Display digits;
+  strcpy_P(line, pattern );
+
+  number = setSign(number);
+
+  int digit = 0;
+
+  for (int pos = 0; line[pos] != '\0'; pos++)
+    {
+      if (line[pos] == '#'){
+        
+        // get member function pointer from array
+        Display::s32Digit f = digits.Display::s32Digit_Array [digit];
+        
+        // call the function
+        line[pos]=( (digits.*f) (number));
+        digit++;   
+      }
+    }  // end of for loop
+  return line;  
+}
+
+
+// -------------------------------------------
+
+
+/*
+
+//char * Display::outputDigitsU32(uint32_t number){
+//// Number can be between 0 and 65,535
+////static char line[15] = "+4,294,967,294"; // Max number
+////static char line[15] = "01234567890123"; // Digit possition (+1 for terminator /0.
+////static char line[15] = " -,---,---,---";
+//
+//  strcpy_P(line, digits32);
+//
+//  line[1]  =  u32Digit1000000000 (number);
+//  //,
+//  line[3]  =  u32Digit100000000  (number);
+//  line[4]  =  u32Digit10000000   (number);
+//  line[5]  =  u32Digit1000000    (number);
+//  //,
+//  line[7]  =  u32Digit100000     (number);
+//  line[8]  =  u32Digit10000      (number);
+//  line[9]  =  u32Digit1000       (number);
+//  //,
+//  line[11] =  u32Digit100        (number);
+//  line[12] =  u32Digit10         (number);
+//  line[13] =  u32Digit1          (number);
+//
+//  line[14] =  '\0';
+//  
+//  return line;
+//}
+//
+//char * Display::outputDigitsS32( int32_t number){
+//// Number can be between 0 and 65,535
+////static char line[15] = "+4,294,967,294"; // Max number
+////static char line[15] = "01234567890123"; // Digit possition (+1 for terminator /0.
+////static char line[15] = " -,---,---,---";
+//
+//  strcpy_P(line, digits32);
+//
+//  number = setSign(number);
+//    
+//  line[1]  =  s32Digit1000000000 (number);
+//  //,
+//  line[3]  =  s32Digit100000000  (number);
+//  line[4]  =  s32Digit10000000   (number);
+//  line[5]  =  s32Digit1000000    (number);
+//  //,
+//  line[7]  =  s32Digit100000     (number);
+//  line[8]  =  s32Digit10000      (number);
+//  line[9]  =  s32Digit1000       (number);
+//  //,
+//  line[11] =  s32Digit100        (number);
+//  line[12] =  s32Digit10         (number);
+//  line[13] =  s32Digit1          (number);
+//
+//  line[14] =  '\0';
+//
+//  return line;
+//}
 
 // ===========================================
 // Time Functions
@@ -307,6 +315,8 @@ char * Display::outputOnTime(uint16_t seconds) {
     line[1]=' ';
     line[2]=' ';
   }
+
+  line[8] =  '\0';
   
   return line;
 }
@@ -340,7 +350,9 @@ char * Display::outputServiceTime(uint32_t seconds) {
   // :
   line[11] = u8Digit10    (ss);
   line[12] = u8Digit1     (ss);
-  
+
+  line[14] =  '\0';
+
   return line;
 }
 
@@ -361,51 +373,115 @@ char * Display::output_xx_xV(uint16_t volts) {
   line[2] =  u16Digit1000  (volts);
   line[4] =  u16Digit100   (volts);
 
+  line[5] =  '\0';
+
   if (line[1] == '0'){ // Should not get here, maybe someday?
     line[1]=' ';
   }
   return line;
 }
 
-char * Display::output_x_xxxV(uint16_t volts) {
+/*
 
-// volts can be between -32,768 and 32,767 (5016 = 5.016v)
-//static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
-//static char line[5] = " -.---V;
-
-  strcpy_P(line, volts_x_xxxV);
-
-  volts = setSign(volts);
-    
-  line[1] =  u16Digit1000  (volts);
-  // .
-  line[3] =  u16Digit100   (volts);
-  line[4] =  u16Digit10    (volts);
-  line[5] =  u16Digit1     (volts);
   
-  return line;
-}
-
-char * Display::output_voltPerBit(uint16_t volts) {
-
-// volts can be between  65,535 (05246 = 0.0005246v)
-//static char line[5] = "01234567890"; // Digit possition (+1 for terminator /0.
-//static char line[5] = "0.00-----V;
-
-  strcpy_P(line, volts_0_00xxxxV);
-
-  line[0] = '0';     
-  // .
-  line[2] = '0';     
-  line[3] = u16Digit10000 (volts); 
-  line[4] = u16Digit1000  (volts);
-  line[5] = u16Digit100   (volts);
-  line[6] = u16Digit10    (volts);
-  line[7] = u16Digit1     (volts);
+  line[1] =  u8Digit100   (number);
+  line[2] =  u8Digit10    (number);
+  line[3] =  u8Digit1     (number);
+  line[4] =  '\0';
   
-  return line;
-}
+  displayInfo.buffer = line;
+  return displayInfo;
+ */
 
+ 
+//char * Display::output_x_xxxV(uint16_t volts) {
+//
+//// volts can be between -32,768 and 32,767 (5016 = 5.016v)
+////static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
+////static char line[5] = " -.---V;
+//
+//  strcpy_P(line,        volts_x_xxxV );
+//
+//  volts = setSign(volts);
+//    
+//  line[1] =  u16Digit1000  (volts);
+//  // .
+//  line[3] =  u16Digit100   (volts);
+//  line[4] =  u16Digit10    (volts);
+//  line[5] =  u16Digit1     (volts);
+//
+//  line[7] =  '\0';
+//
+//  return line;
+//}
+
+/*
+//char * Display::output_x_xxxVVV(uint16_t volts, char ddd []) {
+//
+//// volts can be between -32,768 and 32,767 (5016 = 5.016v)
+////static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
+////static char line[5] = " -.---V;
+//
+//Serial.print ("sizeof(ddd): ");
+//Serial.print (sizeof(ddd));
+//
+//
+//  // test instance of foo
+//  foo bar;
+//  
+//Serial.print ("lp: ");
+//for (int lp = 0; ddd[lp] != '\0';lp++){
+//  Serial.print (lp);  
+//  Serial.print (", '");
+//  Serial.print (ddd[lp]);  
+//  Serial.print ("' ");
+//  
+//  // get member function pointer from array
+//  foo::GeneralFunction f = bar.foo::doActionsArray [lp];
+//  // call the function
+//  (bar.*f) ();
+//}
+//  strcpy_P(line,        volts_x_xxxV );
+//
+//  volts = setSign(volts);
+//    
+//  line[1] =  u16Digit1000  (volts);
+//  // .
+//  line[3] =  u16Digit100   (volts);
+//  line[4] =  u16Digit10    (volts);
+//  line[5] =  u16Digit1     (volts);
+//
+//  line[7] =  '\0';
+//
+//  return line;
+//}
+
+//
+//char * Display::output_voltPerBit(uint16_t volts) {
+//
+//// volts can be between  65,535 (05246 = 0.0005246v)
+////static char line[5] = "01234567890"; // Digit possition (+1 for terminator /0.
+////static char line[5] = "0.00-----V;
+//
+//  strcpy_P(line, volts_0_0xxxxxV);
+//
+//  line[0] = '0';     
+//  // .
+//  line[2] = '0';     
+//  line[3] = u16Digit10000 (volts); 
+//  line[4] = u16Digit1000  (volts);
+//  line[5] = u16Digit100   (volts);
+//  line[6] = u16Digit10    (volts);
+//  line[7] = u16Digit1     (volts);
+//
+//  line[8] =  '\0';
+//  
+//  return line;
+//}
+ */
+
+
+/*
 // ===========================================
 // OHMs Functions
 // ===========================================
@@ -424,7 +500,9 @@ char * Display::output_ohm_xx_xxxO(uint16_t ohms) {
   line[4] =  u16Digit10    (ohms);
   line[5] =  u16Digit1     (ohms);
   // ohms
-  line[6] = 0xF4; //OHM
+  line[6] =  0xF4; //OHM
+
+  line[7] =  '\0';
   
   return line;
 }
@@ -446,8 +524,12 @@ char * Display::output_ohm_x_xxxxO(uint16_t ohms) {
   // ohms
   line[6] = 0xF4; //OHM
   
+  line[7] =  '\0';
+
   return line;
 }
+ */
+
 
 // ===========================================
 // Concatenate PGM string/char
@@ -497,14 +579,7 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 
 
 /*
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- */
+
 
 // require ::: stdlib.h
 //char buffer[20]; //  Hold The Convert Data (width of the LCD)
@@ -633,3 +708,6 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 ////  lcd.print(dtostrf(v5_System, 6, 3, line));
 ////  lcd.print("V");
 //}
+
+ */
+

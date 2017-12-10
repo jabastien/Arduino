@@ -28,7 +28,9 @@ class DataStore
   // library-accessible "private" interface
   private:
    // int value;
-    
+ 
+  protected:
+     
 };
 
 #endif

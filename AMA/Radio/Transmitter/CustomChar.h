@@ -30,6 +30,8 @@ class CustomChar
   private:
     byte char0[8] = {0x1f, 0x00, 0x0a, 0x04, 0x0a, 0x00, 0x11, 0x1f};
     
+  protected:
+  
 };
 
 extern LiquidCrystal_I2C lcd; // Varaible initialized outside my class.

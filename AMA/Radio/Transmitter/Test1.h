@@ -29,6 +29,10 @@ class Test1
   private:
     int value;
     void doSomethingSecret(void);
+
+    
+  protected:
+  
 };
 
 #endif

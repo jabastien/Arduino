@@ -29,6 +29,10 @@ class Edit
   private:
     int value;
     void doSomethingSecret(void);
+
+    
+  protected:
+  
 };
 
 #endif

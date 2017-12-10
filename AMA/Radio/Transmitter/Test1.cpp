@@ -27,8 +27,8 @@ Test1::Test1(int givenValue){
   value = givenValue;
 
   // do whatever is required to initialize the library
-  pinMode(13, OUTPUT);
-  Serial.begin(9600);
+//  pinMode(13, OUTPUT);
+//  Serial.begin(115200);
 }
 
 // Public Methods //////////////////////////////////////////////////////////////

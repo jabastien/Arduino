@@ -37,7 +37,7 @@ Display display = Display();
 
 
 MyEditorData myEditorData;
-DisplayInfo displayInfo;
+//DisplayInfo  displayInfo;
 MyResistorMap myResistorMap;
 MyButtons myButtons;
 MyAux myAux;
@@ -175,8 +175,9 @@ int cntMillis = 0;
 // The sizeof this struct should not exceed 32 bytes
 // This gives us up to 32 8 bits channals
 
-
-
+//  char pattern8[  ]  =         "*__._V";
+//  char pattern16[8]  =        " __,___";
+//  char pattern32[15] = " _,___,___,___";
 // ===========================================
 // Reset
 // ===========================================
@@ -460,6 +461,10 @@ byte menuOptions254 [1] = {253};          // Starting   [click (select) out to 2
 byte menuOptions[5];
 byte menuSize;
 
+boolean function = false;
+
+
+
 void setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   
   // Make sure we don't have an error.
@@ -565,17 +570,29 @@ setMenu(F("x001"), menuOptions001, membersof(menuOptions001));
     lcd.print(F("Repeat: "));
   }
 
-  int numb = (int)((double)repeatCount*3.5);
+////  double shunt = 0.766327;   // 0.5   
+//    pUInt1 = &myResistorMap.shunt; // = (0.766327*10000);   // 0.5
+//    pUInt2 = &myResistorMap.shunt;  // = 2638; // 2.7k
+//  }
+//
+//  lcd.setCursor(6, 1); //   row >    column ^
+//  lcd.print(display.outputDigitsU16(*pUInt1, ohm_x_xxxxO));
+
+  
+  uint8_t numb = (int)((double)repeatCount*3.5);
   customChar.percent(numb);
-  lcd.setCursor(10, 0); //   row >    column ^
+  lcd.setCursor(11, 0); //   row >    column ^
   
   lcd.print(F("Bat:"));  
+//  lcd.print(numb);  
+  lcd.print(display.outputDigitsU8(numb, digits8));//  lcd.print(display.outputDigitsU16(v5_voltPerBit, volts_0_0xxxxxV));
+//  lcd.print(F("  "));
   customChar.showChar();
-  lcd.print(numb);
 
-  lcd.setCursor(17, 3); //   row >    column ^
-  lcd.print(repeatCount);
-  lcd.print(F(" "));
+  lcd.setCursor(16, 3); //   row >    column ^
+//  lcd.print(repeatCount);
+  lcd.print(display.outputDigitsU8(repeatCount, digits8));  
+//  lcd.print(F(" "));
 }
 
 // ===========================================
@@ -920,8 +937,8 @@ void lcdInit240() { // Control check
   lcd.setCursor(0, 3);//   row >    column ^
   lcd.print(PGMSTR(lcd_param_lcdInit240_volts));
   lcd.setCursor(7, 3);//   row >    column ^
-  lcd.print(display.output_x_xxxV(v5_System * 1000));    
-
+  //lcd.print(display.output_x_xxxV(v5_System * 1000));    
+  lcd.print(display.outputDigitsU16(v5_System * 1000, volts_x_xxxV));
 }
 
 // -------------------------------------------
@@ -971,13 +988,13 @@ void lcdInit248() { // Shunt ohms
 
 //  double shunt = 0.766327;   // 0.5   
     pUInt1 = &myResistorMap.shunt; // = (0.766327*10000);   // 0.5
-    pUInt2 = 0;  // = 2638; // 2.7k
+    pUInt2 = &myResistorMap.shunt;  // = 2638; // 2.7k
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(display.outputDigitsU16(*pUInt1));
-//  lcd.setCursor(6, 2); //   row >    column ^
-//  lcd.print(display.outputDigitsU16(*pUInt2));
+  lcd.print(display.outputDigitsU16(*pUInt1, ohm_x_xxxxO));
+  lcd.setCursor(6, 2); //   row >    column ^
+  lcd.print(display.outputDigitsU16(*pUInt2, ohm_x_xxxxO));
 }
 
 // -------------------------------------------
@@ -996,9 +1013,9 @@ void lcdInit249() { // Vin pre 1.1 & 1.2 ohms
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(display.outputDigitsU16(*pUInt1));
+  lcd.print(display.outputDigitsU16(*pUInt1, ohm_xx_xxxO));
   lcd.setCursor(6, 2); //   row >    column ^
-  lcd.print(display.outputDigitsU16(*pUInt2));
+  lcd.print(display.outputDigitsU16(*pUInt2, ohm_xx_xxxO));
 }
 
 // -------------------------------------------
@@ -1017,13 +1034,14 @@ void lcdInit250() { // Vin pst 2.1 & 2.2 ohms
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(display.outputDigitsU16(*pUInt1));
+  lcd.print(display.outputDigitsU16(*pUInt1, ohm_xx_xxxO));
   lcd.setCursor(6, 2); //   row >    column ^
-  lcd.print(display.outputDigitsU16(*pUInt2));
+  lcd.print(display.outputDigitsU16(*pUInt2, ohm_xx_xxxO));
 
 }
 
 //uint32_t tm=0;
+
 // -------------------------------------------
 void lcdInit251() { // V5.0    3.1 & 3.2 ohms
   if (repeatCount == 0) {
@@ -1040,13 +1058,111 @@ void lcdInit251() { // V5.0    3.1 & 3.2 ohms
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
-  lcd.print(display.outputDigitsU16(*pUInt1));
+  lcd.print(display.outputDigitsU16(*pUInt1, ohm_xx_xxxO));
   lcd.setCursor(6, 2); //   row >    column ^
-  lcd.print(display.outputDigitsU16(*pUInt2));
+  lcd.print(display.outputDigitsU16(*pUInt2, ohm_xx_xxxO));
 }
 
+
+void clearMyEditorData(byte returnTo){
+  if (function == false){
+    myEditorData.setDisplayInfo = true;
+    myEditorData.row[0] = -1;
+    myEditorData.row[1] = -1;
+    myEditorData.row[2] = -1;
+    myEditorData.row[3] = -1;
+    //myEditorData.displayInfo[0] = display.TestMethod(myResistorMap.shunt);
+    //myEditorData.displayInfo[1] = display.TestMethod(myResistorMap.shunt);
+    //myEditorData.displayInfo[2] = display.TestMethod(myResistorMap.shunt);
+    //myEditorData.displayInfo[3] = display.TestMethod(myResistorMap.shunt);
+    myEditorData.pVoid[0] = NULL;
+    myEditorData.pVoid[1] = NULL;
+    myEditorData.pVoid[2] = NULL;
+    myEditorData.pVoid[3] = NULL;
+    myEditorData.returnTo = -1; 
+  } else {
+    //myEditorData.returnTo = returnTo; 
+  }
+}
+
+ uint8_t u8number =  0;
+  int8_t s8number =  0;
+uint16_t u16number =  0;
+ int16_t s16number =  0;
+uint32_t u32number =  0;
+ int32_t s32number =  0;
+  
 // -------------------------------------------
 void lcdInit252() {  // V5.0    Regulator Voltage
+/*
+//  //===================================
+//  Serial.print (display.outputDigitsU8(u8number, pattern8));  
+//  u8number+=10;
+//  Serial.print (" ");
+//  Serial.print (display.outputDigitsS8(s8number, pattern8));  
+//  s8number+=10;
+//  Serial.print (" ");
+//  Serial.print (pattern8);
+//  // -----------------------------------
+//  Serial.print (" ::: ");
+//  // -----------------------------------
+//  Serial.print (display.outputDigitsU16(u16number, pattern16));  
+//  u16number+=1000;
+//  Serial.print (" ");
+//  Serial.print (display.outputDigitsS16(s16number, pattern16));  
+//  s16number+=1000;
+//  Serial.print (" ");
+//  Serial.print (pattern16);  
+//  // -----------------------------------
+//  Serial.print (" ::: ");
+//  // -----------------------------------
+//  Serial.print (display.outputDigitsU32(u32number, pattern32));  
+//  u32number+=100000000;
+//  Serial.print (" ");
+//  Serial.print (display.outputDigitsS32(s32number, pattern32));  
+//  s32number+=100000000;
+//  Serial.print (" ");
+//  Serial.print (pattern32);  
+//
+//  //u16number
+//  Serial.println("  ");
+
+
+  
+  
+//  Serial.print("Display Info:  ");
+//  Serial.print(displayInfo.buffer);
+//  Serial.print(" : ");
+//  Serial.print(PGMSTR(displayInfo.pgmData));
+// 
+//  Serial.println();
+  
+//  myEditorData.col[0] = 0;
+//  myEditorData.col[1] = 1;
+//  myEditorData.col[2] = 2;
+//  myEditorData.col[3] = 3;
+  myEditorData.row[0] = 0;
+  myEditorData.row[1] = 1;
+  myEditorData.row[2] = 2;
+  myEditorData.row[3] = 3;
+//  myEditorData.displayInfo[1] = displayInfo;
+  myEditorData.pVoid[1] = &myResistorMap.shunt;;
+  myEditorData.returnTo = 255;
+  
+//  Serial.print("Editor Data:  ");
+//  Serial.print(myEditorData.displayInfo[1].buffer);
+//  Serial.print(" : ");
+//  Serial.print(PGMSTR(myEditorData.displayInfo[1].pgmData));
+
+
+*/
+
+//  if (myEditorData.setDisplayInfo == true){
+//    myEditorData.setDisplayInfo = false;
+//    myEditorData.displayInfo[1] = display.TestMethod(myResistorMap.shunt);
+//    myEditorData.displayInfo[3] = display.TestMethod(v5_Measured);
+//  }
+  
   if (repeatCount == 0) {
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
@@ -1063,17 +1179,16 @@ void lcdInit252() {  // V5.0    Regulator Voltage
   }
 
   lcd.setCursor(13, 1); //   row >    column ^
-  lcd.print(display.output_x_xxxV(v5_Measured));
-
-//  lcd.setCursor(13, 2); //   row >    column ^
-//  lcd.print(display.output_x_xxxV(v5_System));
-
-  lcd.setCursor(11, 3); //   row >    column ^
-  lcd.print(display.output_voltPerBit(v5_voltPerBit));
+  //lcd.print(display.output_x_xxxV(v5_Measured));
+  lcd.print(display.outputDigitsU16(v5_Measured, volts_x_xxxV));
+  
+  lcd.setCursor(10, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(v5_voltPerBit, volts_0_0xxxxxV));
+  
 }
 
 // -------------------------------------------
-void lcdInit253() { // Splash     [no click (select) out to 253]
+void lcdInit253() { // Splash     [no click 'select button' out to 253]
   if (repeatCount == 0) {
     setMenu(F("x253"), menuOptions253, membersof(menuOptions253));    
     lcd.setCursor(0, 0);//   row >    column ^
@@ -1094,51 +1209,40 @@ void lcdInit253() { // Splash     [no click (select) out to 253]
     if (true){
       menuSelected = 252; // Initialize values
     } else {
-      menuSelected = 240;   // Go to Control check befor Main Menu 
+      menuSelected = 240;   // Go to Control check before Main Menu 
     }
   }
 
 
-  lcd.setCursor(11, 3); //   row >    column ^
-
-  DisplayInfo displayInfo = display.TestMethod(myResistorMap.shunt);
-  
-//  Serial.print("Display Info:  ");
-//  Serial.print(displayInfo.buffer);
+//  lcd.setCursor(11, 3); //   row >    column ^
+//
+//  DisplayInfo displayInfo = display.TestMethod(myResistorMap.shunt);
+//  
+////  Serial.print("Display Info:  ");
+////  Serial.print(displayInfo.buffer);
+////  Serial.print(" : ");
+////  Serial.print(PGMSTR(displayInfo.pgmData));
+//// 
+////  Serial.println();
+//  
+//  myEditorData.row[0] = 0;
+//  myEditorData.row[1] = 1;
+//  myEditorData.row[2] = 2;
+//  myEditorData.row[3] = 3;
+////  myEditorData.col[0] = 0;
+////  myEditorData.col[1] = 1;
+////  myEditorData.col[2] = 2;
+////  myEditorData.col[3] = 3;
+//  myEditorData.displayInfo[1] = displayInfo;
+//  myEditorData.pVoid[1] = &myResistorMap.shunt;;
+//  myEditorData.returnTo = 255;
+//  
+//  Serial.print("Editor Data:  ");
+//  Serial.print(myEditorData.displayInfo[1].buffer);
 //  Serial.print(" : ");
-//  Serial.print(PGMSTR(displayInfo.pgmData));
+//  Serial.print(PGMSTR(myEditorData.displayInfo[1].pgmData));
 // 
 //  Serial.println();
-  
-  myEditorData.row[0] = 0;
-  myEditorData.row[1] = 1;
-  myEditorData.row[2] = 2;
-  myEditorData.row[3] = 3;
-//  myEditorData.col[0] = 0;
-//  myEditorData.col[1] = 1;
-//  myEditorData.col[2] = 2;
-//  myEditorData.col[3] = 3;
-  myEditorData.displayInfo[1] = displayInfo;
-  myEditorData.pVoid[1] = &myResistorMap.shunt;;
-  myEditorData.returnTo = 255;
-  
-  Serial.print("Editor Data:  ");
-  Serial.print(myEditorData.displayInfo[1].buffer);
-  Serial.print(" : ");
-  Serial.print(PGMSTR(myEditorData.displayInfo[1].pgmData));
- 
-  Serial.println();
-
-////// ===========================================
-////// Editor Data
-////// ===========================================
-//
-//struct MyEditorData {
-//    byte row[4];      // row > (Start pos for the item to edit.
-//struct DisplayInfo displayInfo[4];
-//    void * pVoid[4];  //  Data element address to edit
-//    byte returnTo;
-//};  
 }
 
 // -------------------------------------------
@@ -1167,19 +1271,19 @@ void lcdInit255() { // this is an error, 255 is reserved
   }
 }
 
-boolean function = false;
 
 void updateLCD() {
   // Detect Menu change
 
   if (menuCurrent != menuSelected) {
+    clearMyEditorData(-1);
+    returnToCurrent = menuCurrent;
     if (true){
       Serial.print (F("C:"));
       Serial.print (menuCurrent);
       Serial.print (F(" S:"));
       Serial.print (menuSelected);
     }
-    returnToCurrent = menuCurrent;
     if (true){
       Serial.print (F(" Cur:"));
       Serial.print (menuCurrent);
@@ -1249,7 +1353,6 @@ void updateLCD() {
     
   }
 
-
 //  if (function && keyPress == 1) {
   if (keyPress == 1) {
     Serial.print (F(" MS1:"));
@@ -1258,10 +1361,6 @@ void updateLCD() {
     Serial.print (F(" MS2:"));
     Serial.println(menuSelected);
   }
-
-
-  //  lcd.setCursor(menuRow - 1, menuCol);//   row >    column ^
-
 
   switch (menuSelected) {
     // ---------------------------------------

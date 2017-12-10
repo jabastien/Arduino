@@ -45,7 +45,7 @@ const String err = "Err:
 /**************************************************************************************/
 PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
 PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
-PROGMEM const char  versionNum [] = {"v1.22"};
+PROGMEM const char  versionNum [] = {"v1.23"};
 
 /**************************************************************************************/
 /***************          date & time configurations               ********************/
@@ -121,20 +121,28 @@ PROGMEM const char lcd_param_lcdInit254_startUp [] = "Start up";
 // ===========================================
 // Display
 // ===========================================
-PROGMEM const char  digits8 []     = " ---";
-PROGMEM const char  digits16[]     = " --,---";
-PROGMEM const char  digits32[]     = " -,---,---,---";
+PROGMEM const char  digits8 []     = " ###";
+PROGMEM const char  digits16[]     = " ##,###";
+PROGMEM const char  digits32[]     = " #,###,###,###";
 
-PROGMEM const char  timer[]        = "--:--:--";
-PROGMEM const char  timerDay[]     = "----:--:--:--";
+PROGMEM const char  volts_xx_xV[]  = " ##.#V";
+PROGMEM const char  volts_x_xxxV[] = " #.###V";
 
-PROGMEM const char  volts_xx_xV[]  = " --.-V";
-PROGMEM const char  volts_x_xxxV[] = " -.---V";
+PROGMEM const char  volts_0_0xxxxxV[] = " 0.0#####V";
 
-PROGMEM const char  volts_0_00xxxxV[] = "0.0-----V";
+//PROGMEM const char  ohm_xx_xxxO[] = "##,###^"; // K OHMs      //0xF4; //OHM  //  line[6] =  0xF4; //OHM
+PROGMEM const char  ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(244),char(0)};
+//PROGMEM const char  ohm_xx_xxxO[] = {' ','#','.','#','#','#',char(0xF4),char(0x00)};
 
-PROGMEM const char  ohm_xx_xxxO[] = "--,---^"; // K OHMs
-PROGMEM const char  ohm_x_xxxxO[] = "-.----^"; // milla OHMs
+//PROGMEM const char  ohm_x_xxxxO[] = "#.####^"; // milla OHMs  //0xF4; //OHM
+PROGMEM const char  ohm_x_xxxxO[] = {' ','#','.','#','#','#','#',char(0xF4),char(0x00)};
+
+// ===========================================
+// Custom Display
+// ===========================================
+PROGMEM const char  timer[]        = "##:##:##";
+PROGMEM const char  timerDay[]     = "####:##:##:##";
+
 
 /**************************************************************************************/
 /***************             motor and servo numbers               ********************/

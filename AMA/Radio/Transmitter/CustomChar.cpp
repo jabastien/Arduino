@@ -74,6 +74,7 @@ void CustomChar::showChar(){
   lcd.print((char)0);
 }
 
+/*
 // Usage:
 //    lcd.createChar(0, testChar0);  
 //    lcd.createChar(1, testChar1);   
@@ -86,4 +87,4 @@ void CustomChar::showChar(){
 //
 //    lcd.home();
 //    lcd.setCursor(0,0); //   row >    column ^
-
+*/
