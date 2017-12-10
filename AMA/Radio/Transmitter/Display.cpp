@@ -32,12 +32,12 @@ static char line [14];
 // Constructor
 // Function that handles the creation and setup of instances
 // ===========================================
-//Display::Display(){
-//  // initialize this instance's variables
-//
-//  // do whatever is required to initialize the library
-//
-//}
+Display::Display(){
+  // initialize this instance's variables
+
+  // do whatever is required to initialize the library
+
+}
 
   
 // ===========================================
@@ -70,9 +70,6 @@ char * Display::outputDigitsU8(uint8_t number, const char * pattern){
   Display digits;
   strcpy_P(line, pattern );
 
-Serial.print  (line);
-Serial.print  (number);
-Serial.println("");
   number = setSign(number);
 
   int digit = 0;
@@ -121,15 +118,19 @@ char * Display::outputDigitsS8( int8_t number, const char * pattern){
 }
 
 // -------------------------------------------
-// Number can be between 0 and 65,535
+// int store a 2 byte value. Instead of storing negative numbers however they only store positive values
+// Yielding a useful range of 0 to 65,535 (2^16) - 1).
 char * Display::outputDigitsU16(uint16_t number, const char * pattern){
+  return Display::outputDigitsU16( number, pattern, 0);
+}
+char * Display::outputDigitsU16(uint16_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
   strcpy_P(line, pattern );
 
 //  number = setSign(number);
 
-  int digit = 0;
+  int digit = startDigit;
 
   for (int pos = 0; line[pos] != '\0'; pos++)
     {
@@ -148,15 +149,18 @@ char * Display::outputDigitsU16(uint16_t number, const char * pattern){
 }
 
 // -------------------------------------------
-// Number can be between -32,768 and 32,767
+// An int stores a 16-bit (2-byte) value. This yields a range of -32,768 to 32,767
 char * Display::outputDigitsS16( int16_t number, const char * pattern){
+  return Display::outputDigitsS16( number, pattern, 0);
+}
+char * Display::outputDigitsS16( int16_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
   strcpy_P(line, pattern );
 
   number = setSign(number);
 
-  int digit = 0;
+  int digit = startDigit;
 
   for (int pos = 0; line[pos] != '\0'; pos++)
     {
@@ -175,15 +179,19 @@ char * Display::outputDigitsS16( int16_t number, const char * pattern){
 }
 
 // -------------------------------------------
-//static char line[15] = "+4,294,967,294"; // Max number
+// Unsigned long variables are extended size variables for number storage, and store 32 bits (4 bytes). 
+// Unlike standard longs unsigned longs won’t store negative numbers, making their range from 0 to 4,294,967,295 (2^32 - 1)
 char * Display::outputDigitsU32(uint32_t number, const char * pattern){
+ return Display::outputDigitsU32( number, pattern, 0);  
+}
+char * Display::outputDigitsU32(uint32_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
   strcpy_P(line, pattern );
 
   number = setSign(number);
 
-  int digit = 0;
+  int digit = startDigit;
 
   for (int pos = 0; line[pos] != '\0'; pos++)
     {
@@ -201,15 +209,18 @@ char * Display::outputDigitsU32(uint32_t number, const char * pattern){
 }
 
 // -------------------------------------------
-//static char line[15] = "+4,294,967,294"; // Max number
+// Long variables are extended size variables for number storage, and store 32 bits (4 bytes), from -2,147,483,648 to 2,147,483,647. 
 char * Display::outputDigitsS32( int32_t number, const char * pattern){
+ return Display::outputDigitsS32( number, pattern, 0);  
+}
+char * Display::outputDigitsS32( int32_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
   strcpy_P(line, pattern );
 
   number = setSign(number);
 
-  int digit = 0;
+  int digit = startDigit;
 
   for (int pos = 0; line[pos] != '\0'; pos++)
     {
@@ -356,180 +367,6 @@ char * Display::outputServiceTime(uint32_t seconds) {
   return line;
 }
 
-// ===========================================
-// Volt Functions
-// ===========================================
-char * Display::output_xx_xV(uint16_t volts) {
-
-// volts can be between -32,768 and 32,767 (12300 = 12.3v)
-//static char line[5] = "012345"; // Digit possition (+1 for terminator /0.
-//static char line[5] = " --.-V"
-
-  strcpy_P(line, volts_xx_xV);
-
-  volts = setSign(volts);
-    
-  line[1] =  u16Digit10000 (volts);
-  line[2] =  u16Digit1000  (volts);
-  line[4] =  u16Digit100   (volts);
-
-  line[5] =  '\0';
-
-  if (line[1] == '0'){ // Should not get here, maybe someday?
-    line[1]=' ';
-  }
-  return line;
-}
-
-/*
-
-  
-  line[1] =  u8Digit100   (number);
-  line[2] =  u8Digit10    (number);
-  line[3] =  u8Digit1     (number);
-  line[4] =  '\0';
-  
-  displayInfo.buffer = line;
-  return displayInfo;
- */
-
- 
-//char * Display::output_x_xxxV(uint16_t volts) {
-//
-//// volts can be between -32,768 and 32,767 (5016 = 5.016v)
-////static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
-////static char line[5] = " -.---V;
-//
-//  strcpy_P(line,        volts_x_xxxV );
-//
-//  volts = setSign(volts);
-//    
-//  line[1] =  u16Digit1000  (volts);
-//  // .
-//  line[3] =  u16Digit100   (volts);
-//  line[4] =  u16Digit10    (volts);
-//  line[5] =  u16Digit1     (volts);
-//
-//  line[7] =  '\0';
-//
-//  return line;
-//}
-
-/*
-//char * Display::output_x_xxxVVV(uint16_t volts, char ddd []) {
-//
-//// volts can be between -32,768 and 32,767 (5016 = 5.016v)
-////static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
-////static char line[5] = " -.---V;
-//
-//Serial.print ("sizeof(ddd): ");
-//Serial.print (sizeof(ddd));
-//
-//
-//  // test instance of foo
-//  foo bar;
-//  
-//Serial.print ("lp: ");
-//for (int lp = 0; ddd[lp] != '\0';lp++){
-//  Serial.print (lp);  
-//  Serial.print (", '");
-//  Serial.print (ddd[lp]);  
-//  Serial.print ("' ");
-//  
-//  // get member function pointer from array
-//  foo::GeneralFunction f = bar.foo::doActionsArray [lp];
-//  // call the function
-//  (bar.*f) ();
-//}
-//  strcpy_P(line,        volts_x_xxxV );
-//
-//  volts = setSign(volts);
-//    
-//  line[1] =  u16Digit1000  (volts);
-//  // .
-//  line[3] =  u16Digit100   (volts);
-//  line[4] =  u16Digit10    (volts);
-//  line[5] =  u16Digit1     (volts);
-//
-//  line[7] =  '\0';
-//
-//  return line;
-//}
-
-//
-//char * Display::output_voltPerBit(uint16_t volts) {
-//
-//// volts can be between  65,535 (05246 = 0.0005246v)
-////static char line[5] = "01234567890"; // Digit possition (+1 for terminator /0.
-////static char line[5] = "0.00-----V;
-//
-//  strcpy_P(line, volts_0_0xxxxxV);
-//
-//  line[0] = '0';     
-//  // .
-//  line[2] = '0';     
-//  line[3] = u16Digit10000 (volts); 
-//  line[4] = u16Digit1000  (volts);
-//  line[5] = u16Digit100   (volts);
-//  line[6] = u16Digit10    (volts);
-//  line[7] = u16Digit1     (volts);
-//
-//  line[8] =  '\0';
-//  
-//  return line;
-//}
- */
-
-
-/*
-// ===========================================
-// OHMs Functions
-// ===========================================
-char * Display::output_ohm_xx_xxxO(uint16_t ohms) {
-
-// volts can be between 65,535 (12300 = 12,300 Ohms)
-//static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
-//static char line[5] = "--,---^"
-
-  strcpy_P(line, ohm_xx_xxxO);
-
-  line[0] =  u16Digit10000 (ohms);
-  line[1] =  u16Digit1000  (ohms);
-  //,
-  line[3] =  u16Digit100   (ohms);
-  line[4] =  u16Digit10    (ohms);
-  line[5] =  u16Digit1     (ohms);
-  // ohms
-  line[6] =  0xF4; //OHM
-
-  line[7] =  '\0';
-  
-  return line;
-}
-
-char * Display::output_ohm_x_xxxxO(uint16_t ohms) {
-
-// volts can be between  65,535 (05389 = 0.5389 Ohms)
-//static char line[5] = "0123456"; // Digit possition (+1 for terminator /0.
-//static char line[5] = "-,----^"
-
-  strcpy_P(line, ohm_x_xxxxO);
-
-  line[0] =  u16Digit10000 (ohms);
-  //.
-  line[2] =  u16Digit1000  (ohms);
-  line[3] =  u16Digit100   (ohms);
-  line[4] =  u16Digit10    (ohms);
-  line[5] =  u16Digit1     (ohms);
-  // ohms
-  line[6] = 0xF4; //OHM
-  
-  line[7] =  '\0';
-
-  return line;
-}
- */
-
 
 // ===========================================
 // Concatenate PGM string/char
@@ -575,10 +412,6 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library
-
-
-
-/*
 
 
 // require ::: stdlib.h

@@ -82,8 +82,8 @@ byte repeatCount = 0;
 byte menuCurrent  = MAINMENU;
 byte menuSelected = 254;
 
-uint16_t v5_System = 0000;
-uint16_t v5_Measured = 5011;
+uint16_t v5_System     = 0;
+uint16_t v5_Measured   = 4919; //5011;
 uint16_t v5_voltPerBit = (v5_Measured / 1023.0)*1000.0;
 
 double vPre = 0.0;
@@ -175,9 +175,6 @@ int cntMillis = 0;
 // The sizeof this struct should not exceed 32 bytes
 // This gives us up to 32 8 bits channals
 
-//  char pattern8[  ]  =         "*__._V";
-//  char pattern16[8]  =        " __,___";
-//  char pattern32[15] = " _,___,___,___";
 // ===========================================
 // Reset
 // ===========================================
@@ -557,7 +554,7 @@ void lcdMenu000() { // this is an error, 000 is reserved
 // ===========================================
 void lcdMenu001() {
   if (repeatCount == 0) {
-setMenu(F("x001"), menuOptions001, membersof(menuOptions001));
+    setMenu(F("x001"), menuOptions001, membersof(menuOptions001));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("Main"));
     lcd.setCursor(0, 1); //   row >    column ^
@@ -614,57 +611,57 @@ void lcdMenu002() {
   // 5 = y2 = 5V
   // 7 = y3 = Pre
 
-  //--------------------
-  //
-  //--------------------
-  lcd.setCursor(0, 0); //   row >    column ^
-  lcd.print(F("PreV: "));
-
-  lcd.print  (v5_voltPerBit * analog[7]);
-  lcd.print  ("V   ");
-
-  //Ein = (Eo/R2) * (R1+R2)
-  lcd.print (vPre);
-  lcd.print  (F("V"));
-
-  //--------------------
-  //
-  //--------------------
-  lcd.setCursor(0, 1); //   row >    column ^
-  lcd.print(F("PstV: "));
-
-  lcd.print  (v5_voltPerBit * analog[1]);
-  lcd.print  (F("V   "));
-
-  //Ein = (Eo/R2) * (R1+R2)
-  lcd.print (vPst);
-  lcd.print  (F("V"));
-
-  //--------------------
-  //
-  //--------------------
-  lcd.setCursor(0, 2); //   row >    column ^
-  lcd.print(F("5.0V: "));
-
-  lcd.print  (v5_voltPerBit * analog[5]);
-  lcd.print  ("V    ");
-
-  //Ein = (Eo/R2) * (R1+R2)
-  lcd.print (v5_System);
-  lcd.print  (F("V"));
-
-  //--------------------
-  //
-  //--------------------
-  lcd.setCursor(0, 3); //   row >    column ^
-  lcd.print(F("Shnt:"));
-
-  lcd.print  (avgSum / avgSize);
-  lcd.print  (F("mV "));
-
-  //Ein = (Eo/R2) * (R1+R2)
-  lcd.print ((avgSum / avgSize) / myResistorMap.shunt);
-  lcd.print  (F("mA"));
+//  //--------------------
+//  //
+//  //--------------------
+//  lcd.setCursor(0, 0); //   row >    column ^
+//  lcd.print(F("PreV: "));
+//
+//  lcd.print  (v5_voltPerBit * analog[7]);
+//  lcd.print  ("V   ");
+//
+//  //Ein = (Eo/R2) * (R1+R2)
+//  lcd.print (vPre);
+//  lcd.print  (F("V"));
+//
+//  //--------------------
+//  //
+//  //--------------------
+//  lcd.setCursor(0, 1); //   row >    column ^
+//  lcd.print(F("PstV: "));
+//
+//  lcd.print  (v5_voltPerBit * analog[1]);
+//  lcd.print  (F("V   "));
+//
+//  //Ein = (Eo/R2) * (R1+R2)
+//  lcd.print (vPst);
+//  lcd.print  (F("V"));
+//
+//  //--------------------
+//  //
+//  //--------------------
+//  lcd.setCursor(0, 2); //   row >    column ^
+//  lcd.print(F("5.0V: "));
+//
+//  lcd.print  (v5_voltPerBit * analog[5]);
+//  lcd.print  ("V    ");
+//
+//  //Ein = (Eo/R2) * (R1+R2)
+//  lcd.print (v5_System);
+//  lcd.print  (F("V"));
+//
+//  //--------------------
+//  //
+//  //--------------------
+//  lcd.setCursor(0, 3); //   row >    column ^
+//  lcd.print(F("Shnt:"));
+//
+//  lcd.print  (avgSum / avgSize);
+//  lcd.print  (F("mV "));
+//
+//  //Ein = (Eo/R2) * (R1+R2)
+//  lcd.print ((avgSum / avgSize) / myResistorMap.shunt);
+//  lcd.print  (F("mA"));
 }
 
 // ===========================================
@@ -870,7 +867,7 @@ void lcdFunc200() { // UInt number edit
         editCol++;
     }
     if (keyPress == 4) {// right
-      if (editRow < 5)
+      if (editRow < 5)  // Replace '5' with field pattern size (allow moves only to '#' cells)
         editRow++;
     }
     if (keyPress == 2) {// left
@@ -929,24 +926,25 @@ void lcdInit240() { // Control check
 // DAQ finish this....
 
      // If Controls not home, wait.
-    if (true){
+    if (false){
       menuSelected = MAINMENU; // Main
     }
   } 
 
   lcd.setCursor(0, 3);//   row >    column ^
   lcd.print(PGMSTR(lcd_param_lcdInit240_volts));
+  
   lcd.setCursor(7, 3);//   row >    column ^
   //lcd.print(display.output_x_xxxV(v5_System * 1000));    
-  lcd.print(display.outputDigitsU16(v5_System * 1000, volts_x_xxxV));
+  lcd.print(display.outputDigitsU16(v5_System * 100, volts_x_xxxV, 1));
 }
 
 // -------------------------------------------
-void lcdInit244() { // Menu
+void lcdInit244() { // Menu buttons
   if (repeatCount == 0) {
     setMenu(F("x244"), menuOptions244, membersof(menuOptions244));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Menu"));
+    lcd.print(F("Menu Buttons"));  // Not using these?????
   }
 }
 
@@ -1084,52 +1082,10 @@ void clearMyEditorData(byte returnTo){
     //myEditorData.returnTo = returnTo; 
   }
 }
-
- uint8_t u8number =  0;
-  int8_t s8number =  0;
-uint16_t u16number =  0;
- int16_t s16number =  0;
-uint32_t u32number =  0;
- int32_t s32number =  0;
   
 // -------------------------------------------
 void lcdInit252() {  // V5.0    Regulator Voltage
 /*
-//  //===================================
-//  Serial.print (display.outputDigitsU8(u8number, pattern8));  
-//  u8number+=10;
-//  Serial.print (" ");
-//  Serial.print (display.outputDigitsS8(s8number, pattern8));  
-//  s8number+=10;
-//  Serial.print (" ");
-//  Serial.print (pattern8);
-//  // -----------------------------------
-//  Serial.print (" ::: ");
-//  // -----------------------------------
-//  Serial.print (display.outputDigitsU16(u16number, pattern16));  
-//  u16number+=1000;
-//  Serial.print (" ");
-//  Serial.print (display.outputDigitsS16(s16number, pattern16));  
-//  s16number+=1000;
-//  Serial.print (" ");
-//  Serial.print (pattern16);  
-//  // -----------------------------------
-//  Serial.print (" ::: ");
-//  // -----------------------------------
-//  Serial.print (display.outputDigitsU32(u32number, pattern32));  
-//  u32number+=100000000;
-//  Serial.print (" ");
-//  Serial.print (display.outputDigitsS32(s32number, pattern32));  
-//  s32number+=100000000;
-//  Serial.print (" ");
-//  Serial.print (pattern32);  
-//
-//  //u16number
-//  Serial.println("  ");
-
-
-  
-  
 //  Serial.print("Display Info:  ");
 //  Serial.print(displayInfo.buffer);
 //  Serial.print(" : ");
@@ -1155,13 +1111,14 @@ void lcdInit252() {  // V5.0    Regulator Voltage
 //  Serial.print(PGMSTR(myEditorData.displayInfo[1].pgmData));
 
 
-*/
+
 
 //  if (myEditorData.setDisplayInfo == true){
 //    myEditorData.setDisplayInfo = false;
 //    myEditorData.displayInfo[1] = display.TestMethod(myResistorMap.shunt);
 //    myEditorData.displayInfo[3] = display.TestMethod(v5_Measured);
 //  }
+*/
   
   if (repeatCount == 0) {
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
@@ -1180,7 +1137,7 @@ void lcdInit252() {  // V5.0    Regulator Voltage
 
   lcd.setCursor(13, 1); //   row >    column ^
   //lcd.print(display.output_x_xxxV(v5_Measured));
-  lcd.print(display.outputDigitsU16(v5_Measured, volts_x_xxxV));
+  lcd.print(display.outputDigitsU16(v5_Measured, volts_x_xxxV, 1));
   
   lcd.setCursor(10, 3); //   row >    column ^
   lcd.print(display.outputDigitsU16(v5_voltPerBit, volts_0_0xxxxxV));
@@ -1588,7 +1545,19 @@ void loop() {
   vKey =    v5_voltPerBit * analog[3];                                                                   // Key
   v5_System = (((v5_voltPerBit * analog[5]) / myResistorMap.V5_32 ) * (myResistorMap.V5_31  + myResistorMap.V5_32 ));  // 5.0V
   vPre = (((v5_voltPerBit * analog[7]) / myResistorMap.Vpre12) * (myResistorMap.Vpre11 + myResistorMap.Vpre12));  // V Pre
-
+//
+//Serial.print (v5_voltPerBit);
+//Serial.print (" ");
+//Serial.print (analog[5]);
+//Serial.print (" ");
+//Serial.print (myResistorMap.V5_31);
+//Serial.print (" ");
+//Serial.print (myResistorMap.V5_32);
+//Serial.print (" ");
+//Serial.print ((((v5_voltPerBit * analog[5]) / myResistorMap.V5_32 ) * (myResistorMap.V5_31  + myResistorMap.V5_32 )));
+//Serial.print (" ");
+//
+//Serial.println();
   //
   if (avgCnt >= avgSize) {
     avgCnt = 0;

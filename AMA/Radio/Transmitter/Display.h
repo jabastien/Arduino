@@ -27,7 +27,9 @@
 
 class Display
 {
+  // ===================================
   // user-accessible "public" interface
+  // ===================================
   public:
 
     //struct DisplayInfo TestMethod(unsigned int);
@@ -36,25 +38,33 @@ class Display
     char *outputDigitsU8 ( uint8_t, const char * );
     char *outputDigitsS8 (  int8_t, const char * );
     char *outputDigitsU16(uint16_t, const char * );
+    char *outputDigitsU16(uint16_t, const char * , uint8_t);
     char *outputDigitsS16( int16_t, const char * );    
+    char *outputDigitsS16( int16_t, const char * , uint8_t);    
     char *outputDigitsU32(uint32_t, const char * );
+    char *outputDigitsU32(uint32_t, const char * , uint8_t);
     char *outputDigitsS32( int32_t, const char * );
+    char *outputDigitsS32( int32_t, const char * , uint8_t);
 
-    char *outputOnTime(uint16_t);
-    char *outputServiceTime(uint32_t);
+//    char *outputOnTime(uint16_t);
+//    char *outputServiceTime(uint32_t);    
 
-//    char *output_xx_xV(uint16_t);
-//    char *output_x_xxxV(uint16_t);
-//    char *output_x_xxxVVV(uint16_t volts, char []);
-    
-//    char *output_ohm_xx_xxxO(uint16_t);
-//    char *output_ohm_x_xxxxO(uint16_t);
+//    char *concatBytesPGM(const char* , const char* );
+//    char *concatBytesPGMSTR(const char* , const char* );
 
-//    char *output_voltPerBit(uint16_t);
-    
 
-    char *concatBytesPGM(const char* , const char* );
-    char *concatBytesPGMSTR(const char* , const char* );
+  // ===================================
+  // library-accessible "protected" interface
+  // ===================================
+  protected:
+      
+  // ===================================
+  // library-accessible "private" interface
+  // ===================================
+  private:
+    //int value;
+    //void doSomethingSecret(void);
+
 
     // ---------------------------------------------------------
     // 8 bit unsigned intiger
@@ -193,14 +203,7 @@ class Display
       &Display::s32Digit1, 
     };
 
-    
-  // library-accessible "private" interface
-  private:
-    //int value;
-    //void doSomethingSecret(void);
 
-  protected:
-  
 };
 
 #endif
