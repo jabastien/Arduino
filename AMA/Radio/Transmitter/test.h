@@ -1,11 +1,11 @@
 /*
-  Test1.h - Test library for Wiring - description
+  Test.h - Test library for Wiring - description
   Copyright (c) 2006 John Doe.  All right reserved.
 */
 
 // ensure this library description is only included once
-#ifndef Test1_h
-#define Test1_h
+#ifndef Test_h
+#define Test_h
 
 // include types & constants of Wiring core API
 //#if defined(ARDUINO) && ARDUINO >= 100
@@ -18,11 +18,11 @@
 #endif
 
 // library interface description
-class Test1
+class Test
 {
   // user-accessible "public" interface
   public:
-    Test1(int);
+    Test(int);
     void doSomething(void);
 
   // library-accessible "private" interface

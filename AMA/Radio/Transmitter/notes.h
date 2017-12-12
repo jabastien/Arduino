@@ -1,4 +1,13 @@
 /*
+
+Todo:
+- Move menu business logic out of main into Menu
+- Create an editor class off of the menu
+- Create a calculate class for all math
+- 
+ */
+
+/*
  
 Variables as a function
 https://www.gammon.com.au/callbacks
@@ -14,4 +23,4 @@ https://github.com/VaSe7u/LiquidMenu/tree/master/src
 Pointers (reference/value) help.
 https://forum.arduino.cc/index.php?topic=439117.0
 
- */
+*/

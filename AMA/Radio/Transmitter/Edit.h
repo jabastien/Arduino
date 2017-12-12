@@ -17,20 +17,29 @@
   #include "WConstants.h"
 #endif
 
-// library interface description
+  // ===========================================
+  // library interface description
+  // ===========================================
 class Edit
 {
+  // ===========================================
   // user-accessible "public" interface
+  // ===========================================
   public:
     Edit(int);
     void doSomething(void);
 
+  // ===========================================
   // library-accessible "private" interface
+  // ===========================================
   private:
     int value;
     void doSomethingSecret(void);
 
     
+  // ===========================================
+  // library-accessible "protected" interface
+  // ===========================================
   protected:
   
 };

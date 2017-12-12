@@ -1,5 +1,7 @@
 /*
   DataStore.cpp - Data for the Transmitter
+
+  EEPROM Data read/write
 */
 
 // include core Arduino API
@@ -14,6 +16,11 @@
 
 // include this library's description file
 #include "DataStore.h"
+#include "Data.h"
+
+#include "config.h"
+#include "def.h"
+#include "types.h"
 
 // include description files for other libraries used (if any)
 #include "HardwareSerial.h"
@@ -24,12 +31,19 @@
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
 
+extern MyResistorMap myResistorMap;
+
 DataStore::DataStore(){
+}
+DataStore::DataStore(Data data){
   // initialize this instance's variables
-
+Serial.begin(115200); //Set the speed to 9600 bauds if you want.
   // do whatever is required to initialize the library
-
-
+  
+Serial.println("In DataStore");
+  data.doSomething();
+Serial.println("Out DataStore");
+  
   //Print length of data to run CRC on.
   Serial.print(F("EEPROM length: "));
   Serial.println(EEPROM.length());  

@@ -17,6 +17,7 @@
 
 // include this library's description file
 #include "def.h"
+#include "Data.h"
 #include "Display.h"
 
 // ===========================================
@@ -36,7 +37,6 @@ Display::Display(){
   // initialize this instance's variables
 
   // do whatever is required to initialize the library
-
 }
 
   
@@ -239,7 +239,6 @@ char * Display::outputDigitsS32( int32_t number, const char * pattern, uint8_t s
 
 
 // -------------------------------------------
-
 
 /*
 

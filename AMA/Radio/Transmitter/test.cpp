@@ -1,5 +1,5 @@
 /*
-  Test1.h - Test library for Wiring - implementation
+  Test.h - Test library for Wiring - implementation
   Copyright (c) 2006 John Doe.  All right reserved.
 */
 
@@ -14,7 +14,7 @@
 #endif
 
 // include this library's description file
-#include "Test1.h"
+#include "Test.h"
 
 // include description files for other libraries used (if any)
 #include "HardwareSerial.h"
@@ -22,7 +22,7 @@
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
 
-Test1::Test1(int givenValue){
+Test::Test(int givenValue){
   // initialize this instance's variables
   value = givenValue;
 
@@ -34,7 +34,7 @@ Test1::Test1(int givenValue){
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
 
-void Test1::doSomething(void)
+void Test::doSomething(void)
 {
   // eventhough this function is public, it can access
   // and modify this library's private variables
@@ -48,7 +48,7 @@ void Test1::doSomething(void)
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library
 
-void Test1::doSomethingSecret(void)
+void Test::doSomethingSecret(void)
 {
   digitalWrite(13, HIGH);
   delay(200);

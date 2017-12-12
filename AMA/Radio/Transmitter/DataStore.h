@@ -1,5 +1,7 @@
 /*
   DataStore.h - 
+
+  EEPROM Data read/write
 */
 
 // ensure this library description is only included once
@@ -16,19 +18,29 @@
   #include "WConstants.h"
 #endif
 
+#include "Data.h"
+
 
 // library interface description
 class DataStore
 {
+  // ======================================
   // user-accessible "public" interface
+  // ======================================
   public:
-    DataStore(void);
+    DataStore();
+    DataStore(Data);
     void factoryReset(void);
 
+  // ======================================
   // library-accessible "private" interface
+  // ======================================
   private:
-   // int value;
- 
+    Data data;
+    
+  // ======================================
+  // library-accessible "protected" interface
+  // ======================================
   protected:
      
 };

@@ -62,9 +62,6 @@ class Display
   // library-accessible "private" interface
   // ===================================
   private:
-    //int value;
-    //void doSomethingSecret(void);
-
 
     // ---------------------------------------------------------
     // 8 bit unsigned intiger

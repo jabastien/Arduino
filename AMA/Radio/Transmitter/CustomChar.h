@@ -18,18 +18,28 @@
 
 #include <LiquidCrystal_I2C.h>
 
+// ====================================
 // library interface description
+// ====================================
 class CustomChar
 {
+  // ====================================
   // user-accessible "public" interface
+  // ====================================
   public:
     CustomChar(void);
     void percent(byte);
     void showChar(void);
+
+  // ====================================
   // library-accessible "private" interface
+  // ====================================
   private:
     byte char0[8] = {0x1f, 0x00, 0x0a, 0x04, 0x0a, 0x00, 0x11, 0x1f};
     
+  // ====================================
+  // library-accessible "protected" interface
+  // ====================================
   protected:
   
 };
