@@ -59,6 +59,12 @@ PROGMEM const char  versionNum [] = {"v1.25"};
 #define HOUR  3600 //  3600000 milliseconds in an hour
 #define MINUTE  60 //    60000 milliseconds in a  minute
 #define SECOND   1 //     1000 milliseconds in a  second
+
+//long day = 86400000; // 86400000 milliseconds in a day
+//long hour = 3600000; // 3600000 milliseconds in an hour
+//long minute = 60000; // 60000 milliseconds in a minute
+//long second =  1000; // 1000 milliseconds in a second
+
  
 #define DD(seconds) (   seconds / DAY)                   //number of days
 #define HH(seconds) ((  seconds % DAY) / HOUR)           //the remainder from days division divided by hours, this gives the full hours
