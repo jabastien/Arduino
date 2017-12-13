@@ -40,8 +40,14 @@ class Menu
     void clearMyEditorData(byte);
     void setMenu(String, byte [], byte);
     void setVisible(void);
+
+    // Reserved
     void lcdMenu000(void);
+
+    // Main Menu
     void lcdMenu001(void);
+
+    // Menu Items
     void lcdMenu002(void);
     void lcdMenu003(void);
     
@@ -51,9 +57,11 @@ class Menu
     void lcdMenu013(void);
     void lcdMenu014(void);
 
+    // Functions
     void lcdFunc200(void);
     void lcdFunc201(void);
 
+    // Init 
     void lcdInit240(void);
     void lcdInit244(void);
     void lcdInit245(void);
@@ -64,8 +72,12 @@ class Menu
     void lcdInit250(void);
     void lcdInit251(void);
     void lcdInit252(void);
+
+    // Startup
     void lcdInit253(void);
     void lcdInit254(void);
+
+    // Reserved    
     void lcdInit255(void);
 
 // ===========================================
@@ -131,9 +143,9 @@ byte menuOptions245 [2] = {244,201};      // Trim
 byte menuOptions246 [2] = {245,201};      // Switch
 byte menuOptions247 [2] = {246,201};      // Joystick
 byte menuOptions248 [2] = {247,201};      // Shunt ohms
-byte menuOptions249 [3] = {248,200,200};  // Vin pre 1.1 & 1.2 ohms
+byte menuOptions249 [3] = {248,200,200};  // V5.0    3.1 & 3.2 ohms
 byte menuOptions250 [3] = {249,200,200};  // Vin pst 2.1 & 2.2 ohms
-byte menuOptions251 [3] = {250,200,200};  // V5.0    3.1 & 3.2 ohms
+byte menuOptions251 [3] = {250,200,200};  // Vin pre 1.1 & 1.2 ohms
 byte menuOptions252 [2] = {251,201};      // V5.0    Regulator Voltage 
 byte menuOptions253 [1] = {253};          // Splash     [no click (select) out to 253]
 byte menuOptions254 [1] = {253};          // Starting   [click (select) out to 254]

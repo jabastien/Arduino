@@ -21,13 +21,11 @@
 #include "CustomChar.h"
 #include "Display.h"
 
-
 // ===========================================
 // I2C LCD
 // ===========================================
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 20, 4);    // Initialization of the book (address, characters, rows)
-
 
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
@@ -372,6 +370,7 @@ void Menu::lcdMenu000() { // this is an error, 000 is reserved
 // ===========================================
 // Main Menu
 // ===========================================
+// -------------------------------------------
 void Menu::lcdMenu001() {
   if (repeatCount == 0) {
     setMenu(F("x001"), menuOptions001, membersof(menuOptions001));
@@ -413,8 +412,9 @@ void Menu::lcdMenu001() {
 }
 
 // ===========================================
-// lcdMenu01
+// Main Items
 // ===========================================
+// -------------------------------------------
 void Menu::lcdMenu002() {
   if (repeatCount == 0) {
     setMenu(F("x002"), menuOptions002, membersof(menuOptions002));
@@ -484,9 +484,7 @@ void Menu::lcdMenu002() {
 //  lcd.print  (F("mA"));
 }
 
-// ===========================================
-// lcdMenu003
-// ===========================================
+// -------------------------------------------
 void Menu::lcdMenu003() {
   if (repeatCount == 0) {
     setMenu(F("x003"), menuOptions003, membersof(menuOptions003));
@@ -515,9 +513,7 @@ void Menu::lcdMenu003() {
 //fix  lcd.print  (keyPress);
 }
 
-// ===========================================
-// lcdMenu10
-// ===========================================
+// -------------------------------------------
 void Menu::lcdMenu010() {
   if (repeatCount == 0) {
     setMenu(F("x010"), menuOptions010, membersof(menuOptions010));
@@ -537,9 +533,7 @@ void Menu::lcdMenu010() {
   //  lcd.print(" ");
 }
 
-// ===========================================
-// lcdMenu011
-// ===========================================
+// -------------------------------------------
 void Menu::lcdMenu011() {
   if (repeatCount == 0) {
     setMenu(F("x011"), menuOptions011, membersof(menuOptions011));
@@ -554,9 +548,7 @@ void Menu::lcdMenu011() {
   lcd.print(F(" "));
 }
 
-// ===========================================
-// lcdMenu012
-// ===========================================
+// -------------------------------------------
 void Menu::lcdMenu012() {
   if (repeatCount == 0) {
     setMenu(F("x012"), menuOptions012, membersof(menuOptions012));
@@ -571,9 +563,7 @@ void Menu::lcdMenu012() {
   lcd.print(F(" "));
 }
 
-// ===========================================
-// lcdMenu013
-// ===========================================
+// -------------------------------------------
 void Menu::lcdMenu013() {
   if (repeatCount == 0) {
     setMenu(F("x013"), menuOptions013, membersof(menuOptions013));
@@ -588,13 +578,9 @@ void Menu::lcdMenu013() {
   lcd.print(" ");
 }
 
-//===========================================
-//lcdMenu014
-//===========================================
+// -------------------------------------------
 //void lcdMainFlightTime(){
 //void updateFPS(){
-
-
 void Menu::lcdMenu014() {
   // check to see if it's time to update LCD; that is, if the difference
   // between the current time and last time you updated the LCD is bigger than
@@ -657,10 +643,10 @@ void Menu::lcdMenu014() {
   lcd.print(F(" "));
 }
 
+//===========================================
+// Functions
+//===========================================
 // -------------------------------------------
-// -------------------------------------------
-// -------------------------------------------
-// UInt number edit
 void Menu::lcdFunc200() { // UInt number edit
   if (repeatCount == 0) {
     setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
@@ -711,6 +697,7 @@ void Menu::lcdFunc200() { // UInt number edit
 
 }
 
+// -------------------------------------------
 void Menu::lcdFunc201() { //Double number edit
   if (repeatCount == 0) {
     setMenu(F("x201"), menuOptions201, membersof(menuOptions201));
@@ -737,6 +724,9 @@ void Menu::lcdFunc201() { //Double number edit
   lcd.setCursor(3 + menuRow, 1); //   row >    column ^
 }
 
+//===========================================
+// Init
+//===========================================
 // -------------------------------------------
 void Menu::lcdInit240() { // Control check
   if (repeatCount == 0) {
@@ -836,24 +826,24 @@ void Menu::lcdInit248() { // Shunt ohms
 }
 
 // -------------------------------------------
-void Menu::lcdInit249() { // Vin pre 1.1 & 1.2 ohms
+void Menu::lcdInit249() { // V5.0    3.1 & 3.2 ohms
   if (repeatCount == 0) {
-    setMenu(F("x249"), menuOptions249, membersof(menuOptions249));
+    setMenu(F("x249"), menuOptions249, membersof(menuOptions251));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Vin pre ohms"));
+    lcd.print(F("5V ohm divider"));
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("1.1 "));    
+    lcd.print(F("3.1 "));    
     lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print(F("1.2 "));          
-  
+    lcd.print(F("3.2 "));    
+
 
 //fix
 //fix
-//fix    pUInt1 = &myResistorMap.Vpre11;  // = 8042; // 8.2k
+//fix    pUInt1 = &myResistorMap.V5_31;  //   = 2161; // 2.2k   
 
 //fix
 //fix
-//fix    pUInt2 = &myResistorMap.Vpre12;  // = 2638; // 2.7k
+//fix    pUInt2 = &myResistorMap.V5_32;  //   = 3212; // 3.3k 
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
@@ -902,27 +892,25 @@ void Menu::lcdInit250() { // Vin pst 2.1 & 2.2 ohms
 
 }
 
-//uint32_t tm=0;
-
 // -------------------------------------------
-void Menu::lcdInit251() { // V5.0    3.1 & 3.2 ohms
+void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
   if (repeatCount == 0) {
     setMenu(F("x251"), menuOptions251, membersof(menuOptions251));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("5V ohm divider"));
+    lcd.print(F("Vin pre ohms"));
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("3.1 "));    
+    lcd.print(F("1.1 "));    
     lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print(F("3.2 "));    
-
-
-//fix
-//fix
-//fix    pUInt1 = &myResistorMap.V5_31;  //   = 2161; // 2.2k   
+    lcd.print(F("1.2 "));          
+  
 
 //fix
 //fix
-//fix    pUInt2 = &myResistorMap.V5_32;  //   = 3212; // 3.3k 
+//fix    pUInt1 = &myResistorMap.Vpre11;  // = 8042; // 8.2k
+
+//fix
+//fix
+//fix    pUInt2 = &myResistorMap.Vpre12;  // = 2638; // 2.7k
   }
 
   lcd.setCursor(6, 1); //   row >    column ^
@@ -998,6 +986,9 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
   
 }
 
+//===========================================
+// Startup 
+//===========================================
 // -------------------------------------------
 void Menu::lcdInit253() { // Splash     [no click 'select button' out to 253]
   if (repeatCount == 0) {
@@ -1075,7 +1066,9 @@ void Menu::lcdInit254() {  // Starting   [click (select) out to 254]
   }
 }
 
-// -------------------------------------------
+//===========================================
+// Reserved
+//===========================================
 void Menu::lcdInit255() { // this is an error, 255 is reserved 
   while (true){
     Serial.println(F("ER255"));

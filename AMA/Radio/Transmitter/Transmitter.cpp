@@ -96,7 +96,7 @@ CD4052 cd4052 = CD4052(5, 4, A7, A6);
 //int debugPin=8; // D8
 
 // ===========================================
-// My Data
+// My packet Data
 // ===========================================
 // The sizeof this struct should not exceed 32 bytes
 // This gives us up to 32 8 bits channals
