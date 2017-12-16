@@ -58,25 +58,25 @@ struct MyResistorMap {
   uint16_t V5_32    = 3212; // 3.3k
 };
 
-// ===========================================
-// Display Info
-// ===========================================
-struct DisplayInfo {
-  char * buffer;
-  const char * pgmData;   
-};
+//// ===========================================
+//// Display Info
+//// ===========================================
+//struct DisplayInfo {
+//  char * buffer;
+//  const char * pgmData;   
+//};
 
 //// ===========================================
 //// Editor Data
 //// ===========================================
-struct MyEditorData {
-    boolean setDisplayInfo = false;  
-    byte   row[4];      // row > (ROW start pos for the item to edit.
-  //byte   col[4];         // column ^ // Not needed, the row[x] -- x = column
-  //const  char * pgmData[4]; &address of the pgmem for mask  ( [0] should always be null (title line))
-    struct DisplayInfo displayInfo[4];
-    void   * pVoid[4];  //  Data element address to edit
-    byte   returnTo;
-};
+//struct MyEditorData {
+//    boolean setDisplayInfo = false;  
+//    byte   row[4];      // row > (ROW start pos for the item to edit.
+//  //byte   col[4];         // column ^ // Not needed, the row[x] -- x = column
+//  //const  char * pgmData[4]; &address of the pgmem for mask  ( [0] should always be null (title line))
+//    struct DisplayInfo displayInfo[4];
+//    void   * pVoid[4];  //  Data element address to edit
+//    byte   returnTo;
+//};
 
 #endif /* TYPES_H_ */

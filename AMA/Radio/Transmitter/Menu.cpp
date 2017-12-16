@@ -19,6 +19,7 @@
 // include this library's description file
 #include "Menu.h"
 #include "CustomChar.h"
+#include "Data.h"
 #include "Display.h"
 
 // ===========================================
@@ -39,6 +40,24 @@ Menu::Menu(){
 //  Serial.begin(115200);
 }
 
+
+
+Menu::Menu(Data * data){
+  // initialize this instance's variables
+
+  _data = data;
+  _data->setAnalog(2,12);  
+  Serial.println("Menu");
+  Serial.println(_data->getAnalog(0));
+  Serial.println(_data->getAnalog(1));
+  Serial.println(_data->getAnalog(2));
+  Serial.println(_data->getAnalog(3));
+
+  // do whatever is required to initialize the library
+//  pinMode(13, OUTPUT);
+//  Serial.begin(115200);
+}
+
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
 
@@ -53,26 +72,26 @@ boolean Menu::isScreenRefreshNeeded(){
  return false  ;
 }
 
-void Menu::clearMyEditorData(byte returnTo){
-  if (function == false){
-    myEditorData.setDisplayInfo = true;
-    myEditorData.row[0] = -1;
-    myEditorData.row[1] = -1;
-    myEditorData.row[2] = -1;
-    myEditorData.row[3] = -1;
-    //myEditorData.displayInfo[0] = display.TestMethod(myResistorMap.shunt);
-    //myEditorData.displayInfo[1] = display.TestMethod(myResistorMap.shunt);
-    //myEditorData.displayInfo[2] = display.TestMethod(myResistorMap.shunt);
-    //myEditorData.displayInfo[3] = display.TestMethod(myResistorMap.shunt);
-    myEditorData.pVoid[0] = NULL;
-    myEditorData.pVoid[1] = NULL;
-    myEditorData.pVoid[2] = NULL;
-    myEditorData.pVoid[3] = NULL;
-    myEditorData.returnTo = -1; 
-  } else {
-    //myEditorData.returnTo = returnTo; 
-  }
-}
+//void Menu::clearMyEditorData(byte returnTo){
+//  if (function == false){
+//    myEditorData.setDisplayInfo = true;
+//    myEditorData.row[0] = -1;
+//    myEditorData.row[1] = -1;
+//    myEditorData.row[2] = -1;
+//    myEditorData.row[3] = -1;
+//    //myEditorData.displayInfo[0] = display.TestMethod(myResistorMap.shunt);
+//    //myEditorData.displayInfo[1] = display.TestMethod(myResistorMap.shunt);
+//    //myEditorData.displayInfo[2] = display.TestMethod(myResistorMap.shunt);
+//    //myEditorData.displayInfo[3] = display.TestMethod(myResistorMap.shunt);
+//    myEditorData.pVoid[0] = NULL;
+//    myEditorData.pVoid[1] = NULL;
+//    myEditorData.pVoid[2] = NULL;
+//    myEditorData.pVoid[3] = NULL;
+//    myEditorData.returnTo = -1; 
+//  } else {
+//    //myEditorData.returnTo = returnTo; 
+//  }
+//}
 
 void Menu::updateLCD(byte keyPress, int fps) {
 
@@ -83,7 +102,7 @@ void Menu::updateLCD(byte keyPress, int fps) {
   // Detect Menu change
 
   if (menuCurrent != menuSelected) {
-    clearMyEditorData(-1);
+//    clearMyEditorData(-1);
     returnToCurrent = menuCurrent;
     if (true){
       Serial.print (F("C:"));

@@ -35,8 +35,8 @@ int fps = 0;
 // Vars
 // ===========================================
 Data data = Data();
-DataStore dataStore = DataStore(data);  //DataStore dataStore = DataStore();
-Menu menu = Menu();
+DataStore dataStore = DataStore(&data);  //DataStore dataStore = DataStore();
+Menu menu = Menu(&data);
 
 
 // ===========================================
@@ -124,6 +124,25 @@ void setup(){
 //  dataStore = DataStore(data);
   Serial.println("Out setup");
   //  pinMode(debugPin, INPUT);      // sets the digital pin as input
+
+  
+  Serial.println("setAnalog");
+//  data.setAnalog(0,10);
+//  data.setAnalog(1,21);
+//  data.setAnalog(2,22);
+  data.setAnalog(3,13);
+
+  Serial.println("Transmitter");
+//  Serial.println(_data->getAnalog(0));
+//  Serial.println(_data->getAnalog(1));
+//  Serial.println(_data->getAnalog(2));
+//  Serial.println(_data->getAnalog(3));
+  
+  Serial.println(data.getAnalog(0));
+  Serial.println(data.getAnalog(1));
+  Serial.println(data.getAnalog(2));
+  Serial.println(data.getAnalog(3));
+
 
   //Start everything up
   //  radio.begin();

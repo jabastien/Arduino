@@ -29,20 +29,22 @@ class DataStore
   // ======================================
   public:
     DataStore();
-    DataStore(Data);
+    DataStore(Data *);
     void factoryReset(void);
 
+     
   // ======================================
   // library-accessible "private" interface
   // ======================================
   private:
-    Data data;
+    Data * _data;   
+
     
   // ======================================
   // library-accessible "protected" interface
   // ======================================
   protected:
-     
+ 
 };
 
 #endif

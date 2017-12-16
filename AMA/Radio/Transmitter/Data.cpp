@@ -47,10 +47,10 @@ void Data::doSomething(void)
 }
 
 void Data::aux(byte b, int d){
-  Serial.print  (b);
-  Serial.print  (" ");
-  Serial.print  (d);
-  Serial.println();
+//  Serial.print  (b);
+//  Serial.print  (" ");
+//  Serial.print  (d);
+//  Serial.println();
 }
 
 
@@ -59,16 +59,16 @@ void Data::aux(byte b, int d){
 //  myControls.roll     = mapJoystickValues( analogRead(A2), myControlsMapRoll.Min,     myControlsMapRoll.Mid,     myControlsMapRoll.Max,     myControlsMapRoll.Rev);
 //  myControls.pitch    = mapJoystickValues( analogRead(A3), myControlsMapPitch.Min,    myControlsMapPitch.Mid,    myControlsMapPitch.Max,    myControlsMapPitch.Rev);
 void Data::setAnalog(byte b, int d){
-  Serial.print  (b);
-  Serial.print  (" ");
-  Serial.print  (d);
-  Serial.println();
+//  Serial.print  (b);
+//  Serial.print  (" ");
+//  Serial.print  (d);
+//  Serial.println();
   analog[b]=d;
 }
 int Data::getAnalog(byte b){
 
-  Serial.print  (b);
-  Serial.print  (" ");
+//  Serial.print  (b);
+//  Serial.print  (" ");
 
   return analog[b];
 }

@@ -50,7 +50,6 @@ class Data
     MyControlsMap myControlsMapRoll;
     MyControlsMap myControlsMapPitch;
 
-
   protected:
 
 };

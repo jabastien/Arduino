@@ -23,6 +23,7 @@
 #include "def.h"
 #include "types.h"
 #include "CustomChar.h"
+#include "Data.h"
 #include "Display.h"
 
 
@@ -35,9 +36,11 @@ class Menu
   // ===========================================
   public:
     Menu();
+    Menu(Data *);
+        
     boolean isScreenRefreshNeeded(void);
     void updateLCD(byte, int);
-    void clearMyEditorData(byte);
+//    void clearMyEditorData(byte);
     void setMenu(String, byte [], byte);
     void setVisible(void);
 
@@ -154,7 +157,7 @@ byte menuOptions254 [1] = {253};          // Starting   [click (select) out to 2
 byte menuOptions[5];
 byte menuSize;
 
-MyEditorData myEditorData;
+//MyEditorData myEditorData;
 
 
 
@@ -162,7 +165,7 @@ MyEditorData myEditorData;
   // library-accessible "private" interface
   // ===========================================
   private:
-  //    int value;
+    Data * _data;   
 
 // ===========================================
 // Timing Vars
