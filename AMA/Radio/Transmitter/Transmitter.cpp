@@ -25,6 +25,7 @@
 #include "Data.h"
 #include "DataStore.h"
 #include "Menu.h"
+#include "Utils.h"
 
 // ===========================================
 // Local vars
@@ -37,7 +38,7 @@ int fps = 0;
 Data data = Data();
 DataStore dataStore = DataStore(&data);  //DataStore dataStore = DataStore();
 Menu menu = Menu(&data);
-
+Utils utils = Utils();
 
 // ===========================================
 // Keypad
@@ -119,30 +120,33 @@ void setup(){
 //  while (!Serial) {
 //    ; // wait for serial port to connect. Needed for native USB port only
 //  }
-
-  Serial.println("In setup");
-//  dataStore = DataStore(data);
-  Serial.println("Out setup");
-  //  pinMode(debugPin, INPUT);      // sets the digital pin as input
-
-  
-  Serial.println("setAnalog");
-//  data.setAnalog(0,10);
-//  data.setAnalog(1,21);
-//  data.setAnalog(2,22);
-  data.setAnalog(3,13);
-
-  Serial.println("Transmitter");
-//  Serial.println(_data->getAnalog(0));
-//  Serial.println(_data->getAnalog(1));
-//  Serial.println(_data->getAnalog(2));
-//  Serial.println(_data->getAnalog(3));
-  
-  Serial.println(data.getAnalog(0));
-  Serial.println(data.getAnalog(1));
-  Serial.println(data.getAnalog(2));
-  Serial.println(data.getAnalog(3));
-
+//
+////  Serial.println("In setup");
+//////  dataStore = DataStore(data);
+////  Serial.println("Out setup");
+////  //  pinMode(debugPin, INPUT);      // sets the digital pin as input
+////
+////  
+////  Serial.println("setAnalog");
+//////  data.setAnalog(0,10);
+//////  data.setAnalog(1,21);
+//////  data.setAnalog(2,22);
+////  data.setAnalog(3,13);
+////
+////  Serial.println("Transmitter");
+//////  Serial.println(_data->getAnalog(0));
+//////  Serial.println(_data->getAnalog(1));
+//////  Serial.println(_data->getAnalog(2));
+//////  Serial.println(_data->getAnalog(3));
+////  
+////  Serial.println(data.getAnalog(0));
+////  Serial.println(data.getAnalog(1));
+////  Serial.println(data.getAnalog(2));
+////  Serial.println(data.getAnalog(3));
+////
+////
+////  Serial.print  ("Free Ram: \t");
+////  Serial.println(utils.freeRam());
 
   //Start everything up
   //  radio.begin();
