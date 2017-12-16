@@ -54,11 +54,6 @@ class Display
 
 
   // ===================================
-  // library-accessible "protected" interface
-  // ===================================
-  protected:
-      
-  // ===================================
   // library-accessible "private" interface
   // ===================================
   private:
@@ -200,6 +195,11 @@ class Display
       &Display::s32Digit1, 
     };
 
+  // ===================================
+  // library-accessible "protected" interface
+  // ===================================
+  protected:
+      
 
 };
 

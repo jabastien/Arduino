@@ -13,15 +13,11 @@
   #include "WConstants.h"
 #endif
 
-// include this library's description file
-#include "config.h"
-#include "def.h"
-#include "types.h"
-
-#include "Data.h"
-
 // include description files for other libraries used (if any)
-#include "HardwareSerial.h"
+//#include "HardwareSerial.h"
+
+// include this library's description file
+#include "Data.h"
 
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
@@ -38,14 +34,6 @@ Data::Data(){
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
 
-void Data::doSomething(void)
-{
-//  Serial.begin(115200); //Set the speed to 9600 bauds if you want.
-  // eventhough this function is public, it can access
-  // and modify this library's private variables
-  Serial.println("Data class");
-}
-
 void Data::aux(byte b, int d){
 //  Serial.print  (b);
 //  Serial.print  (" ");
@@ -54,10 +42,10 @@ void Data::aux(byte b, int d){
 }
 
 
-//  myControls.throttle = mapJoystickValues( analogRead(A0), myControlsMapThrottle.Min, myControlsMapThrottle.Mid, myControlsMapThrottle.Max, myControlsMapThrottle.Rev);
-//  myControls.yaw      = mapJoystickValues( analogRead(A1), myControlsMapYaw.Min,      myControlsMapYaw.Mid,      myControlsMapYaw.Max,      myControlsMapYaw.Rev);
-//  myControls.roll     = mapJoystickValues( analogRead(A2), myControlsMapRoll.Min,     myControlsMapRoll.Mid,     myControlsMapRoll.Max,     myControlsMapRoll.Rev);
-//  myControls.pitch    = mapJoystickValues( analogRead(A3), myControlsMapPitch.Min,    myControlsMapPitch.Mid,    myControlsMapPitch.Max,    myControlsMapPitch.Rev);
+//  myControls.throttle = mapJoystickRange( analogRead(A0), myControlsMapThrottle.Min, myControlsMapThrottle.Mid, myControlsMapThrottle.Max, myControlsMapThrottle.Rev);
+//  myControls.yaw      = mapJoystickRange( analogRead(A1), myControlsMapYaw.Min,      myControlsMapYaw.Mid,      myControlsMapYaw.Max,      myControlsMapYaw.Rev);
+//  myControls.roll     = mapJoystickRange( analogRead(A2), myControlsMapRoll.Min,     myControlsMapRoll.Mid,     myControlsMapRoll.Max,     myControlsMapRoll.Rev);
+//  myControls.pitch    = mapJoystickRange( analogRead(A3), myControlsMapPitch.Min,    myControlsMapPitch.Mid,    myControlsMapPitch.Max,    myControlsMapPitch.Rev);
 void Data::setAnalog(byte b, int d){
 //  Serial.print  (b);
 //  Serial.print  (" ");
@@ -142,13 +130,13 @@ int Data::getAnalog(byte b){
 //}
 
 
-//// ===========================================
-//void myControlsMapSetIt(MyControlsMap item) {
-//  item.Min = 0;
-//  item.Mid = 0;
-//  item.Max = 1023;
-//  item.Rev = false;
-//}
+// ===========================================
+void myControlsMapSetIt(MyControlsMap item) {
+  item.Min = 0;
+  item.Mid = 1023/2;
+  item.Max = 1023;
+  item.Rev = false;
+}
 
 //// ===========================================
 //void myControlsMapSet() {
@@ -186,20 +174,22 @@ int Data::getAnalog(byte b){
 //  initSticksIt(myControlsMapPitch);     // A3
 //}
 
-//// ===========================================
-//// Map Joystick Values
-//// ===========================================
-//// Returns a corrected value for a joystick position that takes into account
-//// the values of the outer extents and the middle of the joystick range.
-//int mapJoystickValues(int value, int minimum, int middle, int maximum, bool reverse)
-//{
-//  value = constrain(value, minimum, maximum);
-//  if ( value < middle )
-//    value = map(value, minimum, middle, 0, MID);
-//  else
-//    value = map(value, middle, maximum, MID, MAX);
-//  return ( reverse ? MAX - value : value );
-//}
+// ===========================================
+// Map Joystick Values
+// ===========================================
+// Returns a full-range value for a joystick position that takes into account
+// the values of the outer extents and the middle of the joystick range.
+int Data::mapJoystickRange(int value, int minimum, int middle, int maximum, bool reverse)
+{
+  value = constrain(value, minimum, maximum);
+  
+  if ( value < middle )
+    value = map(value, minimum, middle, 0, MID);
+  else
+    value = map(value, middle, maximum, MID, MAX);
+    
+  return ( reverse ? MAX - value : value );
+}
 
 
 

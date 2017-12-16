@@ -16,14 +16,12 @@
 #include <avr/pgmspace.h>
 
 // include this library's description file
-#include "def.h"
-#include "Data.h"
 #include "Display.h"
 
 // ===========================================
 // Data
 // ===========================================
-static char line [14];
+static char line [20]; // LCD width
 
 // ===========================================
 // Macros

@@ -26,8 +26,6 @@
 #include "Data.h"
 #include "Display.h"
 
-
-
 // library interface description
 class Menu
 {

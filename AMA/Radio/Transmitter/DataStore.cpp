@@ -16,11 +16,6 @@
 
 // include this library's description file
 #include "DataStore.h"
-#include "Data.h"
-
-#include "config.h"
-#include "def.h"
-#include "types.h"
 
 // include description files for other libraries used (if any)
 #include "HardwareSerial.h"
@@ -33,8 +28,8 @@
 
 //extern MyResistorMap myResistorMap;
 
-DataStore::DataStore(){
-}
+//DataStore::DataStore(){
+//}
 
 DataStore::DataStore(Data * data){
   // initialize this instance's variables
@@ -57,7 +52,7 @@ DataStore::DataStore(Data * data){
   _data->setAnalog(1,11);
 
   Serial.println("DataStore");
-  Serial.println(*_data.getAnalog(0));
+  Serial.println(_data->getAnalog(0));
   Serial.println(_data->getAnalog(1));
   Serial.println(_data->getAnalog(2));
   Serial.println(_data->getAnalog(3));

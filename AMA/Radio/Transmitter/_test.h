@@ -1,12 +1,11 @@
 /*
-  DataStore.h - 
-
-  EEPROM Data read/write
+  _Test.h - Test library for Wiring - description
+  Copyright (c) 2006 John Doe.  All right reserved.
 */
 
 // ensure this library description is only included once
-#ifndef DATA_H
-#define DATA_H
+#ifndef _Test_h
+#define _Test_h
 
 // include types & constants of Wiring core API
 //#if defined(ARDUINO) && ARDUINO >= 100
@@ -18,36 +17,29 @@
   #include "WConstants.h"
 #endif
 
-#include "Data.h"
-
-#include "config.h"
-#include "def.h"
-#include "types.h"
-
 // library interface description
-class DataStore
+class _Test
 {
-  // ======================================
+  // ======================================    
   // user-accessible "public" interface
-  // ======================================
+  // ======================================    
   public:
-    //DataStore();
-    DataStore(Data *);
-    void factoryReset(void);
+    _Test(int);
+    void doSomething(void);
 
-     
-  // ======================================
+  // ======================================    
   // library-accessible "private" interface
-  // ======================================
+  // ======================================    
   private:
-    Data * _data;   
+    int value;
+    void doSomethingSecret(void);
 
-    
+
   // ======================================
   // library-accessible "protected" interface
-  // ======================================
+  // ======================================    
   protected:
- 
+  
 };
 
 #endif

@@ -16,11 +16,9 @@
 // include description files for other libraries used (if any)
 #include "HardwareSerial.h"
 
-// include this library's description file
+//// include this library's description file
 #include "Menu.h"
-#include "CustomChar.h"
-#include "Data.h"
-#include "Display.h"
+
 
 // ===========================================
 // I2C LCD

@@ -29,8 +29,6 @@
 // include description files for other libraries used (if any)
 #include <LiquidCrystal_I2C.h>
 
-
-
 CustomChar::CustomChar(){
   // initialize this instance's variables
 
@@ -73,18 +71,3 @@ void CustomChar::percent(byte percent) {
 void CustomChar::showChar(){
   lcd.print((char)0);
 }
-
-/*
-// Usage:
-//    lcd.createChar(0, testChar0);  
-//    lcd.createChar(1, testChar1);   
-//    lcd.createChar(2, testChar2);   
-//    lcd.createChar(3, testChar3);   
-//    lcd.createChar(4, testChar4);   
-//    lcd.createChar(5, testChar5);   
-//    lcd.createChar(6, testChar6);   
-//    lcd.createChar(7, testChar7);   
-//
-//    lcd.home();
-//    lcd.setCursor(0,0); //   row >    column ^
-*/

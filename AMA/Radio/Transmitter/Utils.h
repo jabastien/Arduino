@@ -1,12 +1,11 @@
 /*
-  DataStore.h - 
-
-  EEPROM Data read/write
+  Utils.h - Utils library for Wiring - description
+  Copyright (c) 2006 John Doe.  All right reserved.
 */
 
 // ensure this library description is only included once
-#ifndef DATA_H
-#define DATA_H
+#ifndef Utils_h
+#define Utils_h
 
 // include types & constants of Wiring core API
 //#if defined(ARDUINO) && ARDUINO >= 100
@@ -18,36 +17,27 @@
   #include "WConstants.h"
 #endif
 
-#include "Data.h"
-
-#include "config.h"
-#include "def.h"
-#include "types.h"
-
 // library interface description
-class DataStore
+class Utils
 {
-  // ======================================
+  // ======================================    
   // user-accessible "public" interface
-  // ======================================
+  // ======================================    
   public:
-    //DataStore();
-    DataStore(Data *);
-    void factoryReset(void);
+    Utils();
+    int freeRam(void);
 
-     
-  // ======================================
+  // ======================================    
   // library-accessible "private" interface
-  // ======================================
+  // ======================================    
   private:
-    Data * _data;   
+    int freeListSize(void);
 
-    
   // ======================================
   // library-accessible "protected" interface
-  // ======================================
+  // ======================================    
   protected:
- 
+  
 };
 
 #endif
