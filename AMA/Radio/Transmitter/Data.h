@@ -25,22 +25,25 @@
 // library interface description
 class Data
 {
-    // ===========================================
-    // user-accessible "public" interface
-    // ===========================================
+  // ===========================================
+  // user-accessible "public" interface
+  // ===========================================
   public:
     Data(void);
     void aux(byte, int);
 
     void setAnalog(byte, int);
     int getAnalog(byte);
-    MyResistorMap& getMyResistorMap(void);
 
+    void setUint16_tNumber(void *);
+    void adjUint16_tNumber(uint16_t number);
+    
+    MyResistorMap& getMyResistorMap(void);
     MyResistorMap  myResistorMap; 
 
-    // ===========================================
-    // library-accessible "private" interface
-    // ===========================================
+  // ===========================================
+  // library-accessible "private" interface
+  // ===========================================
   private:
 
     int mapJoystickRange(int, int, int, int, bool);
@@ -55,9 +58,9 @@ class Data
     MyControlsMap myControlsMapRoll;
     MyControlsMap myControlsMapPitch;
 
-    // ===========================================
-    // library-accessible "protected" interface
-    // ===========================================
+  // ===========================================
+  // library-accessible "protected" interface
+  // ===========================================
   protected:
 
 };

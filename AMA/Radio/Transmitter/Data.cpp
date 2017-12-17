@@ -39,6 +39,19 @@ MyResistorMap& Data::getMyResistorMap(){
   return myResistorMap;
 }
 
+uint16_t* changeUint16_t;
+void Data::setUint16_tNumber(void * pVoid){
+  changeUint16_t = (uint16_t*)pVoid;
+  Serial.println("setUint16_tNumber: ");
+}
+
+void Data::adjUint16_tNumber(uint16_t number){
+  *(uint16_t*)changeUint16_t += number;
+  Serial.print  ("adjUint16_tNumber: ");
+  Serial.println(number);
+}
+
+
 void Data::aux(byte b, int d){
 //  Serial.print  (b);
 //  Serial.print  (" ");

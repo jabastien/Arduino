@@ -985,6 +985,23 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
     myMenuData.pVoid[0] = &_data->getMyResistorMap().shunt;
 
     Serial.println("--------------------------");
+    Serial.println("----->     adjUint16_tNumber");
+
+    _data->setUint16_tNumber(myMenuData.pVoid[0]);
+    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+    _data->adjUint16_tNumber(1);
+    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+    _data->adjUint16_tNumber(10);
+    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+    _data->adjUint16_tNumber(100);
+    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+    _data->adjUint16_tNumber(1000);
+    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+    _data->adjUint16_tNumber(10000);
+    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+
+
+    Serial.println("--------------------------");
     
     Serial.println("----->     _data->getMyResistorMap().shunt");
     Serial.println(_data->getMyResistorMap().shunt);
