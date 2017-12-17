@@ -164,6 +164,13 @@ PROGMEM const char  timerDay[]     = "####:##:##:##";
 
 #define membersof(x) (sizeof(x) / sizeof(x[0]))
 
+#define NOKEY  0
+#define SELECT 1
+#define LEFT   2
+#define DOWN   3
+#define RIGHT  4
+#define UP     5
+
 /**************************************************************************************/
 /***************               Error Checking Section              ********************/
 /**************************************************************************************/

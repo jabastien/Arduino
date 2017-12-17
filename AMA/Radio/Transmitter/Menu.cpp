@@ -125,9 +125,10 @@ void Menu::updateLCD(byte keyPress, int fps) {
     setVisible();
   }
 
-  if (keyPress != 0 ){
+
+  if (keyPress != NOKEY ){
     // Key Select/Enter
-    if (keyPress == 1) {
+    if (keyPress == SELECT) {
       Serial.print (F(" MS1:"));
       Serial.print (menuSelected);
       if (function){
@@ -140,30 +141,24 @@ void Menu::updateLCD(byte keyPress, int fps) {
     } else {
       // Menu operation
       if (!function){
-        if (keyPress == 5) {// up
+        if (keyPress == UP) {
           if (menuCol > 0)
             menuCol--;
         }
-        if (keyPress == 3) {// down
+        if (keyPress == DOWN) {
           if (menuCol < (menuSize-1))
             menuCol++;
         }
-        if (keyPress == 4) {// right
+        if (keyPress == RIGHT) {
           if (menuRow < 5)
             menuRow++;
         }
-        if (keyPress == 2) {// left
+        if (keyPress == LEFT) {
           if (menuRow > 0)
             menuRow--;
         }
     
-        if (true){
-          Serial.print  (keyPress);
-          Serial.print  (F(" R>:"));
-          Serial.print  (menuRow);
-          Serial.print  (F(" C^:"));
-          Serial.println(menuCol);
-        }
+
     
         // Carrot for menu select.
         if (menuCurrent != MAINMENU){
@@ -177,26 +172,33 @@ void Menu::updateLCD(byte keyPress, int fps) {
           }
         }
       
-      } else {
+      } else {        
         // Function operation
         // Function for Edit
-        if (keyPress == 5) {// up
+        if (keyPress == UP) {
+          //if (editCol < (menuSize-1))
+          if (editCol < 10)
+            editCol++;
+        }
+        if (keyPress == DOWN) {
           if (editCol > 0)
             editCol--;
         }
-        if (keyPress == 3) {// down
-          if (editCol < (menuSize-1))
-            editCol++;
-        }
-        if (keyPress == 4) {// right
+        if (keyPress == RIGHT) {
           if (editRow < 5)  // Replace '5' with field pattern size (allow moves only to '#' cells)
             editRow++;
         }
-        if (keyPress == 2) {// left
+        if (keyPress == LEFT) {
           if (editRow > 0)
             editRow--;
         }       
       } 
+    }
+
+    if (true){
+      Serial.print  ("keyPress ");
+      Serial.print  (keyPress);
+      printDrmc();
     }
   }
 
@@ -679,7 +681,22 @@ void Menu::lcdMenu014() {
   lcd.print(F(" "));
 }
 
+void Menu::printDrmc(){
+  Serial.print  (" pos> ");
+  Serial.print  (myMenuData.row[menuCol]);
 
+  Serial.print  (" mc  ");
+  Serial.print  (menuCol);  
+  Serial.print  (" mr  ");
+  Serial.print  (menuRow);  
+  
+  Serial.print  (" ec  ");
+  Serial.print  (editCol);
+  Serial.print  (" er  ");
+  Serial.print  (editRow);
+  
+  Serial.println();
+}
 //===========================================
 // Functions
 //===========================================
@@ -687,44 +704,15 @@ void Menu::lcdMenu014() {
 void Menu::lcdFunc200() { // UInt number edit
   if (repeatCount == 0) {
     setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
-
-//    lcd.setCursor(0, 3); //   row >    column ^
-//    lcd.print(F("Int number edit"));
-    
   }
 
-    
-//  char buffer[10];         //the ASCII of the integer will be stored in this char array
-//  itoa((int)changeMe,buffer,10); //(integer, yourBuffer, base)   
-
-//  lcd.blink();
-//  lcd.setCursor(5, 2); //   row >    column ^
-//  lcd.setCursor(5+editRow, 2+editCol);//   row >    column ^
   lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
-
-  Serial.print  ("Drmc ");
-  Serial.print  (myMenuData.row[menuCol]);
-  Serial.print  (" ec  ");
-  Serial.print  (editCol);
-  Serial.print  (" er  ");
-  Serial.print  (editRow);
-  Serial.print  (" mc  ");
-  Serial.print  (menuCol);  
-  Serial.print  (" mr  ");
-  Serial.print  (menuRow);  
-  Serial.println();
-//  lcd.print(buffer);
-//fix  lcd.setCursor(5 + menuRow, 2); //   row >    column ^
-
 }
 
 // -------------------------------------------
 void Menu::lcdFunc201() { //Double number edit
   if (repeatCount == 0) {
     setMenu(F("x201"), menuOptions201, membersof(menuOptions201));
-    
-//    lcd.setCursor(0, 3); //   row >    column ^
-//    lcd.print(F("Double number edit"));
   }
   // #include<stdlib.h>
   //  dtostrf(FLOAT,WIDTH,PRECSISION,BUFFER);
@@ -742,18 +730,6 @@ void Menu::lcdFunc201() { //Double number edit
 
 //  lcd.setCursor(3 + menuRow, 1); //   row >    column ^
   lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
-
-  Serial.print  ("Drmc ");
-  Serial.print  (myMenuData.row[menuCol]);
-  Serial.print  (" ec  ");
-  Serial.print  (editCol);
-  Serial.print  (" er  ");
-  Serial.print  (editRow);
-  Serial.print  (" mc  ");
-  Serial.print  (menuCol);  
-  Serial.print  (" mr  ");
-  Serial.print  (menuRow);  
-  Serial.println();
 }
 
 
@@ -1036,49 +1012,7 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
     myMenuData.row    [3] = 13;
     myMenuData.pgmData[3] = volts_0_0xxxxxV;
     myMenuData.pVoid  [3] = &_data->getMyVoltageMap().voltPerBit;
-
-   // ========================================  
-
-    // 1
-    Serial.println(PGMSTR(myMenuData.pgmData[1]));
-    Serial.println(*(uint16_t*)myMenuData.pVoid[1]);
-//    Serial.println("----->     adjUint16_tNumber");
-//    _data->setUint16_tNumber(myMenuData.pVoid[1]);
-//    _data->adjUint16_tNumber(10);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[1]);
-
-      // 3
-    Serial.println(PGMSTR(myMenuData.pgmData[3]));
-    Serial.println(*(uint16_t*)myMenuData.pVoid[3]);
-//    Serial.println("----->     adjUint16_tNumber");
-//    _data->setUint16_tNumber(myMenuData.pVoid[3]);
-//    _data->adjUint16_tNumber(10);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[3]);
-}
-
-  
-/*
-
-  uint16_t reg   = 4958; // = 5.000V
-  
-  // Calculated fields voltPerBit = (reg / 1023)
-  uint16_t voltPerBit = 4887; // 0.004887
-  
-//  Serial.print("Display Info:  ");
-//  Serial.print(displayInfo.buffer);
-//  Serial.print(" : ");
-//  Serial.print(PGMSTR(displayInfo.pgmData));
-// 
-//  Serial.println();
-
-//  if (myEditorData.setDisplayInfo == true){
-//    myEditorData.setDisplayInfo = false;
-//    myEditorData.displayInfo[1] = display.TestMethod(myResistorMap.shunt);
-//    myEditorData.displayInfo[3] = display.TestMethod(v5_Measured);
-//  }
-
-  
-*/
+    }
 
   if (repeatCount == 0) {
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
@@ -1097,10 +1031,8 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
   lcd.setCursor(13, 1); //   row >    column ^
   lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
 
-
-
   // Calculate and display Volt/Bit
-  *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (4000/1023.0) * 1000;
+  *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)myMenuData.pVoid[1]/1023.0) * 1000;
   lcd.setCursor(10, 3); //   row >    column ^
   lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
 }

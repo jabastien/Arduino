@@ -156,6 +156,8 @@ class Menu
     // library-accessible "private" interface
     // ===========================================
     private:
+
+      void printDrmc(void);  // test only, delete this and the method
       void clearMyMenuData(void);
       
       Data * _data;   
