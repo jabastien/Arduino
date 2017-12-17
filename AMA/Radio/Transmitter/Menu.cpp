@@ -55,10 +55,10 @@ void Menu::clearMyMenuData(){
   myMenuData.pVoid[1] = NULL;
   myMenuData.pVoid[2] = NULL;
   myMenuData.pVoid[3] = NULL;
-  myMenuData.pInt[0] = NULL;
-  myMenuData.pInt[1] = NULL;
-  myMenuData.pInt[2] = NULL;
-  myMenuData.pInt[3] = NULL;
+//  myMenuData.pInt[0] = NULL;
+//  myMenuData.pInt[1] = NULL;
+//  myMenuData.pInt[2] = NULL;
+//  myMenuData.pInt[3] = NULL;
 }
  
 boolean Menu::isScreenRefreshNeeded(){
@@ -974,48 +974,78 @@ void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
 //fix  lcd.print(display.outputDigitsU16(*pUInt2, ohm_xx_xxxO));
 }
 
-int testtest = 16321; 
-int* pint; //pint=(int*)data; ++(*pint);
-int temp;
+//int testtest = 16321; 
+//int* pint; //pint=(int*)data; ++(*pint);
+//int temp;
 // -------------------------------------------
 void Menu::lcdInit252() {  // V5.0    Regulator Voltage
   if (menuChange){
-    myMenuData.row[0] = 10;
+    myMenuData.row[0] = 1;
     myMenuData.pgmData[0] = volts_x_xxxV;
+    myMenuData.pVoid[0] = &_data->getMyResistorMap().shunt;
+
+    Serial.println("--------------------------");
     
-    myMenuData.pVoid[0] = &testtest;
-    myMenuData.pInt[0]  = &testtest;
-    Serial.println("--------------------------");
-    Serial.println("--------------------------");
-    Serial.println("--------------------------");
+    Serial.println("----->     _data->getMyResistorMap().shunt");
+    Serial.println(_data->getMyResistorMap().shunt);
+    _data->getMyResistorMap().shunt+=20;
+    Serial.println(_data->getMyResistorMap().shunt);
+    
+    /////////////////////////////////////////////////////
+    Serial.println("----->     _data->getMyResistorMap().shunt");
+    uint16_t pint4 = (uint16_t)_data->getMyResistorMap().shunt;
+//    (uint16_t)_data->getMyResistorMap().shunt = (uint16_t)_data->getMyResistorMap().shunt + 300;
+_data->getMyResistorMap().shunt+=300;
+    Serial.println(pint4);
+    Serial.println(_data->getMyResistorMap().shunt);
+    
+//    /////////////////////////////////////////////////////
+//    Serial.println("----->     shunt2");
+//    uint16_t shunt2 = _data->getMyResistorMap().shunt;
+//    Serial.println(shunt2);
+//    shunt2+=222;
+//    Serial.println(shunt2);
+  
+    /////////////////////////////////////////////////////
+    Serial.println("----->     _data->getMyResistorMap()");
+    MyResistorMap mrm = _data->getMyResistorMap();
+    Serial.println(mrm.shunt);
+    mrm.shunt+=11;
+//    uint16_t yyy = mrm.shunt;
+    Serial.println(mrm.shunt);
+  
+    // ========================================  
+    Serial.println("----->     myMenuData.pVoid[0]");
+    uint16_t* pint2=(uint16_t*)myMenuData.pVoid[0];
+    Serial.println(*pint2);
+    *(uint16_t*)myMenuData.pVoid[0] += 10000;
+    Serial.println(*pint2);
 
-// ========================================  
+    uint16_t* pint3=(uint16_t*)myMenuData.pVoid[0];
+    Serial.println(*pint3);
+
+   // ========================================  
     Serial.println(PGMSTR(myMenuData.pgmData[0]));
-
-// ========================================  
-    int xxx1 =  (int) * myMenuData.pInt[0];
-    Serial.println( xxx1 );
-    Serial.println((int) * myMenuData.pInt[0]);
-
-// ========================================  
-//    Serial.println(&myMenuData.pInt[0]);
-  pint=(int*)myMenuData.pVoid[0];
-  Serial.println(*pint);
-
-  temp = *(int*)myMenuData.pVoid[0];
-  Serial.println(temp);
-
-// ========================================  
-//    int * xxx2 =  (int) myMenuData.pInt[0];
-//    Serial.println( xxx2 );
-//    Serial.println( &xxx2 );
-
-// ========================================  
-//    int * xxx3 = &testtest;
-//    Serial.println( * xxx3 );
-
-// ========================================  
-//    Serial.println(testtest);
+  
+    // ========================================  
+    //    Serial.println(&myMenuData.pInt[0]);
+    //  int* pint3=(int*)myMenuData.pVoid[0];
+    //  Serial.println(*pint3);
+    
+    //  temp = *(int*)myMenuData.pVoid[0];
+    //  Serial.println(temp);
+    
+    // ========================================  
+    //    int * xxx2 =  (int) myMenuData.pInt[0];
+    //    Serial.println( xxx2 );
+    //    Serial.println( &xxx2 );
+    
+    // ========================================  
+    //    int * xxx3 = &testtest;
+    //    Serial.println( * xxx3 );
+    
+    // ========================================  
+    //    Serial.println(testtest);
 
     
     Serial.println("--------------------------");

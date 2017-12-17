@@ -29,10 +29,15 @@ Data::Data(){
   // do whatever is required to initialize the library
 //  pinMode(13, OUTPUT);
 //  Serial.begin(115200);
+myResistorMap.shunt = 1239;
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
+// MyResistorMap myResistorMap; 
+MyResistorMap& Data::getMyResistorMap(){
+  return myResistorMap;
+}
 
 void Data::aux(byte b, int d){
 //  Serial.print  (b);

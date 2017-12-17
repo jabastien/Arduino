@@ -22,8 +22,6 @@
 #include "def.h"
 #include "types.h"
 
-#include "Data.h"
-
 // library interface description
 class Data
 {
@@ -36,7 +34,10 @@ class Data
 
     void setAnalog(byte, int);
     int getAnalog(byte);
-    
+    MyResistorMap& getMyResistorMap(void);
+
+    MyResistorMap  myResistorMap; 
+
     // ===========================================
     // library-accessible "private" interface
     // ===========================================
@@ -45,7 +46,7 @@ class Data
     int mapJoystickRange(int, int, int, int, bool);
     int analog[8];
 
-    MyResistorMap myResistorMap;
+
     MyButtons myButtons;
     MyAux myAux;
     MyControls myControls;

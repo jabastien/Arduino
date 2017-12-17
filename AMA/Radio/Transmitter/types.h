@@ -42,18 +42,20 @@ struct MyButtons {
 // Volt divide Vars
 // ===========================================
 struct MyResistorMap {
-  // Messure (  vPre -  vPost) / Current
-  //         (12.867 - 12.836) / 58.8 =  0.527211 Ohm
-  //                    0.031  / 58.8 =  0.527211 Ohm
-//double shunt = 0.727211;   // 0.5
+// Messure (  vPre -  vPost) / Current
+//         (12.867 - 12.836) / 58.8 =  0.527211 Ohm
+//                    0.031  / 58.8 =  0.527211 Ohm
+//  double shunt = 0.727211;   // 0.5
 //  double shunt = 0.766327;   // 0.5
   uint16_t  shunt = (7663);//*10000);   // 0.5
 
   // Max resistor size is 32767 witch is 1/2 of 65,535.
   uint16_t Vpre11   = 8042; // 8.2k
   uint16_t Vpre12   = 2638; // 2.7k
+  
   uint16_t Vpst21   = 8014; // 8.2k
   uint16_t Vpst22   = 2637; // 2.7k
+  
   uint16_t V5_31    = 2161; // 2.2k
   uint16_t V5_32    = 3212; // 3.3k
 };
@@ -82,8 +84,8 @@ struct MyResistorMap {
 struct MyMenuData {
   byte   row[4];            // row > (ROW start pos for the item to edit.
   const  char * pgmData[4]; // &address of the pgmem for mask  ( [0] should always be null (or the Title Line))
-  void   * pVoid[4];        // Data element address to edit
-  int    * pInt[4];  
+  void   * pVoid[4];        // Data element address to edit (Void pointer must be casted)
+//  int    * pInt[4];  
 };
 
 
