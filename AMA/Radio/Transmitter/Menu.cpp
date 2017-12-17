@@ -43,6 +43,7 @@ Menu::Menu(Data * data){
 // Functions available in Wiring sketches, this library, and other libraries
 
 void Menu::clearMyMenuData(){
+Serial.println("clearMyMenuData");  
   myMenuData.row[0] = 0;
   myMenuData.row[1] = 0;
   myMenuData.row[2] = 0;
@@ -55,10 +56,6 @@ void Menu::clearMyMenuData(){
   myMenuData.pVoid[1] = NULL;
   myMenuData.pVoid[2] = NULL;
   myMenuData.pVoid[3] = NULL;
-//  myMenuData.pInt[0] = NULL;
-//  myMenuData.pInt[1] = NULL;
-//  myMenuData.pInt[2] = NULL;
-//  myMenuData.pInt[3] = NULL;
 }
  
 boolean Menu::isScreenRefreshNeeded(){
@@ -84,7 +81,6 @@ void Menu::updateLCD(byte keyPress, int fps) {
   if (menuCurrent != menuSelected) {
     menuChange = true;
 //    clearMyEditorData(-1);
-    clearMyMenuData();
     returnToCurrent = menuCurrent;
     if (true){
       Serial.print (F("C:"));
@@ -111,9 +107,11 @@ void Menu::updateLCD(byte keyPress, int fps) {
       lcd.noBlink();
       lcd.clear();
     }
-    
+
+    editRow = 0;
+
     repeatCount = 0;
-    menuCol = 0;
+    //menuCol = 0;
     menuCurrent = menuSelected;
 //
 //    if (menuCurrent == MAINMENU || menuCurrent >= 250) {
@@ -132,7 +130,11 @@ void Menu::updateLCD(byte keyPress, int fps) {
     if (keyPress == 1) {
       Serial.print (F(" MS1:"));
       Serial.print (menuSelected);
-      menuSelected = menuOptions[menuCol];
+      if (function){
+        menuSelected = menuOptions[0];
+      }else {
+        menuSelected = menuOptions[menuCol];
+      }
       Serial.print (F(" MS2:"));
       Serial.println(menuSelected);
     } else {
@@ -198,7 +200,11 @@ void Menu::updateLCD(byte keyPress, int fps) {
     }
   }
 
-
+  if (menuChange && !function){
+        clearMyMenuData();
+        menuCol = 0;
+  }
+  
   switch (menuSelected) {
     // ---------------------------------------
     case 1: //MAINMENU
@@ -674,8 +680,6 @@ void Menu::lcdMenu014() {
 }
 
 
-
-
 //===========================================
 // Functions
 //===========================================
@@ -695,8 +699,20 @@ void Menu::lcdFunc200() { // UInt number edit
 
 //  lcd.blink();
 //  lcd.setCursor(5, 2); //   row >    column ^
-  lcd.setCursor(5+editRow, 2+editCol);//   row >    column ^
-  
+//  lcd.setCursor(5+editRow, 2+editCol);//   row >    column ^
+  lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
+
+  Serial.print  ("Drmc ");
+  Serial.print  (myMenuData.row[menuCol]);
+  Serial.print  (" ec  ");
+  Serial.print  (editCol);
+  Serial.print  (" er  ");
+  Serial.print  (editRow);
+  Serial.print  (" mc  ");
+  Serial.print  (menuCol);  
+  Serial.print  (" mr  ");
+  Serial.print  (menuRow);  
+  Serial.println();
 //  lcd.print(buffer);
 //fix  lcd.setCursor(5 + menuRow, 2); //   row >    column ^
 
@@ -725,8 +741,19 @@ void Menu::lcdFunc201() { //Double number edit
   //lcd.print(buffer);
 
 //  lcd.setCursor(3 + menuRow, 1); //   row >    column ^
-  lcd.setCursor(5+editRow, 2+editCol);//   row >    column ^
+  lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
 
+  Serial.print  ("Drmc ");
+  Serial.print  (myMenuData.row[menuCol]);
+  Serial.print  (" ec  ");
+  Serial.print  (editCol);
+  Serial.print  (" er  ");
+  Serial.print  (editRow);
+  Serial.print  (" mc  ");
+  Serial.print  (menuCol);  
+  Serial.print  (" mr  ");
+  Serial.print  (menuRow);  
+  Serial.println();
 }
 
 
@@ -741,7 +768,8 @@ void Menu::lcdFunc238() {
   // 1234567890123456789012345678901234567890
   // Erase all transmitter data? y/n
   // Factory Reset? Y/N
-  lcd.setCursor(9, 1); //   row >    column ^
+//  lcd.setCursor(9, 1); //   row >    column ^
+  lcd.setCursor(myMenuData.row[menuCol] + editRow, 1 + editCol);//   row >    column ^
 
   // If Y, goto x239
   // If N, goto mainMenu
@@ -943,6 +971,27 @@ void Menu::lcdInit250() { // Vin pst 2.1 & 2.2 ohms
 
 // -------------------------------------------
 void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
+  if (menuChange){
+    myMenuData.row[1] = 12;
+    myMenuData.pgmData[1] = volts_x_xxxV;
+    myMenuData.pVoid[1] = &_data->getMyResistorMap().shunt;
+
+    myMenuData.row[2] = 12;
+    myMenuData.pgmData[2] = volts_x_xxxV;
+    myMenuData.pVoid[2] = &_data->getMyResistorMap().shunt;
+
+   // ========================================  
+    Serial.println(PGMSTR(myMenuData.pgmData[0]));
+    
+    Serial.println("----->     adjUint16_tNumber");
+
+    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+    _data->setUint16_tNumber(myMenuData.pVoid[0]);
+
+    _data->adjUint16_tNumber(1);
+    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+
+  }  
   if (repeatCount == 0) {
     setMenu(F("x251"), menuOptions251, membersof(menuOptions251));
     lcd.setCursor(0, 0); //   row >    column ^
@@ -980,94 +1029,39 @@ void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
 // -------------------------------------------
 void Menu::lcdInit252() {  // V5.0    Regulator Voltage
   if (menuChange){
-    myMenuData.row[0] = 1;
-    myMenuData.pgmData[0] = volts_x_xxxV;
-    myMenuData.pVoid[0] = &_data->getMyResistorMap().shunt;
-
-    Serial.println("--------------------------");
-    Serial.println("----->     adjUint16_tNumber");
-
-    _data->setUint16_tNumber(myMenuData.pVoid[0]);
-    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-    _data->adjUint16_tNumber(1);
-    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-    _data->adjUint16_tNumber(10);
-    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-    _data->adjUint16_tNumber(100);
-    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-    _data->adjUint16_tNumber(1000);
-    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-    _data->adjUint16_tNumber(10000);
-    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-
-
-    Serial.println("--------------------------");
-    
-    Serial.println("----->     _data->getMyResistorMap().shunt");
-    Serial.println(_data->getMyResistorMap().shunt);
-    _data->getMyResistorMap().shunt+=20;
-    Serial.println(_data->getMyResistorMap().shunt);
-    
-    /////////////////////////////////////////////////////
-    Serial.println("----->     _data->getMyResistorMap().shunt");
-    uint16_t pint4 = (uint16_t)_data->getMyResistorMap().shunt;
-//    (uint16_t)_data->getMyResistorMap().shunt = (uint16_t)_data->getMyResistorMap().shunt + 300;
-_data->getMyResistorMap().shunt+=300;
-    Serial.println(pint4);
-    Serial.println(_data->getMyResistorMap().shunt);
-    
-//    /////////////////////////////////////////////////////
-//    Serial.println("----->     shunt2");
-//    uint16_t shunt2 = _data->getMyResistorMap().shunt;
-//    Serial.println(shunt2);
-//    shunt2+=222;
-//    Serial.println(shunt2);
-  
-    /////////////////////////////////////////////////////
-    Serial.println("----->     _data->getMyResistorMap()");
-    MyResistorMap mrm = _data->getMyResistorMap();
-    Serial.println(mrm.shunt);
-    mrm.shunt+=11;
-//    uint16_t yyy = mrm.shunt;
-    Serial.println(mrm.shunt);
-  
-    // ========================================  
-    Serial.println("----->     myMenuData.pVoid[0]");
-    uint16_t* pint2=(uint16_t*)myMenuData.pVoid[0];
-    Serial.println(*pint2);
-    *(uint16_t*)myMenuData.pVoid[0] += 10000;
-    Serial.println(*pint2);
-
-    uint16_t* pint3=(uint16_t*)myMenuData.pVoid[0];
-    Serial.println(*pint3);
+    myMenuData.row[1] = 13;
+    myMenuData.pgmData[1] = volts_x_xxxV;
+    myMenuData.pVoid[1] = &_data->getMyResistorMap().shunt;
 
    // ========================================  
     Serial.println(PGMSTR(myMenuData.pgmData[0]));
-  
-    // ========================================  
-    //    Serial.println(&myMenuData.pInt[0]);
-    //  int* pint3=(int*)myMenuData.pVoid[0];
-    //  Serial.println(*pint3);
     
-    //  temp = *(int*)myMenuData.pVoid[0];
-    //  Serial.println(temp);
-    
-    // ========================================  
-    //    int * xxx2 =  (int) myMenuData.pInt[0];
-    //    Serial.println( xxx2 );
-    //    Serial.println( &xxx2 );
-    
-    // ========================================  
-    //    int * xxx3 = &testtest;
-    //    Serial.println( * xxx3 );
-    
-    // ========================================  
-    //    Serial.println(testtest);
+    Serial.println("----->     adjUint16_tNumber");
 
-    
-    Serial.println("--------------------------");
-    Serial.println("--------------------------");
-    Serial.println("--------------------------");
+    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+    _data->setUint16_tNumber(myMenuData.pVoid[0]);
+
+    _data->adjUint16_tNumber(1);
+    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//    _data->adjUint16_tNumber(10);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//    _data->adjUint16_tNumber(100);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//    _data->adjUint16_tNumber(1000);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//    _data->adjUint16_tNumber(10000);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//
+//    _data->adjUint16_tNumber(-1);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//    _data->adjUint16_tNumber(-10);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//    _data->adjUint16_tNumber(-100);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//    _data->adjUint16_tNumber(-1000);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//    _data->adjUint16_tNumber(-10000);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
   }
 
   
@@ -1118,16 +1112,16 @@ _data->getMyResistorMap().shunt+=300;
     lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
 
-  lcd.setCursor(13, 1); //   row >    column ^
-  //lcd.print(display.output_x_xxxV(v5_Measured));
+uint16_t v5_voltPerBit = (5.0/1023.0)*1000000.0;
+uint16_t v5_Measured = 4965;
+//Serial.println(v5_voltPerBit);  
+//Serial.println(v5_Measured);  
 
-//fix
-//fix
-//fix  lcd.print(display.outputDigitsU16(v5_Measured, volts_x_xxxV, 1));
-  
+  lcd.setCursor(13, 1); //   row >    column ^
+  lcd.print(display.outputDigitsU16(v5_Measured, volts_x_xxxV, 1));
+
   lcd.setCursor(10, 3); //   row >    column ^
-//fix  lcd.print(display.outputDigitsU16(v5_voltPerBit, volts_0_0xxxxxV));
-  
+  lcd.print(display.outputDigitsU16(v5_voltPerBit, volts_0_0xxxxxV));
 }
 
 //===========================================
@@ -1149,9 +1143,9 @@ void Menu::lcdInit253() { // Splash     [no click 'select button' out to 253]
   if (true){ // Can delete this whole if condition when (no EEPROM data) is completed.
     lcd.setCursor(0, 3);//   row >    column ^
     if (repeatCount %2 == 0){// If ODD.
-      lcd.print("DAQ finish EEPROM...");
+      lcd.print("Finish EEPROM...");
     }else{
-      lcd.print("                    ");
+      lcd.print("                ");
     }
   }
   
