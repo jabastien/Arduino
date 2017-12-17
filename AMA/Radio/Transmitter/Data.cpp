@@ -41,6 +41,13 @@ void Data::aux(byte b, int d){
 //  Serial.println();
 }
 
+  // set levels
+//  myControlsMapSet();
+
+  // Setup the Min, Mid & Max values for the sticks
+//  initSticks();
+
+
 
 //  myControls.throttle = mapJoystickRange( analogRead(A0), myControlsMapThrottle.Min, myControlsMapThrottle.Mid, myControlsMapThrottle.Max, myControlsMapThrottle.Rev);
 //  myControls.yaw      = mapJoystickRange( analogRead(A1), myControlsMapYaw.Min,      myControlsMapYaw.Mid,      myControlsMapYaw.Max,      myControlsMapYaw.Rev);
@@ -60,6 +67,27 @@ int Data::getAnalog(byte b){
 
   return analog[b];
 }
+
+//void Menu::clearMyEditorData(byte returnTo){
+//  if (function == false){
+//    myEditorData.setDisplayInfo = true;
+//    myEditorData.row[0] = -1;
+//    myEditorData.row[1] = -1;
+//    myEditorData.row[2] = -1;
+//    myEditorData.row[3] = -1;
+//    //myEditorData.displayInfo[0] = display.TestMethod(myResistorMap.shunt);
+//    //myEditorData.displayInfo[1] = display.TestMethod(myResistorMap.shunt);
+//    //myEditorData.displayInfo[2] = display.TestMethod(myResistorMap.shunt);
+//    //myEditorData.displayInfo[3] = display.TestMethod(myResistorMap.shunt);
+//    myEditorData.pVoid[0] = NULL;
+//    myEditorData.pVoid[1] = NULL;
+//    myEditorData.pVoid[2] = NULL;
+//    myEditorData.pVoid[3] = NULL;
+//    myEditorData.returnTo = -1; 
+//  } else {
+//    //myEditorData.returnTo = returnTo; 
+//  }
+//}
 
 
 //// ===========================================

@@ -63,7 +63,7 @@ struct MyResistorMap {
 //// ===========================================
 //struct DisplayInfo {
 //  char * buffer;
-//  const char * pgmData;   
+//  const char * pgmData;    &address of the pgmem for mask  ( [0] should always be null (title line))
 //};
 
 //// ===========================================
@@ -73,10 +73,18 @@ struct MyResistorMap {
 //    boolean setDisplayInfo = false;  
 //    byte   row[4];      // row > (ROW start pos for the item to edit.
 //  //byte   col[4];         // column ^ // Not needed, the row[x] -- x = column
-//  //const  char * pgmData[4]; &address of the pgmem for mask  ( [0] should always be null (title line))
+
 //    struct DisplayInfo displayInfo[4];
 //    void   * pVoid[4];  //  Data element address to edit
 //    byte   returnTo;
 //};
+
+struct MyMenuData {
+  byte   row[4];            // row > (ROW start pos for the item to edit.
+  const  char * pgmData[4]; // &address of the pgmem for mask  ( [0] should always be null (or the Title Line))
+  void   * pVoid[4];        // Data element address to edit
+  int    * pInt[4];  
+};
+
 
 #endif /* TYPES_H_ */

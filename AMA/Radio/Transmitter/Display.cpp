@@ -18,15 +18,12 @@
 // include this library's description file
 #include "Display.h"
 
+
 // ===========================================
 // Data
 // ===========================================
-static char line [20]; // LCD width
-
-// ===========================================
-// Macros
-// ===========================================
-
+char line [20]; // LCD width
+ 
 // ===========================================
 // Constructor
 // Function that handles the creation and setup of instances
@@ -36,11 +33,6 @@ Display::Display(){
 
   // do whatever is required to initialize the library
 }
-
-  
-// ===========================================
-// Misc Methods
-// ===========================================
 
 // -------------------------------------------
 // https://forum.arduino.cc/index.php?topic=439117.0
@@ -52,10 +44,10 @@ template <typename T> T setSign (T number){ // Return value of 'T'
     line[0] = '-';
   }
   else{
-    line[0]=' ';
+    line[0] = ' ';
   }
   return number;
-  }  // end of setSign
+}  // end of setSign
 
 // ===========================================
 // Digits
@@ -121,6 +113,7 @@ char * Display::outputDigitsS8( int8_t number, const char * pattern){
 char * Display::outputDigitsU16(uint16_t number, const char * pattern){
   return Display::outputDigitsU16( number, pattern, 0);
 }
+
 char * Display::outputDigitsU16(uint16_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
@@ -151,6 +144,7 @@ char * Display::outputDigitsU16(uint16_t number, const char * pattern, uint8_t s
 char * Display::outputDigitsS16( int16_t number, const char * pattern){
   return Display::outputDigitsS16( number, pattern, 0);
 }
+
 char * Display::outputDigitsS16( int16_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
@@ -182,6 +176,7 @@ char * Display::outputDigitsS16( int16_t number, const char * pattern, uint8_t s
 char * Display::outputDigitsU32(uint32_t number, const char * pattern){
  return Display::outputDigitsU32( number, pattern, 0);  
 }
+
 char * Display::outputDigitsU32(uint32_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
@@ -211,6 +206,7 @@ char * Display::outputDigitsU32(uint32_t number, const char * pattern, uint8_t s
 char * Display::outputDigitsS32( int32_t number, const char * pattern){
  return Display::outputDigitsS32( number, pattern, 0);  
 }
+
 char * Display::outputDigitsS32( int32_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;

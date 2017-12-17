@@ -32,8 +32,6 @@ class Display
   // ===================================
   public:
 
-    //struct DisplayInfo TestMethod(unsigned int);
-    
     Display(void);
     char *outputDigitsU8 ( uint8_t, const char * );
     char *outputDigitsS8 (  int8_t, const char * );
@@ -51,7 +49,6 @@ class Display
 
 //    char *concatBytesPGM(const char* , const char* );
 //    char *concatBytesPGMSTR(const char* , const char* );
-
 
   // ===================================
   // library-accessible "private" interface

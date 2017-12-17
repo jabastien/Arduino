@@ -15,8 +15,8 @@
   #include "WConstants.h"
 #endif
 
-#include <stdlib.h>
-#include <avr/pgmspace.h>
+//#include <stdlib.h>
+//#include <avr/pgmspace.h>
 
 #include "config.h"
 #include "def.h"
@@ -120,33 +120,9 @@ void setup(){
 //  while (!Serial) {
 //    ; // wait for serial port to connect. Needed for native USB port only
 //  }
-//
-////  Serial.println("In setup");
-//////  dataStore = DataStore(data);
-////  Serial.println("Out setup");
-////  //  pinMode(debugPin, INPUT);      // sets the digital pin as input
-////
-////  
-////  Serial.println("setAnalog");
-//////  data.setAnalog(0,10);
-//////  data.setAnalog(1,21);
-//////  data.setAnalog(2,22);
-////  data.setAnalog(3,13);
-////
-////  Serial.println("Transmitter");
-//////  Serial.println(_data->getAnalog(0));
-//////  Serial.println(_data->getAnalog(1));
-//////  Serial.println(_data->getAnalog(2));
-//////  Serial.println(_data->getAnalog(3));
-////  
-////  Serial.println(data.getAnalog(0));
-////  Serial.println(data.getAnalog(1));
-////  Serial.println(data.getAnalog(2));
-////  Serial.println(data.getAnalog(3));
-////
-////
-////  Serial.print  ("Free Ram: \t");
-////  Serial.println(utils.freeRam());
+
+  Serial.print  ("Free Ram: \t");
+  Serial.println(utils.freeRam());
 
   //Start everything up
   //  radio.begin();
@@ -154,35 +130,6 @@ void setup(){
   //  radio.setDataRate(RF24_250KBPS);
   //  radio.openWritingPipe(pipeOut);
   //  resetData();
-
-  // set levels
-//  myControlsMapSet();
-
-  // Setup the Min, Mid & Max values for the sticks
-//  initSticks();
-
-//  // Test code to be deleted
-//  // Test code to be deleted
-//  // Test code to be deleted
-
-// dtostrf( floatVar, 
-//          minStringWidthIncDecimalPoint,
-//          numVarsAfterDecimal, 
-//          charBuf);
-//       dtostrf(x, 10, i, buffer2); // avr-libc function for floats
-//       Serial.print(buffer2);
-//       Serial.println("");
-
-//sprintf(buffer, "String value: %08d.%02d", (int)changeMe, abs((int)(changeMe*100)%100));
-//Serial.println(buffer);
-    
-//  // Test code to be deleted
-//  // Test code to be deleted
-//  // Test code to be deleted
-
-  //dataStore.factoryReset();
-
-
 }
 
 // ===========================================

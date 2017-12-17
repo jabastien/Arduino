@@ -30,6 +30,18 @@ const String err = "Err:
  
 */
 
+
+//// Proc auto detection
+//#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
+//  #define PROMINI
+//#endif
+//#if defined(__AVR_ATmega32U4__) || defined(TEENSY20)
+//  #define PROMICRO
+//#endif
+//#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__)
+//  #define MEGA
+//#endif
+
 /**************************************************************************************/
 /***************      Serail Debug test configurations             ********************/
 /**************************************************************************************/
@@ -41,36 +53,33 @@ const String err = "Err:
 //#define DEBUG_MyControls
 
 /**************************************************************************************/
+/***************             motor and servo numbers               ********************/
+/**************************************************************************************/
+#define THROTTLE = 0
+#define YAW      = 1
+#define PITCH    = 2
+#define ROLL     = 3
+
+/**************************************************************************************/
 /***************          constants configurations                 ********************/
 /**************************************************************************************/
 PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
 PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
-PROGMEM const char  versionNum [] = {"v1.25"};
+PROGMEM const char  versionNum [] = {"v1.27"};
 
 /**************************************************************************************/
 /***************          date & time configurations               ********************/
 /**************************************************************************************/
-//const long day = 86400000; // 86400000 milliseconds in a day
-//const long hour = 3600000; // 3600000 milliseconds in an hour
-//const long minute = 60000; // 60000 milliseconds in a minute
-//const long second =  1000; // 1000 milliseconds in a second
+#define DAY  86400 // 86400000 milliseconds in a  day / 1000
+#define HOUR  3600 //  3600000 milliseconds in an hour / 1000
+#define MINUTE  60 //    60000 milliseconds in a  minute / 1000
+#define SECOND   1 //     1000 milliseconds in a  second / 1000
 
-#define DAY  86400 // 86400000 milliseconds in a  day
-#define HOUR  3600 //  3600000 milliseconds in an hour
-#define MINUTE  60 //    60000 milliseconds in a  minute
-#define SECOND   1 //     1000 milliseconds in a  second
-
-//long day = 86400000; // 86400000 milliseconds in a day
-//long hour = 3600000; // 3600000 milliseconds in an hour
-//long minute = 60000; // 60000 milliseconds in a minute
-//long second =  1000; // 1000 milliseconds in a second
-
- 
 #define DD(seconds) (   seconds / DAY)                   //number of days
 #define HH(seconds) ((  seconds % DAY) / HOUR)           //the remainder from days division divided by hours, this gives the full hours
 #define MM(seconds) ((( seconds % DAY) % HOUR) / MINUTE) //and so on...
 #define SS(seconds) ((((seconds % DAY) % HOUR) % MINUTE) / SECOND)
-
+ 
 /**************************************************************************************/
 /***************           defaults configurations                 ********************/
 /**************************************************************************************/
@@ -81,13 +90,17 @@ PROGMEM const char  versionNum [] = {"v1.25"};
 #define MID 128
 #define MIN 0
 
-
 /**************************************************************************************/
 /***************             Proc specific definitions             ********************/
 /**************************************************************************************/
 // Common
 //                                           123456789012 
 PROGMEM const char lcd_param_common_set [] = "(Set)";
+
+//
+// X000: 
+//                                   123456789012 
+PROGMEM const char ERR000 []     = "ERR000";
 
 //
 // X240
@@ -112,17 +125,10 @@ PROGMEM const char lcd_param_lcdInit252_v5bit [] = "Volt/Bit";
 PROGMEM const char lcd_param_lcdInit254_startUp [] = "Start up";
 
 
-
-//// Proc auto detection
-//#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
-//  #define PROMINI
-//#endif
-//#if defined(__AVR_ATmega32U4__) || defined(TEENSY20)
-//  #define PROMICRO
-//#endif
-//#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__)
-//  #define MEGA
-//#endif
+//
+// X255: 
+//                                   123456789012 
+PROGMEM const char  ERR255 []     = "ERR255";
 
 // ===========================================
 // Display
@@ -150,9 +156,7 @@ PROGMEM const char  timer[]        = "##:##:##";
 PROGMEM const char  timerDay[]     = "####:##:##:##";
 
 
-/**************************************************************************************/
-/***************             motor and servo numbers               ********************/
-/**************************************************************************************/
+
 
 /**************************************************************************************/
 /***************                      Misc                         ********************/
