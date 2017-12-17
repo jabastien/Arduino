@@ -31,12 +31,12 @@ Menu::Menu(Data * data){
   _data = data;
 
   // do whatever is required to initialize the library
-  _data->setAnalog(2,12);  
+  _data->setJoystick(2,12);  
   Serial.println("Menu");
-  Serial.println(_data->getAnalog(0));
-  Serial.println(_data->getAnalog(1));
-  Serial.println(_data->getAnalog(2));
-  Serial.println(_data->getAnalog(3));
+  Serial.println(_data->getJoystick(0));
+  Serial.println(_data->getJoystick(1));
+  Serial.println(_data->getJoystick(2));
+  Serial.println(_data->getJoystick(3));
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
@@ -986,7 +986,7 @@ void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
     Serial.println("----->     adjUint16_tNumber");
 
     Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-    _data->setUint16_tNumber(myMenuData.pVoid[0]);
+    _data->setUint16_tPointer(myMenuData.pVoid[0]);
 
     _data->adjUint16_tNumber(1);
     Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
@@ -1029,77 +1029,57 @@ void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
 // -------------------------------------------
 void Menu::lcdInit252() {  // V5.0    Regulator Voltage
   if (menuChange){
-    myMenuData.row[1] = 13;
+    myMenuData.row    [1] = 13;
     myMenuData.pgmData[1] = volts_x_xxxV;
-    myMenuData.pVoid[1] = &_data->getMyResistorMap().shunt;
+    myMenuData.pVoid  [1] = &_data->getMyVoltageMap().reg;
+
+    myMenuData.row    [3] = 13;
+    myMenuData.pgmData[3] = volts_0_0xxxxxV;
+    myMenuData.pVoid  [3] = &_data->getMyVoltageMap().voltPerBit;
 
    // ========================================  
-    Serial.println(PGMSTR(myMenuData.pgmData[0]));
-    
-    Serial.println("----->     adjUint16_tNumber");
 
-    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-    _data->setUint16_tNumber(myMenuData.pVoid[0]);
-
-    _data->adjUint16_tNumber(1);
-    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+    // 1
+    Serial.println(PGMSTR(myMenuData.pgmData[1]));
+    Serial.println(*(uint16_t*)myMenuData.pVoid[1]);
+//    Serial.println("----->     adjUint16_tNumber");
+//    _data->setUint16_tNumber(myMenuData.pVoid[1]);
 //    _data->adjUint16_tNumber(10);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-//    _data->adjUint16_tNumber(100);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-//    _data->adjUint16_tNumber(1000);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-//    _data->adjUint16_tNumber(10000);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-//
-//    _data->adjUint16_tNumber(-1);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-//    _data->adjUint16_tNumber(-10);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-//    _data->adjUint16_tNumber(-100);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-//    _data->adjUint16_tNumber(-1000);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-//    _data->adjUint16_tNumber(-10000);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-  }
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[1]);
+
+      // 3
+    Serial.println(PGMSTR(myMenuData.pgmData[3]));
+    Serial.println(*(uint16_t*)myMenuData.pVoid[3]);
+//    Serial.println("----->     adjUint16_tNumber");
+//    _data->setUint16_tNumber(myMenuData.pVoid[3]);
+//    _data->adjUint16_tNumber(10);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[3]);
+}
 
   
 /*
+
+  uint16_t reg   = 4958; // = 5.000V
+  
+  // Calculated fields voltPerBit = (reg / 1023)
+  uint16_t voltPerBit = 4887; // 0.004887
+  
 //  Serial.print("Display Info:  ");
 //  Serial.print(displayInfo.buffer);
 //  Serial.print(" : ");
 //  Serial.print(PGMSTR(displayInfo.pgmData));
 // 
 //  Serial.println();
-  
-//myEditorData.col[0] = 0;
-//myEditorData.col[1] = 1;
-//myEditorData.col[2] = 2;
-//myEditorData.col[3] = 3;
-  myEditorData.row[0] = 0;
-  myEditorData.row[1] = 1;
-  myEditorData.row[2] = 2;
-  myEditorData.row[3] = 3;
-//myEditorData.displayInfo[1] = displayInfo;
-  myEditorData.pVoid[1] = &myResistorMap.shunt;;
-  myEditorData.returnTo = 255;
-  
-//  Serial.print("Editor Data:  ");
-//  Serial.print(myEditorData.displayInfo[1].buffer);
-//  Serial.print(" : ");
-//  Serial.print(PGMSTR(myEditorData.displayInfo[1].pgmData));
-
-
-
 
 //  if (myEditorData.setDisplayInfo == true){
 //    myEditorData.setDisplayInfo = false;
 //    myEditorData.displayInfo[1] = display.TestMethod(myResistorMap.shunt);
 //    myEditorData.displayInfo[3] = display.TestMethod(v5_Measured);
 //  }
-*/
+
   
+*/
+
   if (repeatCount == 0) {
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
@@ -1112,16 +1092,17 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
     lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
 
-uint16_t v5_voltPerBit = (5.0/1023.0)*1000000.0;
-uint16_t v5_Measured = 4965;
-//Serial.println(v5_voltPerBit);  
-//Serial.println(v5_Measured);  
 
+  // Display measured voltage
   lcd.setCursor(13, 1); //   row >    column ^
-  lcd.print(display.outputDigitsU16(v5_Measured, volts_x_xxxV, 1));
+  lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
 
+
+
+  // Calculate and display Volt/Bit
+  *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (4000/1023.0) * 1000;
   lcd.setCursor(10, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(v5_voltPerBit, volts_0_0xxxxxV));
+  lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
 }
 
 //===========================================

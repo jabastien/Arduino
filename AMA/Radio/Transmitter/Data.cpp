@@ -29,29 +29,53 @@ Data::Data(){
   // do whatever is required to initialize the library
 //  pinMode(13, OUTPUT);
 //  Serial.begin(115200);
-myResistorMap.shunt = 1239;
+//myResistorMap.shunt = 1239;
+  Serial.print  ("Data() - shunt: ");
+  Serial.println(myResistorMap.shunt);
+  
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
-// MyResistorMap myResistorMap; 
+
+// =====================================
+// Get the structures
+// =====================================
+MyVoltageMap& Data::getMyVoltageMap(){
+  return myVoltageMap;
+}
+
 MyResistorMap& Data::getMyResistorMap(){
   return myResistorMap;
 }
 
-uint16_t* changeUint16_t;
-void Data::setUint16_tNumber(void * pVoid){
-  changeUint16_t = (uint16_t*)pVoid;
-  Serial.println("setUint16_tNumber: ");
+
+// =====================================
+// uint16_t Methods
+// =====================================
+uint16_t* pointerUint16_t;
+    
+void Data::setUint16_tPointer(void * pVoid){
+  pointerUint16_t = (uint16_t*)pVoid;
+  Serial.print  ("setUint16_tNumber: ");
+  Serial.println(*(uint16_t*)pVoid);
 }
 
+void Data::setUint16_tNumber(uint16_t number){
+  *(uint16_t*)pointerUint16_t = number;
+  Serial.print  ("setUint16_tNumber: ");
+  Serial.println(number);
+}
 void Data::adjUint16_tNumber(uint16_t number){
-  *(uint16_t*)changeUint16_t += number;
+  *(uint16_t*)pointerUint16_t += number;
   Serial.print  ("adjUint16_tNumber: ");
   Serial.println(number);
 }
 
 
+// =====================================
+//
+// =====================================
 void Data::aux(byte b, int d){
 //  Serial.print  (b);
 //  Serial.print  (" ");
@@ -66,19 +90,21 @@ void Data::aux(byte b, int d){
 //  initSticks();
 
 
-
+// =====================================
+//
+// =====================================
 //  myControls.throttle = mapJoystickRange( analogRead(A0), myControlsMapThrottle.Min, myControlsMapThrottle.Mid, myControlsMapThrottle.Max, myControlsMapThrottle.Rev);
 //  myControls.yaw      = mapJoystickRange( analogRead(A1), myControlsMapYaw.Min,      myControlsMapYaw.Mid,      myControlsMapYaw.Max,      myControlsMapYaw.Rev);
 //  myControls.roll     = mapJoystickRange( analogRead(A2), myControlsMapRoll.Min,     myControlsMapRoll.Mid,     myControlsMapRoll.Max,     myControlsMapRoll.Rev);
 //  myControls.pitch    = mapJoystickRange( analogRead(A3), myControlsMapPitch.Min,    myControlsMapPitch.Mid,    myControlsMapPitch.Max,    myControlsMapPitch.Rev);
-void Data::setAnalog(byte b, int d){
+void Data::setJoystick(byte b, int d){
 //  Serial.print  (b);
 //  Serial.print  (" ");
 //  Serial.print  (d);
 //  Serial.println();
   analog[b]=d;
 }
-int Data::getAnalog(byte b){
+int Data::getJoystick(byte b){
 
 //  Serial.print  (b);
 //  Serial.print  (" ");
@@ -176,7 +202,9 @@ int Data::getAnalog(byte b){
 //}
 
 
-// ===========================================
+// =====================================
+//
+// =====================================
 void myControlsMapSetIt(MyControlsMap item) {
   item.Min = 0;
   item.Mid = 1023/2;

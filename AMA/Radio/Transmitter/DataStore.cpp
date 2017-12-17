@@ -45,17 +45,17 @@ DataStore::DataStore(Data * data){
   Serial.println(EEPROM.length());  
 
   /*
-    void setAnalog(byte, int);
-    int getAnalog(byte);
+    void setJoystick(byte, int);
+    int getJoystick(byte);
    */
   _data = data;
-  _data->setAnalog(1,11);
+  _data->setJoystick(1,11);
 
   Serial.println("DataStore");
-  Serial.println(_data->getAnalog(0));
-  Serial.println(_data->getAnalog(1));
-  Serial.println(_data->getAnalog(2));
-  Serial.println(_data->getAnalog(3));
+  Serial.println(_data->getJoystick(0));
+  Serial.println(_data->getJoystick(1));
+  Serial.println(_data->getJoystick(2));
+  Serial.println(_data->getJoystick(3));
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
@@ -70,10 +70,30 @@ DataStore::DataStore(Data * data){
 // ===========================================
 
 void DataStore::factoryReset() {
-  for (int i = 0 ; i < EEPROM.length() ; i++) {
+  for (unsigned int i = 0 ; i < EEPROM.length() ; i++) {
     EEPROM.write(i, 0);
   }
 }
+
+template <class T> int EEPROM_writeAnything(int ee, const T& value)
+{
+    const byte* p = (const byte*)(const void*)&value;
+    unsigned int i;
+    for (i = 0; i < sizeof(value); i++)
+          EEPROM.write(ee++, *p++);
+    return i;
+}
+
+template <class T> int EEPROM_readAnything(int ee, T& value)
+{
+    byte* p = (byte*)(void*)&value;
+    unsigned int i;
+    for (i = 0; i < sizeof(value); i++)
+          *p++ = EEPROM.read(ee++);
+    return i;
+}
+
+
 
 //
 //void readEEPROM() {

@@ -90,16 +90,7 @@ class Menu
     
     CustomChar customChar = CustomChar();
     Display display = Display();
-    
-//    unsigned int *pUInt1;
-//    unsigned int *pUInt2;
-//    
-//    unsigned int *pUInt[4];
-//    void *pVoid[4];
-    
-MyResistorMap myResistorMap;   
-    
-    
+
     char buffer[20];  //  Hold The Convert Data (width of the LCD)
     
     byte menuRow = 0;
@@ -160,8 +151,6 @@ MyResistorMap myResistorMap;
     
     byte menuOptions[5];
     byte menuSize;
-    
-    //MyEditorData myEditorData;
 
     // ===========================================
     // library-accessible "private" interface

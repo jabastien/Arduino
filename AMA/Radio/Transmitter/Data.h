@@ -32,14 +32,16 @@ class Data
     Data(void);
     void aux(byte, int);
 
-    void setAnalog(byte, int);
-    int getAnalog(byte);
+    void setJoystick(byte, int);
+    int getJoystick(byte);
 
-    void setUint16_tNumber(void *);
+    void setUint16_tPointer(void *);
+    void setUint16_tNumber(uint16_t number);
     void adjUint16_tNumber(uint16_t number);
     
     MyResistorMap& getMyResistorMap(void);
-    MyResistorMap  myResistorMap; 
+    MyVoltageMap& getMyVoltageMap(void);
+
 
   // ===========================================
   // library-accessible "private" interface
@@ -49,7 +51,8 @@ class Data
     int mapJoystickRange(int, int, int, int, bool);
     int analog[8];
 
-
+    MyVoltageMap myVoltageMap;
+    MyResistorMap  myResistorMap; 
     MyButtons myButtons;
     MyAux myAux;
     MyControls myControls;

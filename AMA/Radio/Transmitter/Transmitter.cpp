@@ -177,8 +177,8 @@ void loop() {
   for (byte analogLoop = 0 ; analogLoop < 4; analogLoop++) {
     // Switch address for 4052 (1x)
     cd4052.setChannel(analogLoop);
-    data.setAnalog((analogLoop * 2)    , cd4052.analogReadX());
-    data.setAnalog((analogLoop * 2) + 1, cd4052.analogReadY());
+    data.setJoystick((analogLoop * 2)    , cd4052.analogReadX());
+    data.setJoystick((analogLoop * 2) + 1, cd4052.analogReadY());
   }
 
   //------------------------------------------------------
@@ -187,7 +187,7 @@ void loop() {
 
   //------------------------------------------------------
   // Button pressed?
-  keyPad.doKeys(data.getAnalog(3));
+  keyPad.doKeys(data.getJoystick(3));
   keyPress = keyPad.getKeyPressed();
 
   //------------------------------------------------------
