@@ -75,13 +75,12 @@ boolean Menu::isScreenRefreshNeeded(){
 }
 
 ///////////////////////////////////////////////////////////////////
-uint16_t numb = 0;
+uint16_t deltaNumber = 0;
 
 
 void Menu::menuDisplay(){
-//  if (menuAction != doMenu){ // Should not be here if a function is active.
-//    return;
-//  }  
+
+  // We always display the MENU
 
   // Menu Switch\Case
   switch (menuSelected) {
@@ -117,14 +116,14 @@ void Menu::menuDisplay(){
     case 14:      //  updateFPS();
       lcdMenu014();
       break;
-//case 200: // Delete me
-//      Serial.print  (F("using 200: " ));
-//  break;  // Delete me
-//case 201: // Delete me
-//      Serial.print  (F("using 201: " ));
-//  break;  // Delete me
-//case 238
-//case 239
+
+    // ---------------------------------------
+    // -----------   Functions   -------------
+    // ---------------------------------------
+    // Do NOT go here...
+    // Do NOT go here...
+    // Do NOT go here...
+
     // ---------------------------------------
     // -----------  Initialize   -------------
     // ---------------------------------------
@@ -185,22 +184,6 @@ void Menu::menuDisplay(){
       break;
   }  
 
-
-  if (menuAction != doInit){
-    if (menuSelected != MAINMENU){// Don't show carrot for MAINMENU
-      // Clear prior carrot
-      for (byte b = 1; b <= 3 ; b++){
-        lcd.setCursor(0, b);//   row >    column ^
-        lcd.print (" ");
-      }
-      // Show new Carrot
-      if (menuCol > 0){
-        lcd.setCursor(0, menuCol);//   row >    column ^
-        lcd.print (">");
-      }
-    }
-  }
-
 }
 
 void Menu::menuKeyboard(byte keyPress){
@@ -216,19 +199,25 @@ void Menu::menuKeyboard(byte keyPress){
 
   // Key Select/Enter (EXIT)
   if (keyPress == SELECT) {
+    
+    if (false){
     Serial.println("doing SELECT");  
-
     Serial.print (F(" MS1:"));
     Serial.print (menuSelected);
-
+  }
+    
     // Do a FUNCTION or next MENU
     if (menuOptions[menuCol] >= 200 && menuOptions[menuCol] < 239){
       // Select FUNCTION to be active
       function = menuOptions[menuCol];
       menuAction = doFunc;
       funcChangeCheck();
-      Serial.print (F(" FS2:"));
-      Serial.println(function);
+      
+      if (false){
+        Serial.print (F(" FS2:"));
+        Serial.println(function);
+      }
+      
       return;
     } else {
       // Select next MENU to be active
@@ -236,12 +225,14 @@ void Menu::menuKeyboard(byte keyPress){
          
       //// DO CheckMenuChange from here
       menuChangeCheck();
-
-      Serial.print (F(" MS3:"));
-      Serial.println(menuSelected);
+    
+      if (false){
+        Serial.print (F(" MS3:"));
+        Serial.println(menuSelected);
+      }
     }
   }
-    
+
   // Menu operation
   if (keyPress == UP) {
     if (menuCol > 0)
@@ -259,6 +250,23 @@ void Menu::menuKeyboard(byte keyPress){
     if (menuRow > 0)
       menuRow--;
   }
+
+  // Do we need a carrot?
+  if (menuAction != doInit){
+    if (menuSelected != MAINMENU){// Don't show carrot for MAINMENU
+      // Clear prior carrot
+      for (byte b = 1; b <= 3 ; b++){
+        lcd.setCursor(0, b);//   row >    column ^
+        lcd.print (" ");
+      }
+      // Show new Carrot
+      if (menuCol > 0){
+        lcd.setCursor(0, menuCol);//   row >    column ^
+        lcd.print (">");
+      }
+    }
+  }
+  
 }
 
 void Menu::menuChangeCheck(){
@@ -267,7 +275,7 @@ void Menu::menuChangeCheck(){
     return;
   }
   
-  if (true){
+  if (false){
     Serial.print (F(" Sel:"));
     Serial.print (menuSelected);
     Serial.println();
@@ -275,9 +283,7 @@ void Menu::menuChangeCheck(){
 
   lcd.noBlink();
   lcd.clear();
-
-  repeatCount = 0;
-
+  
   clearMyMenuData();
   menuCol = 0;  
      
@@ -288,6 +294,9 @@ void Menu::menuChangeCheck(){
 
 void Menu::funcKeyboard(byte keyPress){
 
+  deltaNumber = 0;
+  byte deltaDigits = 0;
+  
   // If not FUNCTION, leave
   if (menuAction != doFunc){ // Should not be here if a MENU is active.
     return;
@@ -296,15 +305,16 @@ void Menu::funcKeyboard(byte keyPress){
   // If no key pressed, leave
   if (keyPress == NOKEY ){
     return;
-  }
-
-  Serial.println("doing FUNCTION");     
+  }     
 
   // Key Select/Enter (EXIT)
   if (keyPress == SELECT) {
-    Serial.print (F(" FS4:"));
-    Serial.print (function);
 
+    if (false){
+      Serial.print (F(" FS4:"));
+      Serial.print (function);
+    }
+    
     menuCol = 0;
     menuRow = 0;
     editCol = 0;
@@ -313,39 +323,54 @@ void Menu::funcKeyboard(byte keyPress){
     menuAction = doMenu;
     isMenuChange = true;
     menuChangeCheck();
-    Serial.print (F(" FS5:"));
-    Serial.println(function);
+    
+    if (false){
+      Serial.print (F(" FS5:"));
+      Serial.println(function);
+    }
 
     return;
   }    
 
+  
   // Function operation
   // Function for Edit
   if (keyPress == UP) {
-    Serial.println("UP-F"); 
     //if (editCol < (menuSize-1))
     if (editCol < 10)
       editCol++;
-      numb = 1; 
+      deltaDigits = 1; 
 //    _data->adjUint16_tNumber(1);               
   }
   if (keyPress == DOWN) {
-    Serial.println("DOWN-F");   
     if (editCol > 0)
       editCol--;
-      numb = -1;  
+      deltaDigits = -1;  
 //    _data->adjUint16_tNumber(-1);            
   }
   if (keyPress == RIGHT) {
-    Serial.println("RIGHT-F"); 
     if (editRow < 5)  // Replace '5' with field pattern size (allow moves only to '#' cells)
       editRow++;
   }
   if (keyPress == LEFT) {
-    Serial.println("LEFT-F"); 
     if (editRow > 0)
       editRow--;
   }               
+
+
+  deltaNumber = 1;
+  for (byte loop = 0; loop < editRow; loop++){
+    deltaNumber*=10;
+  }  
+  deltaNumber *= deltaDigits;
+
+  if (true){
+    Serial.print  ("deltaDigits ");
+    Serial.print  (deltaDigits);
+    Serial.print  (" deltaNumber ");
+    Serial.print  (deltaNumber);
+    Serial.println();
+  }
 }
 
 void Menu::funcChangeCheck(){
@@ -362,11 +387,7 @@ void Menu::funcChangeCheck(){
   }
 
   setVisible();
-  lcd.blink();
-
-  editRow = 0;
-
-  repeatCount = 0;          
+  lcd.blink();    
 }
 
 void Menu::funcDisplay(){
@@ -375,52 +396,56 @@ void Menu::funcDisplay(){
   if (menuAction != doFunc){ // Should not be here if a MENU is active.
     return;
   }
-  
-//Serial.print  ("funcDisplay: ");
-//Serial.println(function);
-    
-    switch (function) {
-      /*
-       *   207 = Byte Signed
-       *   208 = Byte Un-signed
-       *   215 = int Signed
-       *   216 = int Un-signed
-       *   232 = long Signed
-       *   232 = long Un-signed
-       *   
-       *   238 - EEPROM Read
-       *   239 - EEPROM Write
-       */
-       
-      // ---------------------------------------
-      // ------------  Functions  --------------
-      // ---------------------------------------
-      case 200: // Int number edit
-        lcdFunc200();
-        break;
-      // ---------------------------------------
-      case 201: // Double number edit
-        lcdFunc201();
-        break;
-      // ---------------------------------------
-      case 238: // EEPROM Read
-        lcdFunc238();
-        break;
-      // ---------------------------------------
-      case 239: // EEPROM Write
-        lcdFunc239();
-        break;
-      // ---------------------------------------
-      default:
-        // catch all - N/A
-        Serial.print  (F("Function not found Error: " ));
-        Serial.print  (function);
-  //      Serial.println(" - reset");
-  //      menuSelected = 254;
-        break;    
-    }
 
-  lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
+  if (false){
+    Serial.print  ("funcDisplay: ");
+    Serial.println(function);
+  }
+ 
+  switch (function) {
+    /*
+     *   207 = Byte Signed
+     *   208 = Byte Un-signed
+     *   215 = int Signed
+     *   216 = int Un-signed
+     *   232 = long Signed
+     *   232 = long Un-signed
+     *   
+     *   238 - EEPROM Read
+     *   239 - EEPROM Write
+     */
+     
+    // ---------------------------------------
+    // ------------  Functions  --------------
+    // ---------------------------------------
+    case 200: // Int number edit
+      lcdFunc200();
+      break;
+    // ---------------------------------------
+    case 201: // Double number edit
+      lcdFunc201();
+      break;
+    // ---------------------------------------
+    case 238: // EEPROM Read
+      lcdFunc238();
+      break;
+    // ---------------------------------------
+    case 239: // EEPROM Write
+      lcdFunc239();
+      break;
+    // ---------------------------------------
+    default:
+      // catch all - N/A
+      Serial.print  (F("Function not found Error: " ));
+      Serial.print  (function);
+      Serial.println(" - reset");
+      menuSelected = 254;
+      break;    
+  }
+
+  // edit format
+  byte wide = 6;
+  lcd.setCursor(wide + (editRow - wide) + myMenuData.row[menuCol] , menuCol);//   row >    column ^
 }
 
 void Menu::updateLCD(byte keyPress, int fps) {
@@ -436,22 +461,15 @@ void Menu::updateLCD(byte keyPress, int fps) {
     funcDisplay(); 
   }
 
-//  Serial.print  ("updateLCD 1 : ");
-//  Serial.print  ("isMenuChange = ");
-//  Serial.print  (isMenuChange);
-//  Serial.print  (" repeatCount = ");
-//  Serial.println(repeatCount);
+  if (false){
+    Serial.print  ("updateLCD 1 : ");
+    Serial.print  ("isMenuChange = ");
+    Serial.print  (isMenuChange);
+    Serial.print  (" repeatCount = ");
+    Serial.println(repeatCount);
+  }
 
   isMenuChange = false;
-
-//  Serial.print  ("updateLCD 3 : ");
-//  Serial.print  ("isMenuChange = ");
-//  Serial.print  (isMenuChange);
-//  Serial.print  (" repeatCount = ");
-//  Serial.println(repeatCount);
-
-  
-  numb = 0;
   
   if (++repeatCount > 31) {
     repeatCount = 0;
@@ -467,7 +485,6 @@ void Menu::updateLCD(byte keyPress, int fps) {
     }
   } 
 }
-
 
 void Menu::printDrmc(){
   Serial.print  (" pos> ");
@@ -588,14 +605,11 @@ void Menu::lcdMenu001() {
 //  lcd.print(display.outputDigitsU16(*pUInt1, ohm_x_xxxxO));
 
   
-  uint8_t numb = (int)((double)repeatCount*3.5);
-  customChar.percent(numb);
+  uint8_t batPercent = (int)((double)repeatCount*3.5);
+  customChar.percent(batPercent);
   lcd.setCursor(11, 0); //   row >    column ^
-  
   lcd.print(F("Bat:"));  
-//  lcd.print(numb);  
-  lcd.print(display.outputDigitsU8(numb, digits8));//  lcd.print(display.outputDigitsU16(v5_voltPerBit, volts_0_0xxxxxV));
-//  lcd.print(F("  "));
+  lcd.print(display.outputDigitsU8(batPercent, digits8));//  lcd.print(display.outputDigitsU16(v5_voltPerBit, volts_0_0xxxxxV));
   customChar.showChar();
 
   lcd.setCursor(16, 3); //   row >    column ^
@@ -893,9 +907,9 @@ void Menu::lcdFunc201() { //Double number edit
 
 
   //    _data->setUint16_tPointer(myMenuData.pVoid[1]);
-  if (numb != 0){
+  if (deltaNumber != 0){
     if (myMenuData.pVoid[1] != NULL){
-      _data->adjUint16_tNumber(numb);
+      _data->adjUint16_tNumber(deltaNumber);
     } else {
       Serial.println("myMenuData.pVoid[1] = NULL");  
     }
