@@ -79,8 +79,10 @@ uint16_t numb = 0;
 
 
 void Menu::menuDisplay(){
-//Serial.print  ("menuDisplay: ");
-//Serial.println(menuSelected);  
+//  if (menuAction != doMenu){ // Should not be here if a function is active.
+//    return;
+//  }  
+
   // Menu Switch\Case
   switch (menuSelected) {
     // ---------------------------------------
@@ -115,10 +117,14 @@ void Menu::menuDisplay(){
     case 14:      //  updateFPS();
       lcdMenu014();
       break;
-case 200: // Delete me
-  break;  // Delete me
-case 201: // Delete me
-  break;  // Delete me
+//case 200: // Delete me
+//      Serial.print  (F("using 200: " ));
+//  break;  // Delete me
+//case 201: // Delete me
+//      Serial.print  (F("using 201: " ));
+//  break;  // Delete me
+//case 238
+//case 239
     // ---------------------------------------
     // -----------  Initialize   -------------
     // ---------------------------------------
@@ -178,21 +184,35 @@ case 201: // Delete me
       menuSelected = 254;
       break;
   }  
+
+
+  if (menuAction != doInit){
+    if (menuSelected != MAINMENU){// Don't show carrot for MAINMENU
+      // Clear prior carrot
+      for (byte b = 1; b <= 3 ; b++){
+        lcd.setCursor(0, b);//   row >    column ^
+        lcd.print (" ");
+      }
+      // Show new Carrot
+      if (menuCol > 0){
+        lcd.setCursor(0, menuCol);//   row >    column ^
+        lcd.print (">");
+      }
+    }
+  }
+
 }
 
 void Menu::menuKeyboard(byte keyPress){
-
+ 
+  if (menuAction != doMenu && menuAction != doInit){ // Should not be here if a function is active.
+    return;
+  }
+  
   // If no key pressed, leave
   if (keyPress == NOKEY){
     return;
   }
-
-  // If not MENU, leave
-  if (function != 0){ // Should not be here if a function is active.
-    return;
-  }
-
-//  Serial.println("doing MENU");  
 
   // Key Select/Enter
   if (keyPress == SELECT) {
@@ -200,17 +220,21 @@ void Menu::menuKeyboard(byte keyPress){
 
     Serial.print (F(" MS1:"));
     Serial.print (menuSelected);
-  
+
+
+
     if (menuOptions[menuCol] >= 200 && menuOptions[menuCol] < 239){
       // Select FUNCTION to be active
       function = menuOptions[menuCol];
+      menuAction = doFunc;
       Serial.print (F(" FS2:"));
       Serial.println(function);
     } else {
       // Select MENU to be active
-      menuSelected = menuOptions[menuCol];   
-//// DO CheckMenuChange from here
-menuChangeCheck();
+      menuSelected = menuOptions[menuCol];
+         
+      //// DO CheckMenuChange from here
+      menuChangeCheck();
 
       Serial.print (F(" MS3:"));
       Serial.println(menuSelected);
@@ -218,7 +242,6 @@ menuChangeCheck();
   }
     
   // Menu operation
-
   if (keyPress == UP) {
     if (menuCol > 0)
       menuCol--;            
@@ -235,33 +258,15 @@ menuChangeCheck();
     if (menuRow > 0)
       menuRow--;
   }
-
-   
-  if (menuSelected != MAINMENU){// Don't show carrot for MAINMENU
-    // Clear prior carrot
-    for (byte b = 1; b <= 3 ; b++){
-      lcd.setCursor(0, b);//   row >    column ^
-      lcd.print (" ");
-    }
-    // Show new Carrot
-    if (menuCol > 0){
-      lcd.setCursor(0, menuCol);//   row >    column ^
-      lcd.print (">");
-    }
-  }
-
-//_data->adjUint16_tNumber(numb);
-//    if (numb != 0){
-//      _data->adjUint16_tNumber(numb);               
-//    }
-    
 }
 
 void Menu::menuChangeCheck(){
 
+  if (menuAction != doMenu && menuAction != doInit){ // Should not be here if a function is active.
+    return;
+  }
+  
   if (true){
-    Serial.print (F(" Cur:"));
-    Serial.print (menuCurrent);
     Serial.print (F(" Sel:"));
     Serial.print (menuSelected);
     Serial.println();
@@ -276,20 +281,20 @@ void Menu::menuChangeCheck(){
   clearMyMenuData();
   menuCol = 0;  
      
-isMenuChange=true;
-repeatCount = 0;
-menuDisplay();
-
+  isMenuChange=true;
+  repeatCount = 0;
+  menuDisplay();
 }
 
 void Menu::funcKeyboard(byte keyPress){
-  // If no key pressed, leave
-  if (keyPress == NOKEY ){
+
+  // If not FUNCTION, leave
+  if (menuAction != doFunc){ // Should not be here if a MENU is active.
     return;
   }
 
-  // If not FUNCTION, leave
-  if (function == 0){ // Should not be here if a MENU is active.
+  // If no key pressed, leave
+  if (keyPress == NOKEY ){
     return;
   }
 
@@ -300,11 +305,17 @@ void Menu::funcKeyboard(byte keyPress){
     Serial.print (F(" FS4:"));
     Serial.print (function);
 
-    function = 0;
+    menuAction = doMenu;
+   
 //funcChangeCheck();
 isMenuChange=true;
     Serial.print (F(" FS5:"));
     Serial.println(function);
+
+menuCol = 0;
+menuRow = 0;
+editCol = 0;
+editRow = 0;
   }    
 
   // Function operation
@@ -338,9 +349,12 @@ isMenuChange=true;
 
 void Menu::funcChangeCheck(){
 
+  // If not FUNCTION, leave
+  if (menuAction != doFunc){ // Should not be here if a MENU is active.
+    return;
+  }
+  
   if (true){
-    Serial.print (F(" Cur:"));
-    Serial.print (menuCurrent);
     Serial.print (F(" Sel:"));
     Serial.print (menuSelected);
     Serial.println();
@@ -356,6 +370,11 @@ void Menu::funcChangeCheck(){
 
 void Menu::funcDisplay(){
 
+  // If not FUNCTION, leave
+  if (menuAction != doFunc){ // Should not be here if a MENU is active.
+    return;
+  }
+  
 //Serial.print  ("funcDisplay: ");
 //Serial.println(function);
     
@@ -367,6 +386,9 @@ void Menu::funcDisplay(){
        *   216 = int Un-signed
        *   232 = long Signed
        *   232 = long Un-signed
+       *   
+       *   238 - EEPROM Read
+       *   239 - EEPROM Write
        */
        
       // ---------------------------------------
@@ -380,31 +402,38 @@ void Menu::funcDisplay(){
         lcdFunc201();
         break;
       // ---------------------------------------
+      case 238: // EEPROM Read
+        lcdFunc238();
+        break;
+      // ---------------------------------------
+      case 239: // EEPROM Write
+        lcdFunc239();
+        break;
+      // ---------------------------------------
       default:
         // catch all - N/A
         Serial.print  (F("Function not found Error: " ));
-        Serial.print  (menuSelected);
+        Serial.print  (function);
   //      Serial.println(" - reset");
   //      menuSelected = 254;
         break;    
     }
+
+ 
   lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
 }
 
 void Menu::updateLCD(byte keyPress, int fps) {
 
   menuDisplay();
-  if (isMenuChange){
-      menuDisplay();
-  }
 
-  if (function){
+  if (menuAction == doMenu || menuAction == doInit){
+    // MENU mode
+    menuKeyboard(keyPress);    
+  } else {
     // FUNCTION mode
     funcKeyboard(keyPress);
     funcDisplay(); 
-  } else {
-    // MENU mode
-    menuKeyboard(keyPress);
   }
 
 //  Serial.print  ("updateLCD 1 : ");
@@ -432,6 +461,8 @@ void Menu::updateLCD(byte keyPress, int fps) {
     if (keyPress != NOKEY){
       Serial.print  ("keyPress ");
       Serial.print  (keyPress);
+      Serial.print  (" menuAction ");
+      Serial.print  (menuAction);
       printDrmc();
     }
   } 
@@ -487,10 +518,10 @@ void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   // Need to find a way to retain 'menuCol' when returning?
 
 //  if (menuValues[0] != FUNCTION){
+
     // Clear current menu
     memset(menuOptions, 0x00, sizeof(menuOptions)); // for automatically-allocated arrays
     memcpy(menuOptions, menuValues, menuSize);
-    Serial.println(F("setMenu *** menuValue [0]"));
 //  } else {  
 //    if (returnToCurrent != MAINMENU){
 //      // Clear current menu
@@ -505,7 +536,7 @@ void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
 //  }
 
   // Show what we did?
-  if (false) {
+  if (true) {
     Serial.print  (menuOpt);
 
     Serial.print  (F(" Size ["));
@@ -835,9 +866,9 @@ void Menu::lcdMenu014() {
 //===========================================
 // -------------------------------------------
 void Menu::lcdFunc200() { // UInt number edit
-  if (repeatCount == 0) {
-    setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
-  }
+//  if (repeatCount == 0) {
+//    setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
+//  }
 
   if (myMenuData.pgmData[1] != NULL){
     // Display measured voltage
@@ -858,9 +889,9 @@ void Menu::lcdFunc200() { // UInt number edit
 
 // -------------------------------------------
 void Menu::lcdFunc201() { //Double number edit
-  if (repeatCount == 0) {
-    setMenu(F("x201"), menuOptions201, membersof(menuOptions201));
-  }
+//  if (repeatCount == 0) {
+//    setMenu(F("x201"), menuOptions201, membersof(menuOptions201));
+//  }
   // #include<stdlib.h>
   //  dtostrf(FLOAT,WIDTH,PRECSISION,BUFFER);
 
@@ -888,8 +919,14 @@ void Menu::lcdFunc201() { //Double number edit
 //  }
 //lcdInit252(); 
 
+
+//    _data->setUint16_tPointer(myMenuData.pVoid[1]);
 if (numb != 0){
-  _data->adjUint16_tNumber(numb);
+  if (myMenuData.pVoid[1] != NULL){
+    _data->adjUint16_tNumber(numb);
+  } else {
+    Serial.println("myMenuData.pVoid[1] = NULL");  
+  }
 }
     
 //  lcd.setCursor(3 + menuRow, 1); //   row >    column ^
@@ -899,11 +936,12 @@ if (numb != 0){
 
 // -------------------------------------------
 void Menu::lcdFunc238() {
-  if (repeatCount == 0) {
-    setMenu(F("x238"), menuOptions238, membersof(menuOptions238));
-    lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("x238"));
-  }
+
+//  if (repeatCount == 0) {
+//    setMenu(F("x238"), menuOptions238, membersof(menuOptions238));
+//    lcd.setCursor(0, 0); //   row >    column ^
+//    lcd.print(F("x238"));
+//  }
 
   // 1234567890123456789012345678901234567890
   // Erase all transmitter data? y/n
@@ -917,11 +955,11 @@ void Menu::lcdFunc238() {
 
 // -------------------------------------------
 void Menu::lcdFunc239() {
-  if (repeatCount == 0) {
-    setMenu(F("x239"), menuOptions239, membersof(menuOptions239));
-    lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("x239"));
-  }
+//  if (repeatCount == 0) {
+//    setMenu(F("x239"), menuOptions239, membersof(menuOptions239));
+//    lcd.setCursor(0, 0); //   row >    column ^
+//    lcd.print(F("x239"));
+//  }
 
   // 1234567890123456789012345678901234567890
   // Erasing all transmitter data!!!
@@ -946,6 +984,10 @@ void Menu::lcdFunc239() {
 //===========================================
 // -------------------------------------------
 void Menu::lcdInit240() { // Control check
+  if (repeatCount == 0) {
+    // load data pointers
+  }
+
   if (repeatCount == 0) {
     setMenu(F("x240"), menuOptions240, membersof(menuOptions240));
     lcd.setCursor(0, 0); //   row >    column ^
@@ -977,6 +1019,10 @@ void Menu::lcdInit240() { // Control check
 // -------------------------------------------
 void Menu::lcdInit244() { // Menu buttons
   if (repeatCount == 0) {
+    // load data pointers
+  }
+
+  if (repeatCount == 0) {
     setMenu(F("x244"), menuOptions244, membersof(menuOptions244));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("Menu Buttons"));  // Not using these?????
@@ -985,6 +1031,10 @@ void Menu::lcdInit244() { // Menu buttons
 
 // -------------------------------------------
 void Menu::lcdInit245() { // Trim
+  if (repeatCount == 0) {
+    // load data pointers
+  }
+
   if (repeatCount == 0) {
     setMenu(F("x245"), menuOptions245, membersof(menuOptions245));
     lcd.setCursor(0, 0); //   row >    column ^
@@ -995,6 +1045,10 @@ void Menu::lcdInit245() { // Trim
 // -------------------------------------------
 void Menu::lcdInit246() { // Switch
   if (repeatCount == 0) {
+    // load data pointers
+  }
+
+  if (repeatCount == 0) {
     setMenu(F("x246"), menuOptions246, membersof(menuOptions246));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("Switch"));
@@ -1003,6 +1057,10 @@ void Menu::lcdInit246() { // Switch
 
 // -------------------------------------------
 void Menu::lcdInit247() { // Joystick
+  if (repeatCount == 0) {
+    // load data pointers
+  }
+  
   if (repeatCount == 0) {
     setMenu(F("x247"), menuOptions247, membersof(menuOptions247));
     lcd.setCursor(0, 0); //   row >    column ^
@@ -1013,6 +1071,7 @@ void Menu::lcdInit247() { // Joystick
 // -------------------------------------------
 void Menu::lcdInit248() { // Shunt ohms
   if (repeatCount == 0) {
+    // load data pointers
     setMenu(F("x248"), menuOptions248, membersof(menuOptions248));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("Shunt"));
@@ -1111,7 +1170,9 @@ void Menu::lcdInit250() { // Vin pst 2.1 & 2.2 ohms
 
 // -------------------------------------------
 void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
+
   if (isMenuChange){
+    // load data pointers
     myMenuData.row[1] = 12;
     myMenuData.pgmData[1] = volts_x_xxxV;
     myMenuData.pVoid[1] = &_data->getMyResistorMap().shunt;
@@ -1129,8 +1190,8 @@ void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
 
 //    _data->adjUint16_tNumber(1);
 //    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-
   }  
+  
   if (repeatCount == 0) {
     setMenu(F("x251"), menuOptions251, membersof(menuOptions251));
     lcd.setCursor(0, 0); //   row >    column ^
@@ -1165,14 +1226,8 @@ void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
 // -------------------------------------------
 void Menu::lcdInit252() {  // V5.0    Regulator Reference
 
-//  Serial.print  ("lcdInit252 1 : ");
-//  Serial.print  ("isMenuChange = ");
-//  Serial.print  (isMenuChange);
-//  Serial.print  (" repeatCount = ");
-//  Serial.println(repeatCount);
- Serial.println("lcdInit252");   
-  if (isMenuChange){
-    Serial.println("isMenuChange = 1");    
+  if (isMenuChange){ 
+    // load data pointers
     myMenuData.row    [1] = 13;
     myMenuData.pgmData[1] = volts_x_xxxV;
     myMenuData.pVoid  [1] = &_data->getMyVoltageMap().reference;
@@ -1196,10 +1251,9 @@ void Menu::lcdInit252() {  // V5.0    Regulator Reference
     }
   
   if (repeatCount == 0) {
-  Serial.println("repeatCount = 0");
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit252_5V));
+    lcd.print(PGMSTR(lcd_param_lcdInit252_5Vref));
 
     lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_5Vmes));
@@ -1207,8 +1261,6 @@ void Menu::lcdInit252() {  // V5.0    Regulator Reference
     lcd.setCursor(1, 3); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
-
-  Serial.println("Display");
 
  // Display measured voltage
   lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
@@ -1225,6 +1277,13 @@ void Menu::lcdInit252() {  // V5.0    Regulator Reference
 //===========================================
 // -------------------------------------------
 void Menu::lcdInit253() { // Splash     [no click 'select button' out to 253]
+
+  menuAction = doInit;
+
+  if (isMenuChange){  
+    // load data pointers
+  }
+  
   if (repeatCount == 0) 
   {
     setMenu(F("x253"), menuOptions253, membersof(menuOptions253));    
@@ -1236,8 +1295,7 @@ void Menu::lcdInit253() { // Splash     [no click 'select button' out to 253]
     lcd.print(PGMSTR(versionNum));
   }
 
-
-  if (true){ // Can delete this whole if condition when (no EEPROM data) is completed.
+  if (true){ // Can delete this condition when (no EEPROM data) is completed.
     lcd.setCursor(0, 3);//   row >    column ^
     if ((repeatCount/2)%2 == 0){// If ODD.
       lcd.print("Finish EEPROM...");
@@ -1246,21 +1304,28 @@ void Menu::lcdInit253() { // Splash     [no click 'select button' out to 253]
     }
   }
   
-  if (repeatCount > 10) {//delay(2000);
-    
+  if (repeatCount > 12) {//delay(2000);    
      // If first time run (no EEPROM data)
-    if (true){// DAQ finish this....need to read the EEPROM data to know if it is 1st time
-      menuSelected = 252; // Initialize values
+    if (true){// DAQ finish this..(assume first time)..need to read the EEPROM data to know if it is 1st time
+        menuKeyboard(DOWN);  // menuSelected = 252; // Initialize values
     } else {
-      menuSelected = 240;   // Go to Control check before Main Menu 
+        menuKeyboard(DOWN);
+        menuKeyboard(DOWN);  //menuSelected = 240; // Go to Control check before Main Menu 
     }
-
-     menuChangeCheck();
+    menuAction = doMenu;
+    menuKeyboard(SELECT);
   }
 }
 
 // -------------------------------------------
 void Menu::lcdInit254() {  // Starting   [click (select) out to 254]
+  
+  menuAction = doInit;  
+
+  if (isMenuChange){  
+    // load data pointers
+  }
+    
   if (repeatCount == 0) {
     setMenu(F("x254"), menuOptions254, membersof(menuOptions254));
     lcd.init();
@@ -1272,9 +1337,8 @@ void Menu::lcdInit254() {  // Starting   [click (select) out to 254]
     lcd.print(PGMSTR(lcd_param_lcdInit254_startUp));    
   }
   
-  if (repeatCount > 1) { // ~delay(250);
-    menuSelected = 253;
-    menuChangeCheck();
+  if (repeatCount > 2) { // ~delay(250);
+      menuKeyboard(SELECT);
   }
 }
 
@@ -1282,11 +1346,13 @@ void Menu::lcdInit254() {  // Starting   [click (select) out to 254]
 // Reserved
 //===========================================
 void Menu::lcdInit255() { // this is an error, 255 is reserved 
-    lcd.setCursor(6, 1);//   row >    column ^
-    lcd.print(PGMSTR(ERR255));   
-    Serial.println(PGMSTR(ERR255));
-    while (true){
-      }
+  lcd.setCursor(6, 1);//   row >    column ^
+  lcd.print(PGMSTR(ERR255));   
+  Serial.println(PGMSTR(ERR255));
+
+  digitalWrite(1, HIGH); // LED and Sound on
+  while (true){
+    }
 }
 
 

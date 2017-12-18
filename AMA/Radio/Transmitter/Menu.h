@@ -107,15 +107,11 @@ void funcDisplay(void);
     byte editRow = 0;
     byte editCol = 0;
     
-    //byte returnToCurrent = MAINMENU;
-    
     byte repeatCount = 0;
     
-    byte menuCurrent  = MAINMENU;
     byte menuSelected = 254;
     
     byte function = 0;
-    boolean menuChange = true;
     boolean isMenuChange = true;
     
     //===============================================================================
@@ -139,10 +135,10 @@ void funcDisplay(void);
     byte menuOptions013 [1] = {10};
     byte menuOptions014 [1] = {10};
     
-    byte menuOptions200 [1] = {FUNCTION}; // Function for number edit
-    byte menuOptions201 [1] = {FUNCTION}; // Function for number edit
-    byte menuOptions238 [1] = {FUNCTION}; // Function for check for Factory Reset
-    byte menuOptions239 [1] = {FUNCTION}; // Function to do Factory Reset
+    //byte menuOptions200 [1] = {FUNCTION}; // Function for number edit
+    //byte menuOptions201 [1] = {FUNCTION}; // Function for number edit
+    //byte menuOptions238 [1] = {FUNCTION}; // Function for check for Factory Reset
+    //byte menuOptions239 [1] = {FUNCTION}; // Function to do Factory Reset
     
     byte menuOptions240 [1] = {MAINMENU};     // Control Check (make sure all surfaces & switches are homed. (Prevent flight)
     byte menuOptions244 [2] = {240,201};      // Menu
@@ -154,9 +150,9 @@ void funcDisplay(void);
     byte menuOptions250 [3] = {249,200,200};  // Vin pst 2.1 & 2.2 ohms
     byte menuOptions251 [3] = {250,200,200};  // Vin pre 1.1 & 1.2 ohms
     byte menuOptions252 [2] = {251,201};      // V5.0    Regulator Voltage 
-    byte menuOptions253 [1] = {253};          // Splash     [no click (select) out to 253]
+    byte menuOptions253 [3] = {253,252,240};  // Splash     [no click (select) out to 253]
     byte menuOptions254 [1] = {253};          // Starting   [click (select) out to 254]
-    //byte menuOptions255 [0] = {}; // Do NOT use: reserved
+    //byte menuOptions255 [0] = {};  // Do NOT use: reserved
     
     byte menuOptions[5];
     byte menuSize;
@@ -165,6 +161,13 @@ void funcDisplay(void);
     // library-accessible "private" interface
     // ===========================================
     private:
+
+
+      enum MenuAction {
+        doInit,
+        doMenu,
+        doFunc,
+      } menuAction = doInit;
 
       void printDrmc(void);  // test only, delete this and the method
       void clearMyMenuData(void);

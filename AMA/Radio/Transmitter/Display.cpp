@@ -364,7 +364,7 @@ char * Display::outputServiceTime(uint32_t seconds) {
 // ===========================================
 // Concatenate PGM string/char
 // ===========================================
-// Usage: concatBytesPGM(lcd_param_common_set,lcd_param_lcdInit252_5V);
+// Usage: concatBytesPGM(lcd_param_common_set,lcd_param_lcdInit252_5Vref);
 char * Display::concatBytesPGM(const char* pgm1, const char* pgm2) {
   memset(line, 0x00, sizeof(line)); // for automatically-allocated a clean arrays
   int c = 0;
