@@ -24,6 +24,17 @@
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 20, 4);    // Initialization of the book (address, characters, rows)
 
+
+/*
+ *         0 = Reserved
+ *   1 -  49 = Transmitter
+ *  50 -  99 = Model
+ * 100 - 149 = System (Resistors, Voltages)
+ * 200 - 254 = Functions
+ *       255 = Reserved
+ */
+
+
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
 Menu::Menu(Data * data){
@@ -63,26 +74,36 @@ boolean Menu::isScreenRefreshNeeded(){
  return false  ;
 }
 
+void doKeyboard(byte keyPress){
+  
+}
+
+void Menu::updateLCD2(byte keyPress, int fps) {
+/*
+ * Do Menu Keyboard 
+ * Do Func Keyboard 
+ * Do Menu change check
+ * Do Menu display
+ * Do Func display
+ */
+  doKeyboard(keyPress);
+  
+}
+
+uint16_t numb = 0;
+
 void Menu::updateLCD(byte keyPress, int fps) {
 
-// Private Methods /////////////////////////////////////////////////////////////
-// Functions only available to other functions in this library
-
+ 
   // Detect Menu change
-
   menuChange = false;
 
   if (menuCurrent != menuSelected) {
     menuChange = true;
 
     returnToCurrent = menuCurrent;
-    if (false){
-      Serial.print (F("C:"));
-      Serial.print (menuCurrent);
-      Serial.print (F(" S:"));
-      Serial.print (menuSelected);
-    }
-    if (false){
+
+    if (true){
       Serial.print (F(" Cur:"));
       Serial.print (menuCurrent);
       Serial.print (F(" Sel:"));
@@ -94,11 +115,11 @@ void Menu::updateLCD(byte keyPress, int fps) {
 
     // Don't clear the screen for FUNCTIONs
     if (menuSelected >= 200 && menuSelected <= 239){
-      function = true;
+      function = menuSelected;
       Serial.println("function = true;");
       lcd.blink();
     } else {
-      function = false;
+      function = 0;
       Serial.println("function = false;");
       lcd.noBlink();
       lcd.clear();
@@ -114,10 +135,8 @@ void Menu::updateLCD(byte keyPress, int fps) {
     menuCurrent = menuSelected;
   }
 
-Serial.print  ("Func: ");
-Serial.println(function);
 
-uint16_t numb = 0;
+numb = 0;
   if (keyPress != NOKEY ){
     // Key Select/Enter
     if (keyPress == SELECT) {
@@ -192,7 +211,7 @@ uint16_t numb = 0;
       } 
     }
 
-_data->adjUint16_tNumber(numb);
+//_data->adjUint16_tNumber(numb);
 //    if (numb != 0){
 //      _data->adjUint16_tNumber(numb);               
 //    }
@@ -208,7 +227,8 @@ _data->adjUint16_tNumber(numb);
         clearMyMenuData();
         menuCol = 0;
   }
-  
+
+  // Menu Switch\Case
   switch (menuSelected) {
     // ---------------------------------------
     case 1: //MAINMENU
@@ -242,16 +262,10 @@ _data->adjUint16_tNumber(numb);
     case 14:      //  updateFPS();
       lcdMenu014();
       break;
-    // ---------------------------------------
-    // ------------  Functions  --------------
-    // ---------------------------------------
-    case 200: // Int number edit
-      lcdFunc200();
-      break;
-    // ---------------------------------------
-    case 201: // Double number edit
-      lcdFunc201();
-      break;
+case 200: // Delete me
+  break;  // Delete me
+case 201: // Delete me
+  break;  // Delete me
     // ---------------------------------------
     // -----------  Initialize   -------------
     // ---------------------------------------
@@ -312,6 +326,44 @@ _data->adjUint16_tNumber(numb);
       break;
   }
 
+  // Function Switch\Case
+  if (function){
+
+Serial.print  ("Func: ");
+Serial.println(function);
+    
+    switch (menuSelected) {
+      /*
+       *   207 = Signed Byte
+       *   208 = Un-signed Byte
+       *   215 = Signed int
+       *   216 = Un-signed int
+       *   232 = Signed long
+       *   232 = Un-signed long
+       */
+       
+      // ---------------------------------------
+      // ------------  Functions  --------------
+      // ---------------------------------------
+      case 200: // Int number edit
+        lcdFunc200();
+        break;
+      // ---------------------------------------
+      case 201: // Double number edit
+        lcdFunc201();
+        break;
+      // ---------------------------------------
+      default:
+        // catch all - N/A
+        Serial.print  (F("Function not found Error: " ));
+        Serial.print  (menuSelected);
+  //      Serial.println(" - reset");
+  //      menuSelected = 254;
+        break;    
+    }
+  lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
+  
+  }
   // Set Repeat Count
   //repeatCount;
   if (++repeatCount > 31) {
@@ -409,6 +461,20 @@ void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   // Clear return to current   
   returnToCurrent = MAINMENU;
 }
+
+
+// Private Methods /////////////////////////////////////////////////////////////
+// Functions only available to other functions in this library
+
+// Private Methods /////////////////////////////////////////////////////////////
+// Functions only available to other functions in this library
+
+// Private Methods /////////////////////////////////////////////////////////////
+// Functions only available to other functions in this library
+
+// Private Methods /////////////////////////////////////////////////////////////
+// Functions only available to other functions in this library
+
 
 void Menu::setVisible(){
     lcd.setCursor(15, 0); //   row >    column ^
@@ -710,7 +776,6 @@ void Menu::lcdFunc200() { // UInt number edit
     setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
   }
 
-
   if (myMenuData.pgmData[1] != NULL){
     // Display measured voltage
     lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
@@ -721,8 +786,8 @@ void Menu::lcdFunc200() { // UInt number edit
     lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
     lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
   }
-  lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
-
+  
+//  lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
 }
 
 
@@ -746,20 +811,26 @@ void Menu::lcdFunc201() { //Double number edit
 //  lcd.setCursor(3, 1); //   row >    column ^
          
   //lcd.print(buffer);
+//
+//if (myMenuData.pgmData[1] != NULL){
+//    // Display measured voltage
+//    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
+//    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
+//  }
+//  
+//  if (myMenuData.pVoid[3] != NULL){
+//    // Calculate and display Volt/Bit
+//    lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
+//    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
+//  }
+lcdInit252(); 
 
-if (myMenuData.pgmData[1] != NULL){
-    // Display measured voltage
-    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
-  }
-  if (myMenuData.pVoid[3] != NULL){
-    // Calculate and display Volt/Bit
-    lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
-  }
-  
+if (numb != 0){
+  _data->adjUint16_tNumber(numb);               
+}
+    
 //  lcd.setCursor(3 + menuRow, 1); //   row >    column ^
-  lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
+//  lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
 }
 
 
@@ -1038,7 +1109,7 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
     myMenuData.row    [3] = 10;
     myMenuData.pgmData[3] = volts_0_0xxxxxV;
     myMenuData.pVoid  [3] = &_data->getMyVoltageMap().voltPerBit;
-    }
+
 
 //  // test test test
 //  // test test test
@@ -1051,7 +1122,7 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
 //    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
     _data->setUint16_tPointer(myMenuData.pVoid[1]);
 //    _data->adjUint16_tNumber(1);
-
+    }
   
   if (repeatCount == 0) {
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
@@ -1064,9 +1135,8 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
     lcd.setCursor(1, 3); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
-  
 
-  // Display measured voltage
+ // Display measured voltage
   lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
   lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
 
@@ -1139,4 +1209,6 @@ void Menu::lcdInit255() { // this is an error, 255 is reserved
     while (true){
       }
 }
+
+
 

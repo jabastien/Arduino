@@ -58,7 +58,7 @@ uint16_t* pointerUint16_t;
     
 void Data::setUint16_tPointer(void * pVoid){
   pointerUint16_t = (uint16_t*)pVoid;
-  Serial.print  ("setUint16_tNumber: ");
+  Serial.print  ("setUint16_tPointer: ");
   Serial.println(*(uint16_t*)pVoid);
 }
 

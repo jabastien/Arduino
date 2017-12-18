@@ -39,6 +39,10 @@ class Menu
         
     boolean isScreenRefreshNeeded(void);
     void updateLCD(byte, int);
+    void updateLCD2(byte, int);
+
+void doKeyboard(byte);
+    
 //    void clearMyEditorData(byte);
     void setMenu(String, byte [], byte);
     void setVisible(void);
@@ -106,7 +110,7 @@ class Menu
     byte menuCurrent  = MAINMENU;
     byte menuSelected = 254;
     
-    boolean function = false;
+    byte function = 0;
     boolean menuChange = false;
     
     //===============================================================================
