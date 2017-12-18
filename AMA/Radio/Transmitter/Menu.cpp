@@ -692,7 +692,7 @@ void Menu::lcdMenu003() {
 //fix  lcd.print  (v5_voltPerBit * analog[3]);
   lcd.print  (F("V "));
 
-  lcd.setCursor(0, 1); //   row >    column ^
+  lcd.setCursor(1, 1); //   row >    column ^
   lcd.print(F("Value: "));
 //fix  lcd.print  (analog[3]);
   lcd.print(F("   "));
@@ -701,7 +701,7 @@ void Menu::lcdMenu003() {
   //  lcd.print("Key Down: ");
   //  lcd.print  (keyDown);
 
-  lcd.setCursor(0, 3); //   row >    column ^
+  lcd.setCursor(1, 3); //   row >    column ^
   lcd.print(F("Key Pressed: "));
 //fix  lcd.print  (keyPress);
 }
@@ -732,11 +732,11 @@ void Menu::lcdMenu011() {
     setMenu(F("x011"), menuOptions011, membersof(menuOptions011));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("x11"));
-    lcd.setCursor(0, 1); //   row >    column ^
+    lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(F("Repeat: "));
   }
 
-  lcd.setCursor(9, 1); //   row >    column ^
+  lcd.setCursor(10, 1); //   row >    column ^
   lcd.print(repeatCount);
   lcd.print(F(" "));
 }
@@ -747,11 +747,11 @@ void Menu::lcdMenu012() {
     setMenu(F("x012"), menuOptions012, membersof(menuOptions012));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("x12"));
-    lcd.setCursor(0, 1); //   row >    column ^
+    lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(F("Repeat: "));
   }
 
-  lcd.setCursor(9, 1); //   row >    column ^
+  lcd.setCursor(10, 1); //   row >    column ^
   lcd.print(repeatCount);
   lcd.print(F(" "));
 }
@@ -761,11 +761,11 @@ void Menu::lcdMenu013() {
     setMenu(F("x013"), menuOptions013, membersof(menuOptions013));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("x13"));
-    lcd.setCursor(0, 1); //   row >    column ^
+    lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(F("Repeat: "));
   }
 
-  lcd.setCursor(9, 1); //   row >    column ^
+  lcd.setCursor(10, 1); //   row >    column ^
   lcd.print(repeatCount);
   lcd.print(" ");
 }
@@ -781,9 +781,9 @@ void Menu::lcdMenu014() {
   if (repeatCount == 0)
   {
     setMenu(F("x014"), menuOptions014, membersof(menuOptions014));
-    lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("x014"));
-    lcd.setCursor(0, 1); //   row >    column ^
+//    lcd.setCursor(0, 0); //   row >    column ^
+//    lcd.print(F("x014"));
+    lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(F("Repeat: "));
   }
 //  currentMillis = millis();
@@ -815,12 +815,12 @@ void Menu::lcdMenu014() {
     //Serial.println(buffer); ///< You will get something like"01:13:02:09"       
 
       // -------------------------------------
-      lcd.setCursor(0, 2); //   row >    column ^
+      lcd.setCursor(1, 2); //   row >    column ^
       lcd.print(F("Channel:"));
       lcd.print(F(" xxx"));
 
       // -------------------------------------
-      lcd.setCursor(0, 3); //   row >    column ^
+      lcd.setCursor(1, 3); //   row >    column ^
       lcd.print(F("FPS:"));
 //fix      lcd.print(fps);  // ~300 has been the average
       lcd.print(F("   GPS: xxx"));
@@ -830,7 +830,7 @@ void Menu::lcdMenu014() {
       cntMillis = 0;
     }
 //  }
-  lcd.setCursor(9, 1); //   row >    column ^
+  lcd.setCursor(10, 1); //   row >    column ^
   lcd.print(repeatCount);
   lcd.print(F(" "));
 }
@@ -975,10 +975,10 @@ void Menu::lcdInit240() { // Control check
     }
   } 
 
-  lcd.setCursor(0, 3);//   row >    column ^
+  lcd.setCursor(1, 3);//   row >    column ^
   lcd.print(PGMSTR(lcd_param_lcdInit240_volts));
   
-  lcd.setCursor(7, 3);//   row >    column ^
+  lcd.setCursor(8, 3);//   row >    column ^
   //lcd.print(display.output_x_xxxV(v5_System * 1000));    
 
 //fix
