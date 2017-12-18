@@ -4,6 +4,11 @@
   EEPROM Data read/write from Data.cpp
 */
 
+
+// https://github.com/esp8266/Arduino/issues/1539
+
+
+
 // include core Arduino API
 //#if defined(ARDUINO) && ARDUINO >= 100
 #if ARDUINO >= 100

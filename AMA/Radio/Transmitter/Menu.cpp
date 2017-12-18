@@ -31,21 +31,13 @@ Menu::Menu(Data * data){
   _data = data;
 
   // do whatever is required to initialize the library
-
-  
-//  _data->setJoystick(2,12);  
-//  Serial.println("Menu");
-//  Serial.println(_data->getJoystick(0));
-//  Serial.println(_data->getJoystick(1));
-//  Serial.println(_data->getJoystick(2));
-//  Serial.println(_data->getJoystick(3));
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
 
 void Menu::clearMyMenuData(){
-Serial.println("clearMyMenuData");  
+//Serial.println("clearMyMenuData");  
   myMenuData.row[0] = 0;
   myMenuData.row[1] = 0;
   myMenuData.row[2] = 0;
@@ -82,15 +74,15 @@ void Menu::updateLCD(byte keyPress, int fps) {
 
   if (menuCurrent != menuSelected) {
     menuChange = true;
-//    clearMyEditorData(-1);
+
     returnToCurrent = menuCurrent;
-    if (true){
+    if (false){
       Serial.print (F("C:"));
       Serial.print (menuCurrent);
       Serial.print (F(" S:"));
       Serial.print (menuSelected);
     }
-    if (true){
+    if (false){
       Serial.print (F(" Cur:"));
       Serial.print (menuCurrent);
       Serial.print (F(" Sel:"));
@@ -103,31 +95,29 @@ void Menu::updateLCD(byte keyPress, int fps) {
     // Don't clear the screen for FUNCTIONs
     if (menuSelected >= 200 && menuSelected <= 239){
       function = true;
+      Serial.println("function = true;");
       lcd.blink();
     } else {
       function = false;
+      Serial.println("function = false;");
       lcd.noBlink();
       lcd.clear();
     }
 
-    editRow = 0;
+    if (function){
+      setVisible();
+      editRow = 0;
+    }
 
     repeatCount = 0;
-    //menuCol = 0;
+
     menuCurrent = menuSelected;
-//
-//    if (menuCurrent == MAINMENU || menuCurrent >= 250) {
-//      lcd.noBlink();
-//    } else {
-//      lcd.blink();
-//    }
   }
 
-  if (function){
-    setVisible();
-  }
+Serial.print  ("Func: ");
+Serial.println(function);
 
-
+uint16_t numb = 0;
   if (keyPress != NOKEY ){
     // Key Select/Enter
     if (keyPress == SELECT) {
@@ -145,7 +135,7 @@ void Menu::updateLCD(byte keyPress, int fps) {
       if (!function){
         if (keyPress == UP) {
           if (menuCol > 0)
-            menuCol--;
+            menuCol--;            
         }
         if (keyPress == DOWN) {
           if (menuCol < (menuSize-1))
@@ -159,10 +149,7 @@ void Menu::updateLCD(byte keyPress, int fps) {
           if (menuRow > 0)
             menuRow--;
         }
-    
-
-    
-        // Carrot for menu select.
+         // Carrot for menu select.
         if (menuCurrent != MAINMENU){
           for (byte b = 1; b<4;b++){
             lcd.setCursor(0, b);//   row >    column ^
@@ -173,29 +160,42 @@ void Menu::updateLCD(byte keyPress, int fps) {
             lcd.print (">");
           }
         }
-      
-      } else {        
+      } else {   
+        Serial.println("doing FUNCTION");     
         // Function operation
         // Function for Edit
         if (keyPress == UP) {
+          Serial.println("UP-F"); 
           //if (editCol < (menuSize-1))
           if (editCol < 10)
             editCol++;
+            numb = 1; 
+//    _data->adjUint16_tNumber(1);               
         }
         if (keyPress == DOWN) {
+          Serial.println("DOWN-F");   
           if (editCol > 0)
             editCol--;
+            numb = -1;  
+//    _data->adjUint16_tNumber(-1);            
         }
         if (keyPress == RIGHT) {
+          Serial.println("RIGHT-F"); 
           if (editRow < 5)  // Replace '5' with field pattern size (allow moves only to '#' cells)
             editRow++;
         }
         if (keyPress == LEFT) {
+          Serial.println("LEFT-F"); 
           if (editRow > 0)
             editRow--;
         }       
       } 
     }
+
+_data->adjUint16_tNumber(numb);
+//    if (numb != 0){
+//      _data->adjUint16_tNumber(numb);               
+//    }
 
     if (true){
       Serial.print  ("keyPress ");
@@ -319,6 +319,24 @@ void Menu::updateLCD(byte keyPress, int fps) {
   }
 }
 
+
+void Menu::printDrmc(){
+  Serial.print  (" pos> ");
+  Serial.print  (myMenuData.row[menuCol]);
+
+  Serial.print  (" mc  ");
+  Serial.print  (menuCol);  
+  Serial.print  (" mr  ");
+  Serial.print  (menuRow);  
+  
+  Serial.print  (" ec  ");
+  Serial.print  (editCol);
+  Serial.print  (" er  ");
+  Serial.print  (editRow);
+  
+  Serial.println();
+}
+
 void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   
   // Make sure we don't have an error.
@@ -369,7 +387,7 @@ void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   }
 
   // Show what we did?
-  if (true) {
+  if (false) {
     Serial.print  (menuOpt);
     Serial.print  (F(" RTC="));
     Serial.print  (returnToCurrent);
@@ -683,22 +701,6 @@ void Menu::lcdMenu014() {
   lcd.print(F(" "));
 }
 
-void Menu::printDrmc(){
-  Serial.print  (" pos> ");
-  Serial.print  (myMenuData.row[menuCol]);
-
-  Serial.print  (" mc  ");
-  Serial.print  (menuCol);  
-  Serial.print  (" mr  ");
-  Serial.print  (menuRow);  
-  
-  Serial.print  (" ec  ");
-  Serial.print  (editCol);
-  Serial.print  (" er  ");
-  Serial.print  (editRow);
-  
-  Serial.println();
-}
 //===========================================
 // Functions
 //===========================================
@@ -708,8 +710,23 @@ void Menu::lcdFunc200() { // UInt number edit
     setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
   }
 
+
+  if (myMenuData.pgmData[1] != NULL){
+    // Display measured voltage
+    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
+  }
+  if (myMenuData.pVoid[3] != NULL){
+    // Calculate and display Volt/Bit
+    lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
+  }
   lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
+
 }
+
+
+// MS1:252 MS2:201
 
 // -------------------------------------------
 void Menu::lcdFunc201() { //Double number edit
@@ -730,6 +747,17 @@ void Menu::lcdFunc201() { //Double number edit
          
   //lcd.print(buffer);
 
+if (myMenuData.pgmData[1] != NULL){
+    // Display measured voltage
+    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
+  }
+  if (myMenuData.pVoid[3] != NULL){
+    // Calculate and display Volt/Bit
+    lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
+  }
+  
 //  lcd.setCursor(3 + menuRow, 1); //   row >    column ^
   lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
 }
@@ -959,15 +987,14 @@ void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
     myMenuData.pVoid[2] = &_data->getMyResistorMap().shunt;
 
    // ========================================  
-    Serial.println(PGMSTR(myMenuData.pgmData[0]));
-    
-    Serial.println("----->     adjUint16_tNumber");
+//    Serial.println(PGMSTR(myMenuData.pgmData[0]));
+//    
+//    Serial.println("----->     adjUint16_tNumber");
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+    _data->setUint16_tPointer(myMenuData.pVoid[1]);
 
-    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-    _data->setUint16_tPointer(myMenuData.pVoid[0]);
-
-    _data->adjUint16_tNumber(1);
-    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//    _data->adjUint16_tNumber(1);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
 
   }  
   if (repeatCount == 0) {
@@ -1008,11 +1035,24 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
     myMenuData.pgmData[1] = volts_x_xxxV;
     myMenuData.pVoid  [1] = &_data->getMyVoltageMap().reg;
 
-    myMenuData.row    [3] = 13;
+    myMenuData.row    [3] = 10;
     myMenuData.pgmData[3] = volts_0_0xxxxxV;
     myMenuData.pVoid  [3] = &_data->getMyVoltageMap().voltPerBit;
     }
 
+//  // test test test
+//  // test test test
+//  // test test test
+//  // test test test
+//  // test test test
+//  (*(uint16_t*)myMenuData.pVoid[1]) = (*(uint16_t*)myMenuData.pVoid[1]) + 1;
+  // daqdaqdaqdaq
+//    Serial.println("----->     adjUint16_tNumber");
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+    _data->setUint16_tPointer(myMenuData.pVoid[1]);
+//    _data->adjUint16_tNumber(1);
+
+  
   if (repeatCount == 0) {
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
@@ -1024,14 +1064,15 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
     lcd.setCursor(1, 3); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
+  
 
   // Display measured voltage
-  lcd.setCursor(13, 1); //   row >    column ^
+  lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
   lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
 
   // Calculate and display Volt/Bit
   *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)myMenuData.pVoid[1]/1023.0) * 1000;
-  lcd.setCursor(10, 3); //   row >    column ^
+  lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
   lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
 }
 
@@ -1053,7 +1094,7 @@ void Menu::lcdInit253() { // Splash     [no click 'select button' out to 253]
 
   if (true){ // Can delete this whole if condition when (no EEPROM data) is completed.
     lcd.setCursor(0, 3);//   row >    column ^
-    if (repeatCount %2 == 0){// If ODD.
+    if ((repeatCount/2)%2 == 0){// If ODD.
       lcd.print("Finish EEPROM...");
     }else{
       lcd.print("                ");
