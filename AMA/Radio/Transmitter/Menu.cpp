@@ -214,23 +214,24 @@ void Menu::menuKeyboard(byte keyPress){
     return;
   }
 
-  // Key Select/Enter
+  // Key Select/Enter (EXIT)
   if (keyPress == SELECT) {
     Serial.println("doing SELECT");  
 
     Serial.print (F(" MS1:"));
     Serial.print (menuSelected);
 
-
-
+    // Do a FUNCTION or next MENU
     if (menuOptions[menuCol] >= 200 && menuOptions[menuCol] < 239){
       // Select FUNCTION to be active
       function = menuOptions[menuCol];
       menuAction = doFunc;
+      funcChangeCheck();
       Serial.print (F(" FS2:"));
       Serial.println(function);
+      return;
     } else {
-      // Select MENU to be active
+      // Select next MENU to be active
       menuSelected = menuOptions[menuCol];
          
       //// DO CheckMenuChange from here
@@ -272,7 +273,6 @@ void Menu::menuChangeCheck(){
     Serial.println();
   }
 
-
   lcd.noBlink();
   lcd.clear();
 
@@ -300,22 +300,23 @@ void Menu::funcKeyboard(byte keyPress){
 
   Serial.println("doing FUNCTION");     
 
-  // Key Select/Enter
+  // Key Select/Enter (EXIT)
   if (keyPress == SELECT) {
     Serial.print (F(" FS4:"));
     Serial.print (function);
 
+    menuCol = 0;
+    menuRow = 0;
+    editCol = 0;
+    editRow = 0;
+    
     menuAction = doMenu;
-   
-//funcChangeCheck();
-isMenuChange=true;
+    isMenuChange = true;
+    menuChangeCheck();
     Serial.print (F(" FS5:"));
     Serial.println(function);
 
-menuCol = 0;
-menuRow = 0;
-editCol = 0;
-editRow = 0;
+    return;
   }    
 
   // Function operation
@@ -360,9 +361,9 @@ void Menu::funcChangeCheck(){
     Serial.println();
   }
 
+  setVisible();
   lcd.blink();
 
-  setVisible();
   editRow = 0;
 
   repeatCount = 0;          
@@ -419,7 +420,6 @@ void Menu::funcDisplay(){
         break;    
     }
 
- 
   lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
 }
 
@@ -488,6 +488,12 @@ void Menu::printDrmc(){
 
 void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   
+  // Make sure FUNCTIONs don't use this method (bad things heppen
+  if (menuValues[0] == FUNCTION) {
+    Serial.print  (F("Err: setMenu : Don't use for FUNCTIONS"));
+    return;
+  }
+  
   // Make sure we don't have an error.
   if (sizeIs > sizeof(menuOptions)) {
     Serial.print  (F("Err: setMenu "));
@@ -498,45 +504,17 @@ void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
     Serial.print  (F(" s/b <= ")); // increase " byte menuOptions[x] " size
     Serial.println(sizeIs);
   }
-
-  // Make sure FUNCTIONs don't have a child.
-  if (menuValues[0] == FUNCTION && sizeIs > 1) {
-    Serial.print  (F("Err: setMenu "));
-    Serial.print  (sizeIs);
-    Serial.print  (F(" for "));
-    Serial.print  (menuOpt);
-    sizeIs = 1; // degrade to prevent Array Overflow error
-    Serial.print  (F(" funcion s/b = "));
-    Serial.println(sizeIs);
-  }
-  
-  // Need to find a way to retain 'menuCol' when returning?
-  //  byte tempReturnToCurrent = menuOptions[0];
   
   menuSize = sizeIs;
 
   // Need to find a way to retain 'menuCol' when returning?
 
-//  if (menuValues[0] != FUNCTION){
-
-    // Clear current menu
-    memset(menuOptions, 0x00, sizeof(menuOptions)); // for automatically-allocated arrays
-    memcpy(menuOptions, menuValues, menuSize);
-//  } else {  
-//    if (returnToCurrent != MAINMENU){
-//      // Clear current menu
-//      memset(menuOptions, 0x00, sizeof(menuOptions)); // for automatically-allocated arrays
-//      menuOptions[0] = returnToCurrent;//tempReturnToCurrent;  --- fix this......
-//      Serial.println(F("*** menuValue [1]"));
-//      //    }
-//    } else {
-//      Serial.println(F("*** menuValue [2]"));
-//      returnToCurrent = menuOptions[0];
-//    }
-//  }
+  // Clear current menu
+  memset(menuOptions, 0x00, sizeof(menuOptions)); // for automatically-allocated arrays
+  memcpy(menuOptions, menuValues, menuSize);
 
   // Show what we did?
-  if (true) {
+  if (false) {
     Serial.print  (menuOpt);
 
     Serial.print  (F(" Size ["));
@@ -551,11 +529,7 @@ void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
     }
     Serial.println();
   }
-
-  // Clear return to current   
-//  returnToCurrent = MAINMENU;
 }
-
 
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library
@@ -736,13 +710,13 @@ void Menu::lcdMenu003() {
 void Menu::lcdMenu010() {
   if (repeatCount == 0) {
     setMenu(F("x010"), menuOptions010, membersof(menuOptions010));
-    lcd.setCursor(0, 0); //   row >    column ^
+    lcd.setCursor(1, 0); //   row >    column ^
     lcd.print(F("10 -> 11"));
-    lcd.setCursor(0, 1); //   row >    column ^
+    lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(F("10 -> 12"));
-    lcd.setCursor(0, 2); //   row >    column ^
+    lcd.setCursor(1, 2); //   row >    column ^
     lcd.print(F("10 -> 13"));
-    lcd.setCursor(0, 3); //   row >    column ^
+    lcd.setCursor(1, 3); //   row >    column ^
     lcd.print(F("10 -> 14"));
     lcd.print(F(" Repeat: "));
   }
@@ -880,8 +854,6 @@ void Menu::lcdFunc200() { // UInt number edit
     lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
     lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
   }
-  
-//  lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
 }
 
 
@@ -903,34 +875,32 @@ void Menu::lcdFunc201() { //Double number edit
 //    Serial.println(":");
 //  }
 //  lcd.setCursor(3, 1); //   row >    column ^
-         
-  //lcd.print(buffer);
-//
-//if (myMenuData.pgmData[1] != NULL){
-//    // Display measured voltage
-//    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
-//    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
-//  }
-//  
-//  if (myMenuData.pVoid[3] != NULL){
-//    // Calculate and display Volt/Bit
-//    lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
-//    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
-//  }
-//lcdInit252(); 
+//lcd.print(buffer);
 
 
-//    _data->setUint16_tPointer(myMenuData.pVoid[1]);
-if (numb != 0){
-  if (myMenuData.pVoid[1] != NULL){
-    _data->adjUint16_tNumber(numb);
-  } else {
-    Serial.println("myMenuData.pVoid[1] = NULL");  
+////if (myMenuData.pgmData[1] != NULL){
+////    // Display measured voltage
+////    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
+////    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
+////  }
+////  
+////  if (myMenuData.pVoid[3] != NULL){
+////    // Calculate and display Volt/Bit
+////    lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
+////    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
+////  }
+
+
+
+  //    _data->setUint16_tPointer(myMenuData.pVoid[1]);
+  if (numb != 0){
+    if (myMenuData.pVoid[1] != NULL){
+      _data->adjUint16_tNumber(numb);
+    } else {
+      Serial.println("myMenuData.pVoid[1] = NULL");  
+    }
   }
-}
-    
-//  lcd.setCursor(3 + menuRow, 1); //   row >    column ^
-//  lcd.setCursor(myMenuData.row[menuCol] + editRow, menuCol);//   row >    column ^
+  
 }
 
 
