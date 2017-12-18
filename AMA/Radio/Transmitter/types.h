@@ -44,7 +44,7 @@ struct MyButtons {
 // ===========================================
 struct MyVoltageMap {
   // Measured regulator voltage
-  uint16_t reg   = 5010; // = 5.000V
+  uint16_t reference = 5010; // = 5.000V
   
   // Calculated fields voltPerBit = (reg / 1023)
   uint16_t voltPerBit = 4897; // My messured value 0.004897

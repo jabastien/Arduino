@@ -39,10 +39,14 @@ class Menu
         
     boolean isScreenRefreshNeeded(void);
     void updateLCD(byte, int);
-    void updateLCD2(byte, int);
+void updateLCD2(byte, int);
 
-void doKeyboard(byte);
-    
+void menuDisplay(void);
+void menuChangeCheck(void);
+void menuKeyboard(byte);
+void funcKeyboard(byte);
+void funcChangeCheck(void);
+void funcDisplay(void);
 //    void clearMyEditorData(byte);
     void setMenu(String, byte [], byte);
     void setVisible(void);
@@ -103,7 +107,7 @@ void doKeyboard(byte);
     byte editRow = 0;
     byte editCol = 0;
     
-    byte returnToCurrent = MAINMENU;
+    //byte returnToCurrent = MAINMENU;
     
     byte repeatCount = 0;
     
@@ -111,7 +115,8 @@ void doKeyboard(byte);
     byte menuSelected = 254;
     
     byte function = 0;
-    boolean menuChange = false;
+    boolean menuChange = true;
+    boolean isMenuChange = true;
     
     //===============================================================================
     //===============================================================================
