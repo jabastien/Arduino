@@ -53,19 +53,19 @@ const String err = "Err:
 //#define DEBUG_MyControls
 
 /**************************************************************************************/
+/***************          constants configurations                 ********************/
+/**************************************************************************************/
+PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
+PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
+PROGMEM const char  versionNum [] = {"v1.27"};
+
+/**************************************************************************************/
 /***************             motor and servo numbers               ********************/
 /**************************************************************************************/
 #define THROTTLE = 0
 #define YAW      = 1
 #define PITCH    = 2
 #define ROLL     = 3
-
-/**************************************************************************************/
-/***************          constants configurations                 ********************/
-/**************************************************************************************/
-PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
-PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
-PROGMEM const char  versionNum [] = {"v1.27"};
 
 /**************************************************************************************/
 /***************          date & time configurations               ********************/
@@ -171,6 +171,9 @@ PROGMEM const char  timerDay[]     = "####:##:##:##";
 #define RIGHT  4
 #define UP     5
 
+PROGMEM const char  dashes[]   = "====================";
+PROGMEM const char  freeram[]  = "Free Ram: ";
+PROGMEM const char  eepromSz[] = "EEPROM length: ";
 /**************************************************************************************/
 /***************               Error Checking Section              ********************/
 /**************************************************************************************/

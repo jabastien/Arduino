@@ -31,12 +31,14 @@ Menu::Menu(Data * data){
   _data = data;
 
   // do whatever is required to initialize the library
-  _data->setJoystick(2,12);  
-  Serial.println("Menu");
-  Serial.println(_data->getJoystick(0));
-  Serial.println(_data->getJoystick(1));
-  Serial.println(_data->getJoystick(2));
-  Serial.println(_data->getJoystick(3));
+
+  
+//  _data->setJoystick(2,12);  
+//  Serial.println("Menu");
+//  Serial.println(_data->getJoystick(0));
+//  Serial.println(_data->getJoystick(1));
+//  Serial.println(_data->getJoystick(2));
+//  Serial.println(_data->getJoystick(3));
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
@@ -999,9 +1001,6 @@ void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
 //fix  lcd.print(display.outputDigitsU16(*pUInt2, ohm_xx_xxxO));
 }
 
-//int testtest = 16321; 
-//int* pint; //pint=(int*)data; ++(*pint);
-//int temp;
 // -------------------------------------------
 void Menu::lcdInit252() {  // V5.0    Regulator Voltage
   if (menuChange){
@@ -1025,7 +1024,6 @@ void Menu::lcdInit252() {  // V5.0    Regulator Voltage
     lcd.setCursor(1, 3); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
-
 
   // Display measured voltage
   lcd.setCursor(13, 1); //   row >    column ^

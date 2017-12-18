@@ -27,11 +27,12 @@ Data::Data(){
   //value = givenValue;
 
   // do whatever is required to initialize the library
+
 //  pinMode(13, OUTPUT);
 //  Serial.begin(115200);
 //myResistorMap.shunt = 1239;
-  Serial.print  ("Data() - shunt: ");
-  Serial.println(myResistorMap.shunt);
+//  Serial.print  ("Data() - shunt: ");
+//  Serial.println(myResistorMap.shunt);
   
 }
 

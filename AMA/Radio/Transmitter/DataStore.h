@@ -34,7 +34,7 @@ class DataStore
     //DataStore();
     DataStore(Data *);
     void factoryReset(void);
-
+    int eepromSize(void);
      
   // ======================================
   // library-accessible "private" interface

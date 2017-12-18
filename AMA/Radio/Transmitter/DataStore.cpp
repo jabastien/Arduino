@@ -33,29 +33,25 @@
 
 DataStore::DataStore(Data * data){
   // initialize this instance's variables
-  Serial.begin(115200); //Set the speed to 9600 bauds if you want.
-    // do whatever is required to initialize the library
-    
-  Serial.println("In DataStore");
-//  data.doSomething();
-  Serial.println("Out DataStore");
+  //Serial.begin(115200); //Set the speed to 9600 bauds if you want.
   
-  //Print length of data to run CRC on.
-  Serial.print(F("EEPROM length: "));
-  Serial.println(EEPROM.length());  
+  // do whatever is required to initialize the library
+
 
   /*
     void setJoystick(byte, int);
     int getJoystick(byte);
    */
   _data = data;
-  _data->setJoystick(1,11);
 
-  Serial.println("DataStore");
-  Serial.println(_data->getJoystick(0));
-  Serial.println(_data->getJoystick(1));
-  Serial.println(_data->getJoystick(2));
-  Serial.println(_data->getJoystick(3));
+  
+//  _data->setJoystick(1,11);
+//
+//  Serial.println("DataStore");
+//  Serial.println(_data->getJoystick(0));
+//  Serial.println(_data->getJoystick(1));
+//  Serial.println(_data->getJoystick(2));
+//  Serial.println(_data->getJoystick(3));
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
@@ -68,6 +64,9 @@ DataStore::DataStore(Data * data){
 // ===========================================
 // ===========================================
 // ===========================================
+int DataStore::eepromSize(){
+  return EEPROM.length();  
+}
 
 void DataStore::factoryReset() {
   for (unsigned int i = 0 ; i < EEPROM.length() ; i++) {

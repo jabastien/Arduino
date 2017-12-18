@@ -121,9 +121,21 @@ void setup(){
 //    ; // wait for serial port to connect. Needed for native USB port only
 //  }
 
-  Serial.print  ("Free Ram: \t");
+  Serial.println(PGMSTR(dashes)); 
+  
+  Serial.println(PGMSTR(qBytesWorld));
+  Serial.println(PGMSTR(deviceInfo));
+  Serial.println(PGMSTR(versionNum));
+  
+  Serial.print  (PGMSTR(freeram));
   Serial.println(utils.freeRam());
 
+  Serial.print  (PGMSTR(eepromSz));
+  Serial.println(dataStore.eepromSize()); 
+  
+  Serial.println(PGMSTR(dashes)); 
+
+  
   //Start everything up
   //  radio.begin();
   //  radio.setAutoAck(false);
