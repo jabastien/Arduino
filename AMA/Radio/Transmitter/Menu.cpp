@@ -407,9 +407,14 @@ void printOutMessage(const __FlashStringHelper* message){
   sprintf_P(buffer, PSTR("%S") , myMenuData.pgmData[1]);
   Serial.print  ("buffer 2");
   Serial.println(buffer); 
-  
+
+  Serial.println("=================================================");
   edit.doMaskEdit(keyPress , buffer, deltaNumber ); 
+  Serial.println("=================================================");
   edit.doMaskEdit2(keyPress , pttr, deltaNumber ); 
+  Serial.println("=================================================");
+  edit.doMaskEdit2(keyPress , myMenuData.pgmData[1], deltaNumber ); 
+  Serial.println("=================================================");
   }
 }
 
