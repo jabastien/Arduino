@@ -26,6 +26,7 @@
 #include "CustomChar.h"
 #include "Data.h"
 #include "Display.h"
+#include "Edit.h"
 
 // library interface description
 class Menu
@@ -36,18 +37,20 @@ class Menu
   public:
     //Menu();
     Menu(Data *);
-        
+
     boolean isScreenRefreshNeeded(void);
     void updateLCD(byte, int);
 void updateLCD2(byte, int);
 
-void menuDisplay(void);
-void menuChangeCheck(void);
-void menuKeyboard(byte);
-void funcKeyboard(byte);
-void funcChangeCheck(void);
-void funcDisplay(void);
+    void menuDisplay(void);
+    void menuChangeCheck(void);
+    void menuKeyboard(byte);
+    void funcKeyboard(byte);
+    void funcChangeCheck(void);
+    void funcDisplay(void);
+    
 //    void clearMyEditorData(byte);
+
     void setMenu(String, byte [], byte);
     void setVisible(void);
 
@@ -98,6 +101,7 @@ void funcDisplay(void);
     
     CustomChar customChar = CustomChar();
     Display display = Display();
+    Edit edit = Edit();
 
     char buffer[20];  //  Hold The Convert Data (width of the LCD)
     
@@ -161,7 +165,6 @@ void funcDisplay(void);
     // library-accessible "private" interface
     // ===========================================
     private:
-
 
       enum MenuAction {
         doInit,

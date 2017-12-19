@@ -18,6 +18,8 @@
 
 //// include this library's description file
 #include "Menu.h"
+
+
 // ===========================================
 // I2C LCD
 // ===========================================
@@ -76,8 +78,10 @@ boolean Menu::isScreenRefreshNeeded(){
 
 ///////////////////////////////////////////////////////////////////
 uint16_t deltaNumber = 0;
-
-
+byte     deltaWidth  = 5; // Number of # in format
+byte     deltaPos    = 0;
+char     deltaDigits = 0;
+  
 void Menu::menuDisplay(){
 
   // We always display the MENU
@@ -293,9 +297,6 @@ void Menu::menuChangeCheck(){
 }
 
 void Menu::funcKeyboard(byte keyPress){
-
-  deltaNumber = 0;
-  byte deltaDigits = 0;
   
   // If not FUNCTION, leave
   if (menuAction != doFunc){ // Should not be here if a MENU is active.
@@ -304,6 +305,7 @@ void Menu::funcKeyboard(byte keyPress){
 
   // If no key pressed, leave
   if (keyPress == NOKEY ){
+    deltaNumber = 0;    
     return;
   }     
 
@@ -336,17 +338,14 @@ void Menu::funcKeyboard(byte keyPress){
   // Function operation
   // Function for Edit
   if (keyPress == UP) {
-    //if (editCol < (menuSize-1))
     if (editCol < 10)
       editCol++;
-      deltaDigits = 1; 
-//    _data->adjUint16_tNumber(1);               
+      deltaDigits = 1;             
   }
   if (keyPress == DOWN) {
     if (editCol > 0)
       editCol--;
-      deltaDigits = -1;  
-//    _data->adjUint16_tNumber(-1);            
+      deltaDigits = -1;          
   }
   if (keyPress == RIGHT) {
     if (editRow < 5)  // Replace '5' with field pattern size (allow moves only to '#' cells)
@@ -357,19 +356,60 @@ void Menu::funcKeyboard(byte keyPress){
       editRow--;
   }               
 
+  // Calculate the pos of the number
+  if (keyPress == UP || keyPress == DOWN) {
+    //deltaNumber = deltaDigits; // can't mult by 0, 1 works.
+    deltaNumber = 1; // can't mult by 0, 1 works.
+ deltaPos = deltaWidth - editRow;
+    for (byte loop = 0; loop < editRow; loop++){
+      deltaNumber*=10;
+    }
+    if (deltaDigits < 0){
+      //deltaNumber *= deltaDigits;  // ???Can comment out when deltaNumber is used.  Sets the sign on deltaNumber;
+      deltaNumber *= -1; // Sets the sign negative on deltaNumber;
+    }
+  
+    if (true){
+      Serial.print  ("deltaDigits ");
+      Serial.print  (deltaDigits);
+      Serial.print  (" deltaNumber ");
+      Serial.print  (deltaNumber);
+      Serial.print  (" deltaPos ");
+      Serial.print  (deltaPos);
+      Serial.println();
+    }
 
-  deltaNumber = 1;
-  for (byte loop = 0; loop < editRow; loop++){
-    deltaNumber*=10;
-  }  
-  deltaNumber *= deltaDigits;
 
-  if (true){
-    Serial.print  ("deltaDigits ");
-    Serial.print  (deltaDigits);
-    Serial.print  (" deltaNumber ");
-    Serial.print  (deltaNumber);
-    Serial.println();
+/*
+    myMenuData.row[1] = 12;
+    myMenuData.pgmData[1] = volts_x_xxxV;
+    myMenuData.pVoid[1] = &_data->getMyResistorMap().shunt;
+ */
+  const char * pttr = myMenuData.pgmData[1];
+  Serial.print ("pttr ");
+  Serial.println(PGMSTR(pttr));
+  Serial.print ("volts_x_xxxV ");
+  Serial.println(PGMSTR(volts_x_xxxV));
+  Serial.print ("pgmData ");
+  Serial.println(PGMSTR(myMenuData.pgmData[1]));
+
+  sprintf_P(buffer, PSTR("%S") , pttr);
+  Serial.print  ("buffer 1");
+  Serial.println(buffer); 
+/*
+void printOutMessage(const __FlashStringHelper* message){
+  char buffer[40];
+  sprintf_P(buffer, PSTR("Ha Ha %S") , message);
+  Serial.println(buffer); 
+}
+ */
+   
+  sprintf_P(buffer, PSTR("%S") , myMenuData.pgmData[1]);
+  Serial.print  ("buffer 2");
+  Serial.println(buffer); 
+  
+  edit.doMaskEdit(keyPress , buffer, deltaNumber ); 
+  edit.doMaskEdit2(keyPress , pttr, deltaNumber ); 
   }
 }
 
@@ -444,8 +484,8 @@ void Menu::funcDisplay(){
   }
 
   // edit format
-  byte wide = 6;
-  lcd.setCursor(wide + (editRow - wide) + myMenuData.row[menuCol] , menuCol);//   row >    column ^
+
+  lcd.setCursor(myMenuData.row[menuCol] + deltaPos , menuCol);//   row >    column ^
 }
 
 void Menu::updateLCD(byte keyPress, int fps) {
@@ -858,7 +898,7 @@ void Menu::lcdFunc200() { // UInt number edit
 //    setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
 //  }
 
-  if (myMenuData.pgmData[1] != NULL){
+  if (myMenuData.pVoid[1] != NULL){
     // Display measured voltage
     lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
     lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
@@ -868,6 +908,7 @@ void Menu::lcdFunc200() { // UInt number edit
     lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
     lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
   }
+  Serial.println("lcdFunc200");
 }
 
 
@@ -892,7 +933,7 @@ void Menu::lcdFunc201() { //Double number edit
 //lcd.print(buffer);
 
 
-////if (myMenuData.pgmData[1] != NULL){
+////if (myMenuData.pVoid[1] != NULL){
 ////    // Display measured voltage
 ////    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
 ////    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
@@ -910,6 +951,7 @@ void Menu::lcdFunc201() { //Double number edit
   if (deltaNumber != 0){
     if (myMenuData.pVoid[1] != NULL){
       _data->adjUint16_tNumber(deltaNumber);
+      Serial.println("lcdFunc201");
     } else {
       Serial.println("myMenuData.pVoid[1] = NULL");  
     }

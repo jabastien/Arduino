@@ -26,7 +26,8 @@ class Utils
   public:
     Utils();
     int freeRam(void);
-
+    int arraySize(const char *);
+        
   // ======================================    
   // library-accessible "private" interface
   // ======================================    

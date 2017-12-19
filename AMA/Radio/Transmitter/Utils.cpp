@@ -61,6 +61,14 @@ int Utils::freeRam(){
  return free_memory;
 }
 
+
+// https://arduino.stackexchange.com/questions/13389/number-of-elements-in-an-array-char
+int Utils::arraySize(const char *data) { 
+  const char *p = data; 
+  while (*p++); 
+  return p-data-1; 
+}
+
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library
 

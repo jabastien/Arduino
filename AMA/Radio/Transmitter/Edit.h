@@ -17,6 +17,8 @@
   #include "WConstants.h"
 #endif
 
+#include "Utils.h"
+
   // ===========================================
   // library interface description
   // ===========================================
@@ -26,16 +28,17 @@ class Edit
   // user-accessible "public" interface
   // ===========================================
   public:
-    Edit(int);
-    void doSomething(void);
+    Edit(void);
+    void doMaskEdit(byte , char [], uint16_t );
+    void doMaskEdit2(byte , const  char *, uint16_t );
 
   // ===========================================
   // library-accessible "private" interface
   // ===========================================
   private:
-    int value;
-    void doSomethingSecret(void);
+    char* reverse(char [], byte);
 
+    Utils utils = Utils();
     
   // ===========================================
   // library-accessible "protected" interface
