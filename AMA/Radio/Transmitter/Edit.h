@@ -20,6 +20,8 @@
 #include "def.h"
 #include "Utils.h"
 
+//#include "Menu.h"
+
   // ===========================================
   // library interface description
   // ===========================================
@@ -30,26 +32,29 @@ class Edit
   // ===========================================
   public:
     Edit(void);
-      void doMaskInit(const  char *, const  char);
-      void doMaskEdit(byte , const  char *,const  char, byte);
+      void doMaskInit(const  char *, const  char, byte);
+      void doMaskEdit(byte);
+      byte getDisplayPos(void);
+      byte getCourserPos(void);
 
-//    struct EditDetails{
-      char buffer[20];
+  // ===========================================
+  // library-accessible "private" interface
+  // ===========================================
+  private:
+      Utils utils = Utils();
+      
+      const  char *mask;
       byte maskSize;        // length of the mask
       char matchChar;       // what we are looking for.
       byte digitCnt;        // number of '#' in edit mask
       byte courserPos;      // pos in edit mask
       byte expoFactor;     // (digit under edit) digit exponential factor (1=1, 2=10, 3=100, n=^10
-//    } editDetails;
- 
-  // ===========================================
-  // library-accessible "private" interface
-  // ===========================================
-  private:
+      
+      byte displayPos;
 
+      //static byte bbb;
+      //extern char buffer[20];
 
-    Utils utils = Utils();
-    
   // ===========================================
   // library-accessible "protected" interface
   // ===========================================

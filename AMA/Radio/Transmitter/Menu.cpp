@@ -398,26 +398,63 @@ void Menu::funcKeyboard(byte keyPress){
 //  Serial.println("=================================================");
 //  const char * pttr = myMenuData.pgmData[1];
 //  edit.doMaskEdit(keyPress , pttr, '#',0); 
-  Serial.println("=================================================");
-//  edit.doMaskEdit(NOKEY , myMenuData.pgmData[1], '#', 0); 
-  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 0); 
-  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 1); 
-  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 2); 
-  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 3); 
-  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 4); 
-  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 5); 
-  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 6); 
-  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 7); 
 
-  Serial.println("=================================================");
-//
-  edit.doMaskEdit(keyPress , testLB, '#',0); 
-  Serial.println("=================================================");
-//  edit.doMaskEdit(keyPress , testOdd, '#',0); 
-//  Serial.println("=================================================");
-//  edit.doMaskEdit(keyPress , testEven, '#',0); 
-//  Serial.println("=================================================");
+//volts_0_0xxxxxV[] = " 0.0#####V";
+//digits32
+//ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(244),char(0)};
 
+// edit.doMaskInit(myMenuData.pgmData[1], '#', 10);
+Serial.println("Init");
+  edit.doMaskInit(volts_0_0xxxxxV, '#', 10);
+ Serial.println("Init Complete");
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+//=================================================
+ Serial.println("Init");
+ edit.doMaskInit(digits32, '#', 10);
+ Serial.println("Init Complete");
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
 }
 
 void Menu::funcChangeCheck(){
