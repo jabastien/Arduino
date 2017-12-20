@@ -156,6 +156,7 @@ PROGMEM const char  timer[]        = "##:##:##";
 PROGMEM const char  timerDay[]     = "####:##:##:##";
 
 
+PROGMEM const char  testLB[]     = "012#4567";
 PROGMEM const char  testOdd[]     = "1234567";
 PROGMEM const char  testEven[]    = "12345678";
 

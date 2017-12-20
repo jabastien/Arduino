@@ -25,9 +25,10 @@ class Utils
   // ======================================    
   public:
     Utils();
-    int freeRam(void);
-    int arraySize(const char *);
-        
+    int  arraySize(const char *);
+    int  countCharacters(const char *, char);        
+    int  freeRam(void);
+    void reverse(char []);
   // ======================================    
   // library-accessible "private" interface
   // ======================================    

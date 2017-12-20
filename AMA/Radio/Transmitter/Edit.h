@@ -17,6 +17,7 @@
   #include "WConstants.h"
 #endif
 
+#include "def.h"
 #include "Utils.h"
 
   // ===========================================
@@ -29,14 +30,23 @@ class Edit
   // ===========================================
   public:
     Edit(void);
-    void doMaskEdit(byte , char [], uint16_t );
-    void doMaskEdit2(byte , const  char *, uint16_t );
+      void doMaskInit(const  char *, const  char);
+      void doMaskEdit(byte , const  char *,const  char, byte);
 
+//    struct EditDetails{
+      char buffer[20];
+      byte maskSize;        // length of the mask
+      char matchChar;       // what we are looking for.
+      byte digitCnt;        // number of '#' in edit mask
+      byte courserPos;      // pos in edit mask
+      byte expoFactor;     // (digit under edit) digit exponential factor (1=1, 2=10, 3=100, n=^10
+//    } editDetails;
+ 
   // ===========================================
   // library-accessible "private" interface
   // ===========================================
   private:
-    char* reverse(char [], byte);
+
 
     Utils utils = Utils();
     

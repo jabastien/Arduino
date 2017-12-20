@@ -80,7 +80,7 @@ boolean Menu::isScreenRefreshNeeded(){
 uint16_t deltaNumber = 0;
 byte     deltaWidth  = 5; // Number of # in format
 byte     deltaPos    = 0;
-char     deltaDigits = 0;
+int8_t   deltaDigits = 0;
   
 void Menu::menuDisplay(){
 
@@ -347,6 +347,8 @@ void Menu::funcKeyboard(byte keyPress){
       editCol--;
       deltaDigits = -1;          
   }
+
+/*
   if (keyPress == RIGHT) {
     if (editRow < 5)  // Replace '5' with field pattern size (allow moves only to '#' cells)
       editRow++;
@@ -355,7 +357,9 @@ void Menu::funcKeyboard(byte keyPress){
     if (editRow > 0)
       editRow--;
   }               
+*/
 
+/*
   // Calculate the pos of the number
   if (keyPress == UP || keyPress == DOWN) {
     //deltaNumber = deltaDigits; // can't mult by 0, 1 works.
@@ -378,44 +382,42 @@ void Menu::funcKeyboard(byte keyPress){
       Serial.print  (deltaPos);
       Serial.println();
     }
-
-
+  }
+*/
+  
 /*
     myMenuData.row[1] = 12;
     myMenuData.pgmData[1] = volts_x_xxxV;
     myMenuData.pVoid[1] = &_data->getMyResistorMap().shunt;
  */
-  const char * pttr = myMenuData.pgmData[1];
-  Serial.print ("pttr ");
-  Serial.println(PGMSTR(pttr));
-  Serial.print ("volts_x_xxxV ");
-  Serial.println(PGMSTR(volts_x_xxxV));
-  Serial.print ("pgmData ");
-  Serial.println(PGMSTR(myMenuData.pgmData[1]));
-
-  sprintf_P(buffer, PSTR("%S") , pttr);
-  Serial.print  ("buffer 1");
-  Serial.println(buffer); 
-/*
-void printOutMessage(const __FlashStringHelper* message){
-  char buffer[40];
-  sprintf_P(buffer, PSTR("Ha Ha %S") , message);
-  Serial.println(buffer); 
-}
- */
-   
-  sprintf_P(buffer, PSTR("%S") , myMenuData.pgmData[1]);
-  Serial.print  ("buffer 2");
-  Serial.println(buffer); 
+ 
+//  Serial.println("=================================================");
+//  char buffer[20];
+//  sprintf_P(buffer, PSTR("%S") , mask);
+//  edit.doMaskEdit(keyPress , buffer); 
+//  Serial.println("=================================================");
+//  const char * pttr = myMenuData.pgmData[1];
+//  edit.doMaskEdit(keyPress , pttr, '#',0); 
+  Serial.println("=================================================");
+//  edit.doMaskEdit(NOKEY , myMenuData.pgmData[1], '#', 0); 
+  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 0); 
+  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 1); 
+  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 2); 
+  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 3); 
+  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 4); 
+  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 5); 
+  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 6); 
+  edit.doMaskEdit(RIGHT , myMenuData.pgmData[1], '#', 7); 
 
   Serial.println("=================================================");
-  edit.doMaskEdit(keyPress , buffer, deltaNumber ); 
+//
+  edit.doMaskEdit(keyPress , testLB, '#',0); 
   Serial.println("=================================================");
-  edit.doMaskEdit2(keyPress , pttr, deltaNumber ); 
-  Serial.println("=================================================");
-  edit.doMaskEdit2(keyPress , myMenuData.pgmData[1], deltaNumber ); 
-  Serial.println("=================================================");
-  }
+//  edit.doMaskEdit(keyPress , testOdd, '#',0); 
+//  Serial.println("=================================================");
+//  edit.doMaskEdit(keyPress , testEven, '#',0); 
+//  Serial.println("=================================================");
+
 }
 
 void Menu::funcChangeCheck(){
@@ -1293,12 +1295,12 @@ void Menu::lcdInit252() {  // V5.0    Regulator Reference
     lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
 
- // Display measured voltage
+ // Display measured reference voltage
   lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
   lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
 
   // Calculate and display Volt/Bit
-  *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)myMenuData.pVoid[1]/1023.0) * 1000;
+  *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)myMenuData.pVoid[1] / 1023.0) * 1000;
   lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
   lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
 }

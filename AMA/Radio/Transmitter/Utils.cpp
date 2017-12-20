@@ -49,6 +49,28 @@ Utils::Utils(){
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
 
+
+// https://arduino.stackexchange.com/questions/13389/number-of-elements-in-an-array-char
+int Utils::arraySize(const char *data) { 
+  const char *p = data; 
+  while (*p++); 
+  return p-data-1; 
+}
+
+int Utils::countCharacters(const char *str, char character)
+{
+    const char *p = str;
+    int count = 0;
+    
+    do {
+      if (*p == character){
+        count++;
+        }
+       } while (*(p++));
+
+    return count;
+}
+
 int Utils::freeRam(){
  int free_memory;
 
@@ -61,17 +83,6 @@ int Utils::freeRam(){
  return free_memory;
 }
 
-
-// https://arduino.stackexchange.com/questions/13389/number-of-elements-in-an-array-char
-int Utils::arraySize(const char *data) { 
-  const char *p = data; 
-  while (*p++); 
-  return p-data-1; 
-}
-
-// Private Methods /////////////////////////////////////////////////////////////
-// Functions only available to other functions in this library
-
 /* Calculates the size of the free list */
 int Utils::freeListSize() {
   struct __freelist* current;
@@ -82,3 +93,26 @@ int Utils::freeListSize() {
   }
   return total;
 }
+
+void Utils::reverse(char stg [] ){
+
+  byte stgSize = arraySize(stg) - 1; // Array is zero (0) relative
+  byte halfSize = stgSize / 2; // small performance boost (1/2 loop)
+  
+  for (byte b = 0; b < halfSize; b++){
+    char tmp = stg[b];
+    stg[b] = stg[stgSize - b];
+    stg[stgSize - b] = tmp;
+    }
+
+  if (false){
+    Serial.print  ("Reverse: ");
+    Serial.println(stg); 
+  }
+}
+
+
+
+// Private Methods /////////////////////////////////////////////////////////////
+// Functions only available to other functions in this library
+
