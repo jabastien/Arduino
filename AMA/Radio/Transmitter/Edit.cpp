@@ -201,19 +201,26 @@ void Edit::doMaskEdit(byte _keyPress){
 
     Serial.print  (" expoFactor ");
     Serial.print  (expoFactor);
-// pow has a bug (not whole numbers).  Assume it's a float thing
+    
+// pow has a bug (not whole numbers).  It's a float point thing
+// https://ucexperiment.wordpress.com/2016/02/02/floating-point-precision-or-arduino-dont-know-math/
 //    Serial.print  (" pow "); 
 //    Serial.print  (pow(10.000, 9.000));
 //    Serial.print  (pow(10.0, (float)expoFactor));
 
-//    Serial.print  (" x^y ");
-//    Serial.print  ((uint32_t)pow(10, expoFactor));
+//float expo = expoFactor;
+//float fact = 10.00;
+//    Serial.print  (" pow ");
+//    Serial.print  ((uint32_t)pow(fact, expo));
 
-//
+//    Serial.print  (" x^y ");
+//    Serial.print  ((uint32_t)exp(expo * log(fact)));
+
 //    float pow (float A, float B)//{
 //     return exp (B * log(A));
 //    }
-    
+
+    // This is my work around
     Serial.print  (" myuInt32 ");
     Serial.print  (myuInt32);
     Serial.println();        

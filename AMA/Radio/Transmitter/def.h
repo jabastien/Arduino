@@ -49,7 +49,7 @@ const String err = "Err:
 //#define DEBUG_CD4051_MASK
 //#define DEBUG_CD4052
 //#define DEBUG_CD4052_VOLTS
-//#define DEBUG_EDIT
+#define DEBUG_EDIT
 //#define DEBUG_EDIT_DETAIL
 //#define DEBUG_KEY
 //#define DEBUG_MyControls

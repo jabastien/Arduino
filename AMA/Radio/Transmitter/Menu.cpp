@@ -349,7 +349,7 @@ void Menu::funcKeyboard(byte keyPress){
 //digits32
 //ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(244),char(0)};
 
-//#define ABC
+#define ABC
 #ifdef ABC
 // edit.doMaskInit(myMenuData.pgmData[1], '#', 10);
 Serial.println("Init -----------------------------------------------");
