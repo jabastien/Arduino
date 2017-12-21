@@ -32,67 +32,39 @@ Edit::Edit(){
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
 
-
-/*
-  Serial.print ("pttr ");
-  Serial.println(PGMSTR(pttr));
-  Serial.print ("volts_x_xxxV ");
-  Serial.println(PGMSTR(volts_x_xxxV));
-  Serial.print ("pgmData ");
-  Serial.println(PGMSTR(myMenuData.pgmData[1]));
-
-  sprintf_P(buffer, PSTR("%S") , pttr);
-  Serial.print  ("buffer 1");
-  Serial.println(buffer); 
-
-void printOutMessage(const __FlashStringHelper* message){
-  char buffer[40];
-  sprintf_P(buffer, PSTR("Ha Ha %S") , message);
-  Serial.println(buffer); 
-}
-
-sprintf_P(buffer, PSTR("%S") , myMenuData.pgmData[1]);
-Serial.print  ("buffer 2");
-Serial.println(buffer); 
- */
-
 void Edit::doMaskInit(const  char *_mask, const  char _matchChar, byte _displayPos){
   mask = _mask;
-char buffer[20];
   sprintf_P(buffer, PSTR("%S") , mask);
 //  utils.reverse(buffer);  
   maskSize = utils.arraySize(buffer);
   matchChar = _matchChar;
   digitCnt = utils.countCharacters(buffer, matchChar);
   courserPos = -1;
-  expoFactor = 0;
+  expoFactor = -1;
   displayPos = _displayPos;
 
+  // INIT, first time setup for mask, set defaults....
   doMaskEdit(RIGHT);
 }
 
-// INIT, first time setup for mask, set defaults....
+byte Edit::getDisplayPos(){
+  return displayPos;
+}
+
+byte Edit::getCourserPos(){
+  return ((displayPos + (maskSize - 1)) - courserPos);
+}
+
+const char * Edit::getMask(void){
+  sprintf_P(buffer, PSTR("%S") , mask);
+  return buffer;
+}
+
 void Edit::doMaskEdit(byte _keyPress){
-//  byte ccc = Edit::bbb;
-
-//    sprintf_P(buffer2, PSTR("%S") , mask);
-
-char buffer[20];
   sprintf_P(buffer, PSTR("%S") , mask);
   utils.reverse(buffer);  
-/* Force navigation, Don't allow this to be passed in, store locally */
-//const  char *mask,      // already have it
-//const  char _matchChar, // already have it
-//byte _courserPos        // already have it
-/* Force navigation, Don't allow this to be passed in, store locally */
-  
-//  sprintf_P(buffer, PSTR("%S") , mask);
-//  maskSize = utils.arraySize(buffer);
-//  matchChar = _matchChar;
-//  digitCnt = utils.countCharacters(buffer, matchChar);
-//  courserPos = _courserPos;
-//  expoFactor = 0;
-  
+
+  #ifdef DEBUG_EDIT_DETAIL
   if (false){
   Serial.print  ("IN     : '");
   Serial.print  (buffer);  
@@ -106,110 +78,106 @@ char buffer[20];
   Serial.print  ("' : ");
   Serial.println(digitCnt);  
   }
-    
-//  utils.reverse(buffer);
-
+  #endif
   int8_t tmpCurserPos = (uint8_t)courserPos;
   boolean done = false;
-  int8_t dir = 0;
+  int8_t moveLR = 0;
 
+  #ifdef DEBUG_EDIT_DETAIL
   if (false){
     Serial.print  ("tmpCurserPos ");
     Serial.print  (tmpCurserPos);
     Serial.println();
   }
+  #endif  
+
+  incDirection = 0;
+  if (_keyPress == UP) {
+    incDirection = 1;
+  }
+  if (_keyPress == DOWN) {
+    incDirection = -1;  
+  }
+
   if (_keyPress == RIGHT) {
-    dir = 1;
+    moveLR = 1;
   }
   if (_keyPress == LEFT) {
-    dir = -1;
+    moveLR = -1;
   }
     
-  if (dir != 0) { //_keyPress == LEFT || _keyPress == RIGHT
+  if (moveLR != 0) { //_keyPress == LEFT || _keyPress == RIGHT
     // Limit move to width of mask
     while(!done){
-      bool cond = ((tmpCurserPos+dir) < 0 || (tmpCurserPos+dir >= maskSize));
+      bool cond = ((tmpCurserPos+moveLR) < 0 || (tmpCurserPos+moveLR >= maskSize));
+       #ifdef DEBUG_EDIT_DETAIL
       if (false){
-        bool cond1 = ((tmpCurserPos+dir) < 0);
-        bool cond2 = ((tmpCurserPos+dir) >= maskSize);      
+        bool cond1 = ((tmpCurserPos+moveLR) < 0);
+        bool cond2 = ((tmpCurserPos+moveLR) >= maskSize);      
         Serial.print  (" Condition T:M:C ");
-        Serial.print  (tmpCurserPos+dir);
+        Serial.print  (tmpCurserPos+moveLR);
         Serial.print  (":");
         Serial.print  (maskSize - 1);
         Serial.print  (":");
         Serial.print  (cond);
         Serial.println();
       }
+       #endif      
       if (cond){
+        #ifdef DEBUG_EDIT_DETAIL
         if (false){
           Serial.println("range ==============");
           Serial.print  ("tmpCurserPos ");
           Serial.print  (tmpCurserPos);
           Serial.println();        
         }
+        #endif        
         done = true;
       }
       if (!done){
         // Allow moves only to '#' cells
+        #ifdef DEBUG_EDIT_DETAIL        
         if (false){
           Serial.println("!done");
         }
-        tmpCurserPos += dir;
+        #endif        
+        tmpCurserPos += moveLR;
         if (buffer[tmpCurserPos] == matchChar){
           courserPos = tmpCurserPos;
-          expoFactor += dir;
+          expoFactor += moveLR;
+          #ifdef DEBUG_EDIT_DETAIL          
           if (false){
             Serial.println("Inc/Dec ==============");        
           }
+          #endif          
           done = true;
         }
       } else {
         // End of mask, no match, no move
+        #ifdef DEBUG_EDIT_DETAIL
         if (false){
           Serial.println("Fail =============="); 
           Serial.print  ("tmpCurserPos ");
           Serial.print  (tmpCurserPos);
           Serial.println();  
-        }     
-        done = true;
-      }
-    }
-  }
-
-/*
-  if (dir != 0) {
-        Serial.print  ("dir ");
-        Serial.print  (dir);
-        Serial.println();
-    // Limit move to width of mask
-    while(!done){
-        Serial.print  (" Condition ");
-        Serial.print  (tmpCurserPos > 0 && tmpCurserPos < maskSize);
-        Serial.println();
-      if (tmpCurserPos >= 0 && tmpCurserPos < maskSize){
-        // Allow moves only to '#' cells
-        Serial.println("If ");        
-        tmpCurserPos += dir;
-        if (buffer[tmpCurserPos] == matchChar){
-          courserPos = tmpCurserPos;
-          expoFactor += dir;
-        Serial.println("Inc");        
-          done = true;
         }
-      } else {
-        // End of mask, no match, no move
-        Serial.println("Fail");        
+        #endif             
         done = true;
       }
     }
   }
-*/
 
+  uint32_t myuInt32 = 1;
+  for (uint8_t i = 0; i < expoFactor; i++){
+     myuInt32 *= 10;
+  }
+
+  #ifdef DEBUG_EDIT
   if (true){
     Serial.print  (" _keyPress ");
     Serial.print  (_keyPress);
-    Serial.print  (" dir ");
-    Serial.print  ((int8_t)dir);
+    Serial.print  (" moveLR ");
+    Serial.print  (moveLR);
     Serial.print  ("\t tmpCurserPos ");
     Serial.print  ((int8_t)tmpCurserPos);  
     Serial.print  ("  \t courserPos ");
@@ -233,10 +201,25 @@ char buffer[20];
 
     Serial.print  (" expoFactor ");
     Serial.print  (expoFactor);
+// pow has a bug (not whole numbers).  Assume it's a float thing
+//    Serial.print  (" pow "); 
+//    Serial.print  (pow(10.000, 9.000));
+//    Serial.print  (pow(10.0, (float)expoFactor));
 
+//    Serial.print  (" x^y ");
+//    Serial.print  ((uint32_t)pow(10, expoFactor));
+
+//
+//    float pow (float A, float B)//{
+//     return exp (B * log(A));
+//    }
+    
+    Serial.print  (" myuInt32 ");
+    Serial.print  (myuInt32);
     Serial.println();        
   }
-  
+
+
   if (false){   
     Serial.print  ("Reverse: '");
     for (byte b = 0; b < maskSize; b++){
@@ -252,15 +235,8 @@ char buffer[20];
     Serial.println();
     Serial.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");     
   }
-}
+  #endif
 
-
-byte Edit::getDisplayPos(){
-  return displayPos;
-}
-
-byte Edit::getCourserPos(){
-  return ((displayPos + (maskSize - 1)) - courserPos);
 }
 
 // Private Methods /////////////////////////////////////////////////////////////

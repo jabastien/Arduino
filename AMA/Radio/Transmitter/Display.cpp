@@ -22,7 +22,7 @@
 // ===========================================
 // Data
 // ===========================================
-char line [20]; // LCD width
+
  
 // ===========================================
 // Constructor
@@ -37,14 +37,13 @@ Display::Display(){
 // -------------------------------------------
 // https://forum.arduino.cc/index.php?topic=439117.0
 // -------------------------------------------
-//void setSign(type T number){              // No return value
-template <typename T> T setSign (T number){ // Return value of 'T'
+template <typename T> T Display::setSign (T number){ // Return value of 'T'
   if (number < 0){ // Can't be negative.
     number *= -1;
-    line[0] = '-';
+    buffer[0] = '-';
   }
   else{
-    line[0] = ' ';
+    buffer[0] = ' ';
   }
   return number;
 }  // end of setSign
@@ -58,26 +57,26 @@ template <typename T> T setSign (T number){ // Return value of 'T'
 char * Display::outputDigitsU8(uint8_t number, const char * pattern){
 
   Display digits;
-  strcpy_P(line, pattern );
+  strcpy_P(buffer, pattern );
 
   number = setSign(number);
 
   int digit = 0;
 
-  for (int pos = 0; line[pos] != '\0'; pos++)
+  for (int pos = 0; buffer[pos] != '\0'; pos++)
     {
-      if (line[pos] == '#'){
+      if (buffer[pos] == '#'){
         
         // get member function pointer from array
         Display::u8Digit f = digits.Display::u8Digit_Array [digit];
         
         // call the function
-        line[pos]=( (digits.*f) (number));
+        buffer[pos]=( (digits.*f) (number));
         
         digit++;   
       }
     }  // end of for loop
-  return line;  
+  return buffer;  
 }
 
 // -------------------------------------------
@@ -85,26 +84,26 @@ char * Display::outputDigitsU8(uint8_t number, const char * pattern){
 char * Display::outputDigitsS8( int8_t number, const char * pattern){
 
   Display digits;
-  strcpy_P(line, pattern );
+  strcpy_P(buffer, pattern );
 
   number = setSign(number);
 
   int digit = 0;
 
-  for (int pos = 0; line[pos] != '\0'; pos++)
+  for (int pos = 0; buffer[pos] != '\0'; pos++)
     {
-      if (line[pos] == '#'){
+      if (buffer[pos] == '#'){
         
         // get member function pointer from array
         Display::s8Digit f = digits.Display::s8Digit_Array [digit];
         
         // call the function
-        line[pos]=( (digits.*f) (number));
+        buffer[pos]=( (digits.*f) (number));
         
         digit++;   
       }
     }  // end of for loop
-  return line;  
+  return buffer;  
 }
 
 // -------------------------------------------
@@ -117,26 +116,26 @@ char * Display::outputDigitsU16(uint16_t number, const char * pattern){
 char * Display::outputDigitsU16(uint16_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
-  strcpy_P(line, pattern );
+  strcpy_P(buffer, pattern );
 
 //  number = setSign(number);
 
   int digit = startDigit;
 
-  for (int pos = 0; line[pos] != '\0'; pos++)
+  for (int pos = 0; buffer[pos] != '\0'; pos++)
     {
-      if (line[pos] == '#'){
+      if (buffer[pos] == '#'){
         
         // get member function pointer from array
         Display::u16Digit f = digits.Display::u16Digit_Array [digit];
         
         // call the function
-        line[pos]=( (digits.*f) (number));
+        buffer[pos]=( (digits.*f) (number));
         digit++;   
       }
     }  // end of for loop
     
-  return line;  
+  return buffer;  
 }
 
 // -------------------------------------------
@@ -148,26 +147,26 @@ char * Display::outputDigitsS16( int16_t number, const char * pattern){
 char * Display::outputDigitsS16( int16_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
-  strcpy_P(line, pattern );
+  strcpy_P(buffer, pattern );
 
   number = setSign(number);
 
   int digit = startDigit;
 
-  for (int pos = 0; line[pos] != '\0'; pos++)
+  for (int pos = 0; buffer[pos] != '\0'; pos++)
     {
-      if (line[pos] == '#'){
+      if (buffer[pos] == '#'){
         
         // get member function pointer from array
         Display::s16Digit f = digits.Display::s16Digit_Array [digit];
         
         // call the function
-        line[pos]=( (digits.*f) (number));
+        buffer[pos]=( (digits.*f) (number));
         
         digit++;   
       }
     }  // end of for loop
-  return line;  
+  return buffer;  
 }
 
 // -------------------------------------------
@@ -180,25 +179,25 @@ char * Display::outputDigitsU32(uint32_t number, const char * pattern){
 char * Display::outputDigitsU32(uint32_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
-  strcpy_P(line, pattern );
+  strcpy_P(buffer, pattern );
 
   number = setSign(number);
 
   int digit = startDigit;
 
-  for (int pos = 0; line[pos] != '\0'; pos++)
+  for (int pos = 0; buffer[pos] != '\0'; pos++)
     {
-      if (line[pos] == '#'){
+      if (buffer[pos] == '#'){
         
         // get member function pointer from array
         Display::u32Digit f = digits.Display::u32Digit_Array [digit];
         
         // call the function
-        line[pos]=( (digits.*f) (number));
+        buffer[pos]=( (digits.*f) (number));
         digit++;   
       }
     }  // end of for loop
-  return line;  
+  return buffer;  
 }
 
 // -------------------------------------------
@@ -210,25 +209,25 @@ char * Display::outputDigitsS32( int32_t number, const char * pattern){
 char * Display::outputDigitsS32( int32_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
-  strcpy_P(line, pattern );
+  strcpy_P(buffer, pattern );
 
   number = setSign(number);
 
   int digit = startDigit;
 
-  for (int pos = 0; line[pos] != '\0'; pos++)
+  for (int pos = 0; buffer[pos] != '\0'; pos++)
     {
-      if (line[pos] == '#'){
+      if (buffer[pos] == '#'){
         
         // get member function pointer from array
         Display::s32Digit f = digits.Display::s32Digit_Array [digit];
         
         // call the function
-        line[pos]=( (digits.*f) (number));
+        buffer[pos]=( (digits.*f) (number));
         digit++;   
       }
     }  // end of for loop
-  return line;  
+  return buffer;  
 }
 
 
@@ -238,58 +237,58 @@ char * Display::outputDigitsS32( int32_t number, const char * pattern, uint8_t s
 
 //char * Display::outputDigitsU32(uint32_t number){
 //// Number can be between 0 and 65,535
-////static char line[15] = "+4,294,967,294"; // Max number
-////static char line[15] = "01234567890123"; // Digit possition (+1 for terminator /0.
-////static char line[15] = " -,---,---,---";
+////static char buffer[15] = "+4,294,967,294"; // Max number
+////static char buffer[15] = "01234567890123"; // Digit possition (+1 for terminator /0.
+////static char buffer[15] = " -,---,---,---";
 //
-//  strcpy_P(line, digits32);
+//  strcpy_P(buffer, digits32);
 //
-//  line[1]  =  u32Digit1000000000 (number);
+//  buffer[1]  =  u32Digit1000000000 (number);
 //  //,
-//  line[3]  =  u32Digit100000000  (number);
-//  line[4]  =  u32Digit10000000   (number);
-//  line[5]  =  u32Digit1000000    (number);
+//  buffer[3]  =  u32Digit100000000  (number);
+//  buffer[4]  =  u32Digit10000000   (number);
+//  buffer[5]  =  u32Digit1000000    (number);
 //  //,
-//  line[7]  =  u32Digit100000     (number);
-//  line[8]  =  u32Digit10000      (number);
-//  line[9]  =  u32Digit1000       (number);
+//  buffer[7]  =  u32Digit100000     (number);
+//  buffer[8]  =  u32Digit10000      (number);
+//  buffer[9]  =  u32Digit1000       (number);
 //  //,
-//  line[11] =  u32Digit100        (number);
-//  line[12] =  u32Digit10         (number);
-//  line[13] =  u32Digit1          (number);
+//  buffer[11] =  u32Digit100        (number);
+//  buffer[12] =  u32Digit10         (number);
+//  buffer[13] =  u32Digit1          (number);
 //
-//  line[14] =  '\0';
+//  buffer[14] =  '\0';
 //  
-//  return line;
+//  return buffer;
 //}
 //
 //char * Display::outputDigitsS32( int32_t number){
 //// Number can be between 0 and 65,535
-////static char line[15] = "+4,294,967,294"; // Max number
-////static char line[15] = "01234567890123"; // Digit possition (+1 for terminator /0.
-////static char line[15] = " -,---,---,---";
+////static char buffer[15] = "+4,294,967,294"; // Max number
+////static char buffer[15] = "01234567890123"; // Digit possition (+1 for terminator /0.
+////static char buffer[15] = " -,---,---,---";
 //
-//  strcpy_P(line, digits32);
+//  strcpy_P(buffer, digits32);
 //
 //  number = setSign(number);
 //    
-//  line[1]  =  s32Digit1000000000 (number);
+//  buffer[1]  =  s32Digit1000000000 (number);
 //  //,
-//  line[3]  =  s32Digit100000000  (number);
-//  line[4]  =  s32Digit10000000   (number);
-//  line[5]  =  s32Digit1000000    (number);
+//  buffer[3]  =  s32Digit100000000  (number);
+//  buffer[4]  =  s32Digit10000000   (number);
+//  buffer[5]  =  s32Digit1000000    (number);
 //  //,
-//  line[7]  =  s32Digit100000     (number);
-//  line[8]  =  s32Digit10000      (number);
-//  line[9]  =  s32Digit1000       (number);
+//  buffer[7]  =  s32Digit100000     (number);
+//  buffer[8]  =  s32Digit10000      (number);
+//  buffer[9]  =  s32Digit1000       (number);
 //  //,
-//  line[11] =  s32Digit100        (number);
-//  line[12] =  s32Digit10         (number);
-//  line[13] =  s32Digit1          (number);
+//  buffer[11] =  s32Digit100        (number);
+//  buffer[12] =  s32Digit10         (number);
+//  buffer[13] =  s32Digit1          (number);
 //
-//  line[14] =  '\0';
+//  buffer[14] =  '\0';
 //
-//  return line;
+//  return buffer;
 //}
 
 // ===========================================
@@ -303,26 +302,26 @@ char * Display::outputOnTime(uint16_t seconds) {
 
   //                  Max: 18:12:15 (uint16_t) 65535
   //                       01234567
-  //static char line[9] = "--:--:--";
+  //static char buffer[9] = "--:--:--";
 
-  strcpy_P(line, timer);
+  strcpy_P(buffer, timer);
   
-  line[0] = u16Digit10 (h);
-  line[1] = u16Digit1  (h);
-  line[3] = u8Digit10  (m);
-  line[4] = u8Digit1   (m);
-  line[6] = u8Digit10  (s);
-  line[7] = u8Digit1   (s);
+  buffer[0] = u16Digit10 (h);
+  buffer[1] = u16Digit1  (h);
+  buffer[3] = u8Digit10  (m);
+  buffer[4] = u8Digit1   (m);
+  buffer[6] = u8Digit10  (s);
+  buffer[7] = u8Digit1   (s);
 
-  if (line[1] == '0' && line[1] == '0'){ // Should not get here, maybe someday?
-    line[0]=' ';
-    line[1]=' ';
-    line[2]=' ';
+  if (buffer[1] == '0' && buffer[1] == '0'){ // Should not get here, maybe someday?
+    buffer[0]=' ';
+    buffer[1]=' ';
+    buffer[2]=' ';
   }
 
-  line[8] =  '\0';
+  buffer[8] =  '\0';
   
-  return line;
+  return buffer;
 }
 
 char * Display::outputServiceTime(uint32_t seconds) {
@@ -337,27 +336,27 @@ char * Display::outputServiceTime(uint32_t seconds) {
   //            actual max:49710:06:28:14
   //            display max 9701:06:28:14
   //                        0123456789012
-  //static char line[14] = "dddd:hh:mm:ss";
+  //static char buffer[14] = "dddd:hh:mm:ss";
 
-  strcpy_P(line, timerDay);
+  strcpy_P(buffer, timerDay);
   
-  line[ 0] = u16Digit1000 (dd);
-  line[ 1] = u16Digit100  (dd);
-  line[ 2] = u16Digit10   (dd);
-  line[ 3] = u16Digit1    (dd);
+  buffer[ 0] = u16Digit1000 (dd);
+  buffer[ 1] = u16Digit100  (dd);
+  buffer[ 2] = u16Digit10   (dd);
+  buffer[ 3] = u16Digit1    (dd);
   // :
-  line[ 5] = u8Digit10    (hh);
-  line[ 6] = u8Digit1     (hh);
+  buffer[ 5] = u8Digit10    (hh);
+  buffer[ 6] = u8Digit1     (hh);
   // :
-  line[ 8] = u8Digit10    (mm);
-  line[ 9] = u8Digit1     (mm);
+  buffer[ 8] = u8Digit10    (mm);
+  buffer[ 9] = u8Digit1     (mm);
   // :
-  line[11] = u8Digit10    (ss);
-  line[12] = u8Digit1     (ss);
+  buffer[11] = u8Digit10    (ss);
+  buffer[12] = u8Digit1     (ss);
 
-  line[14] =  '\0';
+  buffer[14] =  '\0';
 
-  return line;
+  return buffer;
 }
 
 
@@ -366,40 +365,40 @@ char * Display::outputServiceTime(uint32_t seconds) {
 // ===========================================
 // Usage: concatBytesPGM(lcd_param_common_set,lcd_param_lcdInit252_5Vref);
 char * Display::concatBytesPGM(const char* pgm1, const char* pgm2) {
-  memset(line, 0x00, sizeof(line)); // for automatically-allocated a clean arrays
+  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated a clean arrays
   int c = 0;
 
   for (int k = 0; k < strlen_P(pgm1); k++){
-    line[c++]=pgm_read_byte_near(pgm1 + k);
+    buffer[c++]=pgm_read_byte_near(pgm1 + k);
   }
   
-  line[c++]=' ';
+  buffer[c++]=' ';
   
   for (int k = 0; k < strlen_P(pgm2); k++){
-    line[c++]=pgm_read_byte_near(pgm2 + k);
+    buffer[c++]=pgm_read_byte_near(pgm2 + k);
   }
   
-  line[c]=0;  
-  line[sizeof(line)] = 0;          // end with a null terminator.
+  buffer[c]=0;  
+  buffer[sizeof(buffer)] = 0;          // end with a null terminator.
 
   if (false){
-    Serial.println(line);
+    Serial.println(buffer);
   }
     
-  return line;
+  return buffer;
 }
 
 // Usage: concatBytesPGMSTR(qBytesWorld, versionNum);  
 char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
-//  memset(line, 0x00, sizeof(line)); // for automatically-allocated arrays (clear the array);
-    memcpy(line, PGMSTR(pgmstr1), strlen_P(pgmstr1)+1);
-    line[strlen_P(pgmstr1)] = ' ';
-    memcpy(line+strlen_P(pgmstr1)+1, PGMSTR(pgmstr2), strlen_P(pgmstr2)+1);
+//  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated arrays (clear the array);
+    memcpy(buffer, PGMSTR(pgmstr1), strlen_P(pgmstr1)+1);
+    buffer[strlen_P(pgmstr1)] = ' ';
+    memcpy(buffer+strlen_P(pgmstr1)+1, PGMSTR(pgmstr2), strlen_P(pgmstr2)+1);
 
     if (false){
-      Serial.println(line);
+      Serial.println(buffer);
     }
-  return line;    
+  return buffer;    
 }
 
 
@@ -436,19 +435,19 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 //int lcdInt(int n, String format){
 //char charBuf[10];
 //  format.toCharArray(charBuf,10); 
-//  int m = sprintf (line, charBuf, n);
-//  lcd.print(line);
+//  int m = sprintf (buffer, charBuf, n);
+//  lcd.print(buffer);
 //  return m;
 //}
 //int lcdInt(int n, String format){
-//  int m = sprintf (line, "%6d", n);
-//  lcd.print(line);
+//  int m = sprintf (buffer, "%6d", n);
+//  lcd.print(buffer);
 //  return m;
 //}
 //int lcdInt(int n, const char format){
 //  //    lcd.print(PGMSTR(qBytesWorld));
-//  int m = sprintf (line, format, n);
-//  lcd.print(line);
+//  int m = sprintf (buffer, format, n);
+//  lcd.print(buffer);
 //  return m;
 //}
 //////// ===========================================
@@ -456,9 +455,9 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 //////// ===========================================
 //int lcdUnLong6D(unsigned long n){
 //  Serial.println(n);
-//  //int m = sprintf (line, "%06d", n);
-//  int m = sprintf (line, "%06lu", n);
-//  lcd.print(line);
+//  //int m = sprintf (buffer, "%06d", n);
+//  int m = sprintf (buffer, "%06lu", n);
+//  lcd.print(buffer);
 //  return m;
 //}
 //
@@ -470,33 +469,33 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 //
 ////void lcdprint_uint32(uint32_t v) {
 //void lcdprint_ulong(unsigned long v) {
-//  static char line[14] = "-,---,---,---";
+//  static char buffer[14] = "-,---,---,---";
 //  //                      0 2 4 6 8   12
-//  line[0]  = '0' + v  / 1000000000;
-//  line[2]  = '0' + v  / 100000000 - (v/1000000000) * 10;
-//  line[3]  = '0' + v  / 10000000  - (v/100000000)  * 10;
-//  line[4]  = '0' + v  / 1000000   - (v/10000000)   * 10;
-//  line[6]  = '0' + v  / 100000    - (v/1000000)    * 10;
-//  line[7]  = '0' + v  / 10000     - (v/100000)     * 10;
-//  line[8]  = '0' + v  / 1000      - (v/10000)      * 10;
-//  line[10] = '0' + v  / 100       - (v/1000)       * 10;
-//  line[11] = '0' + v  / 10        - (v/100)        * 10;
-//  line[12] = '0' + v  / 1         - (v/10)         * 10;
+//  buffer[0]  = '0' + v  / 1000000000;
+//  buffer[2]  = '0' + v  / 100000000 - (v/1000000000) * 10;
+//  buffer[3]  = '0' + v  / 10000000  - (v/100000000)  * 10;
+//  buffer[4]  = '0' + v  / 1000000   - (v/10000000)   * 10;
+//  buffer[6]  = '0' + v  / 100000    - (v/1000000)    * 10;
+//  buffer[7]  = '0' + v  / 10000     - (v/100000)     * 10;
+//  buffer[8]  = '0' + v  / 1000      - (v/10000)      * 10;
+//  buffer[10] = '0' + v  / 100       - (v/1000)       * 10;
+//  buffer[11] = '0' + v  / 10        - (v/100)        * 10;
+//  buffer[12] = '0' + v  / 1         - (v/10)         * 10;
 //
-//  lcd.print(line);  
+//  lcd.print(buffer);  
 //}
 ////void lcdprint_uint32(uint32_t v) {
 //void lcdprint_uint(unsigned int v) {
-//  static char line[14] = "--,---";
+//  static char buffer[14] = "--,---";
 //  //                      01 345
 //
-//  line[0] = '0' + v / 10000;
-//  line[1] = '0' + v / 1000      - (v/10000)      * 10;
-//  line[3] = '0' + v / 100       - (v/1000)       * 10;
-//  line[4] = '0' + v / 10        - (v/100)        * 10;
-//  line[5] = '0' + v             - (v/10)         * 10;
+//  buffer[0] = '0' + v / 10000;
+//  buffer[1] = '0' + v / 1000      - (v/10000)      * 10;
+//  buffer[3] = '0' + v / 100       - (v/1000)       * 10;
+//  buffer[4] = '0' + v / 10        - (v/100)        * 10;
+//  buffer[5] = '0' + v             - (v/10)         * 10;
 //
-//  lcd.print(line);  
+//  lcd.print(buffer);  
 //}
 //
 //////// ===========================================
@@ -505,20 +504,20 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 ////int printInt(int n, String format){
 ////
 //
-////  char line[10];         //the ASCII of the integer will be stored in this char array
-////  itoa((int)changeMe,line,10); //(integer, yourline, base)
+////  char buffer[10];         //the ASCII of the integer will be stored in this char array
+////  itoa((int)changeMe,buffer,10); //(integer, yourbuffer, base)
 //  
 //////char dateFormat[] = "%02d:%02d:%02d:%02d";
-//////    sprintf(line, dateFormat[3], days, hours, minutes, seconds); ///< This has 4 2-digit integers with leading zeros, separated by ":" . The list of parameters, hour, min, sec, provides the numbers the sprintf prints out with.
-//////    lcd.print(line);    
-////    //Serial.println(line); ///< You will get something like"01:13:02:09" 
+//////    sprintf(buffer, dateFormat[3], days, hours, minutes, seconds); ///< This has 4 2-digit integers with leading zeros, separated by ":" . The list of parameters, hour, min, sec, provides the numbers the sprintf prints out with.
+//////    lcd.print(buffer);    
+////    //Serial.println(buffer); ///< You will get something like"01:13:02:09" 
 ////    
 ////char format[] = "ddddd";
 ////      
 //////  char c[10];        // long enough to hold complete integer string
 //////  char charBuf[20];
-////  format.toCharArray(line,10);
-////  int m = sprintf(c, line, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
+////  format.toCharArray(buffer,10);
+////  int m = sprintf(c, buffer, n);    // build integer string using C integer formatters  (m is length, and not used in this code)
 ////  Serial.print(c);
 ////  return m;
 ////}
@@ -527,11 +526,11 @@ char * Display::concatBytesPGMSTR(const char* pgmstr1, const char* pgmstr2){
 ////// LCD Print NNN.DDD
 ////// ===========================================
 //void lcdDouble63(double dbl) {
-//  char *r = dtostrf(dbl, 6, 3, line);
-////  lcd.print(line);
+//  char *r = dtostrf(dbl, 6, 3, buffer);
+////  lcd.print(buffer);
 //  lcd.print(r);
 //  lcd.print("V");
-////  lcd.print(dtostrf(v5_System, 6, 3, line));
+////  lcd.print(dtostrf(v5_System, 6, 3, buffer));
 ////  lcd.print("V");
 //}
 

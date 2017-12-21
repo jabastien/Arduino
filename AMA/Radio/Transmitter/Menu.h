@@ -40,7 +40,6 @@ class Menu
 
     boolean isScreenRefreshNeeded(void);
     void updateLCD(byte, int);
-void updateLCD2(byte, int);
 
     void menuDisplay(void);
     void menuChangeCheck(void);
@@ -62,8 +61,7 @@ void updateLCD2(byte, int);
 
     // Menu Items
     void lcdMenu002(void);
-    void lcdMenu003(void);
-    
+    void lcdMenu003(void);    
     void lcdMenu010(void);
     void lcdMenu011(void);
     void lcdMenu012(void);

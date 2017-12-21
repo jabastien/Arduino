@@ -49,15 +49,18 @@ const String err = "Err:
 //#define DEBUG_CD4051_MASK
 //#define DEBUG_CD4052
 //#define DEBUG_CD4052_VOLTS
+//#define DEBUG_EDIT
+//#define DEBUG_EDIT_DETAIL
 //#define DEBUG_KEY
 //#define DEBUG_MyControls
+
 
 /**************************************************************************************/
 /***************          constants configurations                 ********************/
 /**************************************************************************************/
 PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
 PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
-PROGMEM const char  versionNum [] = {"v1.28"};
+PROGMEM const char  versionNum [] = {"v1.1.29"};
 
 /**************************************************************************************/
 /***************             motor and servo numbers               ********************/
@@ -182,6 +185,26 @@ PROGMEM const char  eepromSz[] = "EEPROM length: ";
 /**************************************************************************************/
 /***************               Error Checking Section              ********************/
 /**************************************************************************************/
+
+
+/*
+Directive  Meaning
+# include include a source file
+# define  define a macro
+# undef undefine a macro
+# if  conditional compilation
+# ifdef conditional compilation
+# ifndef  conditional compilation
+# elif  conditional compilation
+# else  conditional compilation
+# endif conditional compilation
+# line  control error reporting
+# error force an error message
+# pragma  used for implementation-dependent control
+# null directive; no effect
+
+http://publications.gbdirect.co.uk/c_book/chapter7/directives.html
+*/
 
 //#if GPS && !defined(NMEA) && !defined(UBLOX)
 //  #error "when using GPS you must specify the protocol NMEA, UBLOX..."

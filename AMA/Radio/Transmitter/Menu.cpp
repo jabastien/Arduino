@@ -76,11 +76,8 @@ boolean Menu::isScreenRefreshNeeded(){
  return false  ;
 }
 
-///////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 uint16_t deltaNumber = 0;
-byte     deltaWidth  = 5; // Number of # in format
-byte     deltaPos    = 0;
-int8_t   deltaDigits = 0;
   
 void Menu::menuDisplay(){
 
@@ -334,57 +331,6 @@ void Menu::funcKeyboard(byte keyPress){
     return;
   }    
 
-  
-  // Function operation
-  // Function for Edit
-  if (keyPress == UP) {
-    if (editCol < 10)
-      editCol++;
-      deltaDigits = 1;             
-  }
-  if (keyPress == DOWN) {
-    if (editCol > 0)
-      editCol--;
-      deltaDigits = -1;          
-  }
-
-/*
-  if (keyPress == RIGHT) {
-    if (editRow < 5)  // Replace '5' with field pattern size (allow moves only to '#' cells)
-      editRow++;
-  }
-  if (keyPress == LEFT) {
-    if (editRow > 0)
-      editRow--;
-  }               
-*/
-
-/*
-  // Calculate the pos of the number
-  if (keyPress == UP || keyPress == DOWN) {
-    //deltaNumber = deltaDigits; // can't mult by 0, 1 works.
-    deltaNumber = 1; // can't mult by 0, 1 works.
- deltaPos = deltaWidth - editRow;
-    for (byte loop = 0; loop < editRow; loop++){
-      deltaNumber*=10;
-    }
-    if (deltaDigits < 0){
-      //deltaNumber *= deltaDigits;  // ???Can comment out when deltaNumber is used.  Sets the sign on deltaNumber;
-      deltaNumber *= -1; // Sets the sign negative on deltaNumber;
-    }
-  
-    if (true){
-      Serial.print  ("deltaDigits ");
-      Serial.print  (deltaDigits);
-      Serial.print  (" deltaNumber ");
-      Serial.print  (deltaNumber);
-      Serial.print  (" deltaPos ");
-      Serial.print  (deltaPos);
-      Serial.println();
-    }
-  }
-*/
-  
 /*
     myMenuData.row[1] = 12;
     myMenuData.pgmData[1] = volts_x_xxxV;
@@ -403,6 +349,8 @@ void Menu::funcKeyboard(byte keyPress){
 //digits32
 //ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(244),char(0)};
 
+//#define ABC
+#ifdef ABC
 // edit.doMaskInit(myMenuData.pgmData[1], '#', 10);
 Serial.println("Init -----------------------------------------------");
   edit.doMaskInit(myMenuData.pgmData[1], '#', 13);
@@ -480,6 +428,7 @@ Serial.println("Init -----------------------------------------------");
   edit.doMaskEdit(LEFT); 
   edit.doMaskEdit(LEFT); 
   edit.doMaskEdit(LEFT); 
+#endif
 }
 
 void Menu::funcChangeCheck(){
@@ -554,7 +503,7 @@ void Menu::funcDisplay(){
 
   // edit format
 
-  lcd.setCursor(myMenuData.row[menuCol] + deltaPos , menuCol);//   row >    column ^
+  lcd.setCursor(myMenuData.row[menuCol] , menuCol);//   row >    column ^
 }
 
 void Menu::updateLCD(byte keyPress, int fps) {

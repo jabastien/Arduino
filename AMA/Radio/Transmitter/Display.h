@@ -32,7 +32,12 @@ class Display
   // ===================================
   public:
 
+
     Display(void);
+
+template <typename T> T setSign (T number); // Return value of 'T'
+char buffer [20]; // LCD width
+
     char *outputDigitsU8 ( uint8_t, const char * );
     char *outputDigitsS8 (  int8_t, const char * );
     char *outputDigitsU16(uint16_t, const char * );
