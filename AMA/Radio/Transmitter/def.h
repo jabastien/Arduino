@@ -135,7 +135,7 @@ PROGMEM const char  ERR255 []     = "ERR255";
 // ===========================================
 PROGMEM const char  digits8 []     = " ###";
 PROGMEM const char  digits16[]     = " ##,###";
-PROGMEM const char  digits32[]     = "##,###,###,###";
+PROGMEM const char  digits32[]     = " #,###,###,###";
 
 PROGMEM const char  volts_xx_xV[]  = " ##.#V";
 PROGMEM const char  volts_x_xxxV[] = " #.###V";
