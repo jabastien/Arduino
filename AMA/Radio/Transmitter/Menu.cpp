@@ -404,8 +404,8 @@ void Menu::funcKeyboard(byte keyPress){
 //ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(244),char(0)};
 
 // edit.doMaskInit(myMenuData.pgmData[1], '#', 10);
-Serial.println("Init");
-  edit.doMaskInit(volts_0_0xxxxxV, '#', 10);
+Serial.println("Init -----------------------------------------------");
+  edit.doMaskInit(myMenuData.pgmData[1], '#', 13);
  Serial.println("Init Complete");
   edit.doMaskEdit(LEFT); 
   edit.doMaskEdit(RIGHT); 
@@ -424,11 +424,34 @@ Serial.println("Init");
   edit.doMaskEdit(LEFT); 
   edit.doMaskEdit(LEFT); 
   edit.doMaskEdit(LEFT); 
+Serial.println("Init -----------------------------------------------");
+  edit.doMaskInit(volts_0_0xxxxxV, '#', 12);
+ Serial.println("Init Complete");
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+  
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
+
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT);   
 //=================================================
- Serial.println("Init");
- edit.doMaskInit(digits32, '#', 10);
+Serial.println("Init -----------------------------------------------");
+
+ edit.doMaskInit(digits32, '#', 7);
  Serial.println("Init Complete");
   edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(RIGHT); 
+  edit.doMaskEdit(RIGHT); 
   edit.doMaskEdit(RIGHT); 
   edit.doMaskEdit(RIGHT); 
   edit.doMaskEdit(RIGHT); 
@@ -445,6 +468,8 @@ Serial.println("Init");
   edit.doMaskEdit(RIGHT); 
   edit.doMaskEdit(RIGHT); 
 
+  edit.doMaskEdit(LEFT); 
+  edit.doMaskEdit(LEFT); 
   edit.doMaskEdit(LEFT); 
   edit.doMaskEdit(LEFT); 
   edit.doMaskEdit(LEFT); 

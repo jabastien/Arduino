@@ -64,15 +64,11 @@ char buffer[20];
   maskSize = utils.arraySize(buffer);
   matchChar = _matchChar;
   digitCnt = utils.countCharacters(buffer, matchChar);
-  courserPos = 0;
+  courserPos = -1;
   expoFactor = 0;
   displayPos = _displayPos;
 
   doMaskEdit(RIGHT);
-
-  if (digitCnt > 0){
-    expoFactor = 1;
-  }
 }
 
 // INIT, first time setup for mask, set defaults....
@@ -113,10 +109,14 @@ char buffer[20];
     
 //  utils.reverse(buffer);
 
-  byte tmpCurserPos   = courserPos;
+  int8_t tmpCurserPos = (uint8_t)courserPos;
   boolean done = false;
-  byte dir = 0;
+  int8_t dir = 0;
 
+      Serial.print  ("tmpCurserPos ");
+      Serial.print  (tmpCurserPos);
+      Serial.println();
+      
   if (_keyPress == RIGHT) {
     dir = 1;
   }
@@ -127,22 +127,39 @@ char buffer[20];
   if (dir != 0) { //_keyPress == LEFT || _keyPress == RIGHT
     // Limit move to width of mask
     while(!done){
-//        Serial.print  (" Condition ");
-//        Serial.print  (tmpCurserPos > 0 && tmpCurserPos < maskSize);
-//        Serial.println();
-      if (tmpCurserPos >= 0 && tmpCurserPos < maskSize){
+      bool cond1 = ((tmpCurserPos+dir) < 0);
+      bool cond2 = ((tmpCurserPos+dir) >= maskSize);      
+      Serial.print  (" Condition T:M:C ");
+      bool cond = ((tmpCurserPos+dir) < 0 || (tmpCurserPos+dir >= maskSize));
+      Serial.print  (tmpCurserPos+dir);
+      Serial.print  (":");
+      Serial.print  (maskSize - 1);
+      Serial.print  (":");
+      Serial.print  (cond);
+      Serial.println();
+      if (cond){
+            Serial.println("range ==============");
+            Serial.print  ("tmpCurserPos ");
+            Serial.print  (tmpCurserPos);
+            Serial.println();        
+        done = true;
+      }
+      if (!done){
         // Allow moves only to '#' cells
-//        Serial.println("If ");        
+Serial.println("!done");        
         tmpCurserPos += dir;
         if (buffer[tmpCurserPos] == matchChar){
           courserPos = tmpCurserPos;
           expoFactor += dir;
-//           Serial.println("Inc");        
+Serial.println("Inc/Dec ==============");        
           done = true;
         }
       } else {
         // End of mask, no match, no move
-//        Serial.println("Fail");        
+Serial.println("Fail =============="); 
+Serial.print  ("tmpCurserPos ");
+Serial.print  (tmpCurserPos);
+Serial.println();       
         done = true;
       }
     }
@@ -220,6 +237,8 @@ char buffer[20];
     Serial.println("'");
   }
 
+Serial.println();
+Serial.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");     
 }
 
 
