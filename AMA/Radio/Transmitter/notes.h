@@ -23,4 +23,10 @@ https://github.com/VaSe7u/LiquidMenu/tree/master/src
 Pointers (reference/value) help.
 https://forum.arduino.cc/index.php?topic=439117.0
 
+
+https://www.tutorialspoint.com/cplusplus/cpp_data_types.htm
+
+Templates
+http://www.cplusplus.com/doc/oldtutorial/templates/
+
 */

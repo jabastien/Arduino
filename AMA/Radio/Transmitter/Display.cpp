@@ -57,7 +57,8 @@ template <typename T> T Display::setSign (T number){ // Return value of 'T'
 char * Display::outputDigitsU8(uint8_t number, const char * pattern){
 
   Display digits;
-  strcpy_P(buffer, pattern );
+
+  setBuffer(pattern);
 
   number = setSign(number);
 
@@ -84,7 +85,8 @@ char * Display::outputDigitsU8(uint8_t number, const char * pattern){
 char * Display::outputDigitsS8( int8_t number, const char * pattern){
 
   Display digits;
-  strcpy_P(buffer, pattern );
+
+  setBuffer(pattern);
 
   number = setSign(number);
 
@@ -106,6 +108,16 @@ char * Display::outputDigitsS8( int8_t number, const char * pattern){
   return buffer;  
 }
 
+
+void Display::setBuffer(const char * pattern){
+  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated arrays (clear the array);
+  memcpy(buffer, PGMSTR(pattern), utils.arraySize(pattern) + 1);
+
+  Serial.print (" +_+_+_+ ");
+  Serial.print (buffer);
+  Serial.println();
+}
+
 // -------------------------------------------
 // int store a 2 byte value. Instead of storing negative numbers however they only store positive values
 // Yielding a useful range of 0 to 65,535 (2^16) - 1).
@@ -116,9 +128,10 @@ char * Display::outputDigitsU16(uint16_t number, const char * pattern){
 char * Display::outputDigitsU16(uint16_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
-  strcpy_P(buffer, pattern );
 
-//  number = setSign(number);
+  setBuffer(pattern);
+  
+//number = setSign(number);
 
   int digit = startDigit;
 
@@ -147,7 +160,8 @@ char * Display::outputDigitsS16( int16_t number, const char * pattern){
 char * Display::outputDigitsS16( int16_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
-  strcpy_P(buffer, pattern );
+
+  setBuffer(pattern);
 
   number = setSign(number);
 
@@ -179,7 +193,8 @@ char * Display::outputDigitsU32(uint32_t number, const char * pattern){
 char * Display::outputDigitsU32(uint32_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
-  strcpy_P(buffer, pattern );
+
+  setBuffer(pattern);
 
   number = setSign(number);
 
@@ -209,7 +224,8 @@ char * Display::outputDigitsS32( int32_t number, const char * pattern){
 char * Display::outputDigitsS32( int32_t number, const char * pattern, uint8_t startDigit){
 
   Display digits;
-  strcpy_P(buffer, pattern );
+
+  setBuffer(pattern);
 
   number = setSign(number);
 

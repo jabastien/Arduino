@@ -60,7 +60,7 @@ const String err = "Err:
 /**************************************************************************************/
 PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
 PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
-PROGMEM const char  versionNum [] = {"v1.1.29"};
+PROGMEM const char  versionNum [] = {"v1.1.30"};
 
 /**************************************************************************************/
 /***************             motor and servo numbers               ********************/

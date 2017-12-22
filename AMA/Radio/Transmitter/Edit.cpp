@@ -26,13 +26,22 @@ Edit::Edit(){
   // initialize this instance's variables
 
   // do whatever is required to initialize the library
+  mask = NULL;
+  maskSize = 0;
+  matchChar = NULL;
+  digitCnt = 0;
+  courserPos = -1;
+  expoFactor = -1;
+  displayPos = 0;
 
+  pVoid = NULL;
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
 
-void Edit::doMaskInit(const  char *_mask, const  char _matchChar, byte _displayPos){
+void Edit::doMaskInit(const  char *_mask, const  char _matchChar, byte _displayPos, void * _pVoid){
+
   mask = _mask;
   sprintf_P(buffer, PSTR("%S") , mask);
 //  utils.reverse(buffer);  
@@ -43,8 +52,13 @@ void Edit::doMaskInit(const  char *_mask, const  char _matchChar, byte _displayP
   expoFactor = -1;
   displayPos = _displayPos;
 
+  pVoid = _pVoid;
   // INIT, first time setup for mask, set defaults....
   doMaskEdit(RIGHT);
+}
+
+void * Edit::getVoidPointer(void){
+  return pVoid;
 }
 
 byte Edit::getDisplayPos(){
@@ -58,6 +72,18 @@ byte Edit::getCourserPos(){
 const char * Edit::getMask(void){
   sprintf_P(buffer, PSTR("%S") , mask);
   return buffer;
+}
+
+// pow has a bug (not whole numbers).  It's a float point thing
+// https://ucexperiment.wordpress.com/2016/02/02/floating-point-precision-or-arduino-dont-know-math/
+uint32_t Edit::getExpoValue(){
+
+  uint32_t expoValue = 1;
+  for (uint8_t i = 0; i < expoFactor; i++){
+     expoValue *= 10;
+  }
+
+  return expoValue;
 }
 
 void Edit::doMaskEdit(byte _keyPress){
@@ -167,11 +193,6 @@ void Edit::doMaskEdit(byte _keyPress){
     }
   }
 
-  uint32_t myuInt32 = 1;
-  for (uint8_t i = 0; i < expoFactor; i++){
-     myuInt32 *= 10;
-  }
-
   #ifdef DEBUG_EDIT
   if (true){
     Serial.print  (" _keyPress ");
@@ -202,8 +223,7 @@ void Edit::doMaskEdit(byte _keyPress){
     Serial.print  (" expoFactor ");
     Serial.print  (expoFactor);
     
-// pow has a bug (not whole numbers).  It's a float point thing
-// https://ucexperiment.wordpress.com/2016/02/02/floating-point-precision-or-arduino-dont-know-math/
+
 //    Serial.print  (" pow "); 
 //    Serial.print  (pow(10.000, 9.000));
 //    Serial.print  (pow(10.0, (float)expoFactor));
@@ -220,12 +240,19 @@ void Edit::doMaskEdit(byte _keyPress){
 //     return exp (B * log(A));
 //    }
 
+
+  
     // This is my work around
-    Serial.print  (" myuInt32 ");
-    Serial.print  (myuInt32);
+    Serial.print  (" getExpoValue ");
+    Serial.print  (getExpoValue());
+//    uint32_t expoValue = 1;
+//    for (uint8_t i = 0; i < expoFactor; i++){
+//       expoValue *= 10;
+//    } 
+//    Serial.print  (" uint32_t ");
+//    Serial.print  (expoValue);
     Serial.println();        
   }
-
 
   if (false){   
     Serial.print  ("Reverse: '");
@@ -245,6 +272,8 @@ void Edit::doMaskEdit(byte _keyPress){
   #endif
 
 }
+
+
 
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library

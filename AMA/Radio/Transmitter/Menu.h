@@ -171,11 +171,14 @@ class Menu
       } menuAction = doInit;
 
       void printDrmc(void);  // test only, delete this and the method
-      void clearMyMenuData(void);
+      void clearDisplayEdit(void);
+      void clearMyMenuData(void); // delete this....
+
       
       Data * _data;   
       MyMenuData myMenuData;
-      
+      Edit editDisplay[4];
+
 
     // ===========================================
     // Timing Vars
