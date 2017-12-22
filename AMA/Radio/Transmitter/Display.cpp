@@ -245,6 +245,20 @@ char * Display::outputDigitsS32( int32_t number, const char * pattern, uint8_t s
 
 // -------------------------------------------
 
+
+  // #include<stdlib.h>
+  //  dtostrf(FLOAT,WIDTH,PRECSISION,BUFFER);
+
+//  char *r = dtostrf(changeMe, 8, 2, buffer);
+//  if (true){
+//    Serial.print  (buffer);
+//    Serial.print  (" r:");
+//    Serial.print  (r);
+//    Serial.println(":");
+//  }
+
+
+
 /*
 
 //char * Display::outputDigitsU32(uint32_t number){

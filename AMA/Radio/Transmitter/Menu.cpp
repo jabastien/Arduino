@@ -898,9 +898,8 @@ void Menu::lcdMenu014() {
 //===========================================
 // -------------------------------------------
 void Menu::lcdFunc200() { // UInt number
-//  if (repeatCount == 0) {
-//    setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
-//  }
+//  if (repeatCount == 0) { setMenu(F("x200"), menuOptions200, membersof(menuOptions200)); }
+
 
   if (myMenuData.pVoid[1] != NULL){
     // Display measured voltage
@@ -919,35 +918,8 @@ void Menu::lcdFunc200() { // UInt number
 // MS1:252 MS2:201
 
 // -------------------------------------------
-void Menu::lcdFunc201(byte _keyPress) { //Double number
-//  if (repeatCount == 0) {
-//    setMenu(F("x201"), menuOptions201, membersof(menuOptions201));
-//  }
-  // #include<stdlib.h>
-  //  dtostrf(FLOAT,WIDTH,PRECSISION,BUFFER);
-
-//  char *r = dtostrf(changeMe, 8, 2, buffer);
-//  if (true){
-//    Serial.print  (buffer);
-//    Serial.print  (" r:");
-//    Serial.print  (r);
-//    Serial.println(":");
-//  }
-//  lcd.setCursor(3, 1); //   row >    column ^
-//lcd.print(buffer);
-
-
-////if (myMenuData.pVoid[1] != NULL){
-////    // Display measured voltage
-////    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
-////    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
-////  }
-////  
-////  if (myMenuData.pVoid[3] != NULL){
-////    // Calculate and display Volt/Bit
-////    lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
-////    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
-////  }
+void Menu::lcdFunc201(byte _keyPress) { // Uint16_t number
+//  if (repeatCount == 0) { setMenu(F("x201"), menuOptions201, membersof(menuOptions201)); }
 
   displayMask[menuCol].doMaskEdit(_keyPress); 
 
@@ -1265,23 +1237,24 @@ void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
 void Menu::lcdInit252() {  // V5.0    Regulator Reference
 
   if (isMenuChange){ 
+    setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     // load DisplayMask data pointers
+
+    // 0
     //displayMask[0].doMaskInit(
+
+    // 1
     displayMask[1].doMaskInit(volts_x_xxxV, '#', 13, &_data->getMyVoltageMap().reference);
-    //displayMask[3].doMaskInit(
+    _data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+    // 2
+    //displayMask[2].doMaskInit(
+
+    // 3
     displayMask[3].doMaskInit(volts_0_0xxxxxV, '#', 10, &_data->getMyVoltageMap().voltPerBit);
-
-//  (*(uint16_t*)myMenuData.pVoid[1]) = (*(uint16_t*)myMenuData.pVoid[1]) + 1;
-
-//    Serial.println("----->     adjUint16_tNumber");
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[1]);
-//    _data->setUint16_tPointer(myMenuData.pVoid[1]);
-      _data->setUint16_tPointer(displayMask[1].getVoidPointer());
-//    _data->adjUint16_tNumber(1);
-    }
+  }
   
   if (repeatCount == 0) {
-    setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit252_5Vref));
 
@@ -1292,14 +1265,16 @@ void Menu::lcdInit252() {  // V5.0    Regulator Reference
     lcd.print(PGMSTR(lcd_param_lcdInit252_v5bit));
   }
 
- // Display measured reference voltage
-  lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
-  lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask(), 1));
-  
-  // Calculate and display Volt/Bit
-  *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)displayMask[1].getVoidPointer() / 1023.0) * 1000;
-  lcd.setCursor(displayMask[3].getDisplayPos(), 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[3].getVoidPointer(), displayMask[3].getMask()));
+  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
+    // Display measured reference voltage
+    lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask(), 1));
+    
+    // Calculate and display Volt/Bit
+    *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)displayMask[1].getVoidPointer() / 1023.0) * 1000;
+    lcd.setCursor(displayMask[3].getDisplayPos(), 3); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[3].getVoidPointer(), displayMask[3].getMask()));
+  }
 }
 
 //===========================================
