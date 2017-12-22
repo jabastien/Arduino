@@ -112,10 +112,6 @@ char * Display::outputDigitsS8( int8_t number, const char * pattern){
 void Display::setBuffer(const char * pattern){
   memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated arrays (clear the array);
   memcpy(buffer, PGMSTR(pattern), utils.arraySize(pattern) + 1);
-
-  Serial.print (" +_+_+_+ ");
-  Serial.print (buffer);
-  Serial.println();
 }
 
 // -------------------------------------------

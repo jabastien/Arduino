@@ -49,8 +49,8 @@ const String err = "Err:
 //#define DEBUG_CD4051_MASK
 //#define DEBUG_CD4052
 //#define DEBUG_CD4052_VOLTS
-#define DEBUG_EDIT
-//#define DEBUG_EDIT_DETAIL
+#define DEBUG_DISPLAYMASK
+//#define DEBUG_DISPLAYMASK_DETAIL
 //#define DEBUG_KEY
 //#define DEBUG_MyControls
 
@@ -60,7 +60,7 @@ const String err = "Err:
 /**************************************************************************************/
 PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
 PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
-PROGMEM const char  versionNum [] = {"v1.1.30"};
+PROGMEM const char  versionNum [] = {"v1.1.31"};
 
 /**************************************************************************************/
 /***************             motor and servo numbers               ********************/
@@ -104,6 +104,7 @@ PROGMEM const char lcd_param_common_set [] = "(Set)";
 // X000: 
 //                                   123456789012 
 PROGMEM const char ERR000 []     = "ERR000";
+PROGMEM const char ERR201_0 []   = "ERR201-0"; // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
 
 //
 // X240

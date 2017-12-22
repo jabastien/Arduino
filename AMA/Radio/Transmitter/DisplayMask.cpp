@@ -1,5 +1,5 @@
 /*
-  Edit.h - Test library for Wiring - implementation
+  DisplayMask.h - Test library for Wiring - implementation
   Copyright (c) 2006 John Doe.  All right reserved.
 */
 
@@ -14,7 +14,7 @@
 #endif
 
 // include this library's description file
-#include "Edit.h"
+#include "DisplayMask.h"
 
 // include description files for other libraries used (if any)
 #include "HardwareSerial.h"
@@ -22,29 +22,28 @@
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
 
-Edit::Edit(){
+DisplayMask::DisplayMask(){
   // initialize this instance's variables
 
   // do whatever is required to initialize the library
   mask = NULL;
   maskSize = 0;
-  matchChar = NULL;
+  matchChar = 0;
   digitCnt = 0;
   courserPos = -1;
   expoFactor = -1;
   displayPos = 0;
-
   pVoid = NULL;
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
 
-void Edit::doMaskInit(const  char *_mask, const  char _matchChar, byte _displayPos, void * _pVoid){
+void DisplayMask::doMaskInit(const  char *_mask, const  char _matchChar, byte _displayPos, void * _pVoid){
 
   mask = _mask;
   sprintf_P(buffer, PSTR("%S") , mask);
-//  utils.reverse(buffer);  
+  //utils.reverse(buffer);  
   maskSize = utils.arraySize(buffer);
   matchChar = _matchChar;
   digitCnt = utils.countCharacters(buffer, matchChar);
@@ -53,30 +52,35 @@ void Edit::doMaskInit(const  char *_mask, const  char _matchChar, byte _displayP
   displayPos = _displayPos;
 
   pVoid = _pVoid;
+  
   // INIT, first time setup for mask, set defaults....
-  doMaskEdit(RIGHT);
+  doMaskEdit(LEFT);
 }
 
-void * Edit::getVoidPointer(void){
+void * DisplayMask::getVoidPointer(void){
   return pVoid;
 }
 
-byte Edit::getDisplayPos(){
+byte DisplayMask::getDisplayPos(){
   return displayPos;
 }
 
-byte Edit::getCourserPos(){
+byte DisplayMask::getCourserPos(){
   return ((displayPos + (maskSize - 1)) - courserPos);
 }
 
-const char * Edit::getMask(void){
+int8_t DisplayMask::getIncDirection(){
+  return incDirection;
+}
+
+const char * DisplayMask::getMask(void){
   sprintf_P(buffer, PSTR("%S") , mask);
   return buffer;
 }
 
 // pow has a bug (not whole numbers).  It's a float point thing
 // https://ucexperiment.wordpress.com/2016/02/02/floating-point-precision-or-arduino-dont-know-math/
-uint32_t Edit::getExpoValue(){
+uint32_t DisplayMask::getExpoValue(){
 
   uint32_t expoValue = 1;
   for (uint8_t i = 0; i < expoFactor; i++){
@@ -86,11 +90,12 @@ uint32_t Edit::getExpoValue(){
   return expoValue;
 }
 
-void Edit::doMaskEdit(byte _keyPress){
+void DisplayMask::doMaskEdit(byte _keyPress){
+  
   sprintf_P(buffer, PSTR("%S") , mask);
   utils.reverse(buffer);  
 
-  #ifdef DEBUG_EDIT_DETAIL
+  #ifdef DEBUG_DISPLAYMASK_DETAIL
   if (false){
   Serial.print  ("IN     : '");
   Serial.print  (buffer);  
@@ -109,7 +114,7 @@ void Edit::doMaskEdit(byte _keyPress){
   boolean done = false;
   int8_t moveLR = 0;
 
-  #ifdef DEBUG_EDIT_DETAIL
+  #ifdef DEBUG_DISPLAYMASK_DETAIL
   if (false){
     Serial.print  ("tmpCurserPos ");
     Serial.print  (tmpCurserPos);
@@ -118,6 +123,13 @@ void Edit::doMaskEdit(byte _keyPress){
   #endif  
 
   incDirection = 0;
+
+  // NOKEY, leave.
+  if (_keyPress == NOKEY){
+    return;
+  }
+
+  // Direction for number increment.
   if (_keyPress == UP) {
     incDirection = 1;
   }
@@ -125,18 +137,19 @@ void Edit::doMaskEdit(byte _keyPress){
     incDirection = -1;  
   }
 
-  if (_keyPress == RIGHT) {
-    moveLR = 1;
-  }
+  // Move cursor LEFT/RIGHT?
   if (_keyPress == LEFT) {
-    moveLR = -1;
+    moveLR =  1; // Not (-1), backward because array is reversed.
+  }
+  if (_keyPress == RIGHT) {
+    moveLR = -1; // Not (+1), backward because array is reversed.
   }
     
   if (moveLR != 0) { //_keyPress == LEFT || _keyPress == RIGHT
     // Limit move to width of mask
     while(!done){
       bool cond = ((tmpCurserPos+moveLR) < 0 || (tmpCurserPos+moveLR >= maskSize));
-       #ifdef DEBUG_EDIT_DETAIL
+       #ifdef DEBUG_DISPLAYMASK_DETAIL
       if (false){
         bool cond1 = ((tmpCurserPos+moveLR) < 0);
         bool cond2 = ((tmpCurserPos+moveLR) >= maskSize);      
@@ -150,7 +163,7 @@ void Edit::doMaskEdit(byte _keyPress){
       }
        #endif      
       if (cond){
-        #ifdef DEBUG_EDIT_DETAIL
+        #ifdef DEBUG_DISPLAYMASK_DETAIL
         if (false){
           Serial.println("range ==============");
           Serial.print  ("tmpCurserPos ");
@@ -162,7 +175,7 @@ void Edit::doMaskEdit(byte _keyPress){
       }
       if (!done){
         // Allow moves only to '#' cells
-        #ifdef DEBUG_EDIT_DETAIL        
+        #ifdef DEBUG_DISPLAYMASK_DETAIL        
         if (false){
           Serial.println("!done");
         }
@@ -171,7 +184,7 @@ void Edit::doMaskEdit(byte _keyPress){
         if (buffer[tmpCurserPos] == matchChar){
           courserPos = tmpCurserPos;
           expoFactor += moveLR;
-          #ifdef DEBUG_EDIT_DETAIL          
+          #ifdef DEBUG_DISPLAYMASK_DETAIL          
           if (false){
             Serial.println("Inc/Dec ==============");        
           }
@@ -180,7 +193,7 @@ void Edit::doMaskEdit(byte _keyPress){
         }
       } else {
         // End of mask, no match, no move
-        #ifdef DEBUG_EDIT_DETAIL
+        #ifdef DEBUG_DISPLAYMASK_DETAIL
         if (false){
           Serial.println("Fail =============="); 
           Serial.print  ("tmpCurserPos ");
@@ -193,7 +206,7 @@ void Edit::doMaskEdit(byte _keyPress){
     }
   }
 
-  #ifdef DEBUG_EDIT
+  #ifdef DEBUG_DISPLAYMASK
   if (true){
     Serial.print  (" _keyPress ");
     Serial.print  (_keyPress);
@@ -273,9 +286,6 @@ void Edit::doMaskEdit(byte _keyPress){
 
 }
 
-
-
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library
-
 

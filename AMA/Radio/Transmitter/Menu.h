@@ -26,7 +26,7 @@
 #include "CustomChar.h"
 #include "Data.h"
 #include "Display.h"
-#include "Edit.h"
+#include "DisplayMask.h"
 
 // library interface description
 class Menu
@@ -46,7 +46,7 @@ class Menu
     void menuKeyboard(byte);
     void funcKeyboard(byte);
     void funcChangeCheck(void);
-    void funcDisplay(void);
+    void funcDisplay(byte);
     
 //    void clearMyEditorData(byte);
 
@@ -70,7 +70,7 @@ class Menu
 
     // Functions
     void lcdFunc200(void);
-    void lcdFunc201(void);
+    void lcdFunc201(byte);
     void lcdFunc238(void);
     void lcdFunc239(void);
 
@@ -99,7 +99,7 @@ class Menu
     
     CustomChar customChar = CustomChar();
     Display display = Display();
-    Edit edit = Edit();
+    DisplayMask edit = DisplayMask();  /// Delete this
 
     char buffer[20];  //  Hold The Convert Data (width of the LCD)
     
@@ -125,7 +125,7 @@ class Menu
     //https://arduino.stackexchange.com/questions/21095/how-to-write-array-of-functions-in-arduino-library
     //https://arduino.stackexchange.com/questions/21095/how-to-write-array-of-functions-in-arduino-library
     
-    //byte menuOptions000 [0] = {}; // Do NOT use: reserved
+    byte menuOptions000 [0] = {/* Do NOT use: reserved */}; 
     byte menuOptions001 [4] = {MAINMENU, 2, 3, 10};
     
     byte menuOptions002 [1] = {MAINMENU};
@@ -154,7 +154,7 @@ class Menu
     byte menuOptions252 [2] = {251,201};      // V5.0    Regulator Voltage 
     byte menuOptions253 [3] = {253,252,240};  // Splash     [no click (select) out to 253]
     byte menuOptions254 [1] = {253};          // Starting   [click (select) out to 254]
-    //byte menuOptions255 [0] = {};  // Do NOT use: reserved
+    byte menuOptions255 [0] = {/* Do NOT use: reserved */};
     
     byte menuOptions[5];
     byte menuSize;
@@ -171,13 +171,11 @@ class Menu
       } menuAction = doInit;
 
       void printDrmc(void);  // test only, delete this and the method
-      void clearDisplayEdit(void);
-      void clearMyMenuData(void); // delete this....
-
+      void clearDisplayMask(void);
       
       Data * _data;   
       MyMenuData myMenuData;
-      Edit editDisplay[4];
+      DisplayMask displayMask[4];
 
 
     // ===========================================

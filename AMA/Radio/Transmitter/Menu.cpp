@@ -26,7 +26,6 @@
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 20, 4);    // Initialization of the book (address, characters, rows)
 
-
 /*
  *         0 = Reserved
  *   1 -  49 = Transmitter
@@ -45,50 +44,18 @@ Menu::Menu(Data * data){
 
   // do whatever is required to initialize the library
 
-  clearDisplayEdit(); // Inital load 
+  clearDisplayMask(); // Inital load 
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
 
-void Menu::clearMyMenuData(){
-//Serial.println("clearMyMenuData");  
-  myMenuData.row[0] = 0;
-  myMenuData.row[1] = 0;
-  myMenuData.row[2] = 0;
-  myMenuData.row[3] = 0;
-  myMenuData.pgmData[0] = NULL;
-  myMenuData.pgmData[1] = NULL;
-  myMenuData.pgmData[2] = NULL;
-  myMenuData.pgmData[3] = NULL;
-  myMenuData.pVoid[0] = NULL;
-  myMenuData.pVoid[1] = NULL;
-  myMenuData.pVoid[2] = NULL;
-  myMenuData.pVoid[3] = NULL;
-
-
-  /*
-  Move each item to a method in Edit, do it once not 4 x;
-   void Edit:clearEdit(){
-    row = 0;
-    pgmData = NULL;
-    pVoid = NULL;
-   }
-  This mehtod becomes.
-   edit[0].clearEdit();
-   edit[1].clearEdit();
-   edit[2].clearEdit();
-   edit[3].clearEdit();
-   */
-  
-}
-
-// Initialize Edit Display;
-void Menu::clearDisplayEdit(){
-  editDisplay[0] = Edit();
-  editDisplay[1] = Edit();
-  editDisplay[2] = Edit();
-  editDisplay[3] = Edit();  
+// Initialize Display Mask;
+void Menu::clearDisplayMask(){
+  displayMask[0] = DisplayMask();
+  displayMask[1] = DisplayMask();
+  displayMask[2] = DisplayMask();
+  displayMask[3] = DisplayMask();  
 }
  
 boolean Menu::isScreenRefreshNeeded(){
@@ -311,8 +278,7 @@ void Menu::menuChangeCheck(){
   lcd.noBlink();
   lcd.clear();
   
-  clearMyMenuData(); //This will be deleted.
-  clearDisplayEdit();  
+  clearDisplayMask();  
   menuCol = 0;  
      
   isMenuChange=true;
@@ -320,92 +286,92 @@ void Menu::menuChangeCheck(){
   menuDisplay();
 }
 
+/* define ABC - displayMask.doMaskEdit(LEFT); 
 #define ABC
 #ifdef ABC
-void debugFuncKeyboard(Edit edit, MyMenuData myMenuData){
+void debugFuncKeyboard(DisplayMask displayMask, MyMenuData myMenuData){
 
 // Need to add pVOid to doMaskInit method
-// edit.doMaskInit(myMenuData.pgmData[1], '#', 10, pVoid value....);
+// displayMask.doMaskInit(myMenuData.pgmData[1], '#', 10, pVoid value....);
 Serial.println("Init -----------------------------------------------");
-  edit.doMaskInit(myMenuData.pgmData[1], '#', 14, NULL);
+  displayMask.doMaskInit(myMenuData.pgmData[1], '#', 14, NULL);
  Serial.println("Init Complete");
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
   
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
 Serial.println("Init -----------------------------------------------");
-  edit.doMaskInit(volts_0_0xxxxxV, '#', 11, NULL);
+  displayMask.doMaskInit(volts_0_0xxxxxV, '#', 11, NULL);
  Serial.println("Init Complete");
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
   
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT);   
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT);   
 //=================================================
 Serial.println("Init -----------------------------------------------");
 
- edit.doMaskInit(digits32, '#', 7, NULL);
+ displayMask.doMaskInit(digits32, '#', 7, NULL);
  Serial.println("Init Complete");
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
   
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(RIGHT); 
-  edit.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(RIGHT); 
+  displayMask.doMaskEdit(RIGHT); 
 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-  edit.doMaskEdit(LEFT); 
-
-  
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT); 
+  displayMask.doMaskEdit(LEFT);  
 }
 #endif
+*/
 
 void Menu::funcKeyboard(byte keyPress){
 
@@ -422,7 +388,6 @@ void Menu::funcKeyboard(byte keyPress){
 
   // Key Select/Enter (EXIT)
   if (keyPress == SELECT) {
-
     if (false){
       Serial.print (F(" FS4:"));
       Serial.print (function);
@@ -442,18 +407,16 @@ void Menu::funcKeyboard(byte keyPress){
       Serial.println(function);
     }
 
-    return;
-  }    
+  return;
+  } 
 
-
- 
-
+/*
   #ifdef ABC
-  debugFuncKeyboard(edit, myMenuData);
+  debugFuncKeyboard(displayMask, myMenuData);  // this may not work?? Need menuCol
   #endif
+*/
+  
 }
-
-
 
 void Menu::funcChangeCheck(){
 
@@ -472,7 +435,7 @@ void Menu::funcChangeCheck(){
   lcd.blink();    
 }
 
-void Menu::funcDisplay(){
+void Menu::funcDisplay(byte _keyPress){
 
   // If not FUNCTION, leave
   if (menuAction != doFunc){ // Should not be here if a MENU is active.
@@ -500,12 +463,12 @@ void Menu::funcDisplay(){
     // ---------------------------------------
     // ------------  Functions  --------------
     // ---------------------------------------
-    case 200: // Int number edit
+    case 200: // Int number
       lcdFunc200();
       break;
     // ---------------------------------------
-    case 201: // Double number edit
-      lcdFunc201();
+    case 201: // Double number
+      lcdFunc201(_keyPress);
       break;
     // ---------------------------------------
     case 238: // EEPROM Read
@@ -525,9 +488,8 @@ void Menu::funcDisplay(){
       break;    
   }
 
-  // edit format
-
-  lcd.setCursor(myMenuData.row[menuCol] , menuCol);//   row >    column ^
+//  lcd.setCursor(myMenuData.row[menuCol] , menuCol);//   row >    column ^
+  lcd.setCursor(displayMask[menuCol].getCourserPos(), menuCol);//   row >    column ^
 }
 
 void Menu::updateLCD(byte keyPress, int fps) {
@@ -540,7 +502,7 @@ void Menu::updateLCD(byte keyPress, int fps) {
   } else {
     // FUNCTION mode
     funcKeyboard(keyPress);
-    funcDisplay(); 
+    funcDisplay(keyPress); 
   }
 
   if (false){
@@ -935,7 +897,7 @@ void Menu::lcdMenu014() {
 // Functions
 //===========================================
 // -------------------------------------------
-void Menu::lcdFunc200() { // UInt number edit
+void Menu::lcdFunc200() { // UInt number
 //  if (repeatCount == 0) {
 //    setMenu(F("x200"), menuOptions200, membersof(menuOptions200));
 //  }
@@ -957,7 +919,7 @@ void Menu::lcdFunc200() { // UInt number edit
 // MS1:252 MS2:201
 
 // -------------------------------------------
-void Menu::lcdFunc201() { //Double number edit
+void Menu::lcdFunc201(byte _keyPress) { //Double number
 //  if (repeatCount == 0) {
 //    setMenu(F("x201"), menuOptions201, membersof(menuOptions201));
 //  }
@@ -987,15 +949,22 @@ void Menu::lcdFunc201() { //Double number edit
 ////    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
 ////  }
 
+  displayMask[menuCol].doMaskEdit(_keyPress); 
 
+  if (displayMask[menuCol].getIncDirection() != 0){
+    if (displayMask[menuCol].getMask() != NULL  && displayMask[menuCol].getVoidPointer() != NULL){
+      Serial.print  ("IncDirection ");
+      Serial.print  (displayMask[menuCol].getIncDirection());
+      Serial.print  (" Expo ");
+      Serial.print  (displayMask[menuCol].getExpoValue());
 
-  //    _data->setUint16_tPointer(myMenuData.pVoid[1]);
-  if (deltaNumber != 0){
-    if (myMenuData.pVoid[1] != NULL){
-      _data->adjUint16_tNumber(deltaNumber);
-      Serial.println("lcdFunc201");
+      _data->setUint16_tPointer(displayMask[menuCol].getVoidPointer());
+      _data->adjUint16_tNumber(displayMask[menuCol].getIncDirection() * displayMask[menuCol].getExpoValue());
+
+      Serial.println();
     } else {
-      Serial.println("myMenuData.pVoid[1] = NULL");  
+      // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
+      Serial.println(PGMSTR(ERR201_0));
     }
   }
   
@@ -1240,7 +1209,7 @@ void Menu::lcdInit250() { // Vin pst 2.1 & 2.2 ohms
 void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
 
   if (isMenuChange){
-    // load DisplayEdit data pointers
+    // load DisplayMask data pointers
 
     myMenuData.row[1] = 12;
     myMenuData.pgmData[1] = volts_x_xxxV;
@@ -1296,31 +1265,18 @@ void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
 void Menu::lcdInit252() {  // V5.0    Regulator Reference
 
   if (isMenuChange){ 
-    // load DisplayEdit data pointers
+    // load DisplayMask data pointers
+    //displayMask[0].doMaskInit(
+    displayMask[1].doMaskInit(volts_x_xxxV, '#', 13, &_data->getMyVoltageMap().reference);
+    //displayMask[3].doMaskInit(
+    displayMask[3].doMaskInit(volts_0_0xxxxxV, '#', 10, &_data->getMyVoltageMap().voltPerBit);
 
-//    editDisplay[1]
-    editDisplay[1].doMaskInit(volts_x_xxxV, '#', 13, &_data->getMyVoltageMap().reference);
-//    myMenuData.row    [1] = 13;
-//    myMenuData.pgmData[1] = volts_x_xxxV;
-//    myMenuData.pVoid  [1] = &_data->getMyVoltageMap().reference;
-
-    editDisplay[3].doMaskInit(volts_0_0xxxxxV, '#', 10, &_data->getMyVoltageMap().voltPerBit);
-//    myMenuData.row    [3] = 10;
-//    myMenuData.pgmData[3] = volts_0_0xxxxxV;
-//    myMenuData.pVoid  [3] = &_data->getMyVoltageMap().voltPerBit;
-
-
-//  // test test test
-//  // test test test
-//  // test test test
-//  // test test test
-//  // test test test
 //  (*(uint16_t*)myMenuData.pVoid[1]) = (*(uint16_t*)myMenuData.pVoid[1]) + 1;
-  // daqdaqdaqdaq
+
 //    Serial.println("----->     adjUint16_tNumber");
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
+//    Serial.println(*(uint16_t*)myMenuData.pVoid[1]);
 //    _data->setUint16_tPointer(myMenuData.pVoid[1]);
-    _data->setUint16_tPointer(editDisplay[1].getVoidPointer());
+      _data->setUint16_tPointer(displayMask[1].getVoidPointer());
 //    _data->adjUint16_tNumber(1);
     }
   
@@ -1337,33 +1293,13 @@ void Menu::lcdInit252() {  // V5.0    Regulator Reference
   }
 
  // Display measured reference voltage
-//  lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
-  lcd.setCursor(editDisplay[1].getDisplayPos(), 1); //   row >    column ^
+  lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
+  lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask(), 1));
   
-  
-//Serial.print  ("lcdInit252-1 ");
-//const char * ddd = editDisplay[1].getMask();
-//Serial.println(ddd);
-//
-//Serial.print  ("lcdInit252-2 ");
-//sprintf_P(buffer, PSTR("%S") , ddd);
-//Serial.println(buffer);
-
-//  lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
-    lcd.print(display.outputDigitsU16(*(uint16_t*)editDisplay[1].getVoidPointer(), editDisplay[1].getMask(), 1));
-//  lcd.print(display.outputDigitsU16(*(uint16_t*)editDisplay[1].getVoidPointer(), editDisplay[1].getMask(), 1));
-  
-//  // Calculate and display Volt/Bit
-//  *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)myMenuData.pVoid[1] / 1023.0) * 1000;
-  *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)editDisplay[1].getVoidPointer() / 1023.0) * 1000;
-  lcd.setCursor(editDisplay[3].getDisplayPos(), 3); //   row >    column ^
-//  lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
-    lcd.print(display.outputDigitsU16(*(uint16_t*)editDisplay[3].getVoidPointer(), editDisplay[3].getMask()));
-
-Serial.println("=====");
-Serial.println("=====");
-Serial.println("=====");
-
+  // Calculate and display Volt/Bit
+  *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)displayMask[1].getVoidPointer() / 1023.0) * 1000;
+  lcd.setCursor(displayMask[3].getDisplayPos(), 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[3].getVoidPointer(), displayMask[3].getMask()));
 }
 
 //===========================================
@@ -1375,7 +1311,7 @@ void Menu::lcdInit253() { // Splash     [no click 'select button' out to 253]
   menuAction = doInit;
 
   if (isMenuChange){  
-    // load DisplayEdit data pointers
+    // load DisplayMask data pointers
   }
   
   if (repeatCount == 0) 
@@ -1417,7 +1353,7 @@ void Menu::lcdInit254() {  // Starting   [click (select) out to 254]
   menuAction = doInit;  
 
   if (isMenuChange){  
-    // load DisplayEdit data pointers
+    // load DisplayMask data pointers
   }
     
   if (repeatCount == 0) {
