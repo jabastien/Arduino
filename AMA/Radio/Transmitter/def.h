@@ -87,6 +87,7 @@ PROGMEM const char  versionNum [] = {"v1.1.32"};
 /***************           defaults configurations                 ********************/
 /**************************************************************************************/
 #define MAINMENU 1
+#define STARTMENU 254 // This is the Init/Startup screen.
 #define FUNCTION 255
 
 #define MAX 255

@@ -62,12 +62,12 @@ void Data::setUint16_tPointer(void * pVoid){
   Serial.println(*(uint16_t*)pVoid);
 }
 
-void Data::setUint16_tNumber(uint16_t number){
+void Data::setUint16_tNumber(int16_t number){
   *(uint16_t*)pointerUint16_t = number;
   Serial.print  ("setUint16_tNumber: ");
   Serial.println(number);
 }
-void Data::adjUint16_tNumber(uint16_t number){
+void Data::adjUint16_tNumber(int16_t number){
   *(uint16_t*)pointerUint16_t += number;
   Serial.print  ("adjUint16_tNumber: ");
   Serial.println(number);

@@ -36,8 +36,8 @@ class Data
     int getJoystick(byte);
 
     void setUint16_tPointer(void *);
-    void setUint16_tNumber(uint16_t number);
-    void adjUint16_tNumber(uint16_t number);
+    void setUint16_tNumber(int16_t number);
+    void adjUint16_tNumber(int16_t number);
     
     MyResistorMap& getMyResistorMap(void);
     MyVoltageMap& getMyVoltageMap(void);

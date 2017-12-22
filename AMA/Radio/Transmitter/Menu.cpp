@@ -395,8 +395,8 @@ void Menu::funcKeyboard(byte keyPress){
     
     menuCol = 0;
     menuRow = 0;
-    editCol = 0;
-    editRow = 0;
+//    editCol = 0;
+//    editRow = 0;
     
     menuAction = doMenu;
     isMenuChange = true;
@@ -483,8 +483,8 @@ void Menu::funcDisplay(byte _keyPress){
       // catch all - N/A
       Serial.print  (F("Function not found Error: " ));
       Serial.print  (function);
-      Serial.println(" - reset");
-      menuSelected = 254;
+      Serial.println(F(" - reset"));
+      menuSelected = STARTMENU;
       break;    
   }
 
@@ -505,13 +505,13 @@ void Menu::updateLCD(byte keyPress, int fps) {
     funcDisplay(keyPress); 
   }
 
-  if (false){
-    Serial.print  ("updateLCD 1 : ");
-    Serial.print  ("isMenuChange = ");
-    Serial.print  (isMenuChange);
-    Serial.print  (" repeatCount = ");
-    Serial.println(repeatCount);
-  }
+//  if (false){
+//    Serial.print  ("updateLCD 1 : ");
+//    Serial.print  ("isMenuChange = ");
+//    Serial.print  (isMenuChange);
+//    Serial.print  (" repeatCount = ");
+//    Serial.println(repeatCount);
+//  }
 
   isMenuChange = false;
   
@@ -532,17 +532,13 @@ void Menu::updateLCD(byte keyPress, int fps) {
 
 void Menu::printDrmc(){
   Serial.print  (" pos> ");
-  Serial.print  (myMenuData.row[menuCol]);
-
+//  Serial.print  (myMenuData.row[menuCol]);
+  Serial.print(displayMask[1].getDisplayPos());
+  
   Serial.print  (" mc  ");
   Serial.print  (menuCol);  
   Serial.print  (" mr  ");
   Serial.print  (menuRow);  
-  
-  Serial.print  (" ec  ");
-  Serial.print  (editCol);
-  Serial.print  (" er  ");
-  Serial.print  (editRow);
   
   Serial.println();
 }
@@ -901,16 +897,16 @@ void Menu::lcdFunc200() { // UInt number
 //  if (repeatCount == 0) { setMenu(F("x200"), menuOptions200, membersof(menuOptions200)); }
 
 
-  if (myMenuData.pVoid[1] != NULL){
-    // Display measured voltage
-    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
-  }
-  if (myMenuData.pVoid[3] != NULL){
-    // Calculate and display Volt/Bit
-    lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
-  }
+//  if (myMenuData.pVoid[1] != NULL){
+//    // Display measured voltage
+//    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
+//    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
+//  }
+//  if (myMenuData.pVoid[3] != NULL){
+//    // Calculate and display Volt/Bit
+//    lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
+//    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
+//  }
   Serial.println("lcdFunc200");
 }
 
@@ -956,7 +952,7 @@ void Menu::lcdFunc238() {
   // Erase all transmitter data? y/n
   // Factory Reset? Y/N
 //  lcd.setCursor(9, 1); //   row >    column ^
-  lcd.setCursor(myMenuData.row[menuCol] + editRow, 1 + editCol);//   row >    column ^
+//  lcd.setCursor(myMenuData.row[menuCol] + editRow, 1 + editCol);//   row >    column ^
 
   // If Y, goto x239
   // If N, goto mainMenu
@@ -1079,158 +1075,188 @@ void Menu::lcdInit247() { // Joystick
 
 // -------------------------------------------
 void Menu::lcdInit248() { // Shunt ohms
-  if (repeatCount == 0) {
-    // load data pointers
+
+  if (isMenuChange){ 
     setMenu(F("x248"), menuOptions248, membersof(menuOptions248));
-    lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Shunt"));
-    lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("ohms "));    
 
-//  double shunt = 0.766327;   // 0.5   
+    // load DisplayMask[0-3] data pointers
 
-//fix
-//fix
-//fix    pUInt1 = &myResistorMap.shunt; // = (0.766327*10000);   // 0.5
+    // 0
+    //displayMask[0].doMaskInit(
 
-//fix
-//fix
-//fix    pUInt2 = &myResistorMap.shunt;  // = 2638; // 2.7k
+    // 1
+    displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 12, &_data->getMyResistorMap().shunt);
+    _data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+    // 2
+    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_32);
+    //_data->setUint16_tPointer(displayMask[2].getVoidPointer());
+
+    // 3
+    //displayMask[2].doMaskInit(
+
   }
 
-  lcd.setCursor(6, 1); //   row >    column ^
+  if (repeatCount == 0) {
 
-//fix
-//fix
-//fix  lcd.print(display.outputDigitsU16(*pUInt1, ohm_x_xxxxO));
-  lcd.setCursor(6, 2); //   row >    column ^
+    lcd.setCursor(0, 0); //   row >    column ^
+    lcd.print(F("Shunt ohm"));
+    
+    lcd.setCursor(2, 1); //   row >    column ^
+    lcd.print(F("Shunt "));         
+  }
 
-//fix
-//fix
-//fix  lcd.print(display.outputDigitsU16(*pUInt2, ohm_x_xxxxO));
+  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
+
+    // Display measured reference voltage
+    lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask()));
+  }
+  
 }
 
 // -------------------------------------------
 void Menu::lcdInit249() { // V5.0    3.1 & 3.2 ohms
-  if (repeatCount == 0) {
-    setMenu(F("x249"), menuOptions249, membersof(menuOptions251));
-    lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("5V ohm divider"));
-    lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("3.1 "));    
-    lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print(F("3.2 "));    
 
+  if (isMenuChange){ 
+    setMenu(F("x249"), menuOptions249, membersof(menuOptions249));
 
-//fix
-//fix
-//fix    pUInt1 = &myResistorMap.V5_31;  //   = 2161; // 2.2k   
+    // load DisplayMask[0-3] data pointers
 
-//fix
-//fix
-//fix    pUInt2 = &myResistorMap.V5_32;  //   = 3212; // 3.3k 
+    // 0
+    //displayMask[0].doMaskInit(
+
+    // 1
+    displayMask[1].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_31);
+    _data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+    // 2
+    displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_32);
+    _data->setUint16_tPointer(displayMask[2].getVoidPointer());
+
+    // 3
+    //displayMask[2].doMaskInit(
+
   }
 
-  lcd.setCursor(6, 1); //   row >    column ^
+  if (repeatCount == 0) {
 
-//fix
-//fix
-//fix  lcd.print(display.outputDigitsU16(*pUInt1, ohm_xx_xxxO));
-  lcd.setCursor(6, 2); //   row >    column ^
+    lcd.setCursor(0, 0); //   row >    column ^
+    lcd.print(F("5V ohm divider"));
+    
+    lcd.setCursor(2, 1); //   row >    column ^
+    lcd.print(F("R3.1 "));    
+    
+    lcd.setCursor(2, 2); //   row >    column ^
+    lcd.print(F("R3.2 "));          
+  }
 
-//fix
-//fix
-//fix  lcd.print(display.outputDigitsU16(*pUInt2, ohm_xx_xxxO));
+  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
+
+    // Display measured reference voltage
+    lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask()));
+    
+    // Calculate and display Volt/Bit
+    lcd.setCursor(displayMask[2].getDisplayPos(), 2); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[2].getVoidPointer(), displayMask[2].getMask()));
+  }
 }
 
 // -------------------------------------------
 void Menu::lcdInit250() { // Vin pst 2.1 & 2.2 ohms
-  if (repeatCount == 0) {
+
+  if (isMenuChange){ 
     setMenu(F("x250"), menuOptions250, membersof(menuOptions250));
-    lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Vin post ohms"));
-    lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("2.1 "));    
-    lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print(F("2.2 "));    
-  
 
-//fix
-//fix
-//fix    pUInt1 = &myResistorMap.Vpst21;  // = 8014; // 8.2k
+    // load DisplayMask[0-3] data pointers
 
-//fix
-//fix
-//fix    pUInt2 = &myResistorMap.Vpst22;  // = 2637; // 2.7k 
+    // 0
+    //displayMask[0].doMaskInit(
+
+    // 1
+    displayMask[1].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().Vpst21);
+    _data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+    // 2
+    displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().Vpst22);
+    _data->setUint16_tPointer(displayMask[2].getVoidPointer());
+
+    // 3
+    //displayMask[2].doMaskInit(
+
   }
 
-  lcd.setCursor(6, 1); //   row >    column ^
+  if (repeatCount == 0) {
 
-//fix
-//fix
-//fix  lcd.print(display.outputDigitsU16(*pUInt1, ohm_xx_xxxO));
-  lcd.setCursor(6, 2); //   row >    column ^
+    lcd.setCursor(0, 0); //   row >    column ^
+    lcd.print(F("Vin post ohms"));
+    
+    lcd.setCursor(2, 1); //   row >    column ^
+    lcd.print(F("R2.1 "));    
+    
+    lcd.setCursor(2, 2); //   row >    column ^
+    lcd.print(F("R2.2 "));          
+  }
 
-//fix
-//fix
-//fix  lcd.print(display.outputDigitsU16(*pUInt2, ohm_xx_xxxO));
+  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
 
+    // Display measured reference voltage
+    lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask()));
+    
+    // Calculate and display Volt/Bit
+    lcd.setCursor(displayMask[2].getDisplayPos(), 2); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[2].getVoidPointer(), displayMask[2].getMask()));
+  }
 }
 
 // -------------------------------------------
 void Menu::lcdInit251() { // Vin pre 1.1 & 1.2 ohms
 
-  if (isMenuChange){
-    // load DisplayMask data pointers
+  if (isMenuChange){ 
+    setMenu(F("x251"), menuOptions251, membersof(menuOptions251));
+    // load DisplayMask[0-3] data pointers
 
-    myMenuData.row[1] = 12;
-    myMenuData.pgmData[1] = volts_x_xxxV;
-    myMenuData.pVoid[1] = &_data->getMyResistorMap().shunt;
+    // 0
+    //displayMask[0].doMaskInit(
 
-    myMenuData.row[2] = 12;
-    myMenuData.pgmData[2] = volts_x_xxxV;
-    myMenuData.pVoid[2] = &_data->getMyResistorMap().shunt;
+    // 1
+    displayMask[1].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().Vpre11);
+    _data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
-   // ========================================  
-//    Serial.println(PGMSTR(myMenuData.pgmData[0]));
-//    
-//    Serial.println("----->     adjUint16_tNumber");
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-    _data->setUint16_tPointer(myMenuData.pVoid[1]);
+    // 2
+    displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().Vpre12);
+    _data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
-//    _data->adjUint16_tNumber(1);
-//    Serial.println(*(uint16_t*)myMenuData.pVoid[0]);
-  }  
+    // 3
+    //displayMask[2].doMaskInit(
+
+  }
   
   if (repeatCount == 0) {
-    setMenu(F("x251"), menuOptions251, membersof(menuOptions251));
+
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("Vin pre ohms"));
+    
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("1.1 "));    
+    lcd.print(F("R1.1 "));    
+    
     lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print(F("1.2 "));          
-  
-
-//fix
-//fix
-//fix    pUInt1 = &myResistorMap.Vpre11;  // = 8042; // 8.2k
-
-//fix
-//fix
-//fix    pUInt2 = &myResistorMap.Vpre12;  // = 2638; // 2.7k
+    lcd.print(F("R1.2 "));          
   }
 
-  lcd.setCursor(6, 1); //   row >    column ^
+  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
 
-//fix
-//fix
-//fix  lcd.print(display.outputDigitsU16(*pUInt1, ohm_xx_xxxO));
-  lcd.setCursor(6, 2); //   row >    column ^
-
-//fix
-//fix
-//fix  lcd.print(display.outputDigitsU16(*pUInt2, ohm_xx_xxxO));
+    // Display measured reference voltage
+    lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask()));
+    
+    // Calculate and display Volt/Bit
+    lcd.setCursor(displayMask[2].getDisplayPos(), 2); //   row >    column ^
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[2].getVoidPointer(), displayMask[2].getMask()));
+  }
+  
 }
 
 // -------------------------------------------
@@ -1238,7 +1264,7 @@ void Menu::lcdInit252() {  // V5.0    Regulator Reference
 
   if (isMenuChange){ 
     setMenu(F("x252"), menuOptions252, membersof(menuOptions252));
-    // load DisplayMask data pointers
+    // load DisplayMask[0-3] data pointers
 
     // 0
     //displayMask[0].doMaskInit(
