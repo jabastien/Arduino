@@ -19,6 +19,8 @@
 // include this library's description file
 #include "Data.h"
 
+#include <limits.h> //Access to TYPE sizes (MIN & MAX values)
+
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
 
@@ -70,21 +72,45 @@ void Data::setUint16_tNumber(int16_t number){
 
 void Data::adjUint16_tNumber(int8_t incDirection, int8_t expoFactor){
 
-// pow has a bug (not whole numbers).  It's a float point thing
-// https://ucexperiment.wordpress.com/2016/02/02/floating-point-precision-or-arduino-dont-know-math/
-
   int16_t expoValue = 1;
-  
+
+  // POW
+  // pow has a bug (not whole numbers).  It's a float point thing
+  // https://ucexperiment.wordpress.com/2016/02/02/floating-point-precision-or-arduino-dont-know-math/
   for (uint8_t i = 0; i < expoFactor; i++){
      expoValue *= 10;
   }
 
+  // Set Sign
   expoValue *= incDirection;
-  
-  *(uint16_t*)pointerUint16_t += expoValue;
-  
-  Serial.print  ("adjUint16_tNumber: ");
-  Serial.println(expoValue);
+
+  // Test variable limit exceed size limit, set to MAX or MIN value.
+  if (incDirection > 0){
+    // Increase test
+    if (*(uint16_t*)pointerUint16_t > (*(uint16_t*)pointerUint16_t + expoValue)){
+      // Exceeded MAX limit
+      *(uint16_t*)pointerUint16_t = USHRT_MAX; // limit.h
+    }else{
+      *(uint16_t*)pointerUint16_t += expoValue;
+    }
+  } else {
+    // Decrease test
+    if (*(uint16_t*)pointerUint16_t < (*(uint16_t*)pointerUint16_t + expoValue)){
+      // Exceeded MIN limit
+      *(uint16_t*)pointerUint16_t = 0;   // limit.h
+    }else{
+      *(uint16_t*)pointerUint16_t += expoValue;
+    }
+  }
+
+  // Print the value
+  if (false){
+    Serial.print  ("adjUint16_tNumber: ");
+    Serial.print  (expoValue);
+    Serial.print  ("*(uint16_t*)pointerUint16_t: ");
+    Serial.print  (*(uint16_t*)pointerUint16_t);
+    Serial.println();
+  }
 }
 
 // deprecated method (use adjUint16_tNumber(int8_t incDirection, int8_t expoFactor)
@@ -230,7 +256,7 @@ int Data::getJoystick(byte b){
 // =====================================
 void myControlsMapSetIt(MyControlsMap item) {
   item.Min = 0;
-  item.Mid = 1023/2;
+  item.Mid = 1023 / 2;
   item.Max = 1023;
   item.Rev = false;
 }
