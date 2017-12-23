@@ -49,7 +49,7 @@ const String err = "Err:
 //#define DEBUG_CD4051_MASK
 //#define DEBUG_CD4052
 //#define DEBUG_CD4052_VOLTS
-#define DEBUG_DISPLAYMASK
+//#define DEBUG_DISPLAYMASK
 //#define DEBUG_DISPLAYMASK_DETAIL
 //#define DEBUG_KEY
 //#define DEBUG_MyControls
@@ -60,7 +60,7 @@ const String err = "Err:
 /**************************************************************************************/
 PROGMEM const char  qBytesWorld[] = "Q-Bytes World";
 PROGMEM const char  deviceInfo [] = {"2.4G Transmitter"};
-PROGMEM const char  versionNum [] = {"v1.1.32"};
+PROGMEM const char  versionNum [] = {"v1.1.33"};
 
 /**************************************************************************************/
 /***************             motor and servo numbers               ********************/
@@ -87,7 +87,8 @@ PROGMEM const char  versionNum [] = {"v1.1.32"};
 /***************           defaults configurations                 ********************/
 /**************************************************************************************/
 #define MAINMENU 1
-#define STARTMENU 254 // This is the Init/Startup screen.
+#define STARTMENU 150 // This is the Init/Startup screen.
+#define CTLCHECK 192 // Required 
 #define FUNCTION 255
 
 #define MAX 255
@@ -108,26 +109,26 @@ PROGMEM const char ERR000 []     = "ERR000";
 PROGMEM const char ERR201_0 []   = "ERR201-0"; // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
 
 //
-// X240
+// X192
 // Check controls
 //                                               123456789012 
-PROGMEM const char lcd_param_lcdInit240_volts [] = {"Volts"};
+PROGMEM const char lcd_param_lcdInit192_volts [] = {"Volts"};
 
 //
 // X252
 //5.0V Regulator
 //                                               123456789012 
-PROGMEM const char lcd_param_lcdInit252_5Vref [] = "5V Reference";
-PROGMEM const char lcd_param_lcdInit252_5Vmes [] = "Measure";
-PROGMEM const char lcd_param_lcdInit252_5Vsys [] = "System";
-PROGMEM const char lcd_param_lcdInit252_v5bit [] = "Volt/Bit";
+PROGMEM const char lcd_param_lcdSys114_5Vref [] = "5V Reference";
+PROGMEM const char lcd_param_lcdSys114_5Vmes [] = "Measure";
+PROGMEM const char lcd_param_lcdSys114_5Vsys [] = "System";
+PROGMEM const char lcd_param_lcdSys114_v5bit [] = "Volt/Bit";
 
 
 //
-// X254: 
+// X150: 
 // Start up
 //                                                    123456789012 
-PROGMEM const char lcd_param_lcdInit254_startUp [] = "Start up";
+PROGMEM const char lcd_param_lcdInit150_startUp [] = "Start up";
 
 
 //

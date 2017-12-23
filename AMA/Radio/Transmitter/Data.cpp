@@ -75,7 +75,7 @@ void Data::adjUint16_tNumber(int8_t incDirection, int8_t expoFactor){
   int16_t expoValue = 1;
 
   // POW
-  // pow has a bug (not whole numbers).  It's a float point thing
+  // POW has a bug (not whole numbers).  It's a float point thing
   // https://ucexperiment.wordpress.com/2016/02/02/floating-point-precision-or-arduino-dont-know-math/
   for (uint8_t i = 0; i < expoFactor; i++){
      expoValue *= 10;

@@ -53,10 +53,15 @@ class Menu
     void setMenu(String, byte [], byte);
     void setVisible(void);
 
-    // Reserved
+ 
+    // ===========================================
+    //  *         0 = Reserved
+    // ===========================================
     void lcdMenu000(void);
 
-    // Main Menu
+    // ===========================================
+    // *   1 -  49 = Transmitter
+    // ===========================================
     void lcdMenu001(void);
 
     // Menu Items
@@ -68,33 +73,60 @@ class Menu
     void lcdMenu013(void);
     void lcdMenu014(void);
 
-    // Functions
-    void lcdFunc200(void);
-    void lcdFunc201(byte);
-    void lcdFunc238(void);
-    void lcdFunc239(void);
-
-    // Init 
-    void lcdInit240(void);
-    void lcdInit244(void);
-    void lcdInit245(void);
-    void lcdInit246(void);
-    void lcdInit247(void);
-    void lcdInit248(void);
-    void lcdInit249(void);
-    void lcdInit250(void);
-    void lcdInit251(void);
-    void lcdInit252(void);
-
-    // Startup
-    void lcdInit253(void);
-    void lcdInit254(void);
-
-    // Reserved    
-    void lcdInit255(void);
+    // ===========================================
+    // *  50 -  99 = Models
+    // ===========================================
+    
     
     // ===========================================
-    // Menu
+    // * 100 - 149 = System (Resistors, Voltages)
+    // ===========================================
+    void lcdSys102(void); // Vin pre 1.1 & 1.2 ohms
+    void lcdSys104(void); // Vin pst 2.1 & 2.2 ohms
+    void lcdSys106(void); // V5.0    3.1 & 3.2 ohms
+
+    void lcdSys112(void); // V5.0    Regulator Reference
+    void lcdSys114(void); // Shunt ohms
+
+    void lcdSys122(void); // Switch
+    void lcdSys124(void); // Trim
+    void lcdSys126(void); // Menu buttons
+
+    void lcdSys132(void); // Joystick range limits
+
+    void lcdSys148(void); // System Reset
+
+    
+    // ===========================================
+    // * 150 - 199 = START/INIT
+    // ===========================================
+    void lcdInit150(void); // Starting [click (select) out to 254]
+    void lcdInit151(void); // Splash   [no click 'select button' out to 151]
+    
+    void lcdInit192(void); // Control check
+
+
+    // ===========================================
+    // * 200 - 254 = Functions
+    // ===========================================
+//  void lcdFunc200(void); // Bool T/F
+//  void lcdFunc201(void); // Bool Y/N
+//  void lcdFunc207(void); //  8 bit Signed
+//  void lcdFunc208(byte); //  8 bit Unsigned
+    void lcdFunc215(void); // 16 bit Signed
+    void lcdFunc216(byte); // 16 bit Unsigned
+//  void lcdFunc231(void); // 32 bit Signed
+//  void lcdFunc232(byte); // 32 bit Unsigned
+    void lcdFunc238(void); // 
+    void lcdFunc239(void); //
+    
+    // ===========================================
+    // *       255 = Reserved for FUNCTION switch indicator 
+    // ===========================================
+    void lcdInit255(void); // this is an error, 255 is reserved 
+
+
+    // ===========================================
     // ===========================================
     
     CustomChar customChar = CustomChar();
@@ -121,8 +153,24 @@ class Menu
     //https://arduino.stackexchange.com/questions/19748/copy-content-of-array
     //https://arduino.stackexchange.com/questions/21095/how-to-write-array-of-functions-in-arduino-library
     //https://arduino.stackexchange.com/questions/21095/how-to-write-array-of-functions-in-arduino-library
-    
+
+    // =======================================
+    // =======================================
+    // =======================================
+    // *         0 = Reserved
+    // =======================================
+    // =======================================
+    // ======================================= 
     byte menuOptions000 [0] = {/* Do NOT use: reserved */}; 
+
+
+    // =======================================
+    // =======================================
+    // =======================================
+    // *   1 -  49 = Transmitter
+    // =======================================
+    // =======================================
+    // =======================================    
     byte menuOptions001 [4] = {MAINMENU, 2, 3, 10};
     
     byte menuOptions002 [1] = {MAINMENU};
@@ -133,34 +181,118 @@ class Menu
     byte menuOptions012 [1] = {10};
     byte menuOptions013 [1] = {10};
     byte menuOptions014 [1] = {10};
+
     
-    //byte menuOptions200 [1] = {FUNCTION}; // Function for number edit
-    //byte menuOptions201 [1] = {FUNCTION}; // Function for number edit
-    //byte menuOptions238 [1] = {FUNCTION}; // Function for check for Factory Reset
-    //byte menuOptions239 [1] = {FUNCTION}; // Function to do Factory Reset
+    // =======================================
+    // =======================================
+    // =======================================
+    // *  50 -  99 = Models
+    // =======================================
+    // =======================================
+    // =======================================
+
+
     
-    byte menuOptions240 [1] = {MAINMENU};     // Control Check (make sure all surfaces & switches are homed. (Prevent flight)
-// These need to move to SYSTEM & copy to INIT as steps as it could cross TRAN/MODEL/SYSTEM????    
-    byte menuOptions244 [2] = {240,201};      // Menu
-    byte menuOptions245 [2] = {244,201};      // Trim
-    byte menuOptions246 [2] = {245,201};      // Switch
-    byte menuOptions247 [2] = {246,201};      // Joystick
-    byte menuOptions248 [2] = {247,201};      // Shunt ohms
-    byte menuOptions249 [3] = {248,201,201};  // V5.0    3.1 & 3.2 ohms
-    byte menuOptions250 [3] = {249,201,201};  // Vin pst 2.1 & 2.2 ohms
-    byte menuOptions251 [3] = {250,201,201};  // Vin pre 1.1 & 1.2 ohms
-    byte menuOptions252 [2] = {251,201};      // V5.0    Regulator Voltage 
-    byte menuOptions253 [3] = {253,252,240};  // Splash     [no click (select) out to 253]
-    byte menuOptions254 [1] = {253};          // Starting   [click (select) out to 254]
+    // =======================================
+    // =======================================
+    // =======================================
+    // * 100 - 149 = System (Resistors, Voltages, Switches and Controls values/limits)
+    // =======================================
+    // =======================================
+    // =======================================
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    byte menuOptions100 [4] = {MAINMENU,102,104, 106};  // Pre, Pst & Ref Menu
+    //-------------------------------
+    byte menuOptions102 [3] = {100,216,216};  // Vin  pre 1.1 & 1.2 ohms
+    byte menuOptions104 [3] = {100,216,216};  // Vin  pst 2.1 & 2.2 ohms
+    byte menuOptions106 [3] = {100,216,216};  // V5.0 Ref 3.1 & 3.2 ohms
+
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    byte menuOptions110 [3] = {MAINMENU, 112, 114};      // Shunt & Ref menu
+    //-------------------------------
+    byte menuOptions112 [2] = {110,216};      // Shunt ohms
+    byte menuOptions114 [2] = {110,216};      // V5.0    Reference Voltage 
+
+    
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    byte menuOptions120 [4] = {MAINMENU, 122, 124, 126};      // Menu, Trim & Switch Menu.
+    //-------------------------------
+    byte menuOptions122 [2] = {120,216};      // Switch
+    byte menuOptions124 [2] = {120,216};      // Trim
+    byte menuOptions126 [2] = {120,216};      // Menu
+
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    byte menuOptions132 [2] = {MAINMENU,216};      // Joystick range limits
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    byte menuOptions148 [2] = {MAINMENU,149};      // Factory Reset
+
+
+    // =======================================
+    // =======================================
+    // =======================================
+    // * 150 - 199 = START/INIT
+    // =======================================
+    // =======================================
+    // =======================================
+    byte menuOptions150 [1] = {151};                // Starting   [click (select) out to 254]
+    byte menuOptions151 [3] = {151,152,CTLCHECK};  // Splash     [no click (select) out to 151]
+    
+    byte menuOptions152 [3] = {154,216,216};        // Vin pre 1.1 & 1.2 ohms
+    byte menuOptions154 [3] = {156,216,216};        // Vin pst 2.1 & 2.2 ohms
+    byte menuOptions156 [3] = {162,216,216};        // V5.0    3.1 & 3.2 ohms
+
+    byte menuOptions162 [2] = {164,216};            // Shunt ohms
+    byte menuOptions164 [2] = {172,216};            // V5.0    Reference Voltage 
+
+    byte menuOptions172 [2] = {174,216};            // Switch
+    byte menuOptions174 [2] = {176,216};            // Trim
+    byte menuOptions176 [2] = {182,216};            // Menu
+
+    byte menuOptions182 [2] = {CTLCHECK,216};       // Joystick range limits
+    
+    byte menuOptions192 [1] = {MAINMENU};           // Control Check (make sure all surfaces & switches are homed. (Prevent flight by mistake)
+
+    // =======================================
+    // =======================================
+    // =======================================
+    // * 200 - 254 = Functions
+    // =======================================
+    // =======================================
+    // =======================================    
+    //byte menuOptions207 [1] = {FUNCTION};       // Function for number edit
+    //byte menuOptions208 [1] = {FUNCTION};       // Function for number edit
+    
+    //byte menuOptions215 [1] = {FUNCTION};       // Function for number edit
+    //byte menuOptions216 [1] = {FUNCTION};       // Function for number edit
+    
+    //byte menuOptions231 [1] = {FUNCTION};       // Function for number edit
+    //byte menuOptions232 [1] = {FUNCTION};       // Function for number edit
+    
+    //byte menuOptions238 [1] = {FUNCTION};       // Function for check for Factory Reset
+    //byte menuOptions239 [1] = {FUNCTION};       // Function to do Factory Reset
+    
+    // =======================================
+    // =======================================
+    // =======================================
+    // * 255 = Reserved for FUNCTION switch indicator
+    // =======================================
+    // =======================================
+    // =======================================  
     byte menuOptions255 [0] = {/* Do NOT use: reserved */};
+
     
-    byte menuOptions[5];
-    byte menuSize;
 
     // ===========================================
     // library-accessible "private" interface
     // ===========================================
     private:
+
+int fpsShow = 0;
+      byte menuOptions[5];
+      byte menuSize;
 
       enum MenuAction {
         doInit,
