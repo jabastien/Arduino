@@ -67,7 +67,29 @@ void Data::setUint16_tNumber(int16_t number){
   Serial.print  ("setUint16_tNumber: ");
   Serial.println(number);
 }
+
+void Data::adjUint16_tNumber(int8_t incDirection, int8_t expoFactor){
+
+// pow has a bug (not whole numbers).  It's a float point thing
+// https://ucexperiment.wordpress.com/2016/02/02/floating-point-precision-or-arduino-dont-know-math/
+
+  int16_t expoValue = 1;
+  
+  for (uint8_t i = 0; i < expoFactor; i++){
+     expoValue *= 10;
+  }
+
+  expoValue *= incDirection;
+  
+  *(uint16_t*)pointerUint16_t += expoValue;
+  
+  Serial.print  ("adjUint16_tNumber: ");
+  Serial.println(expoValue);
+}
+
+// deprecated method (use adjUint16_tNumber(int8_t incDirection, int8_t expoFactor)
 void Data::adjUint16_tNumber(int16_t number){
+
   *(uint16_t*)pointerUint16_t += number;
   Serial.print  ("adjUint16_tNumber: ");
   Serial.println(number);

@@ -214,6 +214,7 @@ void loop() {
   //------------------------------------------------------
   if (keyPress > 0 || menu.isScreenRefreshNeeded()) {
     menu.updateLCD(keyPress, fps);
+    Serial.println(fps);
     fps = 0;
   }
 

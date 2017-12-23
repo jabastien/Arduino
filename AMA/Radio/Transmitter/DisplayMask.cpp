@@ -90,6 +90,10 @@ uint32_t DisplayMask::getExpoValue(){
   return expoValue;
 }
 
+int8_t DisplayMask::getExpoFactor(){
+  return expoFactor;
+}
+
 void DisplayMask::doMaskEdit(byte _keyPress){
   
   sprintf_P(buffer, PSTR("%S") , mask);

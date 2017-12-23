@@ -41,6 +41,7 @@ class DisplayMask
       void * getVoidPointer(void);
 
       int8_t getIncDirection(void);
+      int8_t getExpoFactor(void);
       uint32_t getExpoValue(void);
 
   // ===========================================

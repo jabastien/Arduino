@@ -140,6 +140,7 @@ class Menu
     //byte menuOptions239 [1] = {FUNCTION}; // Function to do Factory Reset
     
     byte menuOptions240 [1] = {MAINMENU};     // Control Check (make sure all surfaces & switches are homed. (Prevent flight)
+// These need to move to SYSTEM & copy to INIT as steps as it could cross TRAN/MODEL/SYSTEM????    
     byte menuOptions244 [2] = {240,201};      // Menu
     byte menuOptions245 [2] = {244,201};      // Trim
     byte menuOptions246 [2] = {245,201};      // Switch

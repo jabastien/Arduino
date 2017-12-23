@@ -28,10 +28,13 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);    // Initialization of the book (address, c
 
 /*
  *         0 = Reserved
+ *         
  *   1 -  49 = Transmitter
  *  50 -  99 = Model
  * 100 - 149 = System (Resistors, Voltages)
- * 200 - 254 = Functions
+ * 150 - 199 = 
+ * 200 - 254 = Functions (Do these need to be in the list???)
+ * 
  *       255 = Reserved
  */
 
@@ -198,10 +201,10 @@ void Menu::menuKeyboard(byte keyPress){
     Serial.println("doing SELECT");  
     Serial.print (F(" MS1:"));
     Serial.print (menuSelected);
-  }
+    }
     
     // Do a FUNCTION or next MENU
-    if (menuOptions[menuCol] >= 200 && menuOptions[menuCol] < 239){
+    if (menuOptions[menuCol] >= 200 && menuOptions[menuCol] < 239){  // DAQ this meeds to be >=200 when INIT is moved...
       // Select FUNCTION to be active
       function = menuOptions[menuCol];
       menuAction = doFunc;
@@ -505,13 +508,13 @@ void Menu::updateLCD(byte keyPress, int fps) {
     funcDisplay(keyPress); 
   }
 
-//  if (false){
-//    Serial.print  ("updateLCD 1 : ");
-//    Serial.print  ("isMenuChange = ");
-//    Serial.print  (isMenuChange);
-//    Serial.print  (" repeatCount = ");
-//    Serial.println(repeatCount);
-//  }
+  if (false){
+    Serial.print  ("updateLCD 1 : ");
+    Serial.print  ("isMenuChange = ");
+    Serial.print  (isMenuChange);
+    Serial.print  (" repeatCount = ");
+    Serial.println(repeatCount);
+  }
 
   isMenuChange = false;
   
@@ -645,12 +648,12 @@ void Menu::lcdMenu001() {
 //  lcd.print(display.outputDigitsU16(*pUInt1, ohm_x_xxxxO));
 
   
-  uint8_t batPercent = (int)((double)repeatCount*3.5);
-  customChar.percent(batPercent);
-  lcd.setCursor(11, 0); //   row >    column ^
-  lcd.print(F("Bat:"));  
-  lcd.print(display.outputDigitsU8(batPercent, digits8));//  lcd.print(display.outputDigitsU16(v5_voltPerBit, volts_0_0xxxxxV));
-  customChar.showChar();
+//  uint8_t batPercent = (int)((double)repeatCount*3.5);
+//  customChar.percent(batPercent);
+//  lcd.setCursor(11, 0); //   row >    column ^
+//  lcd.print(F("Bat:"));  
+//  lcd.print(display.outputDigitsU8(batPercent, digits8));//  lcd.print(display.outputDigitsU16(v5_voltPerBit, volts_0_0xxxxxV));
+//  customChar.showChar();
 
   lcd.setCursor(16, 3); //   row >    column ^
 //  lcd.print(repeatCount);
@@ -893,20 +896,8 @@ void Menu::lcdMenu014() {
 // Functions
 //===========================================
 // -------------------------------------------
-void Menu::lcdFunc200() { // UInt number
-//  if (repeatCount == 0) { setMenu(F("x200"), menuOptions200, membersof(menuOptions200)); }
+void Menu::lcdFunc200() { // Sint16_t number
 
-
-//  if (myMenuData.pVoid[1] != NULL){
-//    // Display measured voltage
-//    lcd.setCursor(myMenuData.row[1], 1); //   row >    column ^
-//    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[1], volts_x_xxxV, 1));
-//  }
-//  if (myMenuData.pVoid[3] != NULL){
-//    // Calculate and display Volt/Bit
-//    lcd.setCursor(myMenuData.row[3], 3); //   row >    column ^
-//    lcd.print(display.outputDigitsU16(*(uint16_t*)myMenuData.pVoid[3], volts_0_0xxxxxV));
-//  }
   Serial.println("lcdFunc200");
 }
 
@@ -914,7 +905,7 @@ void Menu::lcdFunc200() { // UInt number
 // MS1:252 MS2:201
 
 // -------------------------------------------
-void Menu::lcdFunc201(byte _keyPress) { // Uint16_t number
+void Menu::lcdFunc201(byte _keyPress) { // Sint16_t number  (move to lcdFunc215 or lcdFunc216)
 //  if (repeatCount == 0) { setMenu(F("x201"), menuOptions201, membersof(menuOptions201)); }
 
   displayMask[menuCol].doMaskEdit(_keyPress); 
@@ -927,7 +918,9 @@ void Menu::lcdFunc201(byte _keyPress) { // Uint16_t number
       Serial.print  (displayMask[menuCol].getExpoValue());
 
       _data->setUint16_tPointer(displayMask[menuCol].getVoidPointer());
-      _data->adjUint16_tNumber(displayMask[menuCol].getIncDirection() * displayMask[menuCol].getExpoValue());
+//      _data->adjUint16_tNumber(displayMask[menuCol].getIncDirection() * displayMask[menuCol].getExpoValue());  // delete-comment this
+
+      _data->adjUint16_tNumber(displayMask[menuCol].getIncDirection(), displayMask[menuCol].getExpoFactor());
 
       Serial.println();
     } else {
