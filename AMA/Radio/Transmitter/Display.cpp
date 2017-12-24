@@ -48,6 +48,12 @@ template <typename T> T Display::setSign (T number){ // Return value of 'T'
   return number;
 }  // end of setSign
 
+
+
+char * Display::outputBinary(uint8_t number, const char * pattern){
+
+
+
 // ===========================================
 // Digits
 // ===========================================

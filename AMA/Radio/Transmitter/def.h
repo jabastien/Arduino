@@ -158,7 +158,7 @@ PROGMEM const char lcd_param_lcdSys114_v5bit [] = "Volt/Bit";
 // lcdSys122
 // Switch buttons
 PROGMEM const char lcd_param_lcdSys122_Switch [] = "Switch";
-PROGMEM const char lcd_param_lcdSys122_Dir []    = "Direction";
+PROGMEM const char lcd_param_lcdSys122_Dir []    = "Values";
 //PROGMEM const char lcd_param_lcdSys122_Current[] = "Current";
 //PROGMEM const char lcd_param_lcdSys122_Desc []   = "0 = Nor : 1 = Rev";
 
@@ -167,12 +167,16 @@ PROGMEM const char lcd_param_lcdSys122_Dir []    = "Direction";
 // X124
 // lcdSys124    
 // Trim buttons
+PROGMEM const char lcd_param_lcdSys124_Trim [] = "Trim";
+PROGMEM const char lcd_param_lcdSys124_Dir []    = "Values";
 
 
 
 // X126
 // lcdSys126    
 // Menu buttons
+PROGMEM const char lcd_param_lcdSys126_Menu [] = "Menu";
+PROGMEM const char lcd_param_lcdSys126_Dir []    = "Values";
 
 
 

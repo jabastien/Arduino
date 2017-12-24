@@ -1369,26 +1369,98 @@ https://alvinalexander.com/programming/printf-format-cheat-sheet
 
 // -------------------------------------------
 void Menu::lcdSys124() { // Trim
-  if (repeatCount == 0) {
-    // load data pointers
+  if (isMenuChange){ 
+
+    // load DisplayMask[0-3] data pointers
+
+    // 0
+    //displayMask[0].doMaskInit(
+
+    // 1
+    displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &_data->getMySwitchMap().trimBTN);
+    //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+    // 2
+    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_32);
+    //_data->setUint16_tPointer(displayMask[2].getVoidPointer());
+
+    // 3
+    //displayMask[2].doMaskInit(
+
   }
+
 
   if (repeatCount == 0) {
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Trim"));
+    lcd.print(PGMSTR(lcd_param_lcdSys124_Trim));
+    
+    lcd.setCursor(1, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys124_Dir));         
+    
+//    lcd.setCursor(1, 2); //   row >    column ^
+//    lcd.print(PGMSTR(lcd_param_lcdSys122_Current));         
+//    
+//    lcd.setCursor(3, 3); //   row >    column ^
+//    lcd.print(PGMSTR(lcd_param_lcdSys122_Desc));         
   }
+
+//  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){    
+    // Display switches as bin (0's and 1's)
+    lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
+
+    for (byte mask = 7; mask < 8; mask--){//for (byte mask = 7; mask != 255; mask--){
+//      lcd.print((_data->getMySwitchMap().trimBTN >> mask) & 1);
+      lcd.print(((*(byte*)displayMask[1].getVoidPointer()) >> mask) & 1);
+      }
+//  }
 }
 
 // -------------------------------------------
 void Menu::lcdSys126() { // Menu buttons
-  if (repeatCount == 0) {
-    // load data pointers
+  if (isMenuChange){ 
+
+    // load DisplayMask[0-3] data pointers
+
+    // 0
+    //displayMask[0].doMaskInit(
+
+    // 1
+    displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &_data->getMySwitchMap().menuSW);
+    //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+    // 2
+    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_32);
+    //_data->setUint16_tPointer(displayMask[2].getVoidPointer());
+
+    // 3
+    //displayMask[2].doMaskInit(
+
   }
+
 
   if (repeatCount == 0) {
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Menu Buttons"));  // Not using these?????
+    lcd.print(PGMSTR(lcd_param_lcdSys126_Menu));
+    
+    lcd.setCursor(1, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys126_Dir));         
+    
+//    lcd.setCursor(1, 2); //   row >    column ^
+//    lcd.print(PGMSTR(lcd_param_lcdSys122_Current));         
+//    
+//    lcd.setCursor(3, 3); //   row >    column ^
+//    lcd.print(PGMSTR(lcd_param_lcdSys122_Desc));         
   }
+
+//  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){    
+    // Display switches as bin (0's and 1's)
+    lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
+
+    for (byte mask = 7; mask < 8; mask--){//for (byte mask = 7; mask != 255; mask--){
+//      lcd.print((_data->getMySwitchMap().menuSW >> mask) & 1);
+      lcd.print(((*(byte*)displayMask[1].getVoidPointer()) >> mask) & 1);
+      }
+//  }
 }
 
 

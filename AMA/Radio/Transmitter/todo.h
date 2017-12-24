@@ -10,14 +10,23 @@ X - chreat this file
     X shunt
     X reference
 
-    = switch
-    = trim
-    = menu
-
+    X switch
+    X trim
+    X menu
+    
+    = turn display bytes (01100011) as a return from Display.cpp
+    
     = joystick range
+      -
+      -
+      -
+      -
 
     = control check
 
+  - Try UNION for xxx.xx
+
+  
     
 3 - build menus
     = Trans
@@ -39,7 +48,7 @@ X - chreat this file
 
 9 - why tps < 144 (was +300)
     = 1 bit  (1) per loop
-    = 2 bits (1) % mod  
+    = 2 bits (1) % mod   (0-7 collect, 8 calculate, 9 tx)
  
 10 - receiver to PC
 
@@ -57,6 +66,8 @@ X - need a 5.0 zener diode for VRef (using post diode input voltage 6-12v)
       = bat volts > 6.0v  
 
 12 - alarms class?
+
+13 - makes switches as LMH (requires 2 bits).
 
 
 

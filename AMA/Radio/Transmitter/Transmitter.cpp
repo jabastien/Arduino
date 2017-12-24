@@ -181,10 +181,12 @@ data.getMySwitchMap().switchSW = switchPin;
     // Trim
     readmask  = (trimCD4051.digitalReadC() << (digitalLoop % 8));
     trimPin   = (trimPin & pinmask) | readmask;
+data.getMySwitchMap().trimBTN = trimPin;
 
     // Menu
     readmask  = (menuCD4051.digitalReadC() << (digitalLoop % 8));
     menuPin   = (menuPin & pinmask) | readmask;
+data.getMySwitchMap().menuSW = menuPin;
   }
 
   //------------------------------------------------------

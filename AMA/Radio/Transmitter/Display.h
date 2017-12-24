@@ -39,6 +39,8 @@ class Display
 template <typename T> T setSign (T number); // Return value of 'T'
 char buffer [20]; // LCD width
 
+    char *outputBinary ( byte, const char * );
+
     char *outputDigitsU8 ( uint8_t, const char * );
 //  char *outputDigitsU8 ( uint8_t, const char * , uint8_t);
     char *outputDigitsS8 (  int8_t, const char * );
