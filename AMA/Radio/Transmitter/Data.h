@@ -41,8 +41,9 @@ class Data
     void adjUint16_tNumber(int8_t, int8_t);
     
     MyResistorMap& getMyResistorMap(void);
-    MyVoltageMap& getMyVoltageMap(void);
-
+    MyVoltageMap&  getMyVoltageMap(void);
+    MySwitchMap&   getMySwitchMap(void);
+    
   // ===========================================
   // library-accessible "private" interface
   // ===========================================
@@ -53,7 +54,8 @@ class Data
 
     MyVoltageMap myVoltageMap;
     MyResistorMap  myResistorMap; 
-    MyButtons myButtons;
+    MySwitchMap mySwitchMap;
+    
     MyAux myAux;
     MyControls myControls;
     MyControlsMap myControlsMapThrottle;

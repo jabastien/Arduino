@@ -73,7 +73,6 @@ boolean Menu::isScreenRefreshNeeded(){
 }
 
 /////////////////////////////////////////////////////////////////////
-uint16_t deltaNumber = 0;
   
 void Menu::menuDisplay(){
 
@@ -269,7 +268,7 @@ void Menu::menuDisplay(){
       lcdSys104();
       break;
     // ---------------------------------------
-    case 156: // v5.0 3.1 3.2 - Reference 
+    case 156: // v5.0 3.1 3.2 
       if (isMenuChange){  
         setMenu(F("x156"), menuOptions156, membersof(menuOptions156));
       }    
@@ -568,7 +567,6 @@ void Menu::funcKeyboard(byte keyPress){
 
   // If no key pressed, leave
   if (keyPress == NOKEY ){
-    deltaNumber = 0;    
     return;
   }     
 
@@ -775,15 +773,6 @@ void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
     Serial.println();
   }
 }
-
-// Private Methods /////////////////////////////////////////////////////////////
-// Functions only available to other functions in this library
-
-// Private Methods /////////////////////////////////////////////////////////////
-// Functions only available to other functions in this library
-
-// Private Methods /////////////////////////////////////////////////////////////
-// Functions only available to other functions in this library
 
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library
@@ -1104,13 +1093,13 @@ void Menu::lcdSys102() { // Vin pre 1.1 & 1.2 ohms
   if (repeatCount == 0) {
 
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Vin pre ohms"));
+    lcd.print(PGMSTR(lcd_param_lcdSys102_Vpre));
     
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("R1.1 "));    
+    lcd.print(PGMSTR(lcd_param_lcdSys102_R11));    
     
     lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print(F("R1.2 "));          
+    lcd.print(PGMSTR(lcd_param_lcdSys102_R12));          
   }
 
   if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
@@ -1151,13 +1140,13 @@ void Menu::lcdSys104() { // Vin pst 2.1 & 2.2 ohms
   if (repeatCount == 0) {
 
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Vin post ohms"));
+    lcd.print(PGMSTR(lcd_param_lcdSys104_Vpst));
     
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("R2.1 "));    
+    lcd.print(PGMSTR(lcd_param_lcdSys104_R21));    
     
     lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print(F("R2.2 "));          
+    lcd.print(PGMSTR(lcd_param_lcdSys104_R22));         
   }
 
   if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
@@ -1197,13 +1186,13 @@ void Menu::lcdSys106() { // V5.0    3.1 & 3.2 ohms
   if (repeatCount == 0) {
 
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("5V ohm divider"));
+    lcd.print(PGMSTR(lcd_param_lcdSys106_V5div));
     
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("R3.1 "));    
+    lcd.print(PGMSTR(lcd_param_lcdSys106_R31));    
     
     lcd.setCursor(2, 2); //   row >    column ^
-    lcd.print(F("R3.2 "));          
+    lcd.print(PGMSTR(lcd_param_lcdSys106_R32));            
   }
 
   if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
@@ -1243,12 +1232,11 @@ void Menu::lcdSys112() { // Shunt ohms
   }
 
   if (repeatCount == 0) {
-
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Shunt ohm"));
+    lcd.print(PGMSTR(lcd_param_lcdSys112_Shunt));
     
     lcd.setCursor(2, 1); //   row >    column ^
-    lcd.print(F("Shunt "));         
+    lcd.print(PGMSTR(lcd_param_lcdSys112_Rshnt));         
   }
 
   if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
@@ -1261,7 +1249,7 @@ void Menu::lcdSys112() { // Shunt ohms
 }
 
 // -------------------------------------------
-void Menu::lcdSys114() { // V5.0    Regulator Reference
+void Menu::lcdSys114() { // V5.0 Reference voltage
 
   if (isMenuChange){ 
     // load DisplayMask[0-3] data pointers
@@ -1305,15 +1293,79 @@ void Menu::lcdSys114() { // V5.0    Regulator Reference
 
 // -------------------------------------------
 void Menu::lcdSys122() { // Switch
-  if (repeatCount == 0) {
-    // load data pointers
+
+  if (isMenuChange){ 
+
+    // load DisplayMask[0-3] data pointers
+
+    // 0
+    //displayMask[0].doMaskInit(
+
+    // 1
+    displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &_data->getMySwitchMap().switchSW);
+    //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+    // 2
+    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_32);
+    //_data->setUint16_tPointer(displayMask[2].getVoidPointer());
+
+    // 3
+    //displayMask[2].doMaskInit(
+
   }
+
 
   if (repeatCount == 0) {
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Switch"));
+    lcd.print(PGMSTR(lcd_param_lcdSys122_Switch));
+    
+    lcd.setCursor(1, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys122_Dir));         
+    
+//    lcd.setCursor(1, 2); //   row >    column ^
+//    lcd.print(PGMSTR(lcd_param_lcdSys122_Current));         
+//    
+//    lcd.setCursor(3, 3); //   row >    column ^
+//    lcd.print(PGMSTR(lcd_param_lcdSys122_Desc));         
   }
+
+//  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){    
+    // Display switches as bin (0's and 1's)
+    lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
+
+    for (byte mask = 7; mask < 8; mask--){//for (byte mask = 7; mask != 255; mask--){
+//      lcd.print((_data->getMySwitchMap().switchSW >> mask) & 1);
+      lcd.print(((*(byte*)displayMask[1].getVoidPointer()) >> mask) & 1);
+      }
+//  }
 }
+
+/*
+void printBits(byte myByte){
+ for(byte mask = 0x80; mask; mask >>= 1){
+   if(mask  & myByte)
+       Serial.print('1');
+   else
+       Serial.print('0');
+ }
+}
+
+https://alvinalexander.com/programming/printf-format-cheat-sheet
+
+
+//sprintf(buffer, "%8B", repeatCount);
+//lcd.print( buffer );
+  // http://www.cplusplus.com/reference/cstdio/printf/
+  
+  //sprintf(buf, "%d.%d", ival/10, ival%10);
+
+//sprintf(buffer, "%8B", repeatCount);
+//lcd.print( buffer );
+  // http://www.cplusplus.com/reference/cstdio/printf/
+  
+  //sprintf(buf, "%d.%d", ival/10, ival%10);
+
+*/
 
 // -------------------------------------------
 void Menu::lcdSys124() { // Trim
@@ -1398,11 +1450,11 @@ void Menu::lcdInit151() { // Splash     [no click 'select button' out to 151]
   if (repeatCount == 0) 
   {
     lcd.setCursor(0, 0);//   row >    column ^
-    lcd.print(PGMSTR(qBytesWorld));
+    lcd.print(PGMSTR(lcd_param_lcdInit151_qBytesWorld));
     lcd.setCursor(0, 1);//   row >    column ^
-    lcd.print(PGMSTR(deviceInfo));
+    lcd.print(PGMSTR(lcd_param_lcdInit151_deviceInfo));
     lcd.setCursor(0, 2);//   row >    column ^
-    lcd.print(PGMSTR(versionNum));
+    lcd.print(PGMSTR(lcd_param_lcdInit151_versionNum));
   }
 
   if (true){ // Can delete this condition when (no EEPROM data) is completed.
@@ -1436,7 +1488,7 @@ void Menu::lcdInit192() { // Control check
 
   if (repeatCount == 0) {
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Control check"));
+    lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck));
   }
   if (repeatCount > 3) {//delay(2000);
 
@@ -1452,13 +1504,7 @@ void Menu::lcdInit192() { // Control check
 
   lcd.setCursor(1, 3);//   row >    column ^
   lcd.print(PGMSTR(lcd_param_lcdInit192_volts));
-  
-  lcd.setCursor(8, 3);//   row >    column ^
-  //lcd.print(display.output_x_xxxV(v5_System * 1000));    
 
-//fix
-//fix
-//fix  lcd.print(display.outputDigitsU16(v5_System * 100, volts_x_xxxV, 1));
 }
 
 
@@ -1492,7 +1538,7 @@ void Menu::lcdFunc216(byte _keyPress) { // Sint16_t number  (move to lcdFunc215 
       Serial.println();
     } else {
       // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
-      Serial.println(PGMSTR(ERR201_0));
+      Serial.println(PGMSTR(ERR216_0));
     }
   }
   

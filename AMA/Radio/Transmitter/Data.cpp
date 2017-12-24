@@ -52,7 +52,9 @@ MyResistorMap& Data::getMyResistorMap(){
   return myResistorMap;
 }
 
-
+MySwitchMap&     Data::getMySwitchMap(){
+  return mySwitchMap;
+}
 // =====================================
 // uint16_t Methods
 // =====================================
@@ -245,9 +247,9 @@ int Data::getJoystick(byte b){
 //  myAux.AUX3     = 0;
 //  myAux.AUX4     = 0;
 //
-//  myButtons.swtch = 0;
-//  myButtons.dip   = 0;
-//  myButtons.menu  = 0;
+//  mySwitchMap.swtch = 0;
+//  mySwitchMap.dip   = 0;
+//  mySwitchMap.menu  = 0;
 //}
 
 

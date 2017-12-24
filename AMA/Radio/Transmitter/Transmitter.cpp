@@ -125,9 +125,9 @@ void setup(){
   Serial.println(); 
   Serial.println(PGMSTR(dashes)); 
   
-  Serial.println(PGMSTR(qBytesWorld));
-  Serial.println(PGMSTR(deviceInfo));
-  Serial.println(PGMSTR(versionNum));
+  Serial.println(PGMSTR(lcd_param_lcdInit151_qBytesWorld));
+  Serial.println(PGMSTR(lcd_param_lcdInit151_deviceInfo));
+  Serial.println(PGMSTR(lcd_param_lcdInit151_versionNum));
   
   Serial.print  (PGMSTR(freeram));
   Serial.println(utils.freeRam());
@@ -175,6 +175,8 @@ void loop() {
     // Switch
     readmask  = (switchCD4051.digitalReadC() << (digitalLoop % 8));
     switchPin = (switchPin & pinmask) | readmask;
+    
+data.getMySwitchMap().switchSW = switchPin;
 
     // Trim
     readmask  = (trimCD4051.digitalReadC() << (digitalLoop % 8));

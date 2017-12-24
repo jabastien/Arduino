@@ -3,12 +3,12 @@
 X - chreat this file
 
 2 - finish start/init screens
-    = r1.1
-    = r2.1
-    = r3.1
+    X r1.1
+    X r2.1
+    X r3.1
     
-    = shunt
-    = reference
+    X shunt
+    X reference
 
     = switch
     = trim

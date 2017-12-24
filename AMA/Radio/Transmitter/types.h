@@ -31,11 +31,11 @@ struct MyAux {
   byte AUX4;
   };
 
-struct MyButtons {
+struct MySwitchMap {
   const byte packetType = 0x03;
-  byte swtch;
-  byte dip;
-  byte menu;
+  byte switchSW;
+  byte trimBTN;
+  byte menuSW;
   };
 
 // ===========================================
@@ -43,7 +43,7 @@ struct MyButtons {
 // Max votage size is 65,535.
 // ===========================================
 struct MyVoltageMap {
-  // Measured regulator voltage
+  // Measured reference voltage
   uint16_t reference = 5010; // = 5.000V
   
   // Calculated fields voltPerBit = (reg / 1023)

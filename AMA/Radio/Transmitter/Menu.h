@@ -85,8 +85,8 @@ class Menu
     void lcdSys104(void); // Vin pst 2.1 & 2.2 ohms
     void lcdSys106(void); // V5.0    3.1 & 3.2 ohms
 
-    void lcdSys112(void); // V5.0    Regulator Reference
-    void lcdSys114(void); // Shunt ohms
+    void lcdSys112(void); // Shunt ohms 
+    void lcdSys114(void); // V5.0    Reference
 
     void lcdSys122(void); // Switch
     void lcdSys124(void); // Trim
