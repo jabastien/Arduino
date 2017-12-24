@@ -1,13 +1,28 @@
 /* My todo's
 
-1 - create this file
 
 2 - finish start/init screens
+    = r1.1
+    = r2.1
+    = r3.1
+    
+    = shunt
+    = reference
 
+    = switch
+    = trim
+    = menu
+
+    = joystick range
+
+    = control check
+
+    
 3 - build menus
-  = Trans
-  = Model
-  = System
+    = Trans
+    = Model
+    = System
+
 4 - u8/s8 number display
   - can we use sprintf instead of role your own
 
@@ -22,7 +37,7 @@
   - packets.h or common.h for transmit structs.
 
 
-9 - why tps < 155 (was +300)
+9 - why tps < 144 (was +300)
     = 1 bit  (1) per loop
     = 2 bits (1) % mod  
  
