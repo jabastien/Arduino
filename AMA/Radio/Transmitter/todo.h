@@ -1,5 +1,6 @@
 /* My todo's
 
+X - chreat this file
 
 2 - finish start/init screens
     = r1.1
@@ -36,13 +37,17 @@
   
   - packets.h or common.h for transmit structs.
 
-
 9 - why tps < 144 (was +300)
     = 1 bit  (1) per loop
     = 2 bits (1) % mod  
  
 10 - receiver to PC
 
+X - need a 5.0 zener diode for VRef (using post diode input voltage 6-12v)
+  http://www.electronics-tutorials.ws/diode/diode_7.html
+
+ - See what can be made a generic methods
+  
  - black box receiver to show data
  
  - black box channel scanner

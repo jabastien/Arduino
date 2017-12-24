@@ -66,7 +66,7 @@ struct MyResistorMap {
 //  double shunt = 0.766327;   // 0.5
   uint16_t  shunt = 7663;//*10000);   // 0.5
 
-  // Max resistor size is 32767 witch is 1/2 of 65,535.
+  // Max resistor size is 65,535.
   uint16_t Vpre11   = 8042; // 8.2k
   uint16_t Vpre12   = 2638; // 2.7k
   
@@ -75,6 +75,6 @@ struct MyResistorMap {
   
   uint16_t V5_31    = 2161; // 2.2k
   uint16_t V5_32    = 3212; // 3.3k
-  todo.h};
+};
 
 #endif /* TYPES_H_ */
