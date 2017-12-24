@@ -14,14 +14,14 @@ struct MyControls {
   byte yaw;      // A1
   byte roll;     // A2
   byte pitch;    // A3
-};
+  };
 
 struct MyControlsMap {
   int       Min; // A0
   int       Mid; // A0
   int       Max; // A0
   boolean   Rev;
-};
+  };
 
 struct MyAux {
   const byte packetType = 0x02;
@@ -29,14 +29,14 @@ struct MyAux {
   byte AUX2;
   byte AUX3;
   byte AUX4;
-};
+  };
 
 struct MyButtons {
   const byte packetType = 0x03;
   byte swtch;
   byte dip;
   byte menu;
-};
+  };
 
 // ===========================================
 // Volt divide Vars
@@ -53,7 +53,7 @@ struct MyVoltageMap {
   uint16_t vPre  = 3157; // 12.871V measured and 3.1570V post volt/div
   uint16_t vPst  = 3154; // 12.839V measured and 3.1546V post volt/div
   uint16_t v50   = 2949; //  4.916V measured and 2.9496V post volt/div
-};
+  };
 
 // ===========================================
 // Volt divide Vars
@@ -75,35 +75,6 @@ struct MyResistorMap {
   
   uint16_t V5_31    = 2161; // 2.2k
   uint16_t V5_32    = 3212; // 3.3k
-};
-
-//// ===========================================
-//// Display Info
-//// ===========================================
-//struct DisplayInfo {
-//  char * buffer;
-//  const char * pgmData;    &address of the pgmem for mask  ( [0] should always be null (title line))
-//};
-
-//// ===========================================
-//// Editor Data
-//// ===========================================
-//struct MyEditorData {
-//    boolean setDisplayInfo = false;  
-//    byte   row[4];      // row > (ROW start pos for the item to edit.
-//  //byte   col[4];         // column ^ // Not needed, the row[x] -- x = column
-
-//    struct DisplayInfo displayInfo[4];
-//    void   * pVoid[4];  //  Data element address to edit
-//    byte   returnTo;
-//};
-
-struct MyMenuData {
-  byte   row[4];            // row > (ROW start pos for the item to edit.
-  const  char * pgmData[4]; // &address of the pgmem for mask  ( [0] should always be null (or the Title Line))
-  void   * pVoid[4];        // Data element address to edit (Void pointer must be casted)
-//  int    * pInt[4];  
-};
-
+  todo.h};
 
 #endif /* TYPES_H_ */
