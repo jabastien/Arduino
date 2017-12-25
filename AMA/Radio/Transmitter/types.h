@@ -33,9 +33,9 @@ struct MyAux {
 
 struct MySwitchMap {
   const byte packetType = 0x03;
-  byte switchSW;
-  byte trimBTN;
-  byte menuSW;
+  byte switchPins;
+  byte trimPins;
+  byte menuPins;
   };
 
 // ===========================================

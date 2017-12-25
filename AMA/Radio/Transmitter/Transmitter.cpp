@@ -78,10 +78,6 @@ CD4051 switchCD4051 = CD4051(3, 4, 5, 6);
 CD4051 trimCD4051   = CD4051(3, 4, 5, 7);
 CD4051 menuCD4051   = CD4051(3, 4, 5, 8);
 
-byte switchPin = 0b00000000;
-byte trimPin   = 0b00000000;
-byte menuPin   = 0b00000000;
-
 byte pinmask;
 byte readmask;
 
@@ -174,19 +170,17 @@ void loop() {
 
     // Switch
     readmask  = (switchCD4051.digitalReadC() << (digitalLoop % 8));
-    switchPin = (switchPin & pinmask) | readmask;
+    data.getMySwitchMap().switchPins = (data.getMySwitchMap().switchPins & pinmask) | readmask;
     
-data.getMySwitchMap().switchSW = switchPin;
 
     // Trim
     readmask  = (trimCD4051.digitalReadC() << (digitalLoop % 8));
-    trimPin   = (trimPin & pinmask) | readmask;
-data.getMySwitchMap().trimBTN = trimPin;
+    data.getMySwitchMap().trimPins = (data.getMySwitchMap().trimPins & pinmask) | readmask;
 
     // Menu
     readmask  = (menuCD4051.digitalReadC() << (digitalLoop % 8));
-    menuPin   = (menuPin & pinmask) | readmask;
-data.getMySwitchMap().menuSW = menuPin;
+    data.getMySwitchMap().menuPins = (data.getMySwitchMap().menuPins & pinmask) | readmask;
+
   }
 
   //------------------------------------------------------

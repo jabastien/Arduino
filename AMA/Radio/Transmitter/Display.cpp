@@ -50,7 +50,22 @@ template <typename T> T Display::setSign (T number){ // Return value of 'T'
 
 
 
-char * Display::outputBinary(uint8_t number, const char * pattern){
+char * Display::outputBinary(byte bits){
+
+    //for (byte mask = 7; mask != 255; mask--){
+//    for (byte mask = 7; mask < 8; mask--){
+//      lcd.print((_data->getMySwitchMap().trimBTN >> mask) & 1);
+//      lcd.print(((*(byte*)displayMask[1].getVoidPointer()) >> mask) & 1);
+//    }
+    
+  for (byte mask = 7; mask < 8; mask--){
+    buffer [mask]= '0' + ((bits >> mask) & 1);
+    }
+
+  buffer[8]='\0';
+  
+  return buffer; 
+}
 
 
 
