@@ -26,6 +26,14 @@
 #include "types.h"
 
 
+
+/*
+ * 
+ * 
+ *   //sprintf(buf, "%d.%d", ival/10, ival%10);
+ * 
+ * 
+ */
 class Display
 {
   // ===================================
@@ -41,20 +49,20 @@ char buffer [20]; // LCD width
 
     char *outputBinary (byte);
 
-    char *outputDigitsU8 ( uint8_t, const char * );
-//  char *outputDigitsU8 ( uint8_t, const char * , uint8_t);
-    char *outputDigitsS8 (  int8_t, const char * );
-//  char *outputDigitsS8 (  int8_t, const char * , uint8_t);
+    char *outputDigitsU8 ( uint8_t, PGM_P );
+//  char *outputDigitsU8 ( uint8_t, PGM_P , uint8_t);
+    char *outputDigitsS8 (  int8_t, PGM_P );
+//  char *outputDigitsS8 (  int8_t, PGM_P , uint8_t);
     
-    char *outputDigitsU16(uint16_t, const char * );
-    char *outputDigitsU16(uint16_t, const char * , uint8_t);
-    char *outputDigitsS16( int16_t, const char * );    
-    char *outputDigitsS16( int16_t, const char * , uint8_t);
+    char *outputDigitsU16(uint16_t, PGM_P );
+    char *outputDigitsU16(uint16_t, PGM_P , uint8_t);
+    char *outputDigitsS16( int16_t, PGM_P );    
+    char *outputDigitsS16( int16_t, PGM_P , uint8_t);
         
-    char *outputDigitsU32(uint32_t, const char * );
-    char *outputDigitsU32(uint32_t, const char * , uint8_t);
-    char *outputDigitsS32( int32_t, const char * );
-    char *outputDigitsS32( int32_t, const char * , uint8_t);
+    char *outputDigitsU32(uint32_t, PGM_P );
+    char *outputDigitsU32(uint32_t, PGM_P , uint8_t);
+    char *outputDigitsS32( int32_t, PGM_P );
+    char *outputDigitsS32( int32_t, PGM_P , uint8_t);
 
 //    char *outputOnTime(uint16_t);
 //    char *outputServiceTime(uint32_t);    
@@ -68,7 +76,8 @@ char buffer [20]; // LCD width
   private:
 
     Utils utils;
-    void setBuffer(const char *);
+    //void setBuffer(PGM_P );
+    void setBuffer(PGM_P);
 
     // ---------------------------------------------------------
     // 8 bit unsigned intiger
