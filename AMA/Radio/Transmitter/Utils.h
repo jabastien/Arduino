@@ -25,8 +25,8 @@ class Utils
   // ======================================    
   public:
     Utils();
-    int  arraySize(const char *);
-    int  countCharacters(const char *, char);        
+    int  arraySize(PGM_P );
+    int  countCharacters(PGM_P , char);        
     int  freeRam(void);
     void reverse(char []);
   // ======================================    

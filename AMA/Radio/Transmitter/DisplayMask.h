@@ -32,12 +32,15 @@ class DisplayMask
   // ===========================================
   public:
       DisplayMask(void);
-      void doMaskInit(const  char *, const  char, byte, void *);
+      void doMaskInit(PGM_P, const  char, byte, void *);
       
       void doMaskEdit(byte);
       byte getDisplayPos(void);
       byte getCourserPos(void);
+      
+      PGM_P getMaskPMG(void);
       const char * getMask(void);
+      
       void * getVoidPointer(void);
 
       int8_t getIncDirection(void);
@@ -52,7 +55,7 @@ class DisplayMask
 
       char buffer[20];
  
-      const char * mask;    // (myMenuData.pgmData[1] = volts_x_xxxV;)
+      PGM_P mask;    // (myMenuData.pgmData[1] = volts_x_xxxV;)
       byte maskSize;       // length of the mask
       char matchChar;      // what we are looking for.
       byte digitCnt;       // number of '#' in mask

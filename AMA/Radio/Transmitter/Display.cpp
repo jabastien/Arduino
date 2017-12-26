@@ -49,7 +49,32 @@ template <typename T> T Display::setSign (T number){ // Return value of 'T'
 }  // end of setSign
 
 
+/*
+void printBits(byte myByte){
+ for(byte mask = 0x80; mask; mask >>= 1){
+   if(mask  & myByte)
+       Serial.print('1');
+   else
+       Serial.print('0');
+ }
+}
 
+https://alvinalexander.com/programming/printf-format-cheat-sheet
+
+
+//sprintf(buffer, "%8B", repeatCount);
+//lcd.print( buffer );
+  // http://www.cplusplus.com/reference/cstdio/printf/
+  
+  //sprintf(buf, "%d.%d", ival/10, ival%10);
+
+//sprintf(buffer, "%8B", repeatCount);
+//lcd.print( buffer );
+  // http://www.cplusplus.com/reference/cstdio/printf/
+  
+  //sprintf(buf, "%d.%d", ival/10, ival%10);
+
+*/
 char * Display::outputBinary(byte bits){
 
     //for (byte mask = 7; mask != 255; mask--){
@@ -67,7 +92,40 @@ char * Display::outputBinary(byte bits){
   return buffer; 
 }
 
+//http://arduino-esp8266.readthedocs.io/en/latest/PROGMEM.html
+void Display::setBuffer(PGM_P pattern){
 
+  if (!pattern)
+    return; // return if the pointer is void
+
+//  memset(buffer, 0x00, 20); // for automatically-allocated arrays (clear the array);
+//  memset(buffer, 0x00, strlen_P((PGM_P)pattern)); // for automatically-allocated arrays (clear the array);
+
+  int i = 0;
+  for (; i < strlen_P((PGM_P)pattern); i++) {
+    char byteval = pgm_read_byte(pattern + i);
+    buffer[i] = byteval;
+    }
+  
+  buffer[i]='\0';
+
+  if (false){
+    Serial.print  ("SizeIS: ");
+    Serial.print  (utils.arraySize(pattern));
+    Serial.print  (" : ");
+    Serial.print  (membersof(pattern));
+    Serial.print  (" | ");
+    Serial.print  (strlen_P(pattern));
+    Serial.print  (" ~ ");
+    Serial.print  (strlen_P((PGM_P)pattern)+1);  // cast it to PGM_P, which is basically const char *, and measure it using the _P version of strlen.    
+    Serial.print  (" ~ ");
+    Serial.print  (sizeof(buffer));
+    Serial.print  (" ~ ");
+    
+    Serial.println(buffer);
+    }
+
+}
 
 // ===========================================
 // Digits
@@ -75,7 +133,7 @@ char * Display::outputBinary(byte bits){
 
 // -------------------------------------------
 // Number can be between 0 and 255
-char * Display::outputDigitsU8(uint8_t number, const char * pattern){
+char * Display::outputDigitsU8(uint8_t number, PGM_P pattern){
 
   Display digits;
 
@@ -103,7 +161,7 @@ char * Display::outputDigitsU8(uint8_t number, const char * pattern){
 
 // -------------------------------------------
 // Number can be between -128 and 127
-char * Display::outputDigitsS8( int8_t number, const char * pattern){
+char * Display::outputDigitsS8( int8_t number, PGM_P pattern){
 
   Display digits;
 
@@ -129,20 +187,14 @@ char * Display::outputDigitsS8( int8_t number, const char * pattern){
   return buffer;  
 }
 
-
-void Display::setBuffer(const char * pattern){
-  memset(buffer, 0x00, sizeof(buffer)); // for automatically-allocated arrays (clear the array);
-  memcpy(buffer, PGMSTR(pattern), utils.arraySize(pattern) + 1);
-}
-
 // -------------------------------------------
 // int store a 2 byte value. Instead of storing negative numbers however they only store positive values
 // Yielding a useful range of 0 to 65,535 (2^16) - 1).
-char * Display::outputDigitsU16(uint16_t number, const char * pattern){
+char * Display::outputDigitsU16(uint16_t number, PGM_P pattern){
   return Display::outputDigitsU16( number, pattern, 0);
 }
 
-char * Display::outputDigitsU16(uint16_t number, const char * pattern, uint8_t startDigit){
+char * Display::outputDigitsU16(uint16_t number, PGM_P pattern, uint8_t startDigit){
 
   Display digits;
 
@@ -170,11 +222,11 @@ char * Display::outputDigitsU16(uint16_t number, const char * pattern, uint8_t s
 
 // -------------------------------------------
 // An int stores a 16-bit (2-byte) value. This yields a range of -32,768 to 32,767
-char * Display::outputDigitsS16( int16_t number, const char * pattern){
+char * Display::outputDigitsS16( int16_t number, PGM_P pattern){
   return Display::outputDigitsS16( number, pattern, 0);
 }
 
-char * Display::outputDigitsS16( int16_t number, const char * pattern, uint8_t startDigit){
+char * Display::outputDigitsS16( int16_t number, PGM_P pattern, uint8_t startDigit){
 
   Display digits;
 
@@ -203,11 +255,11 @@ char * Display::outputDigitsS16( int16_t number, const char * pattern, uint8_t s
 // -------------------------------------------
 // Unsigned long variables are extended size variables for number storage, and store 32 bits (4 bytes). 
 // Unlike standard longs unsigned longs won’t store negative numbers, making their range from 0 to 4,294,967,295 (2^32 - 1)
-char * Display::outputDigitsU32(uint32_t number, const char * pattern){
+char * Display::outputDigitsU32(uint32_t number, PGM_P pattern){
  return Display::outputDigitsU32( number, pattern, 0);  
 }
 
-char * Display::outputDigitsU32(uint32_t number, const char * pattern, uint8_t startDigit){
+char * Display::outputDigitsU32(uint32_t number, PGM_P pattern, uint8_t startDigit){
 
   Display digits;
 
@@ -234,11 +286,11 @@ char * Display::outputDigitsU32(uint32_t number, const char * pattern, uint8_t s
 
 // -------------------------------------------
 // Long variables are extended size variables for number storage, and store 32 bits (4 bytes), from -2,147,483,648 to 2,147,483,647. 
-char * Display::outputDigitsS32( int32_t number, const char * pattern){
+char * Display::outputDigitsS32( int32_t number, PGM_P pattern){
  return Display::outputDigitsS32( number, pattern, 0);  
 }
 
-char * Display::outputDigitsS32( int32_t number, const char * pattern, uint8_t startDigit){
+char * Display::outputDigitsS32( int32_t number, PGM_P pattern, uint8_t startDigit){
 
   Display digits;
 

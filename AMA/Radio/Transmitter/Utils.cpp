@@ -51,15 +51,15 @@ Utils::Utils(){
 
 
 // https://arduino.stackexchange.com/questions/13389/number-of-elements-in-an-array-char
-int Utils::arraySize(const char *data) { 
-  const char *p = data; 
+int Utils::arraySize(PGM_P data) { 
+  PGM_P p = data; 
   while (*p++); 
   return p-data-1; 
 }
 
-int Utils::countCharacters(const char *str, char character)
+int Utils::countCharacters(PGM_P str, char character)
 {
-    const char *p = str;
+    PGM_P p = str;
     int count = 0;
     
     do {

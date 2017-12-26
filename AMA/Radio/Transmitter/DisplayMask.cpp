@@ -39,7 +39,7 @@ DisplayMask::DisplayMask(){
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
 
-void DisplayMask::doMaskInit(const  char *_mask, const  char _matchChar, byte _displayPos, void * _pVoid){
+void DisplayMask::doMaskInit(PGM_P _mask, const  char _matchChar, byte _displayPos, void * _pVoid){
 
   mask = _mask;
   sprintf_P(buffer, PSTR("%S") , mask);
@@ -71,6 +71,10 @@ byte DisplayMask::getCourserPos(){
 
 int8_t DisplayMask::getIncDirection(){
   return incDirection;
+}
+
+PGM_P DisplayMask::getMaskPMG(void){
+  return mask;
 }
 
 const char * DisplayMask::getMask(void){

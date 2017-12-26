@@ -99,6 +99,8 @@ CD4052 cd4052 = CD4052(5, 4, A7, A6);
 // The sizeof this struct should not exceed 32 bytes
 // This gives us up to 32 8 bits channals
 
+int l=1;
+#define line {Serial.print(l++);Serial.print(" ");}
 
 // ===========================================
 // ===========================================
@@ -107,6 +109,7 @@ CD4052 cd4052 = CD4052(5, 4, A7, A6);
 // ===========================================
 // ===========================================
 // ===========================================
+
 void setup(){
 //  pinMode(2, OUTPUT);
 //  digitalWrite (2, LOW);
@@ -134,13 +137,14 @@ void setup(){
   Serial.println(PGMSTR(dashes)); 
 
   
-  //Start everything up
+  //Start Radio
   //  radio.begin();
   //  radio.setAutoAck(false);
   //  radio.setDataRate(RF24_250KBPS);
   //  radio.openWritingPipe(pipeOut);
-  //  resetData();
+
 }
+
 
 // ===========================================
 // ===========================================
@@ -154,10 +158,10 @@ void loop() {
   // The calibration numbers used here should be measured
   // for your joysticks so they send the correct values.
   //------------------------------------------------------
-  data.aux(0, analogRead(A0));
-  data.aux(1, analogRead(A1));
-  data.aux(2, analogRead(A2));
-  data.aux(3, analogRead(A3));
+  data.getMyControlsRangeMap(0).current = analogRead(A0);
+  data.getMyControlsRangeMap(1).current = analogRead(A1);
+  data.getMyControlsRangeMap(2).current = analogRead(A2);
+  data.getMyControlsRangeMap(3).current = analogRead(A3);
 
   //------------------------------------------------------
   // 4051 (3x) Switch address
@@ -180,26 +184,46 @@ void loop() {
     // Menu
     readmask  = (menuCD4051.digitalReadC() << (digitalLoop % 8));
     data.getMySwitchMap().menuPins = (data.getMySwitchMap().menuPins & pinmask) | readmask;
-
-  }
+    }
 
   //------------------------------------------------------
   // 4052 (x1) Read Analog
+  //
+  // Aux Controls
+  // 0 = x0 = Aux0,
+  // 2 = x1 = Aux1,
+  // 4 = x2 = Aux2,
+  // 6 = x3 = Aux3
+  //
+  // Voltage Divides
+  // 1 = y0 = Post,
+  // 3 = y1 = Key
+  // 5 = y2 = 5V
+  // 7 = y3 = Pre  
   //------------------------------------------------------
   for (byte analogLoop = 0 ; analogLoop < 4; analogLoop++) {
     // Switch address for 4052 (1x)
     cd4052.setChannel(analogLoop);
-    data.setJoystick((analogLoop * 2)    , cd4052.analogReadX());
-    data.setJoystick((analogLoop * 2) + 1, cd4052.analogReadY());
-  }
+    data.setJoyAux((analogLoop * 2)    , cd4052.analogReadX());
+    data.setJoyAux((analogLoop * 2) + 1, cd4052.analogReadY());
+    }
+
+
+  //  --  MySwitchMap
+  //myAux.AUX1 = analog[0];
+  //myAux.AUX2 = analog[2];
+  //myAux.AUX3 = analog[4];
+  //myAux.AUX4 = analog[8];
 
   //------------------------------------------------------
   // Send our data
+
+  // Set Joystick values (0-4) via Range limits  
   //  radio.write(&myControls, sizeof(MyControls));
 
   //------------------------------------------------------
   // Button pressed?
-  keyPad.doKeys(data.getJoystick(3));
+  keyPad.doKeys(data.getJoyAux(3));
   keyPress = keyPad.getKeyPressed();
 
   //------------------------------------------------------
@@ -213,7 +237,7 @@ void loop() {
   if (keyPress > 0 || menu.isScreenRefreshNeeded()) {
     menu.updateLCD(keyPress, fps);
     fps = 0;
-  }
+    }
 
   //------------------------------------------------------
   // Serial Debugging

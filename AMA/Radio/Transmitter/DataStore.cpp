@@ -104,21 +104,13 @@ template <class T> int EEPROM_readAnything(int ee, T& value)
 //  int eeAddress = 0;
 //
 //  EEPROM.get(eeAddress, myResistorMap);
-//  eeAddress += sizeof(myResistorMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+//  eeAddress += sizeof(myResistorMap); //Move address to the next byte after MyControlsRangeMap 'myControlsRangeMap'.
 //
 //  //
-//  EEPROM.get(eeAddress, myControlsMapThrottle);
-//  eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
-//  //  eeAddress += sizeof(myControlsMapThrottle); //Move address to the next byte after MyControlsMap 'myControlsMap'.
-//
-//  EEPROM.get(eeAddress, myControlsMapYaw);
-//  eeAddress += sizeof(myControlsMapThrottle); //Move address to the next byte after MyControlsMap 'myControlsMap'.
-//
-//  EEPROM.get(eeAddress, myControlsMapRoll);
-//  eeAddress += sizeof(myControlsMapThrottle); //Move address to the next byte after MyControlsMap 'myControlsMap'.
-//
-//  EEPROM.get(eeAddress, myControlsMapPitch);
-//  eeAddress += sizeof(myControlsMapThrottle); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+//  EEPROM.get(eeAddress, myControlsRangeMap);
+//  eeAddress += sizeof(myControlsRangeMap); //Move address to the next byte after myControlsRangeMap 'myControlsRangeMap'.
+//  //  eeAddress += sizeof(myControlsRangeMap); //Move address to the next byte after myControlsRangeMap 'myControlsRangeMap'.
+
 //}
 //
 //
@@ -126,22 +118,13 @@ template <class T> int EEPROM_readAnything(int ee, T& value)
 //  int eeAddress = 0;
 //
 //  //
-//  EEPROM.put(eeAddress, myResistorMap);
-//  eeAddress += sizeof(myResistorMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+//  EEPROM.put(eeAddress, myControlsRangeMap);
+//  eeAddress += sizeof(myControlsRangeMap); //Move address to the next byte after myControlsRangeMap 'myControlsRangeMap'.
 //
 //  //
-//  //eeAddress += sizeof(myControlsMapSet);
-//  EEPROM.put(eeAddress, myControlsMapThrottle);
-//  eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
-//
-//  EEPROM.put(eeAddress, myControlsMapYaw);
-//  eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
-//
-//  EEPROM.put(eeAddress, myControlsMapRoll);
-//  eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
-//
-//  EEPROM.put(eeAddress, myControlsMapPitch);
-//  eeAddress += sizeof(MyControlsMap); //Move address to the next byte after MyControlsMap 'myControlsMap'.
+//  //eeAddress += sizeof(myControlsRangeMap);
+//  EEPROM.put(eeAddress, myControlsRangeMap);
+//  eeAddress += sizeof(myControlsRangeMap); //Move address to the next byte after myControlsRangeMap 'myControlsRangeMap'.
 //}
 
 // Private Methods /////////////////////////////////////////////////////////////

@@ -3,18 +3,28 @@
 
 #include <avr/pgmspace.h>
 
+// fun with PROGMEM
 #define PGMSTR(x) (__FlashStringHelper*)(x)
+#define FPSTR(pstr_pointer) (reinterpret_cast<const __FlashStringHelper *>(pstr_pointer))
 
+  ///__FlashStringHelper*
+//# define PSTR(s) ((const PROGMEM char *)(s))
+  
 /*
   review these again:
 
     http://www.nongnu.org/avr-libc/user-manual/group__avr__pgmspace.html
     http://arduino-esp8266.readthedocs.io/en/latest/PROGMEM.html
     
+    
 PROGMEM const char   sampleMenu_back = "Back";
 PROGMEM const String sampleMenu_exit = "Exit";
 
 const String err = "Err:
+
+c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atmel3.5.4-arduino2\avr\include\avr\pgmspace.h:408:0: note: this is the location of the previous definition
+ # define PSTR(s) (__extension__({static const char __c[] PROGMEM = (s); &__c[0];}))
+
  */
 
 /*
@@ -29,7 +39,6 @@ const String err = "Err:
   }
  
 */
-
 
 //// Proc auto detection
 //#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
@@ -93,16 +102,32 @@ const String err = "Err:
 #define MID 128
 #define MIN 0
 
+#define INT_MIN 0
+#define INT_MID 1023/2
+#define INT_MAX 1023
+
 /**************************************************************************************/
 /***************             Proc specific definitions             ********************/
 /**************************************************************************************/
 // Common
-//                                            123456789012 
-PROGMEM const char lcd_param_common_set [] = "(Set)";
+const char lcd_param_common_set [] PROGMEM = "(Set)";
 
-PROGMEM const char lcd_param_common_Digits []  = "Digits";
+const char lcd_param_common_Digits [] PROGMEM = "Digits";
 PROGMEM const char lcd_param_common_Pos    [] = "12345678";
-PROGMEM const char lcd_param_common_Values[]  = "Values";
+PROGMEM const char lcd_param_common_Values [] = "Values";
+
+
+//const dataType variableName[] PROGMEM = {}; // use this form
+//const PROGMEM dataType variableName[] = {}; // or this form
+//const dataType PROGMEM variableName[] = {}; // not this one
+
+
+//                                              01234567890123456789 
+PROGMEM const char lcd_param_common_Joystick [] = "Joystick";
+PROGMEM const char lcd_param_common_Set    []   = "Set?";
+//                                              1023 1023 1023 1023 
+PROGMEM const char lcd_param_common_MMM  []  = "Read Min. Ctr. Max.";
+
 
 //
 // X000: 
@@ -162,8 +187,6 @@ PROGMEM const char lcd_param_lcdSys114_v5bit [] = "Volt/Bit";
 // lcdSys122
 // Switch buttons
 PROGMEM const char lcd_param_lcdSys122_Switch [] = "Switch";
-//PROGMEM const char lcd_param_lcdSys122_Dir []    = "Values";
-//PROGMEM const char lcd_param_lcdSys122_Current[] = "Current";
 //PROGMEM const char lcd_param_lcdSys122_Desc []   = "0 = Nor : 1 = Rev";
 
 
@@ -172,7 +195,6 @@ PROGMEM const char lcd_param_lcdSys122_Switch [] = "Switch";
 // lcdSys124    
 // Trim buttons
 PROGMEM const char lcd_param_lcdSys124_Trim [] = "Trim";
-//PROGMEM const char lcd_param_lcdSys124_Dir []    = "Values";
 
 
 
@@ -180,13 +202,19 @@ PROGMEM const char lcd_param_lcdSys124_Trim [] = "Trim";
 // lcdSys126    
 // Menu buttons
 PROGMEM const char lcd_param_lcdSys126_Menu [] = "Menu";
-//PROGMEM const char lcd_param_lcdSys126_Dir []    = "Values";
 
 
 
-// X32
+// X132
 // lcdSys132
-// Joystick range limits
+// Joystick range limits                            12345678901234567890
+PROGMEM const char lcd_param_lcdSys132_Throttle [] = "Throttle";
+PROGMEM const char lcd_param_lcdSys132_YAW      [] = "Yaw";
+PROGMEM const char lcd_param_lcdSys132_ROLL     [] = "Roll";
+PROGMEM const char lcd_param_lcdSys132_PITCH    [] = "Pitch";
+
+PROGMEM const char lcd_param_common_UD [] = "Move up/down";
+PROGMEM const char lcd_param_common_LR [] = "Move left/right";
 
 
 // X148
@@ -207,9 +235,9 @@ PROGMEM const char lcd_param_lcdInit150_startUp [] = "Start up";
 // X151: 
 // lcdInit151
 // Splash   [no click 'select button' out to 151]
-PROGMEM const char  lcd_param_lcdInit151_qBytesWorld[] = "Q-Bytes World";
-PROGMEM const char  lcd_param_lcdInit151_deviceInfo [] = {"2.4G Transmitter"};
-PROGMEM const char  lcd_param_lcdInit151_versionNum [] = {"v1.1.34"};
+const char  lcd_param_lcdInit151_qBytesWorld[] PROGMEM = "Q-Bytes World";
+const char  lcd_param_lcdInit151_deviceInfo [] PROGMEM = {"2.4G Transmitter"};
+const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.35"};
 
 // X192: 
 // lcdInit192
@@ -234,6 +262,8 @@ PROGMEM const char  ERR255 []     = "ERR255";
 PROGMEM const char  digits8 []     = " ###";
 PROGMEM const char  digits16[]     = " ##,###";
 PROGMEM const char  digits32[]     = " #,###,###,###";
+
+PROGMEM const char  joyStickxxxx[] = "####";
 
 PROGMEM const char  volts_xx_xV[]  = " ##.#V";
 PROGMEM const char  volts_x_xxxV[] = " #.###V";
@@ -262,6 +292,7 @@ PROGMEM const char  timerDay[]     = "####:##:##:##";
 /**************************************************************************************/
 /***************                      Misc                         ********************/
 /**************************************************************************************/
+
 
 #define membersof(x) (sizeof(x) / sizeof(x[0]))
 

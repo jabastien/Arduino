@@ -92,7 +92,10 @@ class Menu
     void lcdSys124(void); // Trim
     void lcdSys126(void); // Menu buttons
 
-    void lcdSys132(void); // Joystick range limits
+    void lcdSys132(void); // Throttle - Joystick range limits (Uses             editJoystick 0)  // s/b 131
+//  void lcdSys132(void); // Yoke     - Joystick range limits (Uses lcdSys132 , editJoystick 1)
+//  void lcdSys133(void); // Role     - Joystick range limits (Uses lcdSys132 , editJoystick 2)
+//  void lcdSys134(void); // Pitch    - Joystick range limits (Uses lcdSys132 , editJoystick 3)
 
     void lcdSys148(void); // System Reset
 
@@ -224,7 +227,10 @@ class Menu
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    byte menuOptions131 [2] = {MAINMENU,216};      // Joystick range limits
     byte menuOptions132 [2] = {MAINMENU,216};      // Joystick range limits
+    byte menuOptions133 [2] = {MAINMENU,216};      // Joystick range limits
+    byte menuOptions134 [2] = {MAINMENU,216};      // Joystick range limits
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     byte menuOptions148 [2] = {MAINMENU,149};      // Factory Reset
@@ -251,7 +257,10 @@ class Menu
     byte menuOptions174 [2] = {176,216};            // Trim
     byte menuOptions176 [2] = {182,216};            // Menu
 
-    byte menuOptions182 [2] = {CTLCHECK,216};       // Joystick range limits
+    byte menuOptions182 [2] = {183,216};            // Joystick range limits
+    byte menuOptions183 [2] = {184,216};            // Joystick range limits
+    byte menuOptions184 [2] = {185,216};            // Joystick range limits
+    byte menuOptions185 [2] = {CTLCHECK,216};       // Joystick range limits
     
     byte menuOptions192 [1] = {MAINMENU};           // Control Check (make sure all surfaces & switches are homed. (Prevent flight by mistake)
 
@@ -261,19 +270,19 @@ class Menu
     // * 200 - 254 = Functions
     // =======================================
     // =======================================
-    // =======================================    
+    // =======================================
     //byte menuOptions207 [1] = {FUNCTION};       // Function for number edit
     //byte menuOptions208 [1] = {FUNCTION};       // Function for number edit
-    
+
     //byte menuOptions215 [1] = {FUNCTION};       // Function for number edit
     //byte menuOptions216 [1] = {FUNCTION};       // Function for number edit
-    
+
     //byte menuOptions231 [1] = {FUNCTION};       // Function for number edit
     //byte menuOptions232 [1] = {FUNCTION};       // Function for number edit
-    
+
     //byte menuOptions238 [1] = {FUNCTION};       // Function for check for Factory Reset
     //byte menuOptions239 [1] = {FUNCTION};       // Function to do Factory Reset
-    
+
     // =======================================
     // =======================================
     // =======================================
@@ -290,6 +299,8 @@ class Menu
     // ===========================================
     private:
 
+      byte editJoyStick = 0;
+      
 int fpsShow = 0;
       byte menuOptions[5];
       byte menuSize;

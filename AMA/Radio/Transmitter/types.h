@@ -8,19 +8,12 @@
 // ===========================================
 // Transmission Packages
 // ===========================================
-struct MyControls {
+struct MyControlsMap {
   const byte packetType = 0x01;
   byte throttle; // A0
   byte yaw;      // A1
   byte roll;     // A2
   byte pitch;    // A3
-  };
-
-struct MyControlsMap {
-  int       Min; // A0
-  int       Mid; // A0
-  int       Max; // A0
-  boolean   Rev;
   };
 
 struct MyAux {
@@ -38,6 +31,16 @@ struct MySwitchMap {
   byte menuPins;
   };
 
+// ===========================================
+// 
+// ===========================================
+struct MyControlsRangeMap {
+  int       current;           // Current 10 bit value from Analog port
+  int       minimum = INT_MIN; // Min 10 bit value from Analog port
+  int       center  = INT_MID; // is this really center????
+  int       maximum = INT_MAX; // Max 10 bit value from Analog port
+//  boolean   Reverse;
+  };
 // ===========================================
 // Volt divide Vars
 // Max votage size is 65,535.

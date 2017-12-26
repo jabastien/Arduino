@@ -3,28 +3,35 @@
 X - chreat this file
 
 2 - finish start/init screens
-    X r1.1
-    X r2.1
-    X r3.1
+    X - r1.1
+    X - r2.1
+    X - r3.1
     
-    X shunt
-    X reference
+    X - shunt
+    X - reference
 
-    X switch
-    X trim
-    X menu
-    
-    = turn display bytes (01100011) as a return from Display.cpp
-    
-    = joystick range
-      -
-      -
-      -
-      -
+    X - switch
+    X - trim
+    X - menu
+  
+    X - turn display bytes (01100011) as a return from Display.cpp  
 
-    = control check
+    ? - analog range for sticks (min/ctr/max)
+      - joystick range
+        - THROTTLE
+        - YAW
+        - PITCH
+        - ROLL
 
-  - Try UNION for xxx.xx
+? - Make Switch, Trim, & Menu into a re-usable method like JoyStick
+    It's already a Struct (MySwitchMap).
+  
+5 - create key/volt display in System (after joystick and before control check) 
+
+6 = control check (execute to ensure switch and joystick are NOT flight enabled.)
+
+
+? Try UNION for xxx.xx
 
   
     
@@ -33,12 +40,10 @@ X - chreat this file
     = Model
     = System
 
+   - bug in menu, able to arrow down one (1) when no items are available
+
 4 - u8/s8 number display
   - can we use sprintf instead of role your own
-
-5 - create key/volt display
-
-6 - analog range for sticks (min/mid/max)
 
 7 - collect var volts and test voltage
 
@@ -52,14 +57,14 @@ X - chreat this file
  
 10 - receiver to PC
 
-X - need a 5.0 zener diode for VRef (using post diode input voltage 6-12v)
+?X - need a 5.0 zener diode for VRef (using post diode input voltage 6-12v)
   http://www.electronics-tutorials.ws/diode/diode_7.html
 
- - See what can be made a generic methods
+? - See what can be made a generic methods
   
- - black box receiver to show data
+? - black box receiver to show data
  
- - black box channel scanner
+? - black box channel scanner
 
 11 - math & alarms
       = min FPS > 120
@@ -68,6 +73,10 @@ X - need a 5.0 zener diode for VRef (using post diode input voltage 6-12v)
 12 - alarms class?
 
 13 - makes switches as LMH (requires 2 bits).
+
+14 - setup dead zone
+
+15 - reduce size of Display.cpp & Display.h
 
 
 

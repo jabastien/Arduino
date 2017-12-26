@@ -30,16 +30,21 @@ class Data
   // ===========================================
   public:
     Data(void);
-    void aux(byte, int);
 
-    void setJoystick(byte, int);
-    int getJoystick(byte);
+    void setJoyStick(byte, int);
+    byte getJoyStick(byte);
+    byte getJoyStick(MyControlsRangeMap);
+
+    void setJoyAux(byte, int);
+    int  getJoyAux(byte);    
 
     void setUint16_tPointer(void *);
     void setUint16_tNumber(int16_t);
     void adjUint16_tNumber(int16_t);
     void adjUint16_tNumber(int8_t, int8_t);
-    
+
+    MyControlsRangeMap& getMyControlsRangeMap(byte);
+
     MyResistorMap& getMyResistorMap(void);
     MyVoltageMap&  getMyVoltageMap(void);
     MySwitchMap&   getMySwitchMap(void);
@@ -49,19 +54,19 @@ class Data
   // ===========================================
   private:
 
-    int mapJoystickRange(int, int, int, int, bool);
-    int analog[8];
+    byte mapJoystickRange(int, int, int, int, bool);
+    
+    int aux[8];
 
+    MyControlsRangeMap myControlsRangeMap[4];
+
+    MyControlsRangeMap myControlsRangeMap_single;
+    
     MyVoltageMap myVoltageMap;
     MyResistorMap  myResistorMap; 
     MySwitchMap mySwitchMap;
     
     MyAux myAux;
-    MyControls myControls;
-    MyControlsMap myControlsMapThrottle;
-    MyControlsMap myControlsMapYaw;
-    MyControlsMap myControlsMapRoll;
-    MyControlsMap myControlsMapPitch;
 
   // ===========================================
   // library-accessible "protected" interface

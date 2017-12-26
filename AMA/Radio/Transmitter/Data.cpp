@@ -44,6 +44,12 @@ Data::Data(){
 // =====================================
 // Get the structures
 // =====================================
+
+
+MyControlsRangeMap& Data::getMyControlsRangeMap(byte control){
+  return myControlsRangeMap[control];
+}
+
 MyVoltageMap& Data::getMyVoltageMap(){
   return myVoltageMap;
 }
@@ -55,6 +61,15 @@ MyResistorMap& Data::getMyResistorMap(){
 MySwitchMap&     Data::getMySwitchMap(){
   return mySwitchMap;
 }
+
+void Data::setJoyAux(byte b, int i){
+  aux[b] = i;
+}
+
+int  Data::getJoyAux(byte b){
+  return aux[b];
+}
+    
 // =====================================
 // uint16_t Methods
 // =====================================
@@ -124,44 +139,33 @@ void Data::adjUint16_tNumber(int16_t number){
 }
 
 
-// =====================================
-//
-// =====================================
-void Data::aux(byte b, int d){
-//  Serial.print  (b);
-//  Serial.print  (" ");
-//  Serial.print  (d);
-//  Serial.println();
-}
+//// =====================================
+////
+//// =====================================
 
-  // set levels
-//  myControlsMapSet();
-
-  // Setup the Min, Mid & Max values for the sticks
 //  initSticks();
 
 
 // =====================================
 //
 // =====================================
-//  myControls.throttle = mapJoystickRange( analogRead(A0), myControlsMapThrottle.Min, myControlsMapThrottle.Mid, myControlsMapThrottle.Max, myControlsMapThrottle.Rev);
-//  myControls.yaw      = mapJoystickRange( analogRead(A1), myControlsMapYaw.Min,      myControlsMapYaw.Mid,      myControlsMapYaw.Max,      myControlsMapYaw.Rev);
-//  myControls.roll     = mapJoystickRange( analogRead(A2), myControlsMapRoll.Min,     myControlsMapRoll.Mid,     myControlsMapRoll.Max,     myControlsMapRoll.Rev);
-//  myControls.pitch    = mapJoystickRange( analogRead(A3), myControlsMapPitch.Min,    myControlsMapPitch.Mid,    myControlsMapPitch.Max,    myControlsMapPitch.Rev);
-void Data::setJoystick(byte b, int d){
-//  Serial.print  (b);
-//  Serial.print  (" ");
-//  Serial.print  (d);
-//  Serial.println();
-  analog[b]=d;
-}
-int Data::getJoystick(byte b){
 
-//  Serial.print  (b);
-//  Serial.print  (" ");
+byte Data::getJoyStick(byte control){
 
-  return analog[b];
+  return getJoyStick(myControlsRangeMap[control]);
 }
+
+
+byte Data::getJoyStick(MyControlsRangeMap myControlsRangeMap){
+
+  return mapJoystickRange(myControlsRangeMap.current
+                        , myControlsRangeMap.minimum
+                        , myControlsRangeMap.center
+                        , myControlsRangeMap.maximum
+                        , false //myControlsRangeMap.reverse
+                        );
+}
+
 
 //void Menu::clearMyEditorData(byte returnTo){
 //  if (function == false){
@@ -197,10 +201,7 @@ int Data::getJoystick(byte b){
 //double vKey = 0.0;
 
 
-//  myAux.AUX1 = analog[0];
-//  myAux.AUX2 = analog[2];
-//  myAux.AUX3 = analog[4];
-//  myAux.AUX4 = analog[8];
+
 
 //  vKey =    v5_voltPerBit * analog[3];                                                                                 // Key
 //  vPst =      (((v5_voltPerBit * analog[1]) / myResistorMap.Vpst22) * (myResistorMap.Vpst21 + myResistorMap.Vpst22));  // V Post
@@ -253,58 +254,21 @@ int Data::getJoystick(byte b){
 //}
 
 
-// =====================================
-//
-// =====================================
-void myControlsMapSetIt(MyControlsMap item) {
-  item.Min = 0;
-  item.Mid = 1023 / 2;
-  item.Max = 1023;
-  item.Rev = false;
-}
-
-//// ===========================================
-//void myControlsMapSet() {
-//  myControlsMapSetIt(myControlsMapThrottle);  // A0
-//  myControlsMapSetIt(myControlsMapYaw);       // A1
-//  myControlsMapSetIt(myControlsMapRoll);      // A2
-//  myControlsMapSetIt(myControlsMapPitch);     // A3
-//}
-//
 //// ===========================================
 //// ===========================================
 //// ===========================================
 //// Init contoller
 //// ===========================================
 //// ===========================================
-//// ===========================================
-//void initSticksIt(MyControlsMap item) {
-//  item.Min = 0;    // A0
-//  item.Mid = 512;  // A0
-//  item.Max = 1023; // A0
-//  item.Rev = false;
-//}
-//
-//void initSticks() {
-//  lcd.print(F("Move Throttle up/down"));
-//  initSticksIt(myControlsMapThrottle);  // A0
-//
-//  lcd.print(F("Move Yaw up/down"));
-//  initSticksIt(myControlsMapYaw);       // A1
-//
-//  lcd.print(F("Move Roll up/down"));
-//  initSticksIt(myControlsMapRoll);      // A2
-//
-//  lcd.print(F("Move Pitch up/down"));
-//  initSticksIt(myControlsMapPitch);     // A3
-//}
+
+
 
 // ===========================================
 // Map Joystick Values
 // ===========================================
 // Returns a full-range value for a joystick position that takes into account
-// the values of the outer extents and the middle of the joystick range.
-int Data::mapJoystickRange(int value, int minimum, int middle, int maximum, bool reverse)
+// the values of the outer extremes and the middle of the joystick range.
+byte Data::mapJoystickRange(int value, int minimum, int middle, int maximum, bool reverse)
 {
   value = constrain(value, minimum, maximum);
   
@@ -315,14 +279,6 @@ int Data::mapJoystickRange(int value, int minimum, int middle, int maximum, bool
     
   return ( reverse ? MAX - value : value );
 }
-
-
-
-
-
-
-
-
 
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library

@@ -211,13 +211,48 @@ void Menu::menuDisplay(){
       
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // ---------------------------------------
+    case 131: // Joystick range limits
+      if (isMenuChange){ 
+        setMenu(F("x131"), menuOptions131, membersof(menuOptions131));
+      }
+      
+      editJoyStick = 0;
+
+      lcdSys132();
+      break;
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ---------------------------------------
     case 132: // Joystick range limits
       if (isMenuChange){ 
         setMenu(F("x132"), menuOptions132, membersof(menuOptions132));
-      }       
+      }
+      
+      editJoyStick = 1;
+
       lcdSys132();
       break;
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ---------------------------------------
+    case 133: // Joystick range limits
+      if (isMenuChange){ 
+        setMenu(F("x133"), menuOptions133, membersof(menuOptions133));
+      }
+      
+      editJoyStick = 2;
 
+      lcdSys132();
+      break;
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ---------------------------------------
+    case 134: // Joystick range limits
+      if (isMenuChange){ 
+        setMenu(F("x134"), menuOptions134, membersof(menuOptions134));
+      }
+      
+      editJoyStick = 3;
+
+      lcdSys132();
+      break;
     
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // ---------------------------------------
@@ -319,10 +354,44 @@ void Menu::menuDisplay(){
     case 182: // Joystick range limits
       if (isMenuChange){  
         setMenu(F("x182"), menuOptions182, membersof(menuOptions182));
-      }    
+      }
+      
+      editJoyStick = 0;
+
       lcdSys132();
       break;
+    // ---------------------------------------
+    case 183: // Joystick range limits
+      if (isMenuChange){  
+        setMenu(F("x183"), menuOptions183, membersof(menuOptions183));
+      }
+      
+      editJoyStick = 1;
 
+      lcdSys132();
+      break;
+    // ---------------------------------------
+    case 184: // Joystick range limits
+      if (isMenuChange){  
+        setMenu(F("x184"), menuOptions184, membersof(menuOptions184));
+      }
+      
+      editJoyStick = 2;
+
+      lcdSys132();
+      break;
+    // ---------------------------------------
+    case 185: // Joystick range limits
+      if (isMenuChange){  
+        setMenu(F("x185"), menuOptions185, membersof(menuOptions185));
+      }
+      
+      editJoyStick = 3;
+
+      lcdSys132();
+      break;            
+
+      
     // ---------------------------------------
     // ---------------------------------------
     // ---------------------------------------
@@ -845,15 +914,7 @@ void Menu::lcdMenu002() {
   }
 
 
-  // 0 = x0 = Aux0,
-  // 2 = x1 = Aux1,
-  // 4 = x2 = Aux2,
-  // 6 = x3 = Aux3
 
-  // 1 = y0 = Post,
-  // 3 = y1 = Key
-  // 5 = y2 = 5V
-  // 7 = y3 = Pre
 
   //--------------------
   // Col 0
@@ -1103,14 +1164,13 @@ void Menu::lcdSys102() { // Vin pre 1.1 & 1.2 ohms
   }
 
   if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
-
     // Display measured reference voltage
     lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask()));
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG()));
     
     // Calculate and display Volt/Bit
     lcd.setCursor(displayMask[2].getDisplayPos(), 2); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[2].getVoidPointer(), displayMask[2].getMask()));
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[2].getVoidPointer(), displayMask[2].getMaskPMG())); 
   }
   
 }
@@ -1153,11 +1213,11 @@ void Menu::lcdSys104() { // Vin pst 2.1 & 2.2 ohms
 
     // Display measured reference voltage
     lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask()));
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG()));
     
     // Calculate and display Volt/Bit
     lcd.setCursor(displayMask[2].getDisplayPos(), 2); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[2].getVoidPointer(), displayMask[2].getMask()));
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[2].getVoidPointer(), displayMask[2].getMaskPMG()));
   }
 }
 
@@ -1199,11 +1259,11 @@ void Menu::lcdSys106() { // V5.0    3.1 & 3.2 ohms
 
     // Display measured reference voltage
     lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask()));
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG()));
     
     // Calculate and display Volt/Bit
     lcd.setCursor(displayMask[2].getDisplayPos(), 2); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[2].getVoidPointer(), displayMask[2].getMask()));
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[2].getVoidPointer(), displayMask[2].getMaskPMG()));
   }
 }
 
@@ -1243,7 +1303,7 @@ void Menu::lcdSys112() { // Shunt ohms
 
     // Display measured reference voltage
     lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask()));
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG()));
   }
   
 }
@@ -1282,12 +1342,12 @@ void Menu::lcdSys114() { // V5.0 Reference voltage
   if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
     // Display measured reference voltage
     lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMask(), 1));
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG(), 1));
     
     // Calculate and display Volt/Bit
     *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)displayMask[1].getVoidPointer() / 1023.0) * 1000;
     lcd.setCursor(displayMask[3].getDisplayPos(), 3); //   row >    column ^
-    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[3].getVoidPointer(), displayMask[3].getMask()));
+    lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[3].getVoidPointer(), displayMask[3].getMaskPMG()));
   }
 }
 
@@ -1333,33 +1393,6 @@ void Menu::lcdSys122() { // Switch
     lcd.setCursor(11, 2); //   row >    column ^
     lcd.print( display.outputBinary(_data->getMySwitchMap().switchPins));
 }
-
-/*
-void printBits(byte myByte){
- for(byte mask = 0x80; mask; mask >>= 1){
-   if(mask  & myByte)
-       Serial.print('1');
-   else
-       Serial.print('0');
- }
-}
-
-https://alvinalexander.com/programming/printf-format-cheat-sheet
-
-
-//sprintf(buffer, "%8B", repeatCount);
-//lcd.print( buffer );
-  // http://www.cplusplus.com/reference/cstdio/printf/
-  
-  //sprintf(buf, "%d.%d", ival/10, ival%10);
-
-//sprintf(buffer, "%8B", repeatCount);
-//lcd.print( buffer );
-  // http://www.cplusplus.com/reference/cstdio/printf/
-  
-  //sprintf(buf, "%d.%d", ival/10, ival%10);
-
-*/
 
 // -------------------------------------------
 void Menu::lcdSys124() { // Trim
@@ -1443,22 +1476,73 @@ void Menu::lcdSys126() { // Menu buttons
   
   // Display switches as bin (0's and 1's)
   lcd.setCursor(11, 2); //   row >    column ^
-
   lcd.print( display.outputBinary(_data->getMySwitchMap().menuPins));
 
 }
 
 
 // -------------------------------------------
-void Menu::lcdSys132() { // Joystick range limits
-  if (repeatCount == 0) {
-    // load data pointers
+void Menu::lcdSys132() { // Joystick range limits  (Find MID point, release stick and press 'Select')
+  if (isMenuChange){ 
+
+    // load DisplayMask[0-3] data pointers
+
+    // 0
+    //displayMask[0].doMaskInit(
+
+    // 1
+    displayMask[1].doMaskInit(digits8, '#', 11, &_data->getMyControlsRangeMap(editJoyStick));
+    //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+    // 2
+//    displayMask[2].doMaskInit(joyStickxxxx, '#', 1, &_data->getJoyStick(0));
+    //_data->setUint16_tPointer(displayMask[2].getVoidPointer());
+
+    // 3
+    displayMask[3].doMaskInit(joyStickxxxx, '#', 1, &_data->getMyControlsRangeMap(editJoyStick));
+    //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
   }
-  
+
   if (repeatCount == 0) {
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(F("Joystick"));
-  }
+    lcd.print(PGMSTR(lcd_param_common_Joystick));
+
+    lcd.setCursor(1, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_common_Set));  
+    
+    lcd.setCursor(1, 2); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_common_MMM));              
+    }
+
+
+  // Display XMIT value as ###
+  //  MyControlsRangeMap myControlsRangeMap1 = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
+  lcd.setCursor(16, 1); //   row >    column ^
+  lcd.print(display.outputDigitsU16(      
+    //_data->getJoyStick(myControlsRangeMap1)                 , //displayMask[1].getVoidPointer(),      
+    _data->getJoyStick(*(MyControlsRangeMap*)displayMask[1].getVoidPointer())                 , //displayMask[1].getVoidPointer(),      
+    displayMask[1].getMaskPMG(), 2));
+
+  // ============================================
+  MyControlsRangeMap myControlsRangeMap = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
+  
+  // Display CURRENT as ####
+  lcd.setCursor(1, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myControlsRangeMap.current, displayMask[3].getMaskPMG(),1) );
+
+  // Display MIN as ####
+  lcd.setCursor(6, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myControlsRangeMap.minimum, displayMask[3].getMaskPMG(),1) );
+
+  // Display CENTER as ####
+  lcd.setCursor(11, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myControlsRangeMap.center, displayMask[3].getMaskPMG(),1) );
+
+  // Display MAX as ####
+  lcd.setCursor(16, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myControlsRangeMap.maximum, displayMask[3].getMaskPMG(),1) );
+  
 }
 
 // -------------------------------------------
@@ -1569,14 +1653,39 @@ void Menu::lcdInit192() { // Control check
 //===========================================
 // Functions
 //===========================================
+
+/*
+// -------------------------------------------
+void Menu::lcdFunc200() { // BIN
+
+  Serial.println("lcdFunc200");
+}
+// -------------------------------------------
+void Menu::lcdFunc201() { // BIN
+
+  Serial.println("lcdFunc201");
+}
+
+// -------------------------------------------
+void Menu::lcdFunc207() { // Sint8_t number
+
+  Serial.println("lcdFunc207");
+}
+// -------------------------------------------
+void Menu::lcdFunc208() { // Sint8_t number
+
+  Serial.println("lcdFunc208");
+}
+*/
 // -------------------------------------------
 void Menu::lcdFunc215() { // Sint16_t number
 
   Serial.println("lcdFunc215");
 }
 
+
 // -------------------------------------------
-void Menu::lcdFunc216(byte _keyPress) { // Sint16_t number  (move to lcdFunc215 or lcdFunc216)
+void Menu::lcdFunc216(byte _keyPress) { // Uint16_t number  (move to lcdFunc215 or lcdFunc216)
 
   displayMask[menuCol].doMaskEdit(_keyPress); 
 
@@ -1601,6 +1710,18 @@ void Menu::lcdFunc216(byte _keyPress) { // Sint16_t number  (move to lcdFunc215 
   
 }
 
+/*
+// -------------------------------------------
+void Menu::lcdFunc231() { // Sint32_t number
+
+  Serial.println("lcdFunc231");
+}
+// -------------------------------------------
+void Menu::lcdFunc232() { // Sint32_t number
+
+  Serial.println("lcdFunc232");
+}
+*/
 // -------------------------------------------
 void Menu::lcdFunc238() { // T/F
 
