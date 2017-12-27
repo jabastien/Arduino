@@ -16,7 +16,7 @@ X - chreat this file
   
     X - turn display bytes (01100011) as a return from Display.cpp  
 
-    ? - analog range for sticks (min/ctr/max)
+    X - analog range for sticks (min/ctr/max)
       - joystick range
         - THROTTLE
         - YAW

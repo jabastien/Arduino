@@ -684,8 +684,12 @@ void Menu::funcChangeCheck(){
     Serial.println();
   }
 
+  isFuncChange = true;
+    
   setVisible();
-  lcd.blink();    
+  lcd.blink();   
+
+  repeatCount = 0;
 }
 
 void Menu::funcDisplay(byte _keyPress){
@@ -711,6 +715,11 @@ void Menu::funcDisplay(byte _keyPress){
      *   
      *   238 - EEPROM Read
      *   239 - EEPROM Write
+     *   
+     *   240 - Control Range set
+     *   
+     *   25x - Function for check for Factory Reset
+     *   25x - Function to do Factory Reset
      */
      
     // ---------------------------------------
@@ -731,6 +740,13 @@ void Menu::funcDisplay(byte _keyPress){
     case 239: // EEPROM Write
       lcdFunc239();
       break;
+
+    // ---------------------------------------
+    case 240: // Controls Range
+      lcdFunc240();
+      break;
+
+      
     // ---------------------------------------
     default:
       // catch all - N/A
@@ -743,6 +759,8 @@ void Menu::funcDisplay(byte _keyPress){
 
 //  lcd.setCursor(myMenuData.row[menuCol] , menuCol);//   row >    column ^
   lcd.setCursor(displayMask[menuCol].getCourserPos(), menuCol);//   row >    column ^
+
+  isFuncChange = false;
 }
 
 void Menu::updateLCD(byte keyPress, int fps) {
@@ -1483,6 +1501,7 @@ void Menu::lcdSys126() { // Menu buttons
 
 // -------------------------------------------
 void Menu::lcdSys132() { // Joystick range limits  (Find MID point, release stick and press 'Select')
+
   if (isMenuChange){ 
 
     // load DisplayMask[0-3] data pointers
@@ -1502,18 +1521,50 @@ void Menu::lcdSys132() { // Joystick range limits  (Find MID point, release stic
     displayMask[3].doMaskInit(joyStickxxxx, '#', 1, &_data->getMyControlsRangeMap(editJoyStick));
     //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
+  } else {
+      lcd.noBlink();  
   }
 
-  if (repeatCount == 0) {
+  if (isMenuChange || isFuncChange){    //lcd.print(PGMSTR(lcd_param_common_Joystick));
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_common_Joystick));
-
+    switch(editJoyStick){
+      case 0:
+        lcd.print(PGMSTR(lcd_param_lcdSys132_Throttle));
+        break;
+      case 1:
+        lcd.print(PGMSTR(lcd_param_lcdSys132_YAW));
+        break;
+      case 2:
+        lcd.print(PGMSTR(lcd_param_lcdSys132_ROLL));
+        break;
+      case 3:
+        lcd.print(PGMSTR(lcd_param_lcdSys132_PITCH));
+        break;
+      }    
+    }
+    
     lcd.setCursor(1, 1); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_common_Set));  
+
+    if (menuAction == doFunc){
+        //lcd.print(PGMSTR(lcd_param_common_Joystick));
+        switch(editJoyStick){
+          case 0:
+          case 3:
+            lcd.print(PGMSTR(lcd_param_common_UD));
+            break;
+          case 1:
+          case 2:
+            lcd.print(PGMSTR(lcd_param_common_LR));
+            break;
+        }         
+    } else {
+      lcd.print(PGMSTR(lcd_param_common_Set));  
+      lcd.print("          ");  
+    }
     
     lcd.setCursor(1, 2); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_common_MMM));              
-    }
+
 
 
   // Display XMIT value as ###
@@ -1654,35 +1705,39 @@ void Menu::lcdInit192() { // Control check
 // Functions
 //===========================================
 
-/*
 // -------------------------------------------
-void Menu::lcdFunc200() { // BIN
+/* void Menu::lcdFunc200() { // BIN
 
   Serial.println("lcdFunc200");
 }
+*/
+
 // -------------------------------------------
-void Menu::lcdFunc201() { // BIN
+/* void Menu::lcdFunc201() { // BIN
 
   Serial.println("lcdFunc201");
 }
+*/
 
 // -------------------------------------------
-void Menu::lcdFunc207() { // Sint8_t number
+/* void Menu::lcdFunc207() { // Sint8_t number
 
   Serial.println("lcdFunc207");
 }
+*/
+
 // -------------------------------------------
-void Menu::lcdFunc208() { // Sint8_t number
+/*  void Menu::lcdFunc208() { // Sint8_t number
 
   Serial.println("lcdFunc208");
 }
 */
+
 // -------------------------------------------
 void Menu::lcdFunc215() { // Sint16_t number
 
   Serial.println("lcdFunc215");
 }
-
 
 // -------------------------------------------
 void Menu::lcdFunc216(byte _keyPress) { // Uint16_t number  (move to lcdFunc215 or lcdFunc216)
@@ -1710,18 +1765,20 @@ void Menu::lcdFunc216(byte _keyPress) { // Uint16_t number  (move to lcdFunc215 
   
 }
 
-/*
 // -------------------------------------------
-void Menu::lcdFunc231() { // Sint32_t number
+/* void Menu::lcdFunc231() { // Sint32_t number
 
   Serial.println("lcdFunc231");
 }
+*/
+
 // -------------------------------------------
-void Menu::lcdFunc232() { // Sint32_t number
+/* void Menu::lcdFunc232() { // Sint32_t number
 
   Serial.println("lcdFunc232");
 }
 */
+
 // -------------------------------------------
 void Menu::lcdFunc238() { // T/F
 
@@ -1760,6 +1817,27 @@ void Menu::lcdFunc239() { // Y/N
   // exit to xSTARTMENU
 }
 
+// -------------------------------------------
+void Menu::lcdFunc240() { // Controls Range
+  
+//_data->getMyControlsRangeMap(editJoyStick).center = 99;
+//  MyControlsRangeMap myControlsRangeMap = *(MyControlsRangeMap*)displayMask[editJoyStick].getVoidPointer();
+//MyControlsRangeMap myControlsRangeMap = _data->getMyControlsRangeMap(editJoyStick);
+
+  if (isFuncChange){
+    _data->getMyControlsRangeMap(editJoyStick).minimum = _data->getMyControlsRangeMap(editJoyStick).current;    
+    _data->getMyControlsRangeMap(editJoyStick).center  = _data->getMyControlsRangeMap(editJoyStick).current;    
+    _data->getMyControlsRangeMap(editJoyStick).maximum = _data->getMyControlsRangeMap(editJoyStick).current;    
+  }
+  
+  _data->getMyControlsRangeMap(editJoyStick).minimum = min(_data->getMyControlsRangeMap(editJoyStick).current, _data->getMyControlsRangeMap(editJoyStick).minimum);    
+  _data->getMyControlsRangeMap(editJoyStick).maximum = max(_data->getMyControlsRangeMap(editJoyStick).current, _data->getMyControlsRangeMap(editJoyStick).maximum);    
+
+  lcdSys132();
+  
+//  if (repeatCount == 0) {  }
+  
+}
 
 //===========================================
 // Reserved

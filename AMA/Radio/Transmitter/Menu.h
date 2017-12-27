@@ -120,9 +120,10 @@ class Menu
     void lcdFunc216(byte); // 16 bit Unsigned
 //  void lcdFunc231(void); // 32 bit Signed
 //  void lcdFunc232(byte); // 32 bit Unsigned
-    void lcdFunc238(void); // 
-    void lcdFunc239(void); //
+    void lcdFunc238(void); // EEPROM Read   --> move to 25x range
+    void lcdFunc239(void); // EEPROM Write  --> move to 25x range
     
+    void lcdFunc240(void); // Controls Range 
     // ===========================================
     // *       255 = Reserved for FUNCTION switch indicator 
     // ===========================================
@@ -147,6 +148,9 @@ class Menu
     
     byte function = 0;
     boolean isMenuChange = true;
+    boolean isFuncChange = true;
+
+    //boolean isSetVisable = false;
     
     //===============================================================================
     //===============================================================================
@@ -227,10 +231,10 @@ class Menu
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    byte menuOptions131 [2] = {MAINMENU,216};      // Joystick range limits
-    byte menuOptions132 [2] = {MAINMENU,216};      // Joystick range limits
-    byte menuOptions133 [2] = {MAINMENU,216};      // Joystick range limits
-    byte menuOptions134 [2] = {MAINMENU,216};      // Joystick range limits
+    byte menuOptions131 [2] = {MAINMENU,240};      // Joystick range limits
+    byte menuOptions132 [2] = {MAINMENU,240};      // Joystick range limits
+    byte menuOptions133 [2] = {MAINMENU,240};      // Joystick range limits
+    byte menuOptions134 [2] = {MAINMENU,240};      // Joystick range limits
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     byte menuOptions148 [2] = {MAINMENU,149};      // Factory Reset
@@ -257,10 +261,10 @@ class Menu
     byte menuOptions174 [2] = {176,216};            // Trim
     byte menuOptions176 [2] = {182,216};            // Menu
 
-    byte menuOptions182 [2] = {183,216};            // Joystick range limits
-    byte menuOptions183 [2] = {184,216};            // Joystick range limits
-    byte menuOptions184 [2] = {185,216};            // Joystick range limits
-    byte menuOptions185 [2] = {CTLCHECK,216};       // Joystick range limits
+    byte menuOptions182 [2] = {183,240};            // Joystick range limits
+    byte menuOptions183 [2] = {184,240};            // Joystick range limits
+    byte menuOptions184 [2] = {185,240};            // Joystick range limits
+    byte menuOptions185 [2] = {CTLCHECK,240};       // Joystick range limits
     
     byte menuOptions192 [1] = {MAINMENU};           // Control Check (make sure all surfaces & switches are homed. (Prevent flight by mistake)
 
@@ -280,8 +284,13 @@ class Menu
     //byte menuOptions231 [1] = {FUNCTION};       // Function for number edit
     //byte menuOptions232 [1] = {FUNCTION};       // Function for number edit
 
-    //byte menuOptions238 [1] = {FUNCTION};       // Function for check for Factory Reset
-    //byte menuOptions239 [1] = {FUNCTION};       // Function to do Factory Reset
+    //byte menuOptions238 [1] = {FUNCTION};       // Function for EEPROM read
+    //byte menuOptions239 [1] = {FUNCTION};       // Function for EEPROM write
+
+    //byte menuOptions240 [1] = {FUNCTION};       // Function to do Control Range settings
+
+    //byte menuOptions25x [1] = {FUNCTION};       // Function for check for Factory Reset
+    //byte menuOptions25x [1] = {FUNCTION};       // Function to do Factory Reset
 
     // =======================================
     // =======================================
@@ -302,6 +311,7 @@ class Menu
       byte editJoyStick = 0;
       
 int fpsShow = 0;
+
       byte menuOptions[5];
       byte menuSize;
 
