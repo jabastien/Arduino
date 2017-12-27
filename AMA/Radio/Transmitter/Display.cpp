@@ -49,7 +49,7 @@ template <typename T> T Display::setSign (T number){ // Return value of 'T'
 }  // end of setSign
 
 
-/*
+/*  https://www.arduino.cc/en/Tutorial/BitMask
 void printBits(byte myByte){
  for(byte mask = 0x80; mask; mask >>= 1){
    if(mask  & myByte)
@@ -58,25 +58,11 @@ void printBits(byte myByte){
        Serial.print('0');
  }
 }
-
-https://alvinalexander.com/programming/printf-format-cheat-sheet
-
-
-//sprintf(buffer, "%8B", repeatCount);
-//lcd.print( buffer );
-  // http://www.cplusplus.com/reference/cstdio/printf/
-  
-  //sprintf(buf, "%d.%d", ival/10, ival%10);
-
-//sprintf(buffer, "%8B", repeatCount);
-//lcd.print( buffer );
-  // http://www.cplusplus.com/reference/cstdio/printf/
-  
-  //sprintf(buf, "%d.%d", ival/10, ival%10);
-
 */
+
 char * Display::outputBinary(byte bits){
 
+    //for(byte mask = 0x80; mask; mask >>= 1){
     //for (byte mask = 7; mask != 255; mask--){
 //    for (byte mask = 7; mask < 8; mask--){
 //      lcd.print((_data->getMySwitchMap().trimBTN >> mask) & 1);

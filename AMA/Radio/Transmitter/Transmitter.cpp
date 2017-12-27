@@ -142,9 +142,7 @@ void setup(){
   //  radio.setAutoAck(false);
   //  radio.setDataRate(RF24_250KBPS);
   //  radio.openWritingPipe(pipeOut);
-
 }
-
 
 // ===========================================
 // ===========================================

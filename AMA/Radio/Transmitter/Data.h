@@ -32,8 +32,6 @@ class Data
     Data(void);
 
     void setJoyStick(byte, int);
-    byte getJoyStick(byte);
-    byte getJoyStick(MyControlsRangeMap);
 
     void setJoyAux(byte, int);
     int  getJoyAux(byte);    
@@ -53,9 +51,7 @@ class Data
   // library-accessible "private" interface
   // ===========================================
   private:
-
-    byte mapJoystickRange(int, int, int, int, bool);
-    
+  
     int aux[8];
 
     MyControlsRangeMap myControlsRangeMap[4];

@@ -72,6 +72,22 @@ http://www.cplusplus.com/reference/cstdio/printf/
 https://stackoverflow.com/questions/1449805/how-to-format-a-number-from-1123456789-to-1-123-456-789-in-c
 
 
+https://alvinalexander.com/programming/printf-format-cheat-sheet
+
+
+//sprintf(buffer, "%8B", repeatCount);
+//lcd.print( buffer );
+  // http://www.cplusplus.com/reference/cstdio/printf/
+  
+  //sprintf(buf, "%d.%d", ival/10, ival%10);
+
+//sprintf(buffer, "%8B", repeatCount);
+//lcd.print( buffer );
+  // http://www.cplusplus.com/reference/cstdio/printf/
+  
+  //sprintf(buf, "%d.%d", ival/10, ival%10);
+
+
 // ------------------------------------------------------------------------------------------------
 // MISC
 // ------------------------------------------------------------------------------------------------

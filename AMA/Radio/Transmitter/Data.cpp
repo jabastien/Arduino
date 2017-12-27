@@ -30,12 +30,6 @@ Data::Data(){
 
   // do whatever is required to initialize the library
 
-//  pinMode(13, OUTPUT);
-//  Serial.begin(115200);
-//myResistorMap.shunt = 1239;
-//  Serial.print  ("Data() - shunt: ");
-//  Serial.println(myResistorMap.shunt);
-  
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
@@ -58,7 +52,7 @@ MyResistorMap& Data::getMyResistorMap(){
   return myResistorMap;
 }
 
-MySwitchMap&     Data::getMySwitchMap(){
+MySwitchMap& Data::getMySwitchMap(){
   return mySwitchMap;
 }
 
@@ -139,56 +133,6 @@ void Data::adjUint16_tNumber(int16_t number){
 }
 
 
-//// =====================================
-////
-//// =====================================
-
-//  initSticks();
-
-
-// =====================================
-//
-// =====================================
-
-byte Data::getJoyStick(byte control){
-
-  return getJoyStick(myControlsRangeMap[control]);
-}
-
-
-byte Data::getJoyStick(MyControlsRangeMap myControlsRangeMap){
-
-  return mapJoystickRange(myControlsRangeMap.current
-                        , myControlsRangeMap.minimum
-                        , myControlsRangeMap.center
-                        , myControlsRangeMap.maximum
-                        , false //myControlsRangeMap.reverse
-                        );
-}
-
-
-//void Menu::clearMyEditorData(byte returnTo){
-//  if (function == false){
-//    myEditorData.setDisplayInfo = true;
-//    myEditorData.row[0] = -1;
-//    myEditorData.row[1] = -1;
-//    myEditorData.row[2] = -1;
-//    myEditorData.row[3] = -1;
-//    //myEditorData.displayInfo[0] = display.TestMethod(myResistorMap.shunt);
-//    //myEditorData.displayInfo[1] = display.TestMethod(myResistorMap.shunt);
-//    //myEditorData.displayInfo[2] = display.TestMethod(myResistorMap.shunt);
-//    //myEditorData.displayInfo[3] = display.TestMethod(myResistorMap.shunt);
-//    myEditorData.pVoid[0] = NULL;
-//    myEditorData.pVoid[1] = NULL;
-//    myEditorData.pVoid[2] = NULL;
-//    myEditorData.pVoid[3] = NULL;
-//    myEditorData.returnTo = -1; 
-//  } else {
-//    //myEditorData.returnTo = returnTo; 
-//  }
-//}
-
-
 //// ===========================================
 //// Update LCD
 //// ===========================================
@@ -199,9 +143,6 @@ byte Data::getJoyStick(MyControlsRangeMap myControlsRangeMap){
 //double vPre = 0.0;
 //double vPst = 0.0;
 //double vKey = 0.0;
-
-
-
 
 //  vKey =    v5_voltPerBit * analog[3];                                                                                 // Key
 //  vPst =      (((v5_voltPerBit * analog[1]) / myResistorMap.Vpst22) * (myResistorMap.Vpst21 + myResistorMap.Vpst22));  // V Post
@@ -227,58 +168,6 @@ byte Data::getJoyStick(MyControlsRangeMap myControlsRangeMap){
 //  }
 //
 //  
-
-
-//// ===========================================
-//// Reset
-//// ===========================================
-//void resetData()
-//{
-//  //This are the start values of each channal
-//  // Throttle is 0 in order to stop the motors
-//  //128 is the middle value of the 10 bit ADC.
-//
-//  myControls.throttle = 0;    // no power
-//  myControls.yaw      = MID;  // center control
-//  myControls.pitch    = MID;  // center control
-//  myControls.roll     = MID;  // center control
-//
-//  myAux.AUX1     = 0;
-//  myAux.AUX2     = 0;
-//  myAux.AUX3     = 0;
-//  myAux.AUX4     = 0;
-//
-//  mySwitchMap.swtch = 0;
-//  mySwitchMap.dip   = 0;
-//  mySwitchMap.menu  = 0;
-//}
-
-
-//// ===========================================
-//// ===========================================
-//// ===========================================
-//// Init contoller
-//// ===========================================
-//// ===========================================
-
-
-
-// ===========================================
-// Map Joystick Values
-// ===========================================
-// Returns a full-range value for a joystick position that takes into account
-// the values of the outer extremes and the middle of the joystick range.
-byte Data::mapJoystickRange(int value, int minimum, int middle, int maximum, bool reverse)
-{
-  value = constrain(value, minimum, maximum);
-  
-  if ( value < middle )
-    value = map(value, minimum, middle, 0, MID);
-  else
-    value = map(value, middle, maximum, MID, MAX);
-    
-  return ( reverse ? MAX - value : value );
-}
 
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library

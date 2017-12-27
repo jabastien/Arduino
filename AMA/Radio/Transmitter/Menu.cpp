@@ -1544,9 +1544,10 @@ void Menu::lcdSys132() { // Joystick range limits  (Find MID point, release stic
     }
     
     lcd.setCursor(1, 1); //   row >    column ^
-
+        
+    //lcd.print(PGMSTR(lcd_param_common_Joystick));
     if (menuAction == doFunc){
-        //lcd.print(PGMSTR(lcd_param_common_Joystick));
+
         switch(editJoyStick){
           case 0:
           case 3:
@@ -1568,31 +1569,33 @@ void Menu::lcdSys132() { // Joystick range limits  (Find MID point, release stic
 
 
   // Display XMIT value as ###
-  //  MyControlsRangeMap myControlsRangeMap1 = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
+  MyControlsRangeMap myControlsRangeMap1 = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
+
   lcd.setCursor(16, 1); //   row >    column ^
   lcd.print(display.outputDigitsU16(      
-    //_data->getJoyStick(myControlsRangeMap1)                 , //displayMask[1].getVoidPointer(),      
-    _data->getJoyStick(*(MyControlsRangeMap*)displayMask[1].getVoidPointer())                 , //displayMask[1].getVoidPointer(),      
-    displayMask[1].getMaskPMG(), 2));
+      //_data->getJoyStick(myControlsRangeMap1)                 , //displayMask[1].getVoidPointer(),      
+      //_data->getJoyStick(*(MyControlsRangeMap*)displayMask[1].getVoidPointer())                 , //displayMask[1].getVoidPointer(),    
+      myControlsRangeMap1.joystickRange(),
+      displayMask[1].getMaskPMG(), 2));
 
   // ============================================
-  MyControlsRangeMap myControlsRangeMap = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
+  MyControlsRangeMap myControlsRangeMap3 = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
   
   // Display CURRENT as ####
   lcd.setCursor(1, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap.current, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myControlsRangeMap3.current, displayMask[3].getMaskPMG(),1) );
 
   // Display MIN as ####
   lcd.setCursor(6, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap.minimum, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myControlsRangeMap3.minimum, displayMask[3].getMaskPMG(),1) );
 
   // Display CENTER as ####
   lcd.setCursor(11, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap.center, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myControlsRangeMap3.center, displayMask[3].getMaskPMG(),1) );
 
   // Display MAX as ####
   lcd.setCursor(16, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap.maximum, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myControlsRangeMap3.maximum, displayMask[3].getMaskPMG(),1) );
   
 }
 
@@ -1819,19 +1822,12 @@ void Menu::lcdFunc239() { // Y/N
 
 // -------------------------------------------
 void Menu::lcdFunc240() { // Controls Range
-  
-//_data->getMyControlsRangeMap(editJoyStick).center = 99;
-//  MyControlsRangeMap myControlsRangeMap = *(MyControlsRangeMap*)displayMask[editJoyStick].getVoidPointer();
-//MyControlsRangeMap myControlsRangeMap = _data->getMyControlsRangeMap(editJoyStick);
 
-  if (isFuncChange){
-    _data->getMyControlsRangeMap(editJoyStick).minimum = _data->getMyControlsRangeMap(editJoyStick).current;    
-    _data->getMyControlsRangeMap(editJoyStick).center  = _data->getMyControlsRangeMap(editJoyStick).current;    
-    _data->getMyControlsRangeMap(editJoyStick).maximum = _data->getMyControlsRangeMap(editJoyStick).current;    
+  if (isFuncChange){   
+  _data->getMyControlsRangeMap(editJoyStick).setCenter(); 
   }
-  
-  _data->getMyControlsRangeMap(editJoyStick).minimum = min(_data->getMyControlsRangeMap(editJoyStick).current, _data->getMyControlsRangeMap(editJoyStick).minimum);    
-  _data->getMyControlsRangeMap(editJoyStick).maximum = max(_data->getMyControlsRangeMap(editJoyStick).current, _data->getMyControlsRangeMap(editJoyStick).maximum);    
+
+  _data->getMyControlsRangeMap(editJoyStick).setMinMax();
 
   lcdSys132();
   

@@ -42,21 +42,33 @@ DataStore::DataStore(Data * data){
   
   // do whatever is required to initialize the library
 
-
-  /*
-    void setJoystick(byte, int);
-    int getJoystick(byte);
-   */
   _data = data;
 
-  
-//  _data->setJoystick(1,11);
-//
-//  Serial.println("DataStore");
-//  Serial.println(_data->getJoystick(0));
-//  Serial.println(_data->getJoystick(1));
-//  Serial.println(_data->getJoystick(2));
-//  Serial.println(_data->getJoystick(3));
+  Serial.println(PGMSTR(dashes)); 
+  Serial.println(PGMSTR(dashes)); 
+  Serial.println(PGMSTR(dashes)); 
+
+  Serial.print  ("Size of MyControlsMap: "); 
+  Serial.println(sizeof(MyControlsMap));
+
+  Serial.print  ("Size of MyAux: "); 
+  Serial.println(sizeof(MyAux));
+
+  Serial.print  ("Size of MySwitchMap: "); 
+  Serial.println(sizeof(MySwitchMap));
+
+  Serial.print  ("Size of MyControlsRangeMap: "); 
+  Serial.println(sizeof(MyControlsRangeMap));
+
+  Serial.print  ("Size of MyVoltageMap: "); 
+  Serial.println(sizeof(MyVoltageMap));
+
+  Serial.print  ("Size of MyResistorMap: "); 
+  Serial.println(sizeof(MyResistorMap));
+
+  Serial.println(PGMSTR(dashes)); 
+  Serial.println(PGMSTR(dashes)); 
+  Serial.println(PGMSTR(dashes));   
 }
 
 // Public Methods //////////////////////////////////////////////////////////////

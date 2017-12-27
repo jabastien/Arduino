@@ -14,7 +14,7 @@ struct MyControlsMap {
   byte yaw;      // A1
   byte roll;     // A2
   byte pitch;    // A3
-  };
+};
 
 struct MyAux {
   const byte packetType = 0x02;
@@ -22,25 +22,76 @@ struct MyAux {
   byte AUX2;
   byte AUX3;
   byte AUX4;
-  };
+};
 
 struct MySwitchMap {
   const byte packetType = 0x03;
   byte switchPins;
   byte trimPins;
   byte menuPins;
-  };
+};
 
 // ===========================================
-// 
+// Control Range Map
 // ===========================================
 struct MyControlsRangeMap {
   int       current;           // Current 10 bit value from Analog port
   int       minimum = INT_MIN; // Min 10 bit value from Analog port
   int       center  = INT_MID; // is this really center????
   int       maximum = INT_MAX; // Max 10 bit value from Analog port
-//  boolean   Reverse;
-  };
+  boolean   reverse = false;
+
+// -------------------------------------------
+// Centering Joystick
+// -------------------------------------------
+  void setCenter(){
+    minimum = current;  
+    center = current;  
+    maximum = current;  
+    }
+
+// -------------------------------------------
+// Set Min Max Values
+// -------------------------------------------
+  void setMinMax(){
+    minimum = min(current, minimum);
+    maximum = max(current, maximum);
+    }
+
+// -------------------------------------------
+// Map Joystick Values for MyControlsMap
+// -------------------------------------------
+// Returns a full-range value for a joystick position that takes into account
+// the values of the outer extremes and the center of the joystick.
+  byte joystickRange(){
+    int value = constrain(current, minimum, maximum);
+    
+    if ( value < center )
+      value = map(value, minimum, center, 0, MID);
+    else
+      value = map(value, center, maximum, MID, MAX);
+      
+    return ( reverse ? MAX - value : value );
+  }    
+  
+};
+
+
+/*
+struct foo {
+  int bar;
+  foo() : bar(3) {}   //look, a constructor
+  int getBar() 
+  { 
+    return bar; 
+  }
+};
+
+foo f;
+int y = f.getBar(); // y is 3
+ */
+
+  
 // ===========================================
 // Volt divide Vars
 // Max votage size is 65,535.
