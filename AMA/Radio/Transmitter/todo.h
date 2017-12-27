@@ -2,7 +2,7 @@
 
 X - chreat this file
 
-2 - finish start/init screens
+X - finish start/init screens
     X - r1.1
     X - r2.1
     X - r3.1
@@ -22,6 +22,13 @@ X - chreat this file
         - YAW
         - PITCH
         - ROLL
+    
+3 - build menus
+    = Trans
+    = Model
+    = System
+
+?  - bug in menu, able to arrow down one (1) when no items are available
 
 ? - Make Switch, Trim, & Menu into a re-usable method like JoyStick
     It's already a Struct (MySwitchMap).
@@ -33,25 +40,15 @@ X - chreat this file
 
 ? Try UNION for xxx.xx
 
-  
-    
-3 - build menus
-    = Trans
-    = Model
-    = System
-
-   - bug in menu, able to arrow down one (1) when no items are available
-
 4 - u8/s8 number display
   - can we use sprintf instead of role your own
 
 7 - collect var volts and test voltage
 
-8 - transmit data
-  
+8 - transmit data  
   - packets.h or common.h for transmit structs.
 
-9 - why tps < 144 (was +300)
+X - why tps < 144 (was +300)  (Update, FPS is now 575 on main menu.)
     = 1 bit  (1) per loop
     = 2 bits (1) % mod   (0-7 collect, 8 calculate, 9 tx)
  
@@ -60,8 +57,6 @@ X - chreat this file
 ?X - need a 5.0 zener diode for VRef (using post diode input voltage 6-12v)
   http://www.electronics-tutorials.ws/diode/diode_7.html
 
-? - See what can be made a generic methods
-  
 ? - black box receiver to show data
  
 ? - black box channel scanner
@@ -76,7 +71,11 @@ X - chreat this file
 
 14 - setup dead zone
 
+? - See what can be made a generic methods
+  
 15 - reduce size of Display.cpp & Display.h
+
+16 - remove Serial.print to reduce size (may be able to ture into #define DEBUG_.....
 
 
 
