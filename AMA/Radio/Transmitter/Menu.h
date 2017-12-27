@@ -39,8 +39,11 @@ class Menu
     Menu(Data *);
 
     boolean isScreenRefreshNeeded(void);
-    void updateLCD(byte, int);
+    //void updateLCD(byte, int);
+    void updateLCD(byte);
 
+    void updateFPS(void);
+    
     void menuDisplay(void);
     void menuChangeCheck(void);
     void menuKeyboard(byte);
@@ -309,8 +312,6 @@ class Menu
     private:
 
       byte editJoyStick = 0;
-      
-int fpsShow = 0;
 
       byte menuOptions[5];
       byte menuSize;
@@ -324,20 +325,23 @@ int fpsShow = 0;
       void printDrmc(void);  // test only, delete this and the method
       void clearDisplayMask(void);
       
-      Data * _data;   
+      Data * data;   
       DisplayMask displayMask[4];
 
     // ===========================================
-    // Timing Vars
+    // Screen RefreshTiming Vars
     // ===========================================
-    //unsigned long currentMillis = millis();
-    unsigned long previousMillis = 0;        // will store last time LED was updated
-    const long interval = 100;           // interval at which to update screen (milliseconds)
+    unsigned long  intervalScreenRefresh = 1000 / 4; // 4 times per second
+    unsigned long  previousScreenRefreshMiilis = 0;
+
+    // ===========================================
+    // Screen RefreshTiming Vars
+    // ===========================================
+    unsigned long previousMillisFPS = 0;        // will store last time LED was updated
+    const unsigned long intervalFPS = 1000;           // interval at which to update screen (milliseconds)
     
-    int cntMillis = 0;
-    
-    unsigned long  screenRefresh = 1000 / 4; // 4 times per second
-    unsigned long  screenLastRefresh = 0;
+    int showFPS = 0;
+    int cntFPS  = 0;  
 
   // ===========================================
   // library-accessible "protected" interface

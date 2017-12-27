@@ -41,9 +41,9 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);    // Initialization of the book (address, c
 
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
-Menu::Menu(Data * data){
+Menu::Menu(Data * _data){
   // initialize this instance's variables
-  _data = data;
+   data = _data;
 
   // do whatever is required to initialize the library
 
@@ -64,12 +64,31 @@ void Menu::clearDisplayMask(){
 boolean Menu::isScreenRefreshNeeded(){
   unsigned long currentMillis = millis();
 
-  if (currentMillis > (screenLastRefresh + screenRefresh)){
-    screenLastRefresh = currentMillis;
+  if (currentMillis > (previousScreenRefreshMiilis + intervalScreenRefresh)){
+    previousScreenRefreshMiilis = currentMillis;
     return true;
   }
 
  return false  ;
+}
+
+
+void Menu::updateFPS(){
+
+  cntFPS++;
+  
+  unsigned long currentMillis = millis();
+
+  if (currentMillis > (previousMillisFPS + intervalFPS)){
+      previousMillisFPS = currentMillis;
+      showFPS = cntFPS;
+      cntFPS = 0;
+
+      if (true){
+        Serial.print  ("FPS: ");
+        Serial.println(showFPS);      
+      }
+    }
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -763,9 +782,7 @@ void Menu::funcDisplay(byte _keyPress){
   isFuncChange = false;
 }
 
-void Menu::updateLCD(byte keyPress, int fps) {
-
-fpsShow = fps;
+void Menu::updateLCD(byte keyPress) {
 
   menuDisplay();
 
@@ -897,7 +914,7 @@ void Menu::lcdMenu001() {
     lcd.print(F("Misc: "));
     lcd.setCursor(7, 3); //   row >    column ^
     lcd.print(F("Repeat: "));
-    lcd.print(fpsShow);
+    lcd.print(showFPS);
     lcd.print("  ");
   }
 
@@ -1078,7 +1095,6 @@ void Menu::lcdMenu013() {
 
 // -------------------------------------------
 //void lcdMainFlightTime(){
-//void updateFPS(){
 void Menu::lcdMenu014() {
   // check to see if it's time to update LCD; that is, if the difference
   // between the current time and last time you updated the LCD is bigger than
@@ -1101,7 +1117,7 @@ void Menu::lcdMenu014() {
     //    printVolts();    //Voltage: xx.xV
 
 
-//    if (cntMillis >= (1000 / screenRefresh))
+
     {
       // -------------------------------------
       lcd.setCursor(0, 0); //   row >    column ^
@@ -1127,11 +1143,11 @@ void Menu::lcdMenu014() {
       // -------------------------------------
       lcd.setCursor(1, 3); //   row >    column ^
       lcd.print(F("FPS:"));
-      lcd.print(fpsShow);  // ~300 has been the average
+      lcd.print(showFPS);  // ~300 has been the average
       lcd.print(F("   GPS: xxx"));
 
       // -------------------------------------
-      cntMillis = 0;
+
     }
 //  }
   lcd.setCursor(10, 1); //   row >    column ^
@@ -1157,12 +1173,12 @@ void Menu::lcdSys102() { // Vin pre 1.1 & 1.2 ohms
     //displayMask[0].doMaskInit(
 
     // 1
-    displayMask[1].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().Vpre11);
-    _data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    displayMask[1].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().Vpre11);
+     data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
-    displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().Vpre12);
-    _data->setUint16_tPointer(displayMask[2].getVoidPointer());
+    displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().Vpre12);
+     data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
     // 3
     //displayMask[2].doMaskInit(
@@ -1203,12 +1219,12 @@ void Menu::lcdSys104() { // Vin pst 2.1 & 2.2 ohms
     //displayMask[0].doMaskInit(
 
     // 1
-    displayMask[1].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().Vpst21);
-    _data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    displayMask[1].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().Vpst21);
+     data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
-    displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().Vpst22);
-    _data->setUint16_tPointer(displayMask[2].getVoidPointer());
+    displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().Vpst22);
+     data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
     // 3
     //displayMask[2].doMaskInit(
@@ -1249,12 +1265,12 @@ void Menu::lcdSys106() { // V5.0    3.1 & 3.2 ohms
     //displayMask[0].doMaskInit(
 
     // 1
-    displayMask[1].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_31);
-    _data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    displayMask[1].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().V5_31);
+     data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
-    displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_32);
-    _data->setUint16_tPointer(displayMask[2].getVoidPointer());
+    displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().V5_32);
+     data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
     // 3
     //displayMask[2].doMaskInit(
@@ -1297,12 +1313,12 @@ void Menu::lcdSys112() { // Shunt ohms
     //displayMask[0].doMaskInit(
 
     // 1
-    displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 12, &_data->getMyResistorMap().shunt);
-    _data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 12, &data->getMyResistorMap().shunt);
+     data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
-    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_32);
-    //_data->setUint16_tPointer(displayMask[2].getVoidPointer());
+    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().V5_32);
+    // data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
     // 3
     //displayMask[2].doMaskInit(
@@ -1336,14 +1352,14 @@ void Menu::lcdSys114() { // V5.0 Reference voltage
     //displayMask[0].doMaskInit(
 
     // 1
-    displayMask[1].doMaskInit(volts_x_xxxV, '#', 13, &_data->getMyVoltageMap().reference);
-    _data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    displayMask[1].doMaskInit(volts_x_xxxV, '#', 13, &data->getMyVoltageMap().reference);
+     data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
     //displayMask[2].doMaskInit(
 
     // 3
-    displayMask[3].doMaskInit(volts_0_0xxxxxV, '#', 10, &_data->getMyVoltageMap().voltPerBit);
+    displayMask[3].doMaskInit(volts_0_0xxxxxV, '#', 10, &data->getMyVoltageMap().voltPerBit);
   }
   
   if (repeatCount == 0) {
@@ -1363,7 +1379,7 @@ void Menu::lcdSys114() { // V5.0 Reference voltage
     lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG(), 1));
     
     // Calculate and display Volt/Bit
-    *(uint16_t*)&_data->getMyVoltageMap().voltPerBit = (*(uint16_t*)displayMask[1].getVoidPointer() / 1023.0) * 1000;
+    *(uint16_t*)&data->getMyVoltageMap().voltPerBit = (*(uint16_t*)displayMask[1].getVoidPointer() / 1023.0) * 1000;
     lcd.setCursor(displayMask[3].getDisplayPos(), 3); //   row >    column ^
     lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[3].getVoidPointer(), displayMask[3].getMaskPMG()));
   }
@@ -1380,12 +1396,12 @@ void Menu::lcdSys122() { // Switch
     //displayMask[0].doMaskInit(
 
     // 1
-    //displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &_data->getMySwitchMap().switchSW);
-    //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    //displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &data->getMySwitchMap().switchSW);
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
-    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_32);
-    //_data->setUint16_tPointer(displayMask[2].getVoidPointer());
+    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().V5_32);
+    // data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
     // 3
     //displayMask[2].doMaskInit(
@@ -1409,7 +1425,7 @@ void Menu::lcdSys122() { // Switch
  
     // Display switches as bin (0's and 1's)
     lcd.setCursor(11, 2); //   row >    column ^
-    lcd.print( display.outputBinary(_data->getMySwitchMap().switchPins));
+    lcd.print( display.outputBinary( data->getMySwitchMap().switchPins));
 }
 
 // -------------------------------------------
@@ -1423,12 +1439,12 @@ void Menu::lcdSys124() { // Trim
     //displayMask[0].doMaskInit(
 
     // 1
-    //displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &_data->getMySwitchMap().trimBTN);
-    //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    //displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &data->getMySwitchMap().trimBTN);
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
-    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_32);
-    //_data->setUint16_tPointer(displayMask[2].getVoidPointer());
+    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().V5_32);
+    // data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
     // 3
     //displayMask[2].doMaskInit(
@@ -1451,7 +1467,7 @@ void Menu::lcdSys124() { // Trim
 
     // Display switches as bin (0's and 1's)
     lcd.setCursor(11, 2); //   row >    column ^
-    lcd.print( display.outputBinary(_data->getMySwitchMap().trimPins));
+    lcd.print( display.outputBinary( data->getMySwitchMap().trimPins));
 
 }
 
@@ -1465,12 +1481,12 @@ void Menu::lcdSys126() { // Menu buttons
     //displayMask[0].doMaskInit(
 
     // 1
-    //displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &_data->getMySwitchMap().menuSW);
-    //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    //displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &data->getMySwitchMap().menuSW);
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
-    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &_data->getMyResistorMap().V5_32);
-    //_data->setUint16_tPointer(displayMask[2].getVoidPointer());
+    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().V5_32);
+    // data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
     // 3
     //displayMask[2].doMaskInit(
@@ -1494,7 +1510,7 @@ void Menu::lcdSys126() { // Menu buttons
   
   // Display switches as bin (0's and 1's)
   lcd.setCursor(11, 2); //   row >    column ^
-  lcd.print( display.outputBinary(_data->getMySwitchMap().menuPins));
+  lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
 
 }
 
@@ -1510,16 +1526,16 @@ void Menu::lcdSys132() { // Joystick range limits  (Find MID point, release stic
     //displayMask[0].doMaskInit(
 
     // 1
-    displayMask[1].doMaskInit(digits8, '#', 11, &_data->getMyControlsRangeMap(editJoyStick));
-    //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(editJoyStick));
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
-//    displayMask[2].doMaskInit(joyStickxxxx, '#', 1, &_data->getJoyStick(0));
-    //_data->setUint16_tPointer(displayMask[2].getVoidPointer());
+//    displayMask[2].doMaskInit(joyStickxxxx, '#', 1, &data->getJoyStick(0));
+    // data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
     // 3
-    displayMask[3].doMaskInit(joyStickxxxx, '#', 1, &_data->getMyControlsRangeMap(editJoyStick));
-    //_data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    displayMask[3].doMaskInit(joyStickxxxx, '#', 1, &data->getMyControlsRangeMap(editJoyStick));
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
   } else {
       lcd.noBlink();  
@@ -1573,8 +1589,8 @@ void Menu::lcdSys132() { // Joystick range limits  (Find MID point, release stic
 
   lcd.setCursor(16, 1); //   row >    column ^
   lcd.print(display.outputDigitsU16(      
-      //_data->getJoyStick(myControlsRangeMap1)                 , //displayMask[1].getVoidPointer(),      
-      //_data->getJoyStick(*(MyControlsRangeMap*)displayMask[1].getVoidPointer())                 , //displayMask[1].getVoidPointer(),    
+      // data->getJoyStick(myControlsRangeMap1)                 , //displayMask[1].getVoidPointer(),      
+      // data->getJoyStick(*(MyControlsRangeMap*)displayMask[1].getVoidPointer())                 , //displayMask[1].getVoidPointer(),    
       myControlsRangeMap1.joystickRange(),
       displayMask[1].getMaskPMG(), 2));
 
@@ -1754,10 +1770,10 @@ void Menu::lcdFunc216(byte _keyPress) { // Uint16_t number  (move to lcdFunc215 
       Serial.print  (" Expo ");
       Serial.print  (displayMask[menuCol].getExpoValue());
 
-      _data->setUint16_tPointer(displayMask[menuCol].getVoidPointer());
-//      _data->adjUint16_tNumber(displayMask[menuCol].getIncDirection() * displayMask[menuCol].getExpoValue());  // delete-comment this
+       data->setUint16_tPointer(displayMask[menuCol].getVoidPointer());
+//       data->adjUint16_tNumber(displayMask[menuCol].getIncDirection() * displayMask[menuCol].getExpoValue());  // delete-comment this
 
-      _data->adjUint16_tNumber(displayMask[menuCol].getIncDirection(), displayMask[menuCol].getExpoFactor());
+       data->adjUint16_tNumber(displayMask[menuCol].getIncDirection(), displayMask[menuCol].getExpoFactor());
 
       Serial.println();
     } else {
@@ -1824,10 +1840,10 @@ void Menu::lcdFunc239() { // Y/N
 void Menu::lcdFunc240() { // Controls Range
 
   if (isFuncChange){   
-  _data->getMyControlsRangeMap(editJoyStick).setCenter(); 
+   data->getMyControlsRangeMap(editJoyStick).setCenter(); 
   }
 
-  _data->getMyControlsRangeMap(editJoyStick).setMinMax();
+   data->getMyControlsRangeMap(editJoyStick).setMinMax();
 
   lcdSys132();
   

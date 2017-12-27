@@ -36,14 +36,16 @@
 //DataStore::DataStore(){
 //}
 
-DataStore::DataStore(Data * data){
+DataStore::DataStore(Data * _data){
   // initialize this instance's variables
   //Serial.begin(115200); //Set the speed to 9600 bauds if you want.
   
   // do whatever is required to initialize the library
 
-  _data = data;
+  data = _data;
 
+  Serial.begin(115200); //Set the speed to 9600 bauds if you want.
+  
   Serial.println(PGMSTR(dashes)); 
   Serial.println(PGMSTR(dashes)); 
   Serial.println(PGMSTR(dashes)); 

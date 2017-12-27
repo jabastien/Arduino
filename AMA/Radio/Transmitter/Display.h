@@ -25,8 +25,6 @@
 // library interface description
 #include "types.h"
 
-
-
 /*
  * 
  * 

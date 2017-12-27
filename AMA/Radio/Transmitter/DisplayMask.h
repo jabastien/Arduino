@@ -63,7 +63,7 @@ class DisplayMask
       int8_t expoFactor;     // (digit in mask) digit exponential factor (1=1, 2=10, 3=100, n=^10
       int8_t incDirection; // Increase/Decrease number by expoFactor (1 up, -1 down)  [<T>incAmt = (1^10) * incDirection;]
       byte displayPos;      // (myMenuData.row[1] = 12;)
-      void * pVoid;  //  Data element address for mask (myMenuData.pVoid[1] = &_data->getMyResistorMap().shunt;)
+      void * pVoid;  //  Data element address for mask (myMenuData.pVoid[1] = &data->getMyResistorMap().shunt;)
 
 
   // ===========================================

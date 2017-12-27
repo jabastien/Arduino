@@ -113,6 +113,7 @@ int l=1;
 void setup(){
 //  pinMode(2, OUTPUT);
 //  digitalWrite (2, LOW);
+
   analogReference(EXTERNAL);
 
   // Debug Serial out
@@ -227,14 +228,13 @@ void loop() {
   //------------------------------------------------------
   // Inc Frames Per Second
   //------------------------------------------------------
-  fps++;
+  menu.updateFPS();
 
   //------------------------------------------------------
-  // Update LCD 1/10 seconds
+  // Update LCD 1/4 seconds
   //------------------------------------------------------
   if (keyPress > 0 || menu.isScreenRefreshNeeded()) {
-    menu.updateLCD(keyPress, fps);
-    fps = 0;
+      menu.updateLCD(keyPress);
     }
 
   //------------------------------------------------------

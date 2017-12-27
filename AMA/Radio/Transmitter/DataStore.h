@@ -40,7 +40,7 @@ class DataStore
   // library-accessible "private" interface
   // ======================================
   private:
-    Data * _data;   
+    Data * data;   
 
     
   // ======================================

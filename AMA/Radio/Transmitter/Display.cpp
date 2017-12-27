@@ -48,27 +48,7 @@ template <typename T> T Display::setSign (T number){ // Return value of 'T'
   return number;
 }  // end of setSign
 
-
-/*  https://www.arduino.cc/en/Tutorial/BitMask
-void printBits(byte myByte){
- for(byte mask = 0x80; mask; mask >>= 1){
-   if(mask  & myByte)
-       Serial.print('1');
-   else
-       Serial.print('0');
- }
-}
-*/
-
 char * Display::outputBinary(byte bits){
-
-    //for(byte mask = 0x80; mask; mask >>= 1){
-    //for (byte mask = 7; mask != 255; mask--){
-//    for (byte mask = 7; mask < 8; mask--){
-//      lcd.print((_data->getMySwitchMap().trimBTN >> mask) & 1);
-//      lcd.print(((*(byte*)displayMask[1].getVoidPointer()) >> mask) & 1);
-//    }
-    
   for (byte mask = 7; mask < 8; mask--){
     buffer [mask]= '0' + ((bits >> mask) & 1);
     }
