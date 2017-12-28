@@ -53,7 +53,8 @@ class Menu
     
 //    void clearMyEditorData(byte);
 
-    void setMenu(String, byte [], byte);
+//    void setMenu(String, byte [], byte);
+    void setMenu(byte, byte [], byte);
     void setVisible(void);
 
  

@@ -173,21 +173,21 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 102: // Pre 1.1 1.2
       if (isMenuChange){ 
-        setMenu(F("x102"), menuOptions102, membersof(menuOptions102));
+        setMenu(menuSelected, menuOptions102, membersof(menuOptions102));
       }    
       lcdSys102();
       break;      
     // ---------------------------------------
     case 104: // Post 2.1 2.2
       if (isMenuChange){ 
-        setMenu(F("x104"), menuOptions104, membersof(menuOptions104));
+        setMenu(menuSelected, menuOptions104, membersof(menuOptions104));
       }  
       lcdSys104();
       break;
     // ---------------------------------------
     case 106: // v5.0 3.1 3.2
       if (isMenuChange){ 
-        setMenu(F("x106"), menuOptions106, membersof(menuOptions106));
+        setMenu(menuSelected, menuOptions106, membersof(menuOptions106));
       }  
       lcdSys106();
       break;
@@ -196,14 +196,14 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 112: // Shunt
       if (isMenuChange){ 
-        setMenu(F("x112"), menuOptions112, membersof(menuOptions112));
+        setMenu(menuSelected, menuOptions112, membersof(menuOptions112));
       }  
       lcdSys112();
       break;
     // ---------------------------------------
     case 114: // 5.0V reference voltage 
       if (isMenuChange){ 
-        setMenu(F("x114"), menuOptions114, membersof(menuOptions114));
+        setMenu(menuSelected, menuOptions114, membersof(menuOptions114));
       }      
       lcdSys114();
       break;
@@ -212,21 +212,21 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 122: // Switch
       if (isMenuChange){ 
-        setMenu(F("x122"), menuOptions122, membersof(menuOptions122));
+        setMenu(menuSelected, menuOptions122, membersof(menuOptions122));
       }       
       lcdSys122();
       break;
     // ---------------------------------------
     case 124: // Trim ?? should this be under MODEL????? what would we do here????
       if (isMenuChange){ 
-        setMenu(F("x124"), menuOptions124, membersof(menuOptions124));
+        setMenu(menuSelected, menuOptions124, membersof(menuOptions124));
       }       
       lcdSys124();
       break;
     // ---------------------------------------
     case 126: // Menu
       if (isMenuChange){ 
-        setMenu(F("x126"), menuOptions126, membersof(menuOptions126));
+        setMenu(menuSelected, menuOptions126, membersof(menuOptions126));
       }       
       lcdSys126();
       break;
@@ -235,10 +235,10 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 131: // Joystick range limits
       if (isMenuChange){ 
-        setMenu(F("x131"), menuOptions131, membersof(menuOptions131));
+        setMenu(menuSelected, menuOptions131, membersof(menuOptions131));
       }
       
-      editJoyStick = 0;
+      editJoyStick = THROTTLE;
 
       lcdSys132();
       break;
@@ -246,10 +246,10 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 132: // Joystick range limits
       if (isMenuChange){ 
-        setMenu(F("x132"), menuOptions132, membersof(menuOptions132));
+        setMenu(menuSelected, menuOptions132, membersof(menuOptions132));
       }
       
-      editJoyStick = 1;
+      editJoyStick = YAW;
 
       lcdSys132();
       break;
@@ -257,10 +257,10 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 133: // Joystick range limits
       if (isMenuChange){ 
-        setMenu(F("x133"), menuOptions133, membersof(menuOptions133));
+        setMenu(menuSelected, menuOptions133, membersof(menuOptions133));
       }
       
-      editJoyStick = 2;
+      editJoyStick = ROLL;
 
       lcdSys132();
       break;
@@ -268,10 +268,10 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 134: // Joystick range limits
       if (isMenuChange){ 
-        setMenu(F("x134"), menuOptions134, membersof(menuOptions134));
+        setMenu(menuSelected, menuOptions134, membersof(menuOptions134));
       }
       
-      editJoyStick = 3;
+      editJoyStick = PITCH;
 
       lcdSys132();
       break;
@@ -280,7 +280,7 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 148: // Reset all values -> goto 249 after (bool Y/N check).
       if (isMenuChange){ 
-        setMenu(F("x148"), menuOptions148, membersof(menuOptions148));
+        setMenu(menuSelected, menuOptions148, membersof(menuOptions148));
       }       
       lcdSys148();
       break;
@@ -295,7 +295,7 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 150: // Start up
       if (isMenuChange){  
-        setMenu(F("x150"), menuOptions150, membersof(menuOptions150));
+        setMenu(menuSelected, menuOptions150, membersof(menuOptions150));
       }
       
       lcdInit150();    
@@ -303,7 +303,7 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 151: // Splash
       if (isMenuChange){  
-        setMenu(F("x151"), menuOptions151, membersof(menuOptions151));    
+        setMenu(menuSelected, menuOptions151, membersof(menuOptions151));    
       }
 
       lcdInit151();
@@ -313,21 +313,21 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 152: // Pre 1.1 1.2 - Resistors
       if (isMenuChange){ 
-        setMenu(F("x152"), menuOptions152, membersof(menuOptions152));
+        setMenu(menuSelected, menuOptions152, membersof(menuOptions152));
       }    
       lcdSys102();
       break;
     // ---------------------------------------
     case 154: // Post 2.1 2.2 - Resistors
       if (isMenuChange){  
-        setMenu(F("x154"), menuOptions154, membersof(menuOptions154));
+        setMenu(menuSelected, menuOptions154, membersof(menuOptions154));
       }    
       lcdSys104();
       break;
     // ---------------------------------------
     case 156: // v5.0 3.1 3.2 
       if (isMenuChange){  
-        setMenu(F("x156"), menuOptions156, membersof(menuOptions156));
+        setMenu(menuSelected, menuOptions156, membersof(menuOptions156));
       }    
       lcdSys106();
       break;
@@ -336,14 +336,14 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 162: // Shunt
       if (isMenuChange){  
-        setMenu(F("x162"), menuOptions162, membersof(menuOptions162));
+        setMenu(menuSelected, menuOptions162, membersof(menuOptions162));
       }      
       lcdSys112();
       break;
     // ---------------------------------------
     case 164: // 5.0V reference voltage
       if (isMenuChange){  
-        setMenu(F("x164"), menuOptions164, membersof(menuOptions164));
+        setMenu(menuSelected, menuOptions164, membersof(menuOptions164));
       }      
       lcdSys114();
       break;
@@ -352,21 +352,21 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 172: // Switch
       if (isMenuChange){  
-        setMenu(F("x172"), menuOptions172, membersof(menuOptions172));
+        setMenu(menuSelected, menuOptions172, membersof(menuOptions172));
       }    
       lcdSys122();
       break;
     // ---------------------------------------
     case 174: // Trim
       if (isMenuChange){  
-        setMenu(F("x174"), menuOptions174, membersof(menuOptions174));
+        setMenu(menuSelected, menuOptions174, membersof(menuOptions174));
       }    
       lcdSys124();
       break;
     // ---------------------------------------
     case 176: // Menu
       if (isMenuChange){  
-        setMenu(F("x176"), menuOptions176, membersof(menuOptions176));
+        setMenu(menuSelected, menuOptions176, membersof(menuOptions176));
       }    
       lcdSys126();
       break;
@@ -375,40 +375,40 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 182: // Joystick range limits
       if (isMenuChange){  
-        setMenu(F("x182"), menuOptions182, membersof(menuOptions182));
+        setMenu(menuSelected, menuOptions182, membersof(menuOptions182));
       }
       
-      editJoyStick = 0;
+      editJoyStick = THROTTLE;
 
       lcdSys132();
       break;
     // ---------------------------------------
     case 183: // Joystick range limits
       if (isMenuChange){  
-        setMenu(F("x183"), menuOptions183, membersof(menuOptions183));
+        setMenu(menuSelected, menuOptions183, membersof(menuOptions183));
       }
       
-      editJoyStick = 1;
+      editJoyStick = YAW;
 
       lcdSys132();
       break;
     // ---------------------------------------
     case 184: // Joystick range limits
       if (isMenuChange){  
-        setMenu(F("x184"), menuOptions184, membersof(menuOptions184));
+        setMenu(menuSelected, menuOptions184, membersof(menuOptions184));
       }
       
-      editJoyStick = 2;
+      editJoyStick = ROLL;
 
       lcdSys132();
       break;
     // ---------------------------------------
     case 185: // Joystick range limits
       if (isMenuChange){  
-        setMenu(F("x185"), menuOptions185, membersof(menuOptions185));
+        setMenu(menuSelected, menuOptions185, membersof(menuOptions185));
       }
       
-      editJoyStick = 3;
+      editJoyStick = PITCH;
 
       lcdSys132();
       break;            
@@ -419,7 +419,7 @@ void Menu::menuDisplay(){
     // ---------------------------------------
     case 192: // Control Check
       if (isMenuChange){  
-        setMenu(F("x192"), menuOptions192, membersof(menuOptions192));
+        setMenu(menuSelected, menuOptions192, membersof(menuOptions192));
       }    
       lcdInit192();
       break;
@@ -836,7 +836,8 @@ void Menu::updateLCD(byte keyPress) {
 //  Serial.println();
 //}
 
-void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
+//void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
+void Menu::setMenu(byte menuOpt, byte menuValues[], byte sizeIs) {
   
   // Make sure FUNCTIONs don't use this method (bad things heppen
   if (menuValues[0] == FUNCTION) {
@@ -1547,33 +1548,33 @@ void Menu::lcdSys132() { // Joystick range limits  (Find MID point, release stic
   if (isMenuChange || isFuncChange){    //lcd.print(PGMSTR(lcd_param_common_Joystick));
     lcd.setCursor(0, 0); //   row >    column ^
     switch(editJoyStick){
-      case 0:
+      case THROTTLE:
         lcd.print(PGMSTR(lcd_param_lcdSys132_Throttle));
         break;
-      case 1:
+      case YAW:
         lcd.print(PGMSTR(lcd_param_lcdSys132_YAW));
         break;
-      case 2:
+      case ROLL:
         lcd.print(PGMSTR(lcd_param_lcdSys132_ROLL));
         break;
-      case 3:
+      case PITCH:
         lcd.print(PGMSTR(lcd_param_lcdSys132_PITCH));
         break;
       }    
     }
-    
+ 
     lcd.setCursor(1, 1); //   row >    column ^
-        
+         
     //lcd.print(PGMSTR(lcd_param_common_Joystick));
     if (menuAction == doFunc){
 
         switch(editJoyStick){
-          case 0:
-          case 3:
+          case THROTTLE:
+          case PITCH:
             lcd.print(PGMSTR(lcd_param_common_UD));
             break;
-          case 1:
-          case 2:
+          case YAW:
+          case ROLL:
             lcd.print(PGMSTR(lcd_param_common_LR));
             break;
         }         
@@ -1698,22 +1699,21 @@ void Menu::lcdInit151() { // Splash     [no click 'select button' out to 151]
 // -------------------------------------------
 void Menu::lcdInit192() { // Control check
 
-
   if (isMenuChange){ 
     // 0
-    displayMask[0].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(0));
+    displayMask[0].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(THROTTLE));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
     
     // 1
-    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(1));
+    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(YAW));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
     
     // 2
-    displayMask[2].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(2));
+    displayMask[2].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(ROLL));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
     
     // 3
-    displayMask[3].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(3));
+    displayMask[3].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(PITCH));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
     
   }
@@ -2004,7 +2004,7 @@ void Menu::lcdFunc240() { // Controls Range
    data->getMyControlsRangeMap(editJoyStick).setCenter(); 
   }
 
-   data->getMyControlsRangeMap(editJoyStick).setMinMax();
+  data->getMyControlsRangeMap(editJoyStick).setMinMax();
 
   lcdSys132();
   

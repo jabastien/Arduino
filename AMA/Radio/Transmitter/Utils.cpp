@@ -13,6 +13,9 @@
   #include "WConstants.h"
 #endif
 
+#include <stdio.h>
+#include <stdarg.h>
+
 // include this library's description file
 #include "Utils.h"
 
@@ -57,8 +60,7 @@ int Utils::arraySize(PGM_P data) {
   return p-data-1; 
 }
 
-int Utils::countCharacters(PGM_P str, char character)
-{
+int Utils::countCharacters(PGM_P str, char character){
     PGM_P p = str;
     int count = 0;
     
@@ -104,14 +106,165 @@ void Utils::reverse(char stg [] ){
     stg[b] = stg[stgSize - b];
     stg[stgSize - b] = tmp;
     }
-
-//  if (false){
-//    Serial.print  ("Reverse: ");
-//    Serial.println(stg); 
-//  }
-
 }
 
+/*
+void Utils::ErrorPrint(String errorNum, uint8_t num, ...) {
+
+   Serial.print("errorNum: ");
+   Serial.print(errorNum);
+// if (num <=0) return 0;   
+ if (num <=0) return;   
+ int valu;
+ int total=0;
+  
+  //Declare a va_list macro and initialize it with va_start
+  va_list argList;
+  va_start(argList, num);
+  
+   for(; num; num--) {
+     valu = va_arg(argList, int);
+     Serial.print("valu: ");
+     Serial.print(valu, DEC);
+      total += valu;
+     Serial.print("  total: ");
+     Serial.println(total);
+  }  
+  va_end(argList);
+
+  Serial.println(PGMSTR(dashes));
+}
+
+float Utils::Print( const char* Format, ... ){
+      Serial.println(Format);
+      
+      va_list Arguments;
+      va_start(Arguments, Format);
+      
+      double FArg;
+      int IArg;
+      char c ;
+      char* s ;
+      
+      for(int i = 0; Format[i] != '\0'; ++i ){
+        switch(Format[i]){
+          case 'f':// Float/Double
+                  FArg=va_arg(Arguments, double);
+                  Serial.print("f: ");
+                  Serial.print(FArg);
+            break;
+
+            case 'i': // Integer
+                  IArg=va_arg(Arguments, int);
+                  Serial.print("i:");
+                  Serial.print(IArg);
+                  break;
+
+            case 's':// String
+              
+                s = va_arg( Arguments, char * );
+                Serial.print(s);
+//        //        sprintf(OutMsg,format,s);
+//        //        strcpy(format,OutMsg);
+//        //        j = strlen(format);
+//        //        strcat(format," ");
+                break;
+//              
+              
+            case 'c':// character
+             
+                c = (char) va_arg( Arguments, int );
+                Serial.print(c);                
+//        //        sprintf(OutMsg,format,c);
+//        //        strcpy(format,OutMsg);
+//        //        j = strlen(format);
+//        //        strcat(format," ");
+                break;
+                   
+            default:
+//                Serial.print("?: ");
+//                Serial.print(Format[i]);
+                break;
+              }
+      Serial.print("\t");              
+      }
+      va_end(Arguments);
+
+Serial.println();      
+}
+
+extern char *itoa(int, char *, int);
+
+void Utils::myprintf(const char *fmt, ...){
+  Serial.println("-myprintf-");
+const char *p;
+va_list argp;
+int i;
+char *s;
+char fmtbuf[256];
+
+va_start(argp, fmt);
+
+for(p = fmt; *p != '\0'; p++)  {
+//  if(*p != '%')
+//    {
+////    putchar(*p);
+//      Serial.print  (*p);
+//    continue;
+//    }
+
+  switch(*++p)
+    {
+    case 'c':
+      i = va_arg(argp, int);
+//      putchar(i);
+      Serial.print  (i);
+      break;
+
+    case 'd':
+      i = va_arg(argp, int);
+      s = itoa(i, fmtbuf, 10);
+//      fputs(s, stdout);
+      Serial.print  (s);
+Serial.print(fmtbuf);      
+      break;
+
+    case 'i':
+      i = va_arg(argp, int);
+      s = itoa(i, fmtbuf, 10);
+//      fputs(s, stdout);
+      Serial.print  (s);
+Serial.print(fmtbuf);      
+      break;
+
+    case 's':
+      s = va_arg(argp, char *);
+//      fputs(s, stdout);
+      Serial.print  (s);
+      break;
+
+    case 'x':
+      i = va_arg(argp, int);
+      s = itoa(i, fmtbuf, 16);
+//      fputs(s, stdout);
+      Serial.print  (s);
+      break;
+
+    case '%':
+//      putchar('%');
+      Serial.print  ('%');
+      break;
+      
+    default:
+    Serial.print (*p);
+    }
+  }
+
+va_end(argp);
+
+Serial.println();
+}
+*/
 
 
 // Private Methods /////////////////////////////////////////////////////////////

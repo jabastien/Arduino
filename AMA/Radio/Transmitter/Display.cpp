@@ -220,6 +220,8 @@ char * Display::outputDigitsS16( int16_t number, PGM_P pattern, uint8_t startDig
   return buffer;  
 }
 
+
+/*
 // -------------------------------------------
 // Unsigned long variables are extended size variables for number storage, and store 32 bits (4 bytes). 
 // Unlike standard longs unsigned longs won’t store negative numbers, making their range from 0 to 4,294,967,295 (2^32 - 1)
@@ -282,6 +284,8 @@ char * Display::outputDigitsS32( int32_t number, PGM_P pattern, uint8_t startDig
     }  // end of for loop
   return buffer;  
 }
+
+*/
 
 
 // -------------------------------------------

@@ -59,6 +59,7 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 //#define DEBUG_CD4052
 //#define DEBUG_CD4052_VOLTS
 //#define DEBUG_CALCVOLTS
+//#define DEBUG_CALCVOLTS_PP
 //#define DEBUG_DATASTORE
 //#define DEBUG_DISPLAY
 //#define DEBUG_DISPLAYMASK
@@ -66,6 +67,8 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 //#define DEBUG_FPS
 //#define DEBUG_KEY
 //#define DEBUG_MyControls
+//#define DEBUG_JoyAux
+
 
 
 /**************************************************************************************/
@@ -76,11 +79,25 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 /**************************************************************************************/
 /***************             motor and servo numbers               ********************/
 /**************************************************************************************/
-#define THROTTLE = 0
-#define YAW      = 1
-#define PITCH    = 2
-#define ROLL     = 3
+#define THROTTLE 0
+#define YAW      1
+#define ROLL     2
+#define PITCH    3
 
+  // 4052 (x1) Read Analog
+  //
+//  // Aux Controls
+//#define AUX0 0  // 0 = x0 = Aux0,
+//#define AUX1 2  // 2 = x1 = Aux1,
+//#define AUX2 4  // 4 = x2 = Aux2,
+//#define AUX3 6  // 6 = x3 = Aux3
+
+// Voltage
+#define POST 1  // 1 = y0 = Post,
+#define KEY  3  // 3 = y1 = Key
+#define V5   5  // 5 = y2 = 5V
+#define PRE  7  // 7 = y3 = Pre  
+  
 /**************************************************************************************/
 /***************          date & time configurations               ********************/
 /**************************************************************************************/
@@ -251,7 +268,7 @@ PROGMEM const char  lcd_param_lcdInit192_controlCheck_LR[]    = {"L/R"};
 
 
 //
-// X255: 
+// X216: 
 //                                   123456789012 
 PROGMEM const char ERR216_0 []   = "ERR216-0"; // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
 

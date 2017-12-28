@@ -57,16 +57,16 @@ char buffer [20]; // LCD width
     char *outputDigitsS16( int16_t, PGM_P );    
     char *outputDigitsS16( int16_t, PGM_P , uint8_t);
         
-    char *outputDigitsU32(uint32_t, PGM_P );
-    char *outputDigitsU32(uint32_t, PGM_P , uint8_t);
-    char *outputDigitsS32( int32_t, PGM_P );
-    char *outputDigitsS32( int32_t, PGM_P , uint8_t);
-
-//    char *outputOnTime(uint16_t);
-//    char *outputServiceTime(uint32_t);    
-
-//    char *concatBytesPGM(const char* , const char* );
-//    char *concatBytesPGMSTR(const char* , const char* );
+//    char *outputDigitsU32(uint32_t, PGM_P );
+//    char *outputDigitsU32(uint32_t, PGM_P , uint8_t);
+//    char *outputDigitsS32( int32_t, PGM_P );
+//    char *outputDigitsS32( int32_t, PGM_P , uint8_t);
+//
+////    char *outputOnTime(uint16_t);
+////    char *outputServiceTime(uint32_t);    
+//
+////    char *concatBytesPGM(const char* , const char* );
+////    char *concatBytesPGMSTR(const char* , const char* );
 
   // ===================================
   // library-accessible "private" interface
@@ -152,67 +152,67 @@ char buffer [20]; // LCD width
       &Display::s16Digit1, 
     };
 
-    // ---------------------------------------------------------
-    // 32 bit unsigned intiger
-    // ---------------------------------------------------------
-    // Unsigned  0 to 4294967294
-    char u32Digit1000000000 (uint32_t v) {return '0' + v / 1000000000;}// - (v/10000000000) * 10;}
-    char u32Digit100000000  (uint32_t v) {return '0' + v / 100000000  - (v/1000000000)  * 10;}
-    char u32Digit10000000   (uint32_t v) {return '0' + v / 10000000   - (v/100000000)   * 10;}
-    char u32Digit1000000    (uint32_t v) {return '0' + v / 1000000    - (v/10000000)    * 10;}
-    char u32Digit100000     (uint32_t v) {return '0' + v / 100000     - (v/1000000)     * 10;}
-    char u32Digit10000      (uint32_t v) {return '0' + v / 10000      - (v/100000)      * 10;}
-    char u32Digit1000       (uint32_t v) {return '0' + v / 1000       - (v/10000)       * 10;}
-    char u32Digit100        (uint32_t v) {return '0' + v / 100        - (v/1000)        * 10;}
-    char u32Digit10         (uint32_t v) {return '0' + v / 10         - (v/100)         * 10;}
-    char u32Digit1          (uint32_t v) {return '0' + v / 1          - (v/10)          * 10;} 
-   // typedef for class function
-   typedef char (Display::*u32Digit) (uint32_t);
-   // array of function pointers
-    u32Digit u32Digit_Array [10] =
-    {
-      &Display::u32Digit1000000000, 
-      &Display::u32Digit100000000, 
-      &Display::u32Digit10000000, 
-      &Display::u32Digit1000000, 
-      &Display::u32Digit100000, 
-      &Display::u32Digit10000, 
-      &Display::u32Digit1000, 
-      &Display::u32Digit100, 
-      &Display::u32Digit10, 
-      &Display::u32Digit1, 
-    };
-
-    // ---------------------------------------------------------
-    // 32 bit signed intiger
-    // ---------------------------------------------------------    
-    // Signed   -2147483648 to +2147483647
-    char s32Digit1000000000 ( int32_t v) {return '0' + v / 1000000000;}// - (v/10000000000) * 10;}
-    char s32Digit100000000  ( int32_t v) {return '0' + v / 100000000  - (v/1000000000)  * 10;}
-    char s32Digit10000000   ( int32_t v) {return '0' + v / 10000000   - (v/100000000)   * 10;}
-    char s32Digit1000000    ( int32_t v) {return '0' + v / 1000000    - (v/10000000)    * 10;}
-    char s32Digit100000     ( int32_t v) {return '0' + v / 100000     - (v/1000000)     * 10;}
-    char s32Digit10000      ( int32_t v) {return '0' + v / 10000      - (v/100000)      * 10;}
-    char s32Digit1000       ( int32_t v) {return '0' + v / 1000       - (v/10000)       * 10;}
-    char s32Digit100        ( int32_t v) {return '0' + v / 100        - (v/1000)        * 10;}
-    char s32Digit10         ( int32_t v) {return '0' + v / 10         - (v/100)         * 10;}
-    char s32Digit1          ( int32_t v) {return '0' + v / 1          - (v/10)          * 10;} 
-   // typedef for class function
-   typedef char (Display::*s32Digit) ( int32_t);
-   // array of function pointers
-    s32Digit s32Digit_Array [10] =
-    {
-      &Display::s32Digit1000000000, 
-      &Display::s32Digit100000000, 
-      &Display::s32Digit10000000, 
-      &Display::s32Digit1000000, 
-      &Display::s32Digit100000, 
-      &Display::s32Digit10000, 
-      &Display::s32Digit1000, 
-      &Display::s32Digit100, 
-      &Display::s32Digit10, 
-      &Display::s32Digit1, 
-    };
+//    // ---------------------------------------------------------
+//    // 32 bit unsigned intiger
+//    // ---------------------------------------------------------
+//    // Unsigned  0 to 4294967294
+//    char u32Digit1000000000 (uint32_t v) {return '0' + v / 1000000000;}// - (v/10000000000) * 10;}
+//    char u32Digit100000000  (uint32_t v) {return '0' + v / 100000000  - (v/1000000000)  * 10;}
+//    char u32Digit10000000   (uint32_t v) {return '0' + v / 10000000   - (v/100000000)   * 10;}
+//    char u32Digit1000000    (uint32_t v) {return '0' + v / 1000000    - (v/10000000)    * 10;}
+//    char u32Digit100000     (uint32_t v) {return '0' + v / 100000     - (v/1000000)     * 10;}
+//    char u32Digit10000      (uint32_t v) {return '0' + v / 10000      - (v/100000)      * 10;}
+//    char u32Digit1000       (uint32_t v) {return '0' + v / 1000       - (v/10000)       * 10;}
+//    char u32Digit100        (uint32_t v) {return '0' + v / 100        - (v/1000)        * 10;}
+//    char u32Digit10         (uint32_t v) {return '0' + v / 10         - (v/100)         * 10;}
+//    char u32Digit1          (uint32_t v) {return '0' + v / 1          - (v/10)          * 10;} 
+//   // typedef for class function
+//   typedef char (Display::*u32Digit) (uint32_t);
+//   // array of function pointers
+//    u32Digit u32Digit_Array [10] =
+//    {
+//      &Display::u32Digit1000000000, 
+//      &Display::u32Digit100000000, 
+//      &Display::u32Digit10000000, 
+//      &Display::u32Digit1000000, 
+//      &Display::u32Digit100000, 
+//      &Display::u32Digit10000, 
+//      &Display::u32Digit1000, 
+//      &Display::u32Digit100, 
+//      &Display::u32Digit10, 
+//      &Display::u32Digit1, 
+//    };
+//
+//    // ---------------------------------------------------------
+//    // 32 bit signed intiger
+//    // ---------------------------------------------------------    
+//    // Signed   -2147483648 to +2147483647
+//    char s32Digit1000000000 ( int32_t v) {return '0' + v / 1000000000;}// - (v/10000000000) * 10;}
+//    char s32Digit100000000  ( int32_t v) {return '0' + v / 100000000  - (v/1000000000)  * 10;}
+//    char s32Digit10000000   ( int32_t v) {return '0' + v / 10000000   - (v/100000000)   * 10;}
+//    char s32Digit1000000    ( int32_t v) {return '0' + v / 1000000    - (v/10000000)    * 10;}
+//    char s32Digit100000     ( int32_t v) {return '0' + v / 100000     - (v/1000000)     * 10;}
+//    char s32Digit10000      ( int32_t v) {return '0' + v / 10000      - (v/100000)      * 10;}
+//    char s32Digit1000       ( int32_t v) {return '0' + v / 1000       - (v/10000)       * 10;}
+//    char s32Digit100        ( int32_t v) {return '0' + v / 100        - (v/1000)        * 10;}
+//    char s32Digit10         ( int32_t v) {return '0' + v / 10         - (v/100)         * 10;}
+//    char s32Digit1          ( int32_t v) {return '0' + v / 1          - (v/10)          * 10;} 
+//   // typedef for class function
+//   typedef char (Display::*s32Digit) ( int32_t);
+//   // array of function pointers
+//    s32Digit s32Digit_Array [10] =
+//    {
+//      &Display::s32Digit1000000000, 
+//      &Display::s32Digit100000000, 
+//      &Display::s32Digit10000000, 
+//      &Display::s32Digit1000000, 
+//      &Display::s32Digit100000, 
+//      &Display::s32Digit10000, 
+//      &Display::s32Digit1000, 
+//      &Display::s32Digit100, 
+//      &Display::s32Digit10, 
+//      &Display::s32Digit1, 
+//    };
 
   // ===================================
   // library-accessible "protected" interface

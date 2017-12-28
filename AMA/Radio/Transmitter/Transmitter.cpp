@@ -98,8 +98,8 @@ CD4052 cd4052 = CD4052(5, 4, A7, A6);
 // The sizeof this struct should not exceed 32 bytes
 // This gives us up to 32 8 bits channals
 
-int l=1;
-#define line {Serial.print(l++);Serial.print(" ");}
+//int l=1;
+//#define line {Serial.print(l++);Serial.print(" ");}
 
 // ===========================================
 // ===========================================
@@ -142,6 +142,15 @@ void setup(){
   //  radio.setAutoAck(false);
   //  radio.setDataRate(RF24_250KBPS);
   //  radio.openWritingPipe(pipeOut);
+
+//utils.ErrorPrint("abc",1,1);
+//utils.ErrorPrint("zxv",2,1,2);
+//utils.ErrorPrint("asf",3,1,2,4);
+//
+////utils.Print("This is funny, isn't it?", 1, 2, 12.3456, 3, 4, "nice");
+//
+//utils.myprintf("This is funny, isn't it?", 1, 2, 12.3456, 3, 4,"YES???");
+
 }
 
 // ===========================================
@@ -156,10 +165,10 @@ void loop() {
   // The calibration numbers used here should be measured
   // for your joysticks so they send the correct values.
   //------------------------------------------------------
-  data.getMyControlsRangeMap(0).current = analogRead(A0);
-  data.getMyControlsRangeMap(1).current = analogRead(A1);
-  data.getMyControlsRangeMap(2).current = analogRead(A2);
-  data.getMyControlsRangeMap(3).current = analogRead(A3);
+  data.getMyControlsRangeMap(THROTTLE).current = analogRead(A0);
+  data.getMyControlsRangeMap(YAW).current = analogRead(A1);
+  data.getMyControlsRangeMap(ROLL).current = analogRead(A2);
+  data.getMyControlsRangeMap(PITCH).current = analogRead(A3);
 
   //------------------------------------------------------
   // 4051 (3x) Switch address
@@ -237,43 +246,56 @@ void loop() {
        menu.updateLCD(keyPress);
 
   if (keyPress > 5){
+#ifdef NOTDEFINED
+if(true){    
     Serial.print  ("KP: Ignore KeyPress: "); // Not sure how this is getting changed.
     Serial.print  (keyPress);
     Serial.print  (" ");
     Serial.print  (data.getJoyAux(3));
     Serial.println();
+}
+#endif
     }
   }
 
   if (menu.isScreenRefreshNeeded()) {
        menu.updateLCD(keyPress);
 
-//    Serial.print  ("=== pre-> ");
-//    Serial.print  (data->getPreVolts()); // this is for testing.
-//    Serial.print  ("V  ");
-//    Serial.print  ("=== pst-> ");
-//    Serial.print  (data->getPstVolts()); // this is for testing.
-//    Serial.print  ("V  ");
-//    Serial.print  ("=== v5 -> ");
-//    Serial.print  (data->getV5Volts()); // this is for testing.
-//    Serial.print  ("V  ");
+#ifdef NOTDEFINED
+if(true){
+    Serial.print  ("=== pre-> ");
+    Serial.print  (data.getPreVolts()); // this is for testing.
+    Serial.print  ("V  ");
+    Serial.print  ("=== pst-> ");
+    Serial.print  (data.getPstVolts()); // this is for testing.
+    Serial.print  ("V  ");
+    Serial.print  ("=== v5 -> ");
+    Serial.print  (data.getV5Volts()); // this is for testing.
+    Serial.print  ("V  ");
 //    Serial.print  ("=== amp-> ");
-//    Serial.print  (data->getMilliAmps()); // this is for testing.
+//    Serial.print  (data.getMilliAmps()); // this is for testing.
 //    Serial.print  ("mA  ");
-//    Serial.println();
+    Serial.println();
 
     lcd.setCursor(0, 3);//   row >    column ^
     lcd.print  ("  ");
     lcd.print((data.getMilliAmps()));
     lcd.print  ("mA  ");
+}
+#endif
     
   if (keyPress > 5){
+#ifdef NOTDEFINED
+if(true){    
       Serial.print  ("SR: Ignore KeyPress: "); // Not sure how this is getting changed.
       Serial.print  (keyPress);
       Serial.print  (" ");
       Serial.print  (data.getJoyAux(3));
       Serial.println();
+}
+#endif
     }
+    
   }
 
   //------------------------------------------------------

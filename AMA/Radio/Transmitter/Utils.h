@@ -17,6 +17,10 @@
   #include "WConstants.h"
 #endif
 
+//#include "config.h"
+#include "def.h"
+//#include "types.h"
+
 // library interface description
 class Utils
 {
@@ -29,6 +33,10 @@ class Utils
     int  countCharacters(PGM_P , char);        
     int  freeRam(void);
     void reverse(char []);
+    
+//    void ErrorPrint(String, uint8_t, ...);
+//    float Print( const char* , ... );
+//    void myprintf(const char *, ...);
   // ======================================    
   // library-accessible "private" interface
   // ======================================    
