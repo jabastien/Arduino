@@ -58,24 +58,28 @@ MySwitchMap& Data::getMySwitchMap(){
 
 void Data::setJoyAux(byte b, int i){
   aux[b] = i;
-  
-//  if (b == 3){
-//    Serial.print  ("setJoyAux ");
-//    Serial.print  (b);
-//    Serial.print  (" ");
-//    Serial.println(aux[b]);
-//  }
+
+#ifdef DEBUG_JoyAux  
+  if (true){
+    Serial.print  ("setJoyAux ");
+    Serial.print  (b);
+    Serial.print  (" ");
+    Serial.println(aux[b]);
+  }
+#endif
 }
 
 
 int  Data::getJoyAux(byte b){
-//  if (b == 3){
-//    Serial.print  ("getJoyAux ");
-//    Serial.print  (b);
-//    Serial.print  (" ");
-//    Serial.println(aux[b]);
-//  }
-  
+#ifdef DEBUG_JoyAux
+  if (true){
+    Serial.print  ("getJoyAux ");
+    Serial.print  (b);
+    Serial.print  (" ");
+    Serial.println(aux[b]);
+  }
+#endif
+
   return aux[b];
 }
 
@@ -117,21 +121,23 @@ double Data::getCalcVolts(unsigned int _value, unsigned int R1, unsigned int R2)
   return Ein;
 }
 
+
 double Data::getPreVolts(){
-  return getCalcVolts(aux[7], myResistorMap.Vpre11, myResistorMap.Vpre12);
+  return getCalcVolts(aux[PRE], myResistorMap.Vpre11, myResistorMap.Vpre12);
 }
 
 double Data::getPstVolts(){
-  return getCalcVolts(aux[1], myResistorMap.Vpst21, myResistorMap.Vpst22);
+  return getCalcVolts(aux[POST], myResistorMap.Vpst21, myResistorMap.Vpst22);
 }
 
 double Data::getV5Volts(){
-  return getCalcVolts(aux[5], myResistorMap.V5_31, myResistorMap.V5_32);
+  return getCalcVolts(aux[V5], myResistorMap.V5_31, myResistorMap.V5_32);
 }  
 
 
-
 double Data::getMilliAmps(){
+
+  /*
 ////  return 0; // getCalcVolts(aux[7], myResistorMap.V5_31, myResistorMap.V5_32);
 
 //  cntE++;
@@ -139,12 +145,28 @@ double Data::getMilliAmps(){
 //    cntE = 0;
 //  }
   
-#ifdef DEBUG_CALCVOLTS
-  Serial.print  (" pre: ");
-  Serial.print  (getPreVolts());
+#ifdef DEBUG_CALCVOLTS_PP
+//  Serial.print  (" : ");
+//  Serial.print  (getPreVolts());
+//
+//  Serial.print  (" : ");
+//  Serial.print  (getPstVolts());
+  Serial.print  (" POST: ");
+  Serial.print  (aux[POST]);
 
-  Serial.print  (" pst: ");
-  Serial.print  (getPstVolts());
+  Serial.print  (" PRE: ");
+  Serial.print  (aux[PRE]);
+
+  Serial.print  (" bit diff: ");
+  Serial.print  (aux[PRE] - aux[POST]);
+        
+  Serial.print  (" bit diff: ");
+  Serial.print  ((aux[PRE] - aux[1])*myResistorMap.shunt);
+    // Voltage
+  
+  Serial.print  (" diff: ");
+  Serial.print  ((getPreVolts() - getPstVolts())*100);
+  Serial.println();
 #endif
 
 //  listE[cntE] = (getPreVolts() - getPstVolts());
@@ -187,22 +209,19 @@ avgE = (getPreVolts() - getPstVolts());
 #endif
   
   return avgE2 ;
-}
-
-  // this is POWER ((((double)avgE * (double)avgE ) * ((double)myResistorMap.shunt )));
-//  return (( avgE * avgE ) / (myResistorMap.shunt / 1000000.0));
-
-////////////////////////////// MyVoltageMap
-/*
- *   // Voltage Divides
-  // 1 = y0 = Post,
-  // 3 = y1 = Key
-  // 5 = y2 = 5V
-  // 7 = y3 = Pre 
 */
 
+return 70.3; // I know this is the answer currently, need to work on later....
+// This is expensive code, takes 5% of program space.
+//   23186
+//   21698
+// ==========
+//    1488 bytes....
+}
 
- 
+// this is POWER ((((double)avgE * (double)avgE ) * ((double)myResistorMap.shunt )));
+//  return (( avgE * avgE ) / (myResistorMap.shunt / 1000000.0));
+
 // =====================================
 // uint16_t Methods
 // =====================================
