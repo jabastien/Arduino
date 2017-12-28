@@ -58,8 +58,12 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 //#define DEBUG_CD4051_MASK
 //#define DEBUG_CD4052
 //#define DEBUG_CD4052_VOLTS
+//#define DEBUG_CALCVOLTS
+//#define DEBUG_DATASTORE
+//#define DEBUG_DISPLAY
 //#define DEBUG_DISPLAYMASK
 //#define DEBUG_DISPLAYMASK_DETAIL
+//#define DEBUG_FPS
 //#define DEBUG_KEY
 //#define DEBUG_MyControls
 
@@ -133,15 +137,6 @@ PROGMEM const char lcd_param_common_MMM  []  = "Read Min. Ctr. Max.";
 // X000: 
 //                                 123456789012 
 PROGMEM const char ERR000 []     = "ERR000";
-
-//
-// X192
-// Check controls
-//                                                   123456789012 
-PROGMEM const char lcd_param_lcdInit192_volts [] = {"Volts"};
-
-
-
 
 // X102
 // lcdSys102
@@ -242,7 +237,16 @@ const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.35"};
 // X192: 
 // lcdInit192
 // Control check
-PROGMEM const char  lcd_param_lcdInit192_controlCheck[] = {"Control check"};
+PROGMEM const char  lcd_param_lcdInit192_controlCheck[]       = {"Control check"};
+//                                                                12345678901234567890
+//                                                                u/d xxx xxx xxxxxxxx
+PROGMEM const char  lcd_param_lcdInit192_controlCheck_LRXXX[] = {     "L   R  Switches"};
+PROGMEM const char  lcd_param_lcdInit192_controlCheck_UD[]    = {"U/D"};
+PROGMEM const char  lcd_param_lcdInit192_controlCheck_LR[]    = {"L/R"};
+
+//PROGMEM const char lcd_param_lcdInit192_volts [] = {"Volts"};
+
+
 
 
 
@@ -335,4 +339,5 @@ http://publications.gbdirect.co.uk/c_book/chapter7/directives.html
 //#endif
 
 #endif /* dev_h */
+
 

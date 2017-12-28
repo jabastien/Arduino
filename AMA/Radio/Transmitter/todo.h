@@ -23,7 +23,19 @@ X - finish start/init screens
         - PITCH
         - ROLL
     
-3 - build menus
+2 = display all input voltages...prior to control check...
+    - pre (this is the battery)
+    - post
+    - AMPS
+    - key
+    - aux 0
+    - aux 1
+    - aux 2
+    - aux 3
+            
+3 = control check (execute to ensure switch and joystick are NOT flight enabled.)
+
+4 - build menus
     = Trans
     = Model
     = System
@@ -34,9 +46,6 @@ X - finish start/init screens
     It's already a Struct (MySwitchMap).
   
 5 - create key/volt display in System (after joystick and before control check) 
-
-6 = control check (execute to ensure switch and joystick are NOT flight enabled.)
-
 
 ? Try UNION for xxx.xx
 
@@ -90,3 +99,4 @@ X - why tps < 144 (was +300)  (Update, FPS is now 575 on main menu.)
 
 
  */
+

@@ -105,10 +105,10 @@ void Utils::reverse(char stg [] ){
     stg[stgSize - b] = tmp;
     }
 
-  if (false){
-    Serial.print  ("Reverse: ");
-    Serial.println(stg); 
-  }
+//  if (false){
+//    Serial.print  ("Reverse: ");
+//    Serial.println(stg); 
+//  }
 
 }
 

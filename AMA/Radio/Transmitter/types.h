@@ -98,7 +98,7 @@ int y = f.getBar(); // y is 3
 // ===========================================
 struct MyVoltageMap {
   // Measured reference voltage
-  uint16_t reference = 5010; // = 5.000V
+  uint16_t reference = 5030; // = 5.000V
   
   // Calculated fields voltPerBit = (reg / 1023)
   uint16_t voltPerBit = 4897; // My messured value 0.004897
@@ -118,7 +118,9 @@ struct MyResistorMap {
 //                    0.031  / 58.8 =  0.527211 Ohm
 //  double shunt = 0.727211;   // 0.5
 //  double shunt = 0.766327;   // 0.5
-  uint16_t  shunt = 7663;//*10000);   // 0.5
+//  uint16_t  shunt = 7663;//*10000);   // 0.5
+//  uint16_t  shunt = 5595;//*10000);   // 0.5
+  uint16_t  shunt = 6880;//*10000);   // 0.5
 
   // Max resistor size is 65,535.
   uint16_t Vpre11   = 8042; // 8.2k
@@ -132,3 +134,4 @@ struct MyResistorMap {
 };
 
 #endif /* TYPES_H_ */
+

@@ -232,9 +232,49 @@ void loop() {
   //------------------------------------------------------
   // Update LCD 1/4 seconds
   //------------------------------------------------------
-  if (keyPress > 0 || menu.isScreenRefreshNeeded()) {
-      menu.updateLCD(keyPress);
+
+  if (keyPress > 0) {
+       menu.updateLCD(keyPress);
+
+  if (keyPress > 5){
+    Serial.print  ("KP: Ignore KeyPress: "); // Not sure how this is getting changed.
+    Serial.print  (keyPress);
+    Serial.print  (" ");
+    Serial.print  (data.getJoyAux(3));
+    Serial.println();
     }
+  }
+
+  if (menu.isScreenRefreshNeeded()) {
+       menu.updateLCD(keyPress);
+
+//    Serial.print  ("=== pre-> ");
+//    Serial.print  (data->getPreVolts()); // this is for testing.
+//    Serial.print  ("V  ");
+//    Serial.print  ("=== pst-> ");
+//    Serial.print  (data->getPstVolts()); // this is for testing.
+//    Serial.print  ("V  ");
+//    Serial.print  ("=== v5 -> ");
+//    Serial.print  (data->getV5Volts()); // this is for testing.
+//    Serial.print  ("V  ");
+//    Serial.print  ("=== amp-> ");
+//    Serial.print  (data->getMilliAmps()); // this is for testing.
+//    Serial.print  ("mA  ");
+//    Serial.println();
+
+    lcd.setCursor(0, 3);//   row >    column ^
+    lcd.print  ("  ");
+    lcd.print((data.getMilliAmps()));
+    lcd.print  ("mA  ");
+    
+  if (keyPress > 5){
+      Serial.print  ("SR: Ignore KeyPress: "); // Not sure how this is getting changed.
+      Serial.print  (keyPress);
+      Serial.print  (" ");
+      Serial.print  (data.getJoyAux(3));
+      Serial.println();
+    }
+  }
 
   //------------------------------------------------------
   // Serial Debugging

@@ -66,6 +66,7 @@ boolean Menu::isScreenRefreshNeeded(){
 
   if (currentMillis > (previousScreenRefreshMiilis + intervalScreenRefresh)){
     previousScreenRefreshMiilis = currentMillis;
+
     return true;
   }
 
@@ -84,10 +85,12 @@ void Menu::updateFPS(){
       showFPS = cntFPS;
       cntFPS = 0;
 
-      if (true){
+#ifdef DEBUG_FPS
+      if (false){
         Serial.print  ("FPS: ");
         Serial.println(showFPS);      
       }
+#endif
     }
 }
 
@@ -467,11 +470,11 @@ void Menu::menuKeyboard(byte keyPress){
   // Key Select/Enter (EXIT)
   if (keyPress == SELECT) {
     
-    if (false){
-    Serial.println("doing SELECT");  
-    Serial.print (F(" MS1:"));
-    Serial.print (menuSelected);
-    }
+//    if (false){
+//    Serial.println("doing SELECT");  
+//    Serial.print (F(" MS1:"));
+//    Serial.print (menuSelected);
+//    }
     
     // Do a FUNCTION or next MENU
     if (menuOptions[menuCol] >= 200){
@@ -480,10 +483,10 @@ void Menu::menuKeyboard(byte keyPress){
       menuAction = doFunc;
       funcChangeCheck();
       
-      if (false){
-        Serial.print (F(" FS2:"));
-        Serial.println(function);
-      }
+//      if (false){
+//        Serial.print (F(" FS2:"));
+//        Serial.println(function);
+//      }
       
       return;
     } else {
@@ -493,10 +496,10 @@ void Menu::menuKeyboard(byte keyPress){
       //// DO CheckMenuChange from here
       menuChangeCheck();
     
-      if (false){
-        Serial.print (F(" MS3:"));
-        Serial.println(menuSelected);
-      }
+//      if (false){
+//        Serial.print (F(" MS3:"));
+//        Serial.println(menuSelected);
+//      }
     }
   }
 
@@ -520,7 +523,7 @@ void Menu::menuKeyboard(byte keyPress){
 
   // Do we need a carrot?
   if (menuAction != doInit){
-    if (menuSelected != MAINMENU){// Don't show carrot for MAINMENU
+    if (menuSelected != MAINMENU  && menuSelected != CTLCHECK){// Don't show carrot for MAINMENU & CTLCHECK
       // Clear prior carrot
       for (byte b = 1; b <= 3 ; b++){
         lcd.setCursor(0, b);//   row >    column ^
@@ -542,11 +545,11 @@ void Menu::menuChangeCheck(){
     return;
   }
   
-  if (false){
-    Serial.print (F(" Sel:"));
-    Serial.print (menuSelected);
-    Serial.println();
-  }
+//  if (false){
+//    Serial.print (F(" Sel:"));
+//    Serial.print (menuSelected);
+//    Serial.println();
+//  }
 
   lcd.noBlink();
   lcd.clear();
@@ -660,10 +663,10 @@ void Menu::funcKeyboard(byte keyPress){
 
   // Key Select/Enter (EXIT)
   if (keyPress == SELECT) {
-    if (false){
-      Serial.print (F(" FS4:"));
-      Serial.print (function);
-    }
+//    if (false){
+//      Serial.print (F(" FS4:"));
+//      Serial.print (function);
+//    }
     
     menuCol = 0;
     menuRow = 0;
@@ -674,10 +677,10 @@ void Menu::funcKeyboard(byte keyPress){
     isMenuChange = true;
     menuChangeCheck();
     
-    if (false){
-      Serial.print (F(" FS5:"));
-      Serial.println(function);
-    }
+//    if (false){
+//      Serial.print (F(" FS5:"));
+//      Serial.println(function);
+//    }
 
   return;
   } 
@@ -697,11 +700,11 @@ void Menu::funcChangeCheck(){
     return;
   }
   
-  if (true){
-    Serial.print (F(" Sel:"));
-    Serial.print (menuSelected);
-    Serial.println();
-  }
+//  if (true){
+//    Serial.print (F(" Sel:"));
+//    Serial.print (menuSelected);
+//    Serial.println();
+//  }
 
   isFuncChange = true;
     
@@ -718,10 +721,10 @@ void Menu::funcDisplay(byte _keyPress){
     return;
   }
 
-  if (false){
-    Serial.print  ("funcDisplay: ");
-    Serial.println(function);
-  }
+//  if (false){
+//    Serial.print  ("funcDisplay: ");
+//    Serial.println(function);
+//  }
  
   switch (function) {
     /*
@@ -795,13 +798,13 @@ void Menu::updateLCD(byte keyPress) {
     funcDisplay(keyPress); 
   }
 
-  if (false){
-    Serial.print  ("updateLCD 1 : ");
-    Serial.print  ("isMenuChange = ");
-    Serial.print  (isMenuChange);
-    Serial.print  (" repeatCount = ");
-    Serial.println(repeatCount);
-  }
+//  if (false){
+//    Serial.print  ("updateLCD 1 : ");
+//    Serial.print  ("isMenuChange = ");
+//    Serial.print  (isMenuChange);
+//    Serial.print  (" repeatCount = ");
+//    Serial.println(repeatCount);
+//  }
 
   isMenuChange = false;
   
@@ -809,29 +812,29 @@ void Menu::updateLCD(byte keyPress) {
     repeatCount = 0;
   }
   
-  if (true){
-    if (keyPress != NOKEY){
-      Serial.print  ("keyPress ");
-      Serial.print  (keyPress);
-      Serial.print  (" menuAction ");
-      Serial.print  (menuAction);
-      printDrmc();
-    }
-  } 
+//  if (true){
+//    if (keyPress != NOKEY){
+//      Serial.print  ("keyPress ");
+//      Serial.print  (keyPress);
+//      Serial.print  (" menuAction ");
+//      Serial.print  (menuAction);
+//      printDrmc();
+//    }
+//  } 
 }
 
-void Menu::printDrmc(){
-  Serial.print  (" pos> ");
-//  Serial.print  (myMenuData.row[menuCol]);
-  Serial.print(displayMask[1].getDisplayPos());
-  
-  Serial.print  (" mc  ");
-  Serial.print  (menuCol);  
-  Serial.print  (" mr  ");
-  Serial.print  (menuRow);  
-  
-  Serial.println();
-}
+//void Menu::printDrmc(){
+//  Serial.print  (" pos> ");
+////  Serial.print  (myMenuData.row[menuCol]);
+//  Serial.print(displayMask[1].getDisplayPos());
+//  
+//  Serial.print  (" mc  ");
+//  Serial.print  (menuCol);  
+//  Serial.print  (" mr  ");
+//  Serial.print  (menuRow);  
+//  
+//  Serial.println();
+//}
 
 void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   
@@ -860,22 +863,22 @@ void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
   memset(menuOptions, 0x00, sizeof(menuOptions)); // for automatically-allocated arrays
   memcpy(menuOptions, menuValues, menuSize);
 
-  // Show what we did?
-  if (false) {
-    Serial.print  (menuOpt);
-
-    Serial.print  (F(" Size ["));
-    Serial.print  (menuSize);
-    Serial.print  (F("] menuOptions[...] "));
-    //for (byte loop = 0; loop < sizeof(menuOptions); loop++) {
-    for (byte loop = 0; loop < menuSize; loop++) {
-      Serial.print  (menuOptions[loop]);
-      if ((loop+1) < menuSize){
-        Serial.print  (", ");
-      }
-    }
-    Serial.println();
-  }
+//  // Show what we did?
+//  if (false) {
+//    Serial.print  (menuOpt);
+//
+//    Serial.print  (F(" Size ["));
+//    Serial.print  (menuSize);
+//    Serial.print  (F("] menuOptions[...] "));
+//    //for (byte loop = 0; loop < sizeof(menuOptions); loop++) {
+//    for (byte loop = 0; loop < menuSize; loop++) {
+//      Serial.print  (menuOptions[loop]);
+//      if ((loop+1) < menuSize){
+//        Serial.print  (", ");
+//      }
+//    }
+//    Serial.println();
+//  }
 }
 
 // Private Methods /////////////////////////////////////////////////////////////
@@ -1691,16 +1694,45 @@ void Menu::lcdInit151() { // Splash     [no click 'select button' out to 151]
 }
 
 
+
 // -------------------------------------------
 void Menu::lcdInit192() { // Control check
-  if (repeatCount == 0) {
-    // load data pointers
+
+
+  if (isMenuChange){ 
+    // 0
+    displayMask[0].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(0));
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    
+    // 1
+    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(1));
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    
+    // 2
+    displayMask[2].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(2));
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    
+    // 3
+    displayMask[3].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(3));
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
+    
   }
 
+
   if (repeatCount == 0) {
+    // load data pointers???
+
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck));
+    lcd.setCursor(5, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck_LRXXX));
+    lcd.setCursor(0, 2); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck_UD));
+    lcd.setCursor(0, 3); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck_LR));
   }
+
+  
   if (repeatCount > 3) {//delay(2000);
 
 // DAQ finish this....
@@ -1713,10 +1745,139 @@ void Menu::lcdInit192() { // Control check
     }
   } 
 
-  lcd.setCursor(1, 3);//   row >    column ^
-  lcd.print(PGMSTR(lcd_param_lcdInit192_volts));
+//  lcd.setCursor(1, 3);//   row >    column ^
+//  lcd.print(PGMSTR(lcd_param_lcdInit192_volts));
 
+  // Display XMIT value as ###
+
+  MyControlsRangeMap myControlsRangeMap;
+
+// Left control
+  lcd.setCursor(3, 2); //   row >    column ^
+  myControlsRangeMap = *(MyControlsRangeMap*)displayMask[0].getVoidPointer();
+  lcd.print(display.outputDigitsU16( 
+      myControlsRangeMap.joystickRange(),
+      displayMask[0].getMaskPMG(), 2));
+
+  lcd.setCursor(3, 3); //   row >    column ^
+  myControlsRangeMap = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
+  lcd.print(display.outputDigitsU16( 
+      myControlsRangeMap.joystickRange(),
+      displayMask[0].getMaskPMG(), 2));
+
+// Right control
+  lcd.setCursor(7, 3); //   row >    column ^
+  myControlsRangeMap = *(MyControlsRangeMap*)displayMask[2].getVoidPointer();
+  lcd.print(display.outputDigitsU16( 
+      myControlsRangeMap.joystickRange(),
+      displayMask[0].getMaskPMG(), 2));
+
+  lcd.setCursor(7, 2); //   row >    column ^
+  myControlsRangeMap = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
+  lcd.print(display.outputDigitsU16( 
+      myControlsRangeMap.joystickRange(),
+      displayMask[0].getMaskPMG(), 2));
+
+//data->getBatVolts();
 }
+/*
+
+  if (isMenuChange){ 
+
+    // load DisplayMask[0-3] data pointers
+
+    // 0
+    //displayMask[0].doMaskInit(
+
+    // 1
+    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(editJoyStick));
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+    // 2
+//    displayMask[2].doMaskInit(joyStickxxxx, '#', 1, &data->getJoyStick(0));
+    // data->setUint16_tPointer(displayMask[2].getVoidPointer());
+
+    // 3
+    displayMask[3].doMaskInit(joyStickxxxx, '#', 1, &data->getMyControlsRangeMap(editJoyStick));
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+  } else {
+      lcd.noBlink();  
+  }
+
+  if (isMenuChange || isFuncChange){    //lcd.print(PGMSTR(lcd_param_common_Joystick));
+    lcd.setCursor(0, 0); //   row >    column ^
+    switch(editJoyStick){
+      case 0:
+        lcd.print(PGMSTR(lcd_param_lcdSys132_Throttle));
+        break;
+      case 1:
+        lcd.print(PGMSTR(lcd_param_lcdSys132_YAW));
+        break;
+      case 2:
+        lcd.print(PGMSTR(lcd_param_lcdSys132_ROLL));
+        break;
+      case 3:
+        lcd.print(PGMSTR(lcd_param_lcdSys132_PITCH));
+        break;
+      }    
+    }
+    
+    lcd.setCursor(1, 1); //   row >    column ^
+        
+    //lcd.print(PGMSTR(lcd_param_common_Joystick));
+    if (menuAction == doFunc){
+
+        switch(editJoyStick){
+          case 0:
+          case 3:
+            lcd.print(PGMSTR(lcd_param_common_UD));
+            break;
+          case 1:
+          case 2:
+            lcd.print(PGMSTR(lcd_param_common_LR));
+            break;
+        }         
+    } else {
+      lcd.print(PGMSTR(lcd_param_common_Set));  
+      lcd.print("          ");  
+    }
+    
+    lcd.setCursor(1, 2); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_common_MMM));              
+
+
+
+  // Display XMIT value as ###
+  MyControlsRangeMap myControlsRangeMap1 = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
+
+  lcd.setCursor(16, 1); //   row >    column ^
+  lcd.print(display.outputDigitsU16(      
+      // data->getJoyStick(myControlsRangeMap1)                 , //displayMask[1].getVoidPointer(),      
+      // data->getJoyStick(*(MyControlsRangeMap*)displayMask[1].getVoidPointer())                 , //displayMask[1].getVoidPointer(),    
+      myControlsRangeMap1.joystickRange(),
+      displayMask[1].getMaskPMG(), 2));
+
+  // ============================================
+  MyControlsRangeMap myControlsRangeMap3 = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
+  
+  // Display CURRENT as ####
+  lcd.setCursor(1, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myControlsRangeMap3.current, displayMask[3].getMaskPMG(),1) );
+
+  // Display MIN as ####
+  lcd.setCursor(6, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myControlsRangeMap3.minimum, displayMask[3].getMaskPMG(),1) );
+
+  // Display CENTER as ####
+  lcd.setCursor(11, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myControlsRangeMap3.center, displayMask[3].getMaskPMG(),1) );
+
+  // Display MAX as ####
+  lcd.setCursor(16, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myControlsRangeMap3.maximum, displayMask[3].getMaskPMG(),1) );
+  
+ */
 
 
 
@@ -1765,10 +1926,10 @@ void Menu::lcdFunc216(byte _keyPress) { // Uint16_t number  (move to lcdFunc215 
 
   if (displayMask[menuCol].getIncDirection() != 0){
     if (displayMask[menuCol].getMask() != NULL  && displayMask[menuCol].getVoidPointer() != NULL){
-      Serial.print  ("IncDirection ");
-      Serial.print  (displayMask[menuCol].getIncDirection());
-      Serial.print  (" Expo ");
-      Serial.print  (displayMask[menuCol].getExpoValue());
+//      Serial.print  ("IncDirection ");
+//      Serial.print  (displayMask[menuCol].getIncDirection());
+//      Serial.print  (" Expo ");
+//      Serial.print  (displayMask[menuCol].getExpoValue());
 
        data->setUint16_tPointer(displayMask[menuCol].getVoidPointer());
 //       data->adjUint16_tNumber(displayMask[menuCol].getIncDirection() * displayMask[menuCol].getExpoValue());  // delete-comment this

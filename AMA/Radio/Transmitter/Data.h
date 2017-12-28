@@ -34,7 +34,14 @@ class Data
     void setJoyStick(byte, int);
 
     void setJoyAux(byte, int);
-    int  getJoyAux(byte);    
+    int  getJoyAux(byte);
+
+    double getCalcVolts(unsigned int, unsigned int, unsigned int);
+
+    double getPreVolts(void);
+    double getPstVolts(void);
+    double getV5Volts(void);
+    double getMilliAmps(void);
 
     void setUint16_tPointer(void *);
     void setUint16_tNumber(int16_t);
@@ -51,6 +58,12 @@ class Data
   // library-accessible "private" interface
   // ===========================================
   private:
+
+double avgE = 0.0;
+//byte cntE = 0;
+//
+//double listE[2];
+//byte sizeE=2;
   
     int aux[8];
 

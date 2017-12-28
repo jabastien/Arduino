@@ -75,6 +75,7 @@ void Display::setBuffer(PGM_P pattern){
   
   buffer[i]='\0';
 
+#ifdef DEBUG_DISPLAY
   if (false){
     Serial.print  ("SizeIS: ");
     Serial.print  (utils.arraySize(pattern));
@@ -90,6 +91,7 @@ void Display::setBuffer(PGM_P pattern){
     
     Serial.println(buffer);
     }
+#endif
 
 }
 

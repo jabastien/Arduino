@@ -44,6 +44,7 @@ DataStore::DataStore(Data * _data){
 
   data = _data;
 
+#ifdef DEBUG_DATASTORE
   Serial.begin(115200); //Set the speed to 9600 bauds if you want.
   
   Serial.println(PGMSTR(dashes)); 
@@ -71,6 +72,7 @@ DataStore::DataStore(Data * _data){
   Serial.println(PGMSTR(dashes)); 
   Serial.println(PGMSTR(dashes)); 
   Serial.println(PGMSTR(dashes));   
+#endif  
 }
 
 // Public Methods //////////////////////////////////////////////////////////////

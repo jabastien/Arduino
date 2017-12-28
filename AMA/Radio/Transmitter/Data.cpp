@@ -58,12 +58,151 @@ MySwitchMap& Data::getMySwitchMap(){
 
 void Data::setJoyAux(byte b, int i){
   aux[b] = i;
+  
+//  if (b == 3){
+//    Serial.print  ("setJoyAux ");
+//    Serial.print  (b);
+//    Serial.print  (" ");
+//    Serial.println(aux[b]);
+//  }
 }
 
+
 int  Data::getJoyAux(byte b){
+//  if (b == 3){
+//    Serial.print  ("getJoyAux ");
+//    Serial.print  (b);
+//    Serial.print  (" ");
+//    Serial.println(aux[b]);
+//  }
+  
   return aux[b];
 }
+
+//double Data::getCalcVolts(unsigned int _value, unsigned int R1, unsigned int R2, byte expoFactor){
+double Data::getCalcVolts(unsigned int _value, unsigned int R1, unsigned int R2){
+
+//  double expoValue = 1;
+//  for (byte b = 0; b < expoFactor; b++){
+//      expoValue *= 10;
+//  }
+  
+  double vpb = (double)myVoltageMap.voltPerBit / 1000000.0;  // change 4778 to 0.004778
+  double value = _value;
+
+  //       Ein = (Eo/R2) * (R1+R2)
+  double   Ein = ((value * vpb) / R2 ) * (R1 + R2);
+
+#ifdef DEBUG_CALCVOLTS
+  if (false){
+    if (false){
+      Serial.print  ("  10Bit: ");
+      Serial.print  (_value);
+      Serial.print  ("  VPB:  ");
+      Serial.print  (myVoltageMap.voltPerBit);
+      Serial.print  ("  R1: ");
+      Serial.print  (R1);
+      Serial.print  ("  R2: ");
+      Serial.print  (R2);
+    }
+    Serial.print  ("  Actual: ");
+    Serial.print  (value * vpb);
+    Serial.print  ("V  Vin: ");
+    Serial.print  (Ein);
+    Serial.print ("V  ");
+  }
+#endif
+
+//  return (Ein * expoValue);
+  return Ein;
+}
+
+double Data::getPreVolts(){
+  return getCalcVolts(aux[7], myResistorMap.Vpre11, myResistorMap.Vpre12);
+}
+
+double Data::getPstVolts(){
+  return getCalcVolts(aux[1], myResistorMap.Vpst21, myResistorMap.Vpst22);
+}
+
+double Data::getV5Volts(){
+  return getCalcVolts(aux[5], myResistorMap.V5_31, myResistorMap.V5_32);
+}  
+
+
+
+double Data::getMilliAmps(){
+////  return 0; // getCalcVolts(aux[7], myResistorMap.V5_31, myResistorMap.V5_32);
+
+//  cntE++;
+//  if (cntE > sizeE){
+//    cntE = 0;
+//  }
+  
+#ifdef DEBUG_CALCVOLTS
+  Serial.print  (" pre: ");
+  Serial.print  (getPreVolts());
+
+  Serial.print  (" pst: ");
+  Serial.print  (getPstVolts());
+#endif
+
+//  listE[cntE] = (getPreVolts() - getPstVolts());
+avgE = (getPreVolts() - getPstVolts());
+  
+//#ifdef DEBUG_CALCVOLTS
+//  Serial.print  (" vDif: ");
+//  Serial.print  (listE[cntE]);
+//#endif
+//
+//  avgE = 0;
+//  for (int i = 0; i<sizeE; i++){
+//    avgE += listE[i];
+//  }
+//
+//  
+//#ifdef DEBUG_CALCVOLTS
+//  Serial.print  (" avgE-sizeE: ");
+//  Serial.print  (avgE);
+//#endif
+//  avgE /= sizeE;
+
+  
+#ifdef DEBUG_CALCVOLTS
+  Serial.print  (" avgE/sizeE: ");
+  Serial.print  (avgE*1000);
+#endif
+  double avgE2 = avgE / ((double)myResistorMap.shunt/10000000.0);
+
     
+#ifdef DEBUG_CALCVOLTS
+  Serial.print  ("mV avgE: ");
+  Serial.print  (avgE2);
+
+  Serial.print  ("mA  pwr: ");
+  Serial.print  (((avgE2*avgE2)/myResistorMap.shunt)*1000);
+  Serial.print  ("mW");
+  
+  Serial.println();
+#endif
+  
+  return avgE2 ;
+}
+
+  // this is POWER ((((double)avgE * (double)avgE ) * ((double)myResistorMap.shunt )));
+//  return (( avgE * avgE ) / (myResistorMap.shunt / 1000000.0));
+
+////////////////////////////// MyVoltageMap
+/*
+ *   // Voltage Divides
+  // 1 = y0 = Post,
+  // 3 = y1 = Key
+  // 5 = y2 = 5V
+  // 7 = y3 = Pre 
+*/
+
+
+ 
 // =====================================
 // uint16_t Methods
 // =====================================
@@ -115,6 +254,8 @@ void Data::adjUint16_tNumber(int8_t incDirection, int8_t expoFactor){
   }
 
   // Print the value
+    
+#ifdef DEBUG_CALCVOLTS
   if (false){
     Serial.print  ("adjUint16_tNumber: ");
     Serial.print  (expoValue);
@@ -122,6 +263,8 @@ void Data::adjUint16_tNumber(int8_t incDirection, int8_t expoFactor){
     Serial.print  (*(uint16_t*)pointerUint16_t);
     Serial.println();
   }
+#endif
+  
 }
 
 // deprecated method (use adjUint16_tNumber(int8_t incDirection, int8_t expoFactor)
@@ -132,44 +275,11 @@ void Data::adjUint16_tNumber(int16_t number){
   Serial.println(number);
 }
 
-
-//// ===========================================
-//// Update LCD
-//// ===========================================
-//uint16_t v5_System     = 0;
-//uint16_t v5_Measured   = 4919; //5011;
-//uint16_t v5_voltPerBit = (v5_Measured / 1023.0)*1000.0;
-//
-//double vPre = 0.0;
-//double vPst = 0.0;
-//double vKey = 0.0;
-
 //  vKey =    v5_voltPerBit * analog[3];                                                                                 // Key
-//  vPst =      (((v5_voltPerBit * analog[1]) / myResistorMap.Vpst22) * (myResistorMap.Vpst21 + myResistorMap.Vpst22));  // V Post
-//  v5_System = (((v5_voltPerBit * analog[5]) / myResistorMap.V5_32 ) * (myResistorMap.V5_31  + myResistorMap.V5_32 ));  // 5.0V
-//  vPre =      (((v5_voltPerBit * analog[7]) / myResistorMap.Vpre12) * (myResistorMap.Vpre11 + myResistorMap.Vpre12));  // V Pre
-//
-//  // ======================================================
 
-//byte    avgSize = 50;
-//double  avgList[50];
-//int     avgCnt = 0;
-//double  avgSum = 0.0;
-//double  avg = 0.0;
-
-//  if (avgCnt >= avgSize) {
-//    avgCnt = 0;
-//  }
-//  avgList[avgCnt++] = (vPre - vPst) * 1000;
-//
-//  avgSum = 0;
-//  for (int lp = 0; lp < avgSize; lp++) {
-//    avgSum += avgList[lp];
-//  }
-//
-//  
 
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library
+
 
 
