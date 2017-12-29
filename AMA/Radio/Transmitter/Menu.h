@@ -22,6 +22,7 @@
 #include "config.h"
 #include "def.h"
 #include "types.h"
+#include "utils.h"
 
 #include "CustomChar.h"
 #include "Data.h"
@@ -31,6 +32,7 @@
 // library interface description
 class Menu
 {
+  Utils utils;
   // ===========================================
   // user-accessible "public" interface
   // ===========================================

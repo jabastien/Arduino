@@ -29,7 +29,8 @@ class Utils
   // ======================================    
   public:
     Utils();
-    int  arraySize(PGM_P );
+    byte  arraySizeBYTE(byte []);
+    int  arraySizePMG(PGM_P );
     int  countCharacters(PGM_P , char);        
     int  freeRam(void);
     void reverse(char []);

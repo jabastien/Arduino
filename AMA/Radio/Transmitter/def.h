@@ -123,7 +123,7 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 #define INITMENU  150 // This is the Init/Startup screen.
 #define SPLASH    151
 #define FIRSTINIT 152
-#define CTLCHECK  192 // Required 
+#define CTLCHECK  192 // Required
 
 #define FUNCTION  255 // Function indicator
 

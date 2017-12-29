@@ -601,18 +601,16 @@ void Menu::menuKeyboard(byte keyPress){
   }
 
   // Do we need a carrot?
-  if (menuAction != doInit){
-    if (menuSelected != MAINMENU  && menuSelected != CTLCHECK){// Don't show carrot for MAINMENU & CTLCHECK
-      // Clear prior carrot
-      for (byte b = 1; b <= 3 ; b++){
-        lcd.setCursor(0, b);//   row >    column ^
-        lcd.print (" ");
-      }
-      // Show new Carrot
-      if (menuCol > 0){
-        lcd.setCursor(0, menuCol);//   row >    column ^
-        lcd.print (">");
-      }
+  if (menuSelected != MAINMENU  && utils.arraySizeBYTE(menuOptions) != 1){// Don't show carrot for MAINMENU
+    // Clear prior carrot
+    for (byte b = 1; b <= 3 ; b++){
+      lcd.setCursor(0, b);//   row >    column ^
+      lcd.print (" ");
+    }
+    // Show new Carrot
+    if (menuCol > 0){
+      lcd.setCursor(0, menuCol);//   row >    column ^
+      lcd.print (">");
     }
   }
   
@@ -984,7 +982,7 @@ void Menu::lcdMenu000() { // this is an error, 000 is reserved
 // ===========================================
 // -------------------------------------------
 void Menu::lcdMenu001() {
-  if (repeatCount == 0) {
+
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("Main"));
     lcd.setCursor(0, 1); //   row >    column ^
@@ -997,7 +995,7 @@ void Menu::lcdMenu001() {
     lcd.print(F("Repeat: "));
     lcd.print(showFPS);
     lcd.print("  ");
-  }
+
 
 ////  double shunt = 0.766327;   // 0.5   
 //    pUInt1 = &myResistorMap.shunt; // = (0.766327*10000);   // 0.5
@@ -1026,11 +1024,6 @@ void Menu::lcdMenu001() {
 // ===========================================
 // -------------------------------------------
 void Menu::lcdMenu002() {
-  if (repeatCount == 0) {
-  }
-
-
-
 
   //--------------------
   // Col 0
@@ -1087,8 +1080,6 @@ void Menu::lcdMenu002() {
 
 // -------------------------------------------
 void Menu::lcdMenu003() {
-  if (repeatCount == 0) {
-  }
 
   //--------------------
   //
@@ -1115,7 +1106,7 @@ void Menu::lcdMenu003() {
 
 // -------------------------------------------
 void Menu::lcdMenu010() {
-  if (repeatCount == 0) {
+
     lcd.setCursor(1, 0); //   row >    column ^
     lcd.print(F("10 -> 11"));
     lcd.setCursor(1, 1); //   row >    column ^
@@ -1124,53 +1115,34 @@ void Menu::lcdMenu010() {
     lcd.print(F("10 -> 13"));
     lcd.setCursor(1, 3); //   row >    column ^
     lcd.print(F("10 -> 14"));
-    lcd.print(F(" Repeat: "));
-  }
 
-  //  lcd.setCursor(17, 1); //   row >    column ^
-  //  lcd.print(repeatCount);
-  //  lcd.print(" ");
 }
 
 // -------------------------------------------
 void Menu::lcdMenu011() {
-  if (repeatCount == 0) {
+
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("x11"));
     lcd.setCursor(1, 1); //   row >    column ^
-    lcd.print(F("Repeat: "));
-  }
 
-  lcd.setCursor(10, 1); //   row >    column ^
-  lcd.print(repeatCount);
-  lcd.print(F(" "));
 }
 
 // -------------------------------------------
 void Menu::lcdMenu012() {
-  if (repeatCount == 0) {
+
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("x12"));
     lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(F("Repeat: "));
-  }
 
-  lcd.setCursor(10, 1); //   row >    column ^
-  lcd.print(repeatCount);
-  lcd.print(F(" "));
 }
 
 void Menu::lcdMenu013() {
-  if (repeatCount == 0) {
+
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("x13"));
     lcd.setCursor(1, 1); //   row >    column ^
-    lcd.print(F("Repeat: "));
-  }
 
-  lcd.setCursor(10, 1); //   row >    column ^
-  lcd.print(repeatCount);
-  lcd.print(" ");
 }
 
 
@@ -1181,13 +1153,10 @@ void Menu::lcdMenu014() {
   // between the current time and last time you updated the LCD is bigger than
   // the interval at which you want to blink the LED.
 
-  if (repeatCount == 0)
-  {
-//    lcd.setCursor(0, 0); //   row >    column ^
-//    lcd.print(F("x014"));
-    lcd.setCursor(1, 1); //   row >    column ^
-    lcd.print(F("Repeat: "));
-  }
+
+    lcd.setCursor(0, 0); //   row >    column ^
+    lcd.print(F("x014"));
+
 //  currentMillis = millis();
 
 //  if (currentMillis - previousMillis >= screenRefresh) {
@@ -1230,10 +1199,7 @@ void Menu::lcdMenu014() {
       // -------------------------------------
 
     }
-//  }
-  lcd.setCursor(10, 1); //   row >    column ^
-  lcd.print(repeatCount);
-  lcd.print(F(" "));
+
 }
 
 // ===========================================
@@ -1264,10 +1230,6 @@ void Menu::lcdSys102() { // Vin pre 1.1 & 1.2 ohms
     // 3
     //displayMask[2].doMaskInit(
 
-  }
-  
-  if (repeatCount == 0) {
-
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys102_Vpre));
     
@@ -1278,7 +1240,7 @@ void Menu::lcdSys102() { // Vin pre 1.1 & 1.2 ohms
     lcd.print(PGMSTR(lcd_param_lcdSys102_R12));          
   }
 
-  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
+  if (displayMask[menuCol].getIncDirection() != 0 || isMenuChange){
     // Display measured reference voltage
     lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
     lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG()));
@@ -1310,9 +1272,6 @@ void Menu::lcdSys104() { // Vin pst 2.1 & 2.2 ohms
     // 3
     //displayMask[2].doMaskInit(
 
-  }
-
-  if (repeatCount == 0) {
 
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys104_Vpst));
@@ -1324,8 +1283,7 @@ void Menu::lcdSys104() { // Vin pst 2.1 & 2.2 ohms
     lcd.print(PGMSTR(lcd_param_lcdSys104_R22));         
   }
 
-  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
-
+  if (displayMask[menuCol].getIncDirection() != 0 || isMenuChange){
     // Display measured reference voltage
     lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
     lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG()));
@@ -1356,9 +1314,6 @@ void Menu::lcdSys106() { // V5.0    3.1 & 3.2 ohms
     // 3
     //displayMask[2].doMaskInit(
 
-  }
-
-  if (repeatCount == 0) {
 
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys106_V5div));
@@ -1368,10 +1323,12 @@ void Menu::lcdSys106() { // V5.0    3.1 & 3.2 ohms
     
     lcd.setCursor(2, 2); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys106_R32));            
+
   }
 
-  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
 
+
+  if (displayMask[menuCol].getIncDirection() != 0 || isMenuChange){
     // Display measured reference voltage
     lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
     lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG()));
@@ -1406,16 +1363,15 @@ void Menu::lcdSys112() { // Shunt ohms
 
   }
 
-  if (repeatCount == 0) {
+
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys112_Shunt));
     
     lcd.setCursor(2, 1); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys112_Rshnt));         
-  }
 
-  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
 
+  if (displayMask[menuCol].getIncDirection() != 0 || isMenuChange){
     // Display measured reference voltage
     lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
     lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG()));
@@ -1443,7 +1399,6 @@ void Menu::lcdSys114() { // V5.0 Reference voltage
     displayMask[3].doMaskInit(volts_0_0xxxxxV, '#', 10, &data->getMyVoltageMap().voltPerBit);
   }
   
-  if (repeatCount == 0) {
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys114_5Vref));
 
@@ -1452,9 +1407,9 @@ void Menu::lcdSys114() { // V5.0 Reference voltage
     
     lcd.setCursor(1, 3); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys114_v5bit));
-  }
 
-  if (displayMask[menuCol].getIncDirection() != 0 || repeatCount == 0){
+
+  if (displayMask[menuCol].getIncDirection() != 0 || isMenuChange){
     // Display measured reference voltage
     lcd.setCursor(displayMask[1].getDisplayPos(), 1); //   row >    column ^
     lcd.print(display.outputDigitsU16(*(uint16_t*)displayMask[1].getVoidPointer(), displayMask[1].getMaskPMG(), 1));
@@ -1487,26 +1442,22 @@ void Menu::lcdSys122() { // Switch
     // 3
     //displayMask[2].doMaskInit(
 
-  }
-
-
-  if (repeatCount == 0) {
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys122_Switch));
     
     lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_common_Digits));              
-
+  
     lcd.setCursor(11, 1); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_common_Pos));         
-
+  
     lcd.setCursor(1, 2); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_common_Values));              
   }
- 
-    // Display switches as bin (0's and 1's)
-    lcd.setCursor(11, 2); //   row >    column ^
-    lcd.print( display.outputBinary( data->getMySwitchMap().switchPins));
+
+  // Display switches as bin (0's and 1's)
+  lcd.setCursor(11, 2); //   row >    column ^
+  lcd.print( display.outputBinary( data->getMySwitchMap().switchPins));
 }
 
 // -------------------------------------------
@@ -1530,25 +1481,23 @@ void Menu::lcdSys124() { // Trim
     // 3
     //displayMask[2].doMaskInit(
 
-  }
-
-  if (repeatCount == 0) {
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys124_Trim));
     
     lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_common_Digits));              
-
+  
     lcd.setCursor(11, 1); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_common_Pos));         
-
+  
     lcd.setCursor(1, 2); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_common_Values));       
   }
 
-    // Display switches as bin (0's and 1's)
-    lcd.setCursor(11, 2); //   row >    column ^
-    lcd.print( display.outputBinary( data->getMySwitchMap().trimPins));
+
+  // Display switches as bin (0's and 1's)
+  lcd.setCursor(11, 2); //   row >    column ^
+  lcd.print( display.outputBinary( data->getMySwitchMap().trimPins));
 
 }
 
@@ -1572,22 +1521,20 @@ void Menu::lcdSys126() { // Menu buttons
     // 3
     //displayMask[2].doMaskInit(
 
-  }
 
-
-  if (repeatCount == 0) {
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys126_Menu));
     
     lcd.setCursor(1, 1); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_common_Digits));              
-
+  
     lcd.setCursor(11, 1); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_common_Pos));         
-
+  
     lcd.setCursor(1, 2); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_common_Values));        
   }
+
   
   // Display switches as bin (0's and 1's)
   lcd.setCursor(11, 2); //   row >    column ^
@@ -1699,14 +1646,11 @@ void Menu::lcdSys135() { // Joystick range limits  (Find MID point, release stic
 
 // -------------------------------------------
 void Menu::lcdSys148() { // Reset
-  if (repeatCount == 0) {
-    // load data pointers
-  }
-  
-  if (repeatCount == 0) {
+
+Serial.print("148 not complete");
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(F("Reset"));
-  }
+
 }
 
 
@@ -1717,21 +1661,21 @@ void Menu::lcdSys148() { // Reset
 
 // -------------------------------------------
 void Menu::lcdInit150() {  // Starting   [click (select) out to 150]
+
+    if (isMenuChange){ 
+      menuAction = doInit;  
   
-  menuAction = doInit;  
-    
-  if (repeatCount == 0) {
-    lcd.init();
-    lcd.begin(20,4);
-    lcd.backlight();
-    //lcd.blink();
-    //lcd.noBlink();
-    
-    lcd.setCursor(6, 1);//   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit150_startUp));    
-  }
+      lcd.init();
+      lcd.begin(20,4);
+      lcd.backlight();
+      //lcd.blink();
+      //lcd.noBlink();
+      
+      lcd.setCursor(6, 1);//   row >    column ^
+      lcd.print(PGMSTR(lcd_param_lcdInit150_startUp));    
+    }
   
-  if (repeatCount > 4) { // ~delay(250);
+  if (repeatCount > 1) { // ~delay(250);
       forceMenuChange(SPLASH); //151
   }
 }
@@ -1739,17 +1683,17 @@ void Menu::lcdInit150() {  // Starting   [click (select) out to 150]
 // -------------------------------------------
 void Menu::lcdInit151() { // Splash     [no click 'select button' out to 151]
 
-  menuAction = doInit;
-
-  if (repeatCount == 0) 
-  {
-    lcd.setCursor(0, 0);//   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit151_qBytesWorld));
-    lcd.setCursor(0, 1);//   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit151_deviceInfo));
-    lcd.setCursor(0, 2);//   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit151_versionNum));
-  }
+    if (isMenuChange){ 
+  
+      menuAction = doInit;
+  
+      lcd.setCursor(0, 0);//   row >    column ^
+      lcd.print(PGMSTR(lcd_param_lcdInit151_qBytesWorld));
+      lcd.setCursor(0, 1);//   row >    column ^
+      lcd.print(PGMSTR(lcd_param_lcdInit151_deviceInfo));
+      lcd.setCursor(0, 2);//   row >    column ^
+      lcd.print(PGMSTR(lcd_param_lcdInit151_versionNum));
+    }
 
   // If first time run (no EEPROM data)   
   if (true){ // Can delete this condition when (no EEPROM data) is completed.
@@ -1761,7 +1705,7 @@ void Menu::lcdInit151() { // Splash     [no click 'select button' out to 151]
     }
   }
   
-  if (repeatCount > 12) {//delay(2000);    
+  if (repeatCount > 8) {//delay(2000);    
     // If first time run (no EEPROM data)   
     if (true){// DAQ finish this..(assume first time)..need to read the EEPROM data to know if it is 1st time
       // First time run, initialize system
@@ -1772,7 +1716,6 @@ void Menu::lcdInit151() { // Splash     [no click 'select button' out to 151]
     }
   }
 }
-
 
 // -------------------------------------------
 void Menu::lcdInit192() { // Control check
@@ -1794,13 +1737,6 @@ void Menu::lcdInit192() { // Control check
     displayMask[3].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(PITCH));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
-    repeatCount = 0;
-  }
-
-
-  if (repeatCount == 0) {
-    // load data pointers???
-
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck));
     lcd.setCursor(5, 1); //   row >    column ^
@@ -1809,40 +1745,20 @@ void Menu::lcdInit192() { // Control check
     lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck_UD));
     lcd.setCursor(0, 3); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck_LR));
-
-    // Display switches as bin (0's and 1's)
-    lcd.setCursor(12, 1); //   row >    column ^
-    lcd.print( display.outputBinary( data->getMySwitchMap().switchPins));
-
-    lcd.setCursor(12, 2); //   row >    column ^
-    lcd.print( display.outputBinary( data->getMySwitchMap().trimPins));
-    
-    lcd.setCursor(12, 3); //   row >    column ^
-    lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
-       
   }
-
   
-  if (repeatCount > 13) {
+  // Display switches as bin (0's and 1's)
+  lcd.setCursor(12, 1); //   row >    column ^
+  lcd.print( display.outputBinary( data->getMySwitchMap().switchPins));
 
-     // If Controls not home, wait.
-// DAQ finish this....
-// DAQ finish this....
-// DAQ finish this....     
-    if (true){
-//      menuAction = doMenu;
-//      //menuKeyboard(SELECT);
-//      menuSelected = MAINMENU; // Main
-//      menuChangeCheck();
-      forceMenuChange(MAINMENU);
-    }
-  } 
+  lcd.setCursor(12, 2); //   row >    column ^
+  lcd.print( display.outputBinary( data->getMySwitchMap().trimPins));
+  
+  lcd.setCursor(12, 3); //   row >    column ^
+  lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
 
-//  lcd.setCursor(1, 3);//   row >    column ^
-//  lcd.print(PGMSTR(lcd_param_lcdInit192_volts));
 
   // Display XMIT value as ###
-
   MyControlsRangeMap myControlsRangeMap;
 
 // Left control
@@ -1871,7 +1787,30 @@ void Menu::lcdInit192() { // Control check
       myControlsRangeMap.joystickRange(),
       displayMask[0].getMaskPMG(), 2));
 
-//data->getBatVolts();
+
+
+//  lcd.setCursor(1, 3);//   row >    column ^
+//  lcd.print(PGMSTR(lcd_param_lcdInit192_volts));
+//  data->getBatVolts();
+
+
+
+  
+  if (repeatCount > 16) {
+
+     // If Controls not home, wait.
+// DAQ finish this....
+// DAQ finish this....
+// DAQ finish this....     
+    if (true){
+//      menuAction = doMenu;
+//      //menuKeyboard(SELECT);
+//      menuSelected = MAINMENU; // Main
+//      menuChangeCheck();
+      forceMenuChange(MAINMENU);
+    }
+  } 
+  
 }
 
 
@@ -2061,8 +2000,6 @@ void Menu::lcdFunc216(byte _keyPress) { // Uint16_t number  (move to lcdFunc215 
 // -------------------------------------------
 void Menu::lcdFunc238() { // T/F
 
-  //  if (repeatCount == 0) {
-  //  }
 
   // If Y, goto x239
   // If N, goto mainMenu
@@ -2071,8 +2008,7 @@ void Menu::lcdFunc238() { // T/F
 // -------------------------------------------
 void Menu::lcdFunc239() { // Y/N
   
-//  if (repeatCount == 0) {
-//  }
+
 
   // 1234567890123456789012345678901234567890
   // Erasing all transmitter data!!!
@@ -2102,8 +2038,6 @@ void Menu::lcdFunc240() { // Controls Range
   data->getMyControlsRangeMap(editJoyStick).setMinMax();
 
   lcdSys135();
-  
-//  if (repeatCount == 0) {  }
   
 }
 

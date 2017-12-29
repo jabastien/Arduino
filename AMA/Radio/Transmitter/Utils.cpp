@@ -53,8 +53,19 @@ Utils::Utils(){
 // Functions available in Wiring sketches, this library, and other libraries
 
 
+byte Utils::arraySizeBYTE(byte data []) { 
+  byte count=0;
+  
+  for (; count < 20; count++){
+    if (data[count] == '\0'){
+          break;
+     }
+   }
+   return count;
+}
+
 // https://arduino.stackexchange.com/questions/13389/number-of-elements-in-an-array-char
-int Utils::arraySize(PGM_P data) { 
+int Utils::arraySizePMG(PGM_P data) { 
   PGM_P p = data; 
   while (*p++); 
   return p-data-1; 
@@ -98,7 +109,7 @@ int Utils::freeListSize() {
 
 void Utils::reverse(char stg [] ){
 
-  byte stgSize = arraySize(stg) - 1; // Array is zero (0) relative
+  byte stgSize = arraySizePMG(stg) - 1; // Array is zero (0) relative
   byte halfSize = (stgSize / 2) + 1; // small performance boost (1/2 loop)
   
   for (byte b = 0; b < halfSize; b++){

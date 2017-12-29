@@ -44,7 +44,7 @@ void DisplayMask::doMaskInit(PGM_P _mask, const  char _matchChar, byte _displayP
   mask = _mask;
   sprintf_P(buffer, PSTR("%S") , mask);
   //utils.reverse(buffer);  
-  maskSize = utils.arraySize(buffer);
+  maskSize = utils.arraySizePMG(buffer);
   matchChar = _matchChar;
   digitCnt = utils.countCharacters(buffer, matchChar);
   courserPos = -1;
