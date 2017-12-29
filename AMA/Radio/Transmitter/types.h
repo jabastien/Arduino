@@ -67,11 +67,11 @@ struct MyControlsRangeMap {
     int value = constrain(current, minimum, maximum);
     
     if ( value < center )
-      value = map(value, minimum, center, 0, MID);
+      value = map(value, minimum, center, BYTE_MIN, BYTE_MID);
     else
-      value = map(value, center, maximum, MID, MAX);
+      value = map(value, center, maximum, BYTE_MID, BYTE_MAX);
       
-    return ( reverse ? MAX - value : value );
+    return ( reverse ? BYTE_MAX - value : value );
   }    
   
 };

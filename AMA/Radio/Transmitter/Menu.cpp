@@ -233,47 +233,47 @@ void Menu::menuDisplay(){
       
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // ---------------------------------------
-    case 131: // Joystick range limits
-      if (isMenuChange){ 
-        setMenu(menuSelected, menuOptions131, membersof(menuOptions131));
-      }
-      
-      editJoyStick = THROTTLE;
-
-      lcdSys132();
-      break;
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // ---------------------------------------
-    case 132: // Joystick range limits
-      if (isMenuChange){ 
-        setMenu(menuSelected, menuOptions132, membersof(menuOptions132));
-      }
-      
-      editJoyStick = YAW;
-
-      lcdSys132();
-      break;
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // ---------------------------------------
-    case 133: // Joystick range limits
-      if (isMenuChange){ 
-        setMenu(menuSelected, menuOptions133, membersof(menuOptions133));
-      }
-      
-      editJoyStick = ROLL;
-
-      lcdSys132();
-      break;
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // ---------------------------------------
     case 134: // Joystick range limits
       if (isMenuChange){ 
         setMenu(menuSelected, menuOptions134, membersof(menuOptions134));
       }
       
+      editJoyStick = THROTTLE;
+
+      lcdSys135();
+      break;
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ---------------------------------------
+    case 135: // Joystick range limits
+      if (isMenuChange){ 
+        setMenu(menuSelected, menuOptions135, membersof(menuOptions135));
+      }
+      
+      editJoyStick = YAW;
+
+      lcdSys135();
+      break;
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ---------------------------------------
+    case 138: // Joystick range limits
+      if (isMenuChange){ 
+        setMenu(menuSelected, menuOptions138, membersof(menuOptions138));
+      }
+      
+      editJoyStick = ROLL;
+
+      lcdSys135();
+      break;
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ---------------------------------------
+    case 139: // Joystick range limits
+      if (isMenuChange){ 
+        setMenu(menuSelected, menuOptions139, membersof(menuOptions139));
+      }
+      
       editJoyStick = PITCH;
 
-      lcdSys132();
+      lcdSys135();
       break;
     
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -380,7 +380,7 @@ void Menu::menuDisplay(){
       
       editJoyStick = THROTTLE;
 
-      lcdSys132();
+      lcdSys135();
       break;
     // ---------------------------------------
     case 183: // Joystick range limits
@@ -390,7 +390,7 @@ void Menu::menuDisplay(){
       
       editJoyStick = YAW;
 
-      lcdSys132();
+      lcdSys135();
       break;
     // ---------------------------------------
     case 184: // Joystick range limits
@@ -400,7 +400,7 @@ void Menu::menuDisplay(){
       
       editJoyStick = ROLL;
 
-      lcdSys132();
+      lcdSys135();
       break;
     // ---------------------------------------
     case 185: // Joystick range limits
@@ -410,7 +410,7 @@ void Menu::menuDisplay(){
       
       editJoyStick = PITCH;
 
-      lcdSys132();
+      lcdSys135();
       break;            
 
       
@@ -469,7 +469,8 @@ void Menu::menuKeyboard(byte keyPress){
 
   // Key Select/Enter (EXIT)
   if (keyPress == SELECT) {
-    
+
+      keyPress = NOKEY;
 //    if (false){
 //    Serial.println("doing SELECT");  
 //    Serial.print (F(" MS1:"));
@@ -663,6 +664,7 @@ void Menu::funcKeyboard(byte keyPress){
 
   // Key Select/Enter (EXIT)
   if (keyPress == SELECT) {
+          keyPress = NOKEY;
 //    if (false){
 //      Serial.print (F(" FS4:"));
 //      Serial.print (function);
@@ -1520,7 +1522,7 @@ void Menu::lcdSys126() { // Menu buttons
 
 
 // -------------------------------------------
-void Menu::lcdSys132() { // Joystick range limits  (Find MID point, release stick and press 'Select')
+void Menu::lcdSys135() { // Joystick range limits  (Find MID point, release stick and press 'Select')
 
   if (isMenuChange){ 
 
@@ -1549,16 +1551,16 @@ void Menu::lcdSys132() { // Joystick range limits  (Find MID point, release stic
     lcd.setCursor(0, 0); //   row >    column ^
     switch(editJoyStick){
       case THROTTLE:
-        lcd.print(PGMSTR(lcd_param_lcdSys132_Throttle));
+        lcd.print(PGMSTR(lcd_param_lcdSys135_Throttle));
         break;
       case YAW:
-        lcd.print(PGMSTR(lcd_param_lcdSys132_YAW));
+        lcd.print(PGMSTR(lcd_param_lcdSys135_YAW));
         break;
       case ROLL:
-        lcd.print(PGMSTR(lcd_param_lcdSys132_ROLL));
+        lcd.print(PGMSTR(lcd_param_lcdSys135_ROLL));
         break;
       case PITCH:
-        lcd.print(PGMSTR(lcd_param_lcdSys132_PITCH));
+        lcd.print(PGMSTR(lcd_param_lcdSys135_PITCH));
         break;
       }    
     }
@@ -1809,16 +1811,16 @@ void Menu::lcdInit192() { // Control check
     lcd.setCursor(0, 0); //   row >    column ^
     switch(editJoyStick){
       case 0:
-        lcd.print(PGMSTR(lcd_param_lcdSys132_Throttle));
+        lcd.print(PGMSTR(lcd_param_lcdSys135_Throttle));
         break;
       case 1:
-        lcd.print(PGMSTR(lcd_param_lcdSys132_YAW));
+        lcd.print(PGMSTR(lcd_param_lcdSys135_YAW));
         break;
       case 2:
-        lcd.print(PGMSTR(lcd_param_lcdSys132_ROLL));
+        lcd.print(PGMSTR(lcd_param_lcdSys135_ROLL));
         break;
       case 3:
-        lcd.print(PGMSTR(lcd_param_lcdSys132_PITCH));
+        lcd.print(PGMSTR(lcd_param_lcdSys135_PITCH));
         break;
       }    
     }
@@ -2006,7 +2008,7 @@ void Menu::lcdFunc240() { // Controls Range
 
   data->getMyControlsRangeMap(editJoyStick).setMinMax();
 
-  lcdSys132();
+  lcdSys135();
   
 //  if (repeatCount == 0) {  }
   

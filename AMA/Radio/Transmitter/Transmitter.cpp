@@ -48,7 +48,7 @@ Utils utils = Utils();
 //KeyPad keyPad;  // Empty constructor does not require ().
 //KeyPad keyPad(); // this is an error
 //KeyPad keyPad(2, 5, 10, 200);
-KeyPad keyPad(13, 5, 10, 200);
+KeyPad keyPad(13, 5, 10, 350);
 
 byte keyPress;
 
@@ -233,6 +233,7 @@ void loop() {
   keyPad.doKeys(data.getJoyAux(3));
   keyPress = keyPad.getKeyPressed();
 
+Serial.println(keyPress);
   //------------------------------------------------------
   // Inc Frames Per Second
   //------------------------------------------------------

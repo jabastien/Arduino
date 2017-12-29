@@ -17,7 +17,7 @@
     http://arduino-esp8266.readthedocs.io/en/latest/PROGMEM.html
     
     
-PROGMEM const char   sampleMenu_back = "Back";
+const PROGMEM char   sampleMenu_back = "Back";
 PROGMEM const String sampleMenu_exit = "Exit";
 
 const String err = "Err:
@@ -115,13 +115,20 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 /***************           defaults configurations                 ********************/
 /**************************************************************************************/
 #define MAINMENU  1   // Main Menu
+
+#define X_MITTER  2   // Transmitter Main Menu
+#define MODEL     50  // Model Main Menu
+#define SYSTEM    100 // System Menu
+
 #define STARTMENU 150 // This is the Init/Startup screen.
 #define CTLCHECK  192 // Required 
+
 #define FUNCTION  255 // Function indicator
 
-#define MAX 255
-#define MID 128
-#define MIN 0
+
+#define BYTE_MAX 255
+#define BYTE_MID 128
+#define BYTE_MIN 0
 
 #define INT_MIN 0
 #define INT_MID 1023/2
@@ -131,11 +138,11 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 /***************             Proc specific definitions             ********************/
 /**************************************************************************************/
 // Common
-const char lcd_param_common_set [] PROGMEM = "(Set)";
+const PROGMEM char lcd_param_common_set [] = "(Set)";
 
-const char lcd_param_common_Digits [] PROGMEM = "Digits";
-PROGMEM const char lcd_param_common_Pos    [] = "12345678";
-PROGMEM const char lcd_param_common_Values [] = "Values";
+const PROGMEM char lcd_param_common_Digits []  = "Digits";
+const PROGMEM char lcd_param_common_Pos    [] = "12345678";
+const PROGMEM char lcd_param_common_Values [] = "Values";
 
 
 //const dataType variableName[] PROGMEM = {}; // use this form
@@ -144,89 +151,89 @@ PROGMEM const char lcd_param_common_Values [] = "Values";
 
 
 //                                              01234567890123456789 
-PROGMEM const char lcd_param_common_Joystick [] = "Joystick";
-PROGMEM const char lcd_param_common_Set    []   = "Set?";
+const PROGMEM char lcd_param_common_Joystick [] = "Joystick";
+const PROGMEM char lcd_param_common_Set    []   = "Set?";
 //                                              1023 1023 1023 1023 
-PROGMEM const char lcd_param_common_MMM  []  = "Read Min. Ctr. Max.";
+const PROGMEM char lcd_param_common_MMM  []  = "Read Min. Ctr. Max.";
 
 
 //
 // X000: 
 //                                 123456789012 
-PROGMEM const char ERR000 []     = "ERR000";
+const PROGMEM char ERR000 []     = "ERR000";
 
 // X102
 // lcdSys102
 // Vin pre 1.1 & 1.2 ohms                         12345678901234
-PROGMEM const char lcd_param_lcdSys102_Vpre [] = "Vin pre ohms";
-PROGMEM const char lcd_param_lcdSys102_R11 [] = "R1.1";
-PROGMEM const char lcd_param_lcdSys102_R12 [] = "R1.2";
+const PROGMEM char lcd_param_lcdSys102_Vpre [] = "Vin pre ohms";
+const PROGMEM char lcd_param_lcdSys102_R11 [] = "R1.1";
+const PROGMEM char lcd_param_lcdSys102_R12 [] = "R1.2";
 
 // X104
 // lcdSys104
 // Vin pst 2.1 & 2.2 ohms                         12345678901234
-PROGMEM const char lcd_param_lcdSys104_Vpst [] = "Vin post ohms";
-PROGMEM const char lcd_param_lcdSys104_R21 [] = "R2.1";
-PROGMEM const char lcd_param_lcdSys104_R22 [] = "R2.2";
+const PROGMEM char lcd_param_lcdSys104_Vpst [] = "Vin post ohms";
+const PROGMEM char lcd_param_lcdSys104_R21 [] = "R2.1";
+const PROGMEM char lcd_param_lcdSys104_R22 [] = "R2.2";
 
 
 
 // X106
 // lcdSys106
 //5.0V 3.1 & 3.2 ohms                              12345678901234
-PROGMEM const char lcd_param_lcdSys106_V5div [] = "5V divide ohm";
-PROGMEM const char lcd_param_lcdSys106_R31 [] = "R3.1";
-PROGMEM const char lcd_param_lcdSys106_R32 [] = "R3.2";
+const PROGMEM char lcd_param_lcdSys106_V5div [] = "5V divide ohm";
+const PROGMEM char lcd_param_lcdSys106_R31 [] = "R3.1";
+const PROGMEM char lcd_param_lcdSys106_R32 [] = "R3.2";
 
 
 // X112
 // lcdSys112
 // Shunt ohms 
-PROGMEM const char lcd_param_lcdSys112_Shunt [] = "Shunt ohm";
-PROGMEM const char lcd_param_lcdSys112_Rshnt [] = "Shunt";
+const PROGMEM char lcd_param_lcdSys112_Shunt [] = "Shunt ohm";
+const PROGMEM char lcd_param_lcdSys112_Rshnt [] = "Shunt";
 
 
 // X114
 // lcdSys114
 // V5.0 Reference
-PROGMEM const char lcd_param_lcdSys114_5Vref [] = "5V Reference";
-PROGMEM const char lcd_param_lcdSys114_5Vmes [] = "Measure";
-PROGMEM const char lcd_param_lcdSys114_5Vsys [] = "System";
-PROGMEM const char lcd_param_lcdSys114_v5bit [] = "Volt/Bit";
+const PROGMEM char lcd_param_lcdSys114_5Vref [] = "5V Reference";
+const PROGMEM char lcd_param_lcdSys114_5Vmes [] = "Measure";
+const PROGMEM char lcd_param_lcdSys114_5Vsys [] = "System";
+const PROGMEM char lcd_param_lcdSys114_v5bit [] = "Volt/Bit";
 
 
 // X122
 // lcdSys122
 // Switch buttons
-PROGMEM const char lcd_param_lcdSys122_Switch [] = "Switch";
-//PROGMEM const char lcd_param_lcdSys122_Desc []   = "0 = Nor : 1 = Rev";
+const PROGMEM char lcd_param_lcdSys122_Switch [] = "Switch";
+//const PROGMEM char lcd_param_lcdSys122_Desc []   = "0 = Nor : 1 = Rev";
 
 
 
 // X124
 // lcdSys124    
 // Trim buttons
-PROGMEM const char lcd_param_lcdSys124_Trim [] = "Trim";
+const PROGMEM char lcd_param_lcdSys124_Trim [] = "Trim";
 
 
 
 // X126
 // lcdSys126    
 // Menu buttons
-PROGMEM const char lcd_param_lcdSys126_Menu [] = "Menu";
+const PROGMEM char lcd_param_lcdSys126_Menu [] = "Menu";
 
 
 
-// X132
-// lcdSys132
+// X135
+// lcdSys135
 // Joystick range limits                            12345678901234567890
-PROGMEM const char lcd_param_lcdSys132_Throttle [] = "Throttle";
-PROGMEM const char lcd_param_lcdSys132_YAW      [] = "Yaw";
-PROGMEM const char lcd_param_lcdSys132_ROLL     [] = "Roll";
-PROGMEM const char lcd_param_lcdSys132_PITCH    [] = "Pitch";
+const PROGMEM char lcd_param_lcdSys135_Throttle [] = "Throttle";
+const PROGMEM char lcd_param_lcdSys135_YAW      [] = "Yaw";
+const PROGMEM char lcd_param_lcdSys135_ROLL     [] = "Roll";
+const PROGMEM char lcd_param_lcdSys135_PITCH    [] = "Pitch";
 
-PROGMEM const char lcd_param_common_UD [] = "Move up/down";
-PROGMEM const char lcd_param_common_LR [] = "Move left/right";
+const PROGMEM char lcd_param_common_UD [] = "Move up/down";
+const PROGMEM char lcd_param_common_LR [] = "Move left/right";
 
 
 // X148
@@ -242,7 +249,7 @@ PROGMEM const char lcd_param_common_LR [] = "Move left/right";
 // X150: 
 // lcdInit150
 // Starting [click (select) out to 254]
-PROGMEM const char lcd_param_lcdInit150_startUp [] = "Start up";
+const PROGMEM char lcd_param_lcdInit150_startUp [] = "Start up";
 
 // X151: 
 // lcdInit151
@@ -254,14 +261,14 @@ const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.35"};
 // X192: 
 // lcdInit192
 // Control check
-PROGMEM const char  lcd_param_lcdInit192_controlCheck[]       = {"Control check"};
+const PROGMEM char  lcd_param_lcdInit192_controlCheck[]       = {"Control check"};
 //                                                                12345678901234567890
 //                                                                u/d xxx xxx xxxxxxxx
-PROGMEM const char  lcd_param_lcdInit192_controlCheck_LRXXX[] = {     "L   R  Switches"};
-PROGMEM const char  lcd_param_lcdInit192_controlCheck_UD[]    = {"U/D"};
-PROGMEM const char  lcd_param_lcdInit192_controlCheck_LR[]    = {"L/R"};
+const PROGMEM char  lcd_param_lcdInit192_controlCheck_LRXXX[] = {     "L   R  Switches"};
+const PROGMEM char  lcd_param_lcdInit192_controlCheck_UD[]    = {"U/D"};
+const PROGMEM char  lcd_param_lcdInit192_controlCheck_LR[]    = {"L/R"};
 
-//PROGMEM const char lcd_param_lcdInit192_volts [] = {"Volts"};
+//const PROGMEM char lcd_param_lcdInit192_volts [] = {"Volts"};
 
 
 
@@ -270,44 +277,44 @@ PROGMEM const char  lcd_param_lcdInit192_controlCheck_LR[]    = {"L/R"};
 //
 // X216: 
 //                                   123456789012 
-PROGMEM const char ERR216_0 []   = "ERR216-0"; // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
+const PROGMEM char ERR216_0 []   = "ERR216-0"; // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
 
 //
 // X255: 
 //                                   123456789012 
-PROGMEM const char  ERR255 []     = "ERR255";
+const PROGMEM char  ERR255 []     = "ERR255";
 
 // ===========================================
 // Display
 // ===========================================
-PROGMEM const char  digits8 []     = " ###";
-PROGMEM const char  digits16[]     = " ##,###";
-PROGMEM const char  digits32[]     = " #,###,###,###";
+const PROGMEM char  digits8 []     = " ###";
+const PROGMEM char  digits16[]     = " ##,###";
+const PROGMEM char  digits32[]     = " #,###,###,###";
 
-PROGMEM const char  joyStickxxxx[] = "####";
+const PROGMEM char  joyStickxxxx[] = "####";
 
-PROGMEM const char  volts_xx_xV[]  = " ##.#V";
-PROGMEM const char  volts_x_xxxV[] = " #.###V";
+const PROGMEM char  volts_xx_xV[]  = " ##.#V";
+const PROGMEM char  volts_x_xxxV[] = " #.###V";
 
-PROGMEM const char  volts_0_0xxxxxV[] = " 0.0#####V";
+const PROGMEM char  volts_0_0xxxxxV[] = " 0.0#####V";
 
-//PROGMEM const char  ohm_xx_xxxO[] = "##,###^"; // K OHMs      //0xF4; //OHM  //  line[6] =  0xF4; //OHM
-//PROGMEM const char  ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(244),char(0)};
-PROGMEM const char  ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(0xF4),char(0x00)};
+//const PROGMEM char  ohm_xx_xxxO[] = "##,###^"; // K OHMs      //0xF4; //OHM  //  line[6] =  0xF4; //OHM
+//const PROGMEM char  ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(244),char(0)};
+const PROGMEM char  ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(0xF4),char(0x00)};
 
-//PROGMEM const char  ohm_x_xxxxO[] = "#.####^"; // milla OHMs  //0xF4; //OHM
-PROGMEM const char  ohm_x_xxxxO[] = {' ','#','.','#','#','#','#',char(0xF4),char(0x00)};
+//const PROGMEM char  ohm_x_xxxxO[] = "#.####^"; // milla OHMs  //0xF4; //OHM
+const PROGMEM char  ohm_x_xxxxO[] = {' ','#','.','#','#','#','#',char(0xF4),char(0x00)};
 
 // ===========================================
 // Custom Display
 // ===========================================
-PROGMEM const char  timer[]        = "##:##:##";
-PROGMEM const char  timerDay[]     = "####:##:##:##";
+const PROGMEM char  timer[]        = "##:##:##";
+const PROGMEM char  timerDay[]     = "####:##:##:##";
 
 
-//PROGMEM const char  testLB[]   = "012#4567";
-//PROGMEM const char  testOdd[]  = "1234567";
-//PROGMEM const char  testEven[] = "12345678";
+//const PROGMEM char  testLB[]   = "012#4567";
+//const PROGMEM char  testOdd[]  = "1234567";
+//const PROGMEM char  testEven[] = "12345678";
 
 
 /**************************************************************************************/
@@ -324,9 +331,9 @@ PROGMEM const char  timerDay[]     = "####:##:##:##";
 #define RIGHT  4
 #define UP     5
 
-PROGMEM const char  dashes[]   = "====================";
-PROGMEM const char  freeram[]  = "Free Ram: ";
-PROGMEM const char  eepromSz[] = "EEPROM length: ";
+const PROGMEM char  dashes[]   = "====================";
+const PROGMEM char  freeram[]  = "Free Ram: ";
+const PROGMEM char  eepromSz[] = "EEPROM length: ";
 /**************************************************************************************/
 /***************               Error Checking Section              ********************/
 /**************************************************************************************/

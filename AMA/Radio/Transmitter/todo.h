@@ -50,7 +50,7 @@ X - finish start/init screens
 ? Try UNION for xxx.xx
 
 4 - u8/s8 number display
-  - can we use sprintf instead of role your own
+  - can we use sprintf instead of roll your own
 
 7 - collect var volts and test voltage
 
