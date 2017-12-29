@@ -185,7 +185,7 @@ class Menu
     // =======================================
     // =======================================
     // =======================================    
-    byte menuOptions001 [5] = {10, 11, 12, 13, 14};
+    byte menuOptions001 [1] = {10};
     
     byte menuOptions002 [1] = {MAINMENU};
     byte menuOptions003 [1] = {MAINMENU};
@@ -241,16 +241,16 @@ byte menuOptions100 [4] = {MAINMENU,102,104, 106};
 
 //===============================
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // Switch menu
-  byte menuOptions120 [4] = {SYSTEM, 122, 124, 126};      // Menu, Trim & Switch Menu.
+  // Switch menu      // Menu, Trim or Switch Menu.  (is this needed, it's a show only....
+  byte menuOptions120 [4] = {SYSTEM, 122, 124, 126};
     //-------------------------------
-    byte menuOptions122 [2] = {120,216};      // Switch
-    byte menuOptions124 [2] = {120,216};      // Trim
-    byte menuOptions126 [2] = {120,216};      // Menu
+    byte menuOptions122 [1] = {120};      // Switch
+    byte menuOptions124 [1] = {120};      // Trim
+    byte menuOptions126 [1] = {120};      // Menu
 
 
 //===============================
-// Control Range Limits (Left/Right)    // Control Range menu  (Left Right)
+// Control Range Limits (Left/Right)
 byte menuOptions130 [3] = {SYSTEM,133,137};      
 //===============================
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

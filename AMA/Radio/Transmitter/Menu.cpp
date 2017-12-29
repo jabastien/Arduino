@@ -924,7 +924,7 @@ void Menu::setMenu(byte menuOpt, byte menuValues[], byte sizeIs) {
   
   // Make sure we don't have an error.
   if (sizeIs > sizeof(menuOptions)) {
-    Serial.print  (F("Err: setMenu "));
+    Serial.print  (F("Error: setMenu "));
     Serial.print  (sizeIs);
     Serial.print  (F(" for "));
     Serial.print  (menuOpt);
@@ -1637,7 +1637,8 @@ void Menu::lcdSys135() { // Joystick range limits  (Find MID point, release stic
       case PITCH:
         lcd.print(PGMSTR(lcd_param_lcdSys135_PITCH));
         break;
-      }    
+      }  
+             
     }
  
     lcd.setCursor(1, 1); //   row >    column ^
@@ -1808,10 +1809,21 @@ void Menu::lcdInit192() { // Control check
     lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck_UD));
     lcd.setCursor(0, 3); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck_LR));
+
+    // Display switches as bin (0's and 1's)
+    lcd.setCursor(12, 1); //   row >    column ^
+    lcd.print( display.outputBinary( data->getMySwitchMap().switchPins));
+
+    lcd.setCursor(12, 2); //   row >    column ^
+    lcd.print( display.outputBinary( data->getMySwitchMap().trimPins));
+    
+    lcd.setCursor(12, 3); //   row >    column ^
+    lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
+       
   }
 
   
-  if (repeatCount > 6) {
+  if (repeatCount > 13) {
 
      // If Controls not home, wait.
 // DAQ finish this....
@@ -2024,7 +2036,6 @@ void Menu::lcdFunc216(byte _keyPress) { // Uint16_t number  (move to lcdFunc215 
 
        data->adjUint16_tNumber(displayMask[menuCol].getIncDirection(), displayMask[menuCol].getExpoFactor());
 
-      Serial.println();
     } else {
       // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
       Serial.println(PGMSTR(ERR216_0));

@@ -40,6 +40,8 @@ X - finish start/init screens
     = Model
     = System
 
+? - cleanup all 'err', turn into PRGMEM vars and document data.
+
 ?  - bug in menu, able to arrow down one (1) when no items are available
 
 ? - Make Switch, Trim, & Menu into a re-usable method like JoyStick
