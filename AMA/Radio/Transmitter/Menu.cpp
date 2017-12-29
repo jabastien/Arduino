@@ -95,7 +95,11 @@ void Menu::updateFPS(){
 }
 
 /////////////////////////////////////////////////////////////////////
-  
+void Menu::forceMenuChange(byte _menuItem){
+      menuOptions[0] = _menuItem;
+      menuKeyboard(SELECT);
+}
+
 void Menu::menuDisplay(){
 
   // We always display the MENU
@@ -112,6 +116,9 @@ void Menu::menuDisplay(){
 // =======================================    
     // ---------------------------------------
     case 1: //MAINMENU
+      if (isMenuChange){ 
+        setMenu(menuSelected, menuOptions001, membersof(menuOptions001));
+      }       
       lcdMenu001();
       break;
     // ---------------------------------------
@@ -125,7 +132,11 @@ void Menu::menuDisplay(){
       break;
     // ---------------------------------------
     case 10:
+      if (isMenuChange){ 
+        setMenu(menuSelected, menuOptions010, membersof(menuOptions010));
+      }        
       lcdMenu010();
+      Serial.println("010");
       break;
     // ---------------------------------------
     case 11:
@@ -168,6 +179,9 @@ void Menu::menuDisplay(){
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     case 100: // // Pre, Pst & Ref Menu
 //      lcdInit100();
+//      if (isMenuChange){ 
+//        setMenu(menuSelected, menuOptions102, membersof(menuOptions102));
+//      }   
       Serial.println("fix 100");
       break;
     // ---------------------------------------
@@ -422,6 +436,7 @@ void Menu::menuDisplay(){
         setMenu(menuSelected, menuOptions192, membersof(menuOptions192));
       }    
       lcdInit192();
+      
       break;
 
 
@@ -450,7 +465,8 @@ void Menu::menuDisplay(){
       Serial.print  (F("Menu not found Error: " ));
       Serial.print  (menuSelected);
       Serial.println(F(" - reset"));
-      menuSelected = STARTMENU;
+//      menuSelected = INITMENU;
+      forceMenuChange(INITMENU);
       break;
   }  
 
@@ -777,7 +793,8 @@ void Menu::funcDisplay(byte _keyPress){
       Serial.print  (F("Function not found Error: " ));
       Serial.print  (function);
       Serial.println(F(" - reset"));
-      menuSelected = STARTMENU;
+      //menuSelected = INITMENU;
+      forceMenuChange(INITMENU);
       break;    
   }
 
@@ -788,6 +805,9 @@ void Menu::funcDisplay(byte _keyPress){
 }
 
 void Menu::updateLCD(byte keyPress) {
+
+Serial.print(menuOptions[0]);
+Serial.print(" ");
 
   menuDisplay();
 
@@ -800,13 +820,13 @@ void Menu::updateLCD(byte keyPress) {
     funcDisplay(keyPress); 
   }
 
-//  if (false){
-//    Serial.print  ("updateLCD 1 : ");
-//    Serial.print  ("isMenuChange = ");
-//    Serial.print  (isMenuChange);
-//    Serial.print  (" repeatCount = ");
-//    Serial.println(repeatCount);
-//  }
+  if (true){
+    Serial.print  ("updateLCD 1 : ");
+    Serial.print  ("isMenuChange = ");
+    Serial.print  (isMenuChange);
+    Serial.print  (" repeatCount = ");
+    Serial.println(repeatCount);
+  }
 
   isMenuChange = false;
   
@@ -814,15 +834,17 @@ void Menu::updateLCD(byte keyPress) {
     repeatCount = 0;
   }
   
-//  if (true){
-//    if (keyPress != NOKEY){
-//      Serial.print  ("keyPress ");
-//      Serial.print  (keyPress);
-//      Serial.print  (" menuAction ");
-//      Serial.print  (menuAction);
-//      printDrmc();
-//    }
-//  } 
+  if (true){
+    if (keyPress != NOKEY){
+      Serial.print  ("keyPress ");
+      Serial.print  (keyPress);
+      Serial.print  (" menuAction ");
+      Serial.print  (menuAction);
+      Serial.println(" ");
+      //printDrmc();
+    }
+  } 
+  
 }
 
 //void Menu::printDrmc(){
@@ -840,6 +862,8 @@ void Menu::updateLCD(byte keyPress) {
 
 //void Menu::setMenu(String menuOpt, byte menuValues[], byte sizeIs) {
 void Menu::setMenu(byte menuOpt, byte menuValues[], byte sizeIs) {
+
+  Serial.println(menuOpt);
   
   // Make sure FUNCTIONs don't use this method (bad things heppen
   if (menuValues[0] == FUNCTION) {
@@ -1648,14 +1672,15 @@ void Menu::lcdInit150() {  // Starting   [click (select) out to 150]
     lcd.init();
     lcd.begin(20,4);
     lcd.backlight();
-  //lcd.blink();  //lcd.noBlink();
+    //lcd.blink();
+    //lcd.noBlink();
     
     lcd.setCursor(6, 1);//   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdInit150_startUp));    
   }
   
-  if (repeatCount > 2) { // ~delay(250);
-      menuKeyboard(SELECT);
+  if (repeatCount > 4) { // ~delay(250);
+      forceMenuChange(SPLASH); //151
   }
 }
 
@@ -1674,28 +1699,27 @@ void Menu::lcdInit151() { // Splash     [no click 'select button' out to 151]
     lcd.print(PGMSTR(lcd_param_lcdInit151_versionNum));
   }
 
+  // If first time run (no EEPROM data)   
   if (true){ // Can delete this condition when (no EEPROM data) is completed.
     lcd.setCursor(0, 3);//   row >    column ^
     if ((repeatCount/2)%2 == 0){// If ODD.
-      lcd.print("Finish EEPROM...");
+      lcd.print(F("Finish EEPROM..."));
     }else{
-      lcd.print("                ");
+      lcd.print(F("                "));
     }
   }
   
   if (repeatCount > 12) {//delay(2000);    
-     // If first time run (no EEPROM data)
+    // If first time run (no EEPROM data)   
     if (true){// DAQ finish this..(assume first time)..need to read the EEPROM data to know if it is 1st time
-        menuKeyboard(DOWN);  // menuSelected = 252; // Initialize values
+      // First time run, initialize system
+      forceMenuChange(FIRSTINIT); // 152
     } else {
-        menuKeyboard(DOWN);
-        menuKeyboard(DOWN);  //menuSelected = CTLCHECK = 192; // Go to Control check before Main Menu 
+      // Go to Control check before Main Menu 
+      forceMenuChange(CTLCHECK);  // 192
     }
-    menuAction = doMenu;
-    menuKeyboard(SELECT);
   }
 }
-
 
 
 // -------------------------------------------
@@ -1717,7 +1741,8 @@ void Menu::lcdInit192() { // Control check
     // 3
     displayMask[3].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(PITCH));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
-    
+
+    repeatCount = 0;
   }
 
 
@@ -1735,15 +1760,18 @@ void Menu::lcdInit192() { // Control check
   }
 
   
-  if (repeatCount > 3) {//delay(2000);
-
-// DAQ finish this....
-// DAQ finish this....
-// DAQ finish this....
+  if (repeatCount > 6) {
 
      // If Controls not home, wait.
-    if (false){
-      menuSelected = MAINMENU; // Main
+// DAQ finish this....
+// DAQ finish this....
+// DAQ finish this....     
+    if (true){
+//      menuAction = doMenu;
+//      //menuKeyboard(SELECT);
+//      menuSelected = MAINMENU; // Main
+//      menuChangeCheck();
+      forceMenuChange(MAINMENU);
     }
   } 
 
@@ -1782,6 +1810,13 @@ void Menu::lcdInit192() { // Control check
 
 //data->getBatVolts();
 }
+
+
+
+
+
+
+
 /*
 
   if (isMenuChange){ 
@@ -1993,10 +2028,11 @@ void Menu::lcdFunc239() { // Y/N
   }
   
   if (repeatCount > 1) { // ~delay(250);
-    menuSelected = STARTMENU;
+    //menuSelected = 000; //INITMENU;
+    forceMenuChange(000000000);
+    // exit to INITMENU
   }
 
-  // exit to xSTARTMENU
 }
 
 // -------------------------------------------

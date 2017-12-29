@@ -114,13 +114,15 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 /**************************************************************************************/
 /***************           defaults configurations                 ********************/
 /**************************************************************************************/
-#define MAINMENU  1   // Main Menu
+#define MAINMENU   1   // Main Menu
 
-#define X_MITTER  2   // Transmitter Main Menu
-#define MODEL     50  // Model Main Menu
-#define SYSTEM    100 // System Menu
+#define X_MITTER   2   // Transmitter Main Menu
+#define MODEL      50  // Model Main Menu
+#define SYSTEM     100 // System Menu
 
-#define STARTMENU 150 // This is the Init/Startup screen.
+#define INITMENU  150 // This is the Init/Startup screen.
+#define SPLASH    151
+#define FIRSTINIT 152
 #define CTLCHECK  192 // Required 
 
 #define FUNCTION  255 // Function indicator

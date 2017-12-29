@@ -165,10 +165,10 @@ void loop() {
   // The calibration numbers used here should be measured
   // for your joysticks so they send the correct values.
   //------------------------------------------------------
-  data.getMyControlsRangeMap(THROTTLE).current = analogRead(A0);
-  data.getMyControlsRangeMap(YAW).current = analogRead(A1);
-  data.getMyControlsRangeMap(ROLL).current = analogRead(A2);
-  data.getMyControlsRangeMap(PITCH).current = analogRead(A3);
+  data.getMyControlsRangeMap(THROTTLE).current  = analogRead(A0);
+  data.getMyControlsRangeMap(YAW).current       = analogRead(A1);
+  data.getMyControlsRangeMap(ROLL).current      = analogRead(A2);
+  data.getMyControlsRangeMap(PITCH).current     = analogRead(A3);
 
   //------------------------------------------------------
   // 4051 (3x) Switch address
@@ -233,7 +233,7 @@ void loop() {
   keyPad.doKeys(data.getJoyAux(3));
   keyPress = keyPad.getKeyPressed();
 
-Serial.println(keyPress);
+//Serial.println(keyPress);
   //------------------------------------------------------
   // Inc Frames Per Second
   //------------------------------------------------------
@@ -245,61 +245,38 @@ Serial.println(keyPress);
 
   if (keyPress > 0) {
        menu.updateLCD(keyPress);
-
-  if (keyPress > 5){
-#ifdef NOTDEFINED
-if(true){    
-    Serial.print  ("KP: Ignore KeyPress: "); // Not sure how this is getting changed.
-    Serial.print  (keyPress);
-    Serial.print  (" ");
-    Serial.print  (data.getJoyAux(3));
-    Serial.println();
-}
-#endif
-    }
-  }
-
+  } else {
   if (menu.isScreenRefreshNeeded()) {
-       menu.updateLCD(keyPress);
-
-#ifdef NOTDEFINED
-if(true){
-    Serial.print  ("=== pre-> ");
-    Serial.print  (data.getPreVolts()); // this is for testing.
-    Serial.print  ("V  ");
-    Serial.print  ("=== pst-> ");
-    Serial.print  (data.getPstVolts()); // this is for testing.
-    Serial.print  ("V  ");
-    Serial.print  ("=== v5 -> ");
-    Serial.print  (data.getV5Volts()); // this is for testing.
-    Serial.print  ("V  ");
-//    Serial.print  ("=== amp-> ");
-//    Serial.print  (data.getMilliAmps()); // this is for testing.
-//    Serial.print  ("mA  ");
-    Serial.println();
-
-    lcd.setCursor(0, 3);//   row >    column ^
-    lcd.print  ("  ");
-    lcd.print((data.getMilliAmps()));
-    lcd.print  ("mA  ");
-}
-#endif
-    
-  if (keyPress > 5){
-#ifdef NOTDEFINED
-if(true){    
-      Serial.print  ("SR: Ignore KeyPress: "); // Not sure how this is getting changed.
-      Serial.print  (keyPress);
-      Serial.print  (" ");
-      Serial.print  (data.getJoyAux(3));
-      Serial.println();
-}
-#endif
+       menu.updateLCD(NOKEY);    
     }
-    
   }
 
+  
   //------------------------------------------------------
   // Serial Debugging
   //serialDebug();
 }
+
+
+//  #ifdef NOTDEFINED
+//    if(true){
+//      Serial.print  ("=== pre-> ");
+//      Serial.print  (data.getPreVolts()); // this is for testing.
+//      Serial.print  ("V  ");
+//      Serial.print  ("=== pst-> ");
+//      Serial.print  (data.getPstVolts()); // this is for testing.
+//      Serial.print  ("V  ");
+//      Serial.print  ("=== v5 -> ");
+//      Serial.print  (data.getV5Volts()); // this is for testing.
+//      Serial.print  ("V  ");
+//  //    Serial.print  ("=== amp-> ");
+//  //    Serial.print  (data.getMilliAmps()); // this is for testing.
+//  //    Serial.print  ("mA  ");
+//      Serial.println();
+//  
+//      lcd.setCursor(0, 3);//   row >    column ^
+//      lcd.print  ("  ");
+//      lcd.print((data.getMilliAmps()));
+//      lcd.print  ("mA  ");
+//  }
+//  #endif

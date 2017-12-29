@@ -47,6 +47,9 @@ class Menu
     void menuDisplay(void);
     void menuChangeCheck(void);
     void menuKeyboard(byte);
+
+    void forceMenuChange(byte);
+    
     void funcKeyboard(byte);
     void funcChangeCheck(void);
     void funcDisplay(byte);
@@ -145,14 +148,14 @@ class Menu
     
     byte repeatCount = 0;
     
-    byte menuSelected = STARTMENU;
+    byte menuSelected = INITMENU;
     
     byte function = 0;
     boolean isMenuChange = true;
     boolean isFuncChange = true;
 
     //boolean isSetVisable = false;
-    
+   
     //===============================================================================
     //===============================================================================
     //===============================================================================
@@ -182,7 +185,7 @@ class Menu
     // =======================================
     // =======================================
     // =======================================    
-    byte menuOptions001 [1] = {10};
+    byte menuOptions001 [5] = {10, 11, 12, 13, 14};
     
     byte menuOptions002 [1] = {MAINMENU};
     byte menuOptions003 [1] = {MAINMENU};
@@ -275,8 +278,8 @@ byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset
     // =======================================
     // =======================================
     // =======================================
-    byte menuOptions150 [1] = {151};                // Starting   [click (select) out to 254]
-    byte menuOptions151 [3] = {151,152,CTLCHECK};  // Splash     [no click (select) out to 151]
+    byte menuOptions150 [1] = {INITMENU};           // Starting   [no click (select) out of 150]
+    byte menuOptions151 [3] = {SPLASH};             // Splash     [no click (select) out of 151]
     
     byte menuOptions152 [3] = {154,216,216};        // Vin pre 1.1 & 1.2 ohms
     byte menuOptions154 [3] = {156,216,216};        // Vin pst 2.1 & 2.2 ohms
@@ -296,7 +299,7 @@ byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset
 
 // Need to show voltages here???? or on the Resister screen???
     
-    byte menuOptions192 [1] = {MAINMENU};           // Control Check (make sure all surfaces & switches are homed. (Prevent flight by mistake)
+    byte menuOptions192 [1] = {CTLCHECK};           // Control Check (make sure all surfaces & switches are homed. (Prevent flight by mistake) [no click (select) out of 192]
 
     // =======================================
     // =======================================
