@@ -61,47 +61,58 @@ class Menu
 
  
     // ===========================================
-    //  *         0 = Reserved
+    // *   0 -   1 = Main Menu(s)
     // ===========================================
     void lcdMenu000(void);
-
-    // ===========================================
-    // *   1 -  49 = Transmitter
-    // ===========================================
     void lcdMenu001(void);
 
-    // Menu Items
-    void lcdMenu002(void);
-    void lcdMenu003(void);    
-    void lcdMenu010(void);
-    void lcdMenu011(void);
-    void lcdMenu012(void);
-    void lcdMenu013(void);
-    void lcdMenu014(void);
+    // ===========================================
+    // *   2 -  49 = Transmitter
+    // ===========================================
+    void lcdTx002(void);
+    void lcdTx003(void);    
+    void lcdTx010(void);
+    void lcdTx011(void);
+    void lcdTx012(void);
+    void lcdTx013(void);
+    void lcdTx014(void);
+
+    void lcdTx022(void);
 
     // ===========================================
     // *  50 -  99 = Models
     // ===========================================
+    void lcdMod050(void);
     
     
     // ===========================================
     // * 100 - 149 = System (Resistors, Voltages)
     // ===========================================
-    void lcdSys102(void); // Vin pre 1.1 & 1.2 ohms
-    void lcdSys104(void); // Vin pst 2.1 & 2.2 ohms
-    void lcdSys106(void); // V5.0    3.1 & 3.2 ohms
+    void lcdSys100(void); // OHMs & Volts
 
-    void lcdSys112(void); // Shunt ohms 
-    void lcdSys114(void); // V5.0 Reference
+    void lcdSys101(void); // OHMs & Volts
+    
+    void lcdSys102(void); // OHMs for Pre, Pst & V5.0    
+    void lcdSys104(void); // OHMs Vin pre 1.1 & 1.2 ohms
+    void lcdSys105(void); // OHMs Vin pst 2.1 & 2.2 ohms
+    void lcdSys106(void); // OHMs V5.0    3.1 & 3.2 ohms
 
-    void lcdSys122(void); // Switch
-    void lcdSys124(void); // Trim
-    void lcdSys126(void); // Menu buttons
+    void lcdSys110(void); // Volts for Shunt & 5V Ref
+    void lcdSys112(void); // Volts Shunt ohms 
+    void lcdSys114(void); // Volts V5.0 Reference
 
-    void lcdSys135(void); // Throttle - Joystick range limits (Uses             editJoystick 0)  // s/b 134
-//  void lcdSys136(void); // Yoke     - Joystick range limits (Uses lcdSys135 , editJoystick 1)
-//  void lcdSys138(void); // Roll     - Joystick range limits (Uses lcdSys135 , editJoystick 2)
-//  void lcdSys139(void); // Pitch    - Joystick range limits (Uses lcdSys135 , editJoystick 3)
+
+    void lcdSys122(void); // Switch / Trim / Menu buttons
+
+
+    void lcdSys130(void); // Throttle - Joystick range limits (Uses             editJoystick 0)  // s/b 134
+    void lcdSys131(void); // Throttle - Left Joystick range limits (Uses             editJoystick 0)  // s/b 134
+    void lcdSys132(void); // Throttle - Right Joystick range limits (Uses             editJoystick 0)  // s/b 134
+
+    void lcdSys134(void); // Throttle - Joystick range limits (Uses             editJoystick 0)  // s/b 134
+//  void lcdSys135(void); // Yoke     - Joystick range limits (Uses lcdSys134 , editJoystick 1)
+//  void lcdSys138(void); // Roll     - Joystick range limits (Uses lcdSys134 , editJoystick 2)
+//  void lcdSys139(void); // Pitch    - Joystick range limits (Uses lcdSys134 , editJoystick 3)
 
     void lcdSys148(void); // System Reset
 
@@ -170,24 +181,24 @@ class Menu
     // =======================================
     // =======================================
     // =======================================
-    // *         0 = Reserved
+    // *         0 = Main Menu(s)
     // =======================================
     // =======================================
-    // ======================================= 
-    byte menuOptions000 [0] = {/* Do NOT use: reserved */}; 
+    // =======================================
+    byte menuOptions000 [1] = {1};
+    byte menuOptions001 [4] = {MAINMENU, 2, 50, 100};
 
 
     // =======================================
     // =======================================
     // =======================================
-    // *   1 -  49 = Transmitter
+    // *   2 -  49 = Transmitter
     //
     // #define MAINMENU  1   // Main Menu
     // #define X_MITTER  2   // Transmitter Main Menu   
     // =======================================
     // =======================================
     // =======================================    
-    byte menuOptions001 [1] = {10};
     
     byte menuOptions002 [1] = {MAINMENU};
     byte menuOptions003 [1] = {MAINMENU};
@@ -208,6 +219,7 @@ class Menu
     // =======================================
     // =======================================
     // =======================================
+    byte menuOptions050 [1] = {MAINMENU};
 
 
     
@@ -222,51 +234,56 @@ class Menu
     // =======================================
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //===============================
-// Ohms & Voltage  (SYSTEM)
-byte menuOptions100 [4] = {MAINMENU,102,104, 106};
+// System - Ohms or Voltage / Control Range / Reset 
+byte menuOptions100 [4] = {MAINMENU, 101, 130, 148};
 //===============================
+  
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // Ohms (101)
-  byte menuOptions101 [4] = {SYSTEM,102,104, 106};  // Pre, Pst & Ref Menu
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    byte menuOptions102 [3] = {101,216,216};  // Vin  pre 1.1 & 1.2 ohms
-    byte menuOptions104 [3] = {101,216,216};  // Vin  pst 2.1 & 2.2 ohms
-    byte menuOptions106 [3] = {101,216,216};  // V5.0 Ref 3.1 & 3.2 ohms
+  // (101) - Ohms / Switches
+  byte menuOptions101 [4] = {SYSTEM, 102, 110, 122};
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // Shunt, Reference & V5 menu
-  byte menuOptions110 [3] = {SYSTEM, 112, 114};
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    byte menuOptions112 [2] = {110,216};      // Shunt ohms
-    byte menuOptions114 [2] = {110,216};      // V5.0    Reference Voltage Measured
-    byte menuOptions116 [1] = {110};      // Pre, Post & V5 Regulator
+  // (102) - Ohms
+  byte menuOptions102 [4] = {101,104,105, 106};  // Pre, Pst & Ref Menu
+  //-------------------------------
+    byte menuOptions104 [3] = {102,216,216};  // Vin  pre 1.1 & 1.2 ohms
+    byte menuOptions105 [3] = {102,216,216};  // Vin  pst 2.1 & 2.2 ohms
+    byte menuOptions106 [3] = {102,216,216};  // V5.0 Ref 3.1 & 3.2 ohms
 
-//===============================
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // Switch menu      // Menu, Trim or Switch Menu.  (is this needed, it's a show only....
-  byte menuOptions120 [4] = {SYSTEM, 122, 124, 126};
+  // (110) - Shunt / Reference / Voltages
+  byte menuOptions110 [4] = {101, 112, 114, 116};
+  //-------------------------------
+    byte menuOptions112 [2] = {110, 216};      // 110 - Shunt ohms
+    byte menuOptions114 [2] = {110, 216};      // 110 - V5.0    Reference Voltage Measured
+    byte menuOptions116 [2] = {110, 216};      // 110 - Voltage for Pre, Post & V5 Regulator 
+
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  System - Switch / Trim / Menu.
+//  byte menuOptions120 [4] = {SYSTEM, 122, 124, 126};
     //-------------------------------
-    byte menuOptions122 [1] = {120};      // Switch
-    byte menuOptions124 [1] = {120};      // Trim
-    byte menuOptions126 [1] = {120};      // Menu
+    byte menuOptions122 [1] = {SYSTEM};      // Switch
+//    byte menuOptions124 [1] = {120};      // Trim
+//    byte menuOptions126 [1] = {120};      // Menu
 
 
 //===============================
 // Control Range Limits (Left/Right)
-byte menuOptions130 [3] = {SYSTEM,133,137};      
+byte menuOptions130 [3] = {SYSTEM,131,132};      
+    
 //===============================
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // Left (Throttle or Yaw)
-  byte menuOptions133 [3] = {130,134,135};
+    byte menuOptions131 [3] = {130,134,135};  
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      byte menuOptions134 [2] = {133,240};      // Throttle
-      byte menuOptions135 [2] = {133,240};      // Yaw
+      byte menuOptions134 [2] = {131,240};      // Throttle
+      byte menuOptions135 [2] = {131,240};      // Yaw
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // Right (Roll or Pitch)
-  byte menuOptions137 [3] = {130,138,139};
+    byte menuOptions132 [3] = {130,138,139};      
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      byte menuOptions138 [2] = {137,240};      // Roll
-      byte menuOptions139 [2] = {137,240};      // Pitch
+      byte menuOptions138 [2] = {132,240};      // Roll
+      byte menuOptions139 [2] = {132,240};      // Pitch
 
 //===============================
 // Reset Menu
@@ -290,9 +307,9 @@ byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset
     byte menuOptions162 [2] = {164,216};            // Shunt ohms
     byte menuOptions164 [2] = {172,216};            // V5.0    Reference Voltage 
 
-    byte menuOptions172 [1] = {174};                // Switch
-    byte menuOptions174 [1] = {176};                // Trim
-    byte menuOptions176 [1] = {182};                // Menu
+    byte menuOptions172 [1] = {182};                // Switch
+//    byte menuOptions174 [1] = {176};                // Trim
+//    byte menuOptions176 [1] = {182};                // Menu
 
     byte menuOptions182 [2] = {183,240};            // Joystick range limits
     byte menuOptions183 [2] = {184,240};            // Joystick range limits

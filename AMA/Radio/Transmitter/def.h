@@ -114,7 +114,8 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 /**************************************************************************************/
 /***************           defaults configurations                 ********************/
 /**************************************************************************************/
-#define MAINMENU   1   // Main Menu
+//#define MAINMENU   1   // Main Menu
+#define MAINMENU   0   // Main Menu
 
 #define X_MITTER   2   // Transmitter Main Menu
 #define MODEL      50  // Model Main Menu
@@ -164,19 +165,28 @@ const PROGMEM char lcd_param_common_MMM  []  = "Read Min. Ctr. Max.";
 //                                 123456789012 
 const PROGMEM char ERR000 []     = "ERR000";
 
-// X102
-// lcdSys102
-// Vin pre 1.1 & 1.2 ohms                         12345678901234
-const PROGMEM char lcd_param_lcdSys102_Vpre [] = "Vin pre ohms";
-const PROGMEM char lcd_param_lcdSys102_R11 [] = "R1.1";
-const PROGMEM char lcd_param_lcdSys102_R12 [] = "R1.2";
+
+//
+// X001: 
+//                                 123456789012 
+const PROGMEM char lcd_param_lcdSys001_Xmitter [] = "Transmitter";
+const PROGMEM char lcd_param_lcdSys001_Models  [] = "Model";
+const PROGMEM char lcd_param_lcdSys001_System  [] = "System";
+
 
 // X104
 // lcdSys104
+// Vin pre 1.1 & 1.2 ohms                         12345678901234
+const PROGMEM char lcd_param_lcdSys104_Vpre [] = "Vin pre ohms";
+const PROGMEM char lcd_param_lcdSys104_R11 [] = "R1.1";
+const PROGMEM char lcd_param_lcdSys104_R12 [] = "R1.2";
+
+// X105
+// lcdSys105
 // Vin pst 2.1 & 2.2 ohms                         12345678901234
-const PROGMEM char lcd_param_lcdSys104_Vpst [] = "Vin post ohms";
-const PROGMEM char lcd_param_lcdSys104_R21 [] = "R2.1";
-const PROGMEM char lcd_param_lcdSys104_R22 [] = "R2.2";
+const PROGMEM char lcd_param_lcdSys105_Vpst [] = "Vin post ohms";
+const PROGMEM char lcd_param_lcdSys105_R21 [] = "R2.1";
+const PROGMEM char lcd_param_lcdSys105_R22 [] = "R2.2";
 
 
 
@@ -226,13 +236,13 @@ const PROGMEM char lcd_param_lcdSys126_Menu [] = "Menu";
 
 
 
-// X135
-// lcdSys135
+// X134
+// lcdSys134
 // Joystick range limits                            12345678901234567890
-const PROGMEM char lcd_param_lcdSys135_Throttle [] = "Throttle";
-const PROGMEM char lcd_param_lcdSys135_YAW      [] = "Yaw";
-const PROGMEM char lcd_param_lcdSys135_ROLL     [] = "Roll";
-const PROGMEM char lcd_param_lcdSys135_PITCH    [] = "Pitch";
+const PROGMEM char lcd_param_lcdSys134_Throttle [] = "Throttle";
+const PROGMEM char lcd_param_lcdSys134_YAW      [] = "Yaw";
+const PROGMEM char lcd_param_lcdSys134_ROLL     [] = "Roll";
+const PROGMEM char lcd_param_lcdSys134_PITCH    [] = "Pitch";
 
 const PROGMEM char lcd_param_common_UD [] = "Move up/down";
 const PROGMEM char lcd_param_common_LR [] = "Move left/right";
