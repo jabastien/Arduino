@@ -7,6 +7,8 @@ Todo:
 - 
  */
 
+// https://learn.parallax.com/tutorials/robot/elev-8/multirotor-flying-guide-elev-8-v2/learn-your-transmitter-controls
+
 /*
 https://cdn-learn.adafruit.com/downloads/pdf/memories-of-an-arduino.pdf
 

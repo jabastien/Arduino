@@ -38,6 +38,9 @@ class Utils
 //    void ErrorPrint(String, uint8_t, ...);
 //    float Print( const char* , ... );
 //    void myprintf(const char *, ...);
+//    void Q_printf( char *, ... );
+    void ShowVar( char *szTypes, ... );
+    
   // ======================================    
   // library-accessible "private" interface
   // ======================================    

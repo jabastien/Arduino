@@ -148,8 +148,8 @@ void setup(){
 //utils.ErrorPrint("asf",3,1,2,4);
 //
 ////utils.Print("This is funny, isn't it?", 1, 2, 12.3456, 3, 4, "nice");
-//
 //utils.myprintf("This is funny, isn't it?", 1, 2, 12.3456, 3, 4,"YES???");
+//utils.Q_printf( "sdc", "This is a string", 29, 'X'); 
 
 }
 

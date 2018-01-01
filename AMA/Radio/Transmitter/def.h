@@ -114,7 +114,7 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 /**************************************************************************************/
 /***************           defaults configurations                 ********************/
 /**************************************************************************************/
-//#define MAINMENU   1   // Main Menu
+
 #define MAINMENU   0   // Main Menu
 
 #define X_MITTER   2   // Transmitter Main Menu
@@ -137,78 +137,102 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 #define INT_MID 1023/2
 #define INT_MAX 1023
 
+
 /**************************************************************************************/
 /***************             Proc specific definitions             ********************/
 /**************************************************************************************/
+/*
+  const dataType variableName[] PROGMEM = {}; // use this form
+  const PROGMEM dataType variableName[] = {}; // or this form
+  const dataType PROGMEM variableName[] = {}; // not this one
+*/
+/**************************************************************************************/
+
 // Common
 const PROGMEM char lcd_param_common_set [] = "(Set)";
 
-const PROGMEM char lcd_param_common_Digits []  = "Digits";
+//const PROGMEM char lcd_param_common_Digits []  = "Digits";
 const PROGMEM char lcd_param_common_Pos    [] = "12345678";
-const PROGMEM char lcd_param_common_Values [] = "Values";
+//const PROGMEM char lcd_param_common_Values [] = "Values";
 
-
-//const dataType variableName[] PROGMEM = {}; // use this form
-//const PROGMEM dataType variableName[] = {}; // or this form
-//const dataType PROGMEM variableName[] = {}; // not this one
 
 
 //                                              01234567890123456789 
 const PROGMEM char lcd_param_common_Joystick [] = "Joystick";
 const PROGMEM char lcd_param_common_Set    []   = "Set?";
 //                                              1023 1023 1023 1023 
-const PROGMEM char lcd_param_common_MMM  []  = "Read Min. Ctr. Max.";
+const PROGMEM char lcd_param_common_MCM  []  = "Read Min. Ctr. Max.";
 
 
 //
 // X000: 
 //                                 123456789012 
+
+const PROGMEM char lcd_param_lcdSys000_MainMenu []     = "Main Menu";
 const PROGMEM char ERR000 []     = "ERR000";
 
 
 //
-// X001: 
+// X001
+// lcdMain001
 //                                 123456789012 
 const PROGMEM char lcd_param_lcdSys001_Xmitter [] = "Transmitter";
 const PROGMEM char lcd_param_lcdSys001_Models  [] = "Model";
 const PROGMEM char lcd_param_lcdSys001_System  [] = "System";
 
 
+// X100
+// lcdSys100
+//                                                     12345678901234
+const PROGMEM char lcd_param_lcdSys100_OhmsVolts [] = "OHMs & Volts";
+const PROGMEM char lcd_param_lcdSys100_CntlRange [] = "Controls";
+const PROGMEM char lcd_param_lcdSys100_FactReset [] = "Factory Reset";
+
+
+// X101
+// lcdSys101
+// Vin pre 1.1 & 1.2 OHMs                          12345678901234
+const PROGMEM char lcd_param_lcdSys101_Ohms  [] = "OHMs";
+const PROGMEM char lcd_param_lcdSys101_Volts [] = "Volts";
+
+// x102
+// lcdSys102
+//const PROGMEM char lcd_param_lcdSys102_Pre   [] = "Pre";
+//const PROGMEM char lcd_param_lcdSys102_Post  [] = "Post";
+//const PROGMEM char lcd_param_lcdSys102_V5Ref [] = "5.1v Ref";
+
+    
 // X104
 // lcdSys104
-// Vin pre 1.1 & 1.2 ohms                         12345678901234
-const PROGMEM char lcd_param_lcdSys104_Vpre [] = "Vin pre ohms";
+// Vin pre 1.1 & 1.2 OHMs                         12345678901234
+const PROGMEM char lcd_param_lcdSys104_Vpre [] = "Vin pre OHMs";
 const PROGMEM char lcd_param_lcdSys104_R11 [] = "R1.1";
 const PROGMEM char lcd_param_lcdSys104_R12 [] = "R1.2";
 
 // X105
 // lcdSys105
-// Vin pst 2.1 & 2.2 ohms                         12345678901234
-const PROGMEM char lcd_param_lcdSys105_Vpst [] = "Vin post ohms";
+// Vin pst 2.1 & 2.2 OHMs                         12345678901234
+const PROGMEM char lcd_param_lcdSys105_Vpst [] = "Vin post OHMs";
 const PROGMEM char lcd_param_lcdSys105_R21 [] = "R2.1";
 const PROGMEM char lcd_param_lcdSys105_R22 [] = "R2.2";
 
-
-
 // X106
 // lcdSys106
-//5.0V 3.1 & 3.2 ohms                              12345678901234
-const PROGMEM char lcd_param_lcdSys106_V5div [] = "5V divide ohm";
+//5.0V 3.1 & 3.2 OHMs                              1234567890123456789
+const PROGMEM char lcd_param_lcdSys106_V5div [] = "5.0V Reg. OHMs";
 const PROGMEM char lcd_param_lcdSys106_R31 [] = "R3.1";
 const PROGMEM char lcd_param_lcdSys106_R32 [] = "R3.2";
 
-
 // X112
 // lcdSys112
-// Shunt ohms 
+// Shunt OHMs 
 const PROGMEM char lcd_param_lcdSys112_Shunt [] = "Shunt ohm";
 const PROGMEM char lcd_param_lcdSys112_Rshnt [] = "Shunt";
 
-
 // X114
 // lcdSys114
-// V5.0 Reference
-const PROGMEM char lcd_param_lcdSys114_5Vref [] = "5V Reference";
+// V5.0 Reference                                  1234567890123456789
+const PROGMEM char lcd_param_lcdSys114_5Vref [] = "5.1V Reference";
 const PROGMEM char lcd_param_lcdSys114_5Vmes [] = "Measure";
 const PROGMEM char lcd_param_lcdSys114_5Vsys [] = "System";
 const PROGMEM char lcd_param_lcdSys114_v5bit [] = "Volt/Bit";
@@ -218,22 +242,25 @@ const PROGMEM char lcd_param_lcdSys114_v5bit [] = "Volt/Bit";
 // lcdSys122
 // Switch buttons
 const PROGMEM char lcd_param_lcdSys122_Switch [] = "Switch";
-//const PROGMEM char lcd_param_lcdSys122_Desc []   = "0 = Nor : 1 = Rev";
-
-
 
 // X124
 // lcdSys124    
 // Trim buttons
 const PROGMEM char lcd_param_lcdSys124_Trim [] = "Trim";
 
-
-
 // X126
 // lcdSys126    
 // Menu buttons
-const PROGMEM char lcd_param_lcdSys126_Menu [] = "Menu";
+const PROGMEM char lcd_param_lcdSys126_Menu [] = "Button";
 
+
+// X130
+// lcdSys130
+// Joystick range limits                                 12345678901234567890
+const PROGMEM char lcd_param_lcdSys134_Cntl        [] = "Controls";
+const PROGMEM char lcd_param_lcdSys134_LeftCtlRng  [] = "Left Cntl Rng";
+const PROGMEM char lcd_param_lcdSys134_RightCtlRng [] = "Right Cntl Rng";
+const PROGMEM char lcd_param_lcdSys134_SwitchesButtons    [] = "SWs & Btns";
 
 
 // X134
@@ -268,7 +295,7 @@ const PROGMEM char lcd_param_lcdInit150_startUp [] = "Start up";
 // Splash   [no click 'select button' out to 151]
 const char  lcd_param_lcdInit151_qBytesWorld[] PROGMEM = "Q-Bytes World";
 const char  lcd_param_lcdInit151_deviceInfo [] PROGMEM = {"2.4G Transmitter"};
-const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.35"};
+const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.36"};
 
 // X192: 
 // lcdInit192

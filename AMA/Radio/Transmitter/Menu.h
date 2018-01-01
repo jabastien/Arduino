@@ -93,12 +93,12 @@ class Menu
     void lcdSys101(void); // OHMs & Volts
     
     void lcdSys102(void); // OHMs for Pre, Pst & V5.0    
-    void lcdSys104(void); // OHMs Vin pre 1.1 & 1.2 ohms
-    void lcdSys105(void); // OHMs Vin pst 2.1 & 2.2 ohms
-    void lcdSys106(void); // OHMs V5.0    3.1 & 3.2 ohms
+    void lcdSys104(void); // OHMs Vin pre 1.1 & 1.2 OHMs
+    void lcdSys105(void); // OHMs Vin pst 2.1 & 2.2 OHMs
+    void lcdSys106(void); // OHMs V5.0    3.1 & 3.2 OHMs
 
     void lcdSys110(void); // Volts for Shunt & 5V Ref
-    void lcdSys112(void); // Volts Shunt ohms 
+    void lcdSys112(void); // Volts Shunt OHMs 
     void lcdSys114(void); // Volts V5.0 Reference
 
 
@@ -203,7 +203,7 @@ class Menu
     byte menuOptions002 [1] = {MAINMENU};
     byte menuOptions003 [1] = {MAINMENU};
     
-    byte menuOptions010 [5] = {MAINMENU, 11, 12, 13, 14};
+    byte menuOptions010 [4] = {MAINMENU, 11, 12, 13};
     byte menuOptions011 [1] = {10};
     byte menuOptions012 [1] = {10};
     byte menuOptions013 [1] = {10};
@@ -220,8 +220,6 @@ class Menu
     // =======================================
     // =======================================
     byte menuOptions050 [1] = {MAINMENU};
-
-
     
     // =======================================
     // =======================================
@@ -240,21 +238,21 @@ byte menuOptions100 [4] = {MAINMENU, 101, 130, 148};
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // (101) - Ohms / Switches
-  byte menuOptions101 [4] = {SYSTEM, 102, 110, 122};
+  byte menuOptions101 [3] = {SYSTEM, 102, 110};
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // (102) - Ohms
   byte menuOptions102 [4] = {101,104,105, 106};  // Pre, Pst & Ref Menu
   //-------------------------------
-    byte menuOptions104 [3] = {102,216,216};  // Vin  pre 1.1 & 1.2 ohms
-    byte menuOptions105 [3] = {102,216,216};  // Vin  pst 2.1 & 2.2 ohms
-    byte menuOptions106 [3] = {102,216,216};  // V5.0 Ref 3.1 & 3.2 ohms
+    byte menuOptions104 [3] = {102,216,216};  // Vin  pre 1.1 & 1.2 OHMs
+    byte menuOptions105 [3] = {102,216,216};  // Vin  pst 2.1 & 2.2 OHMs
+    byte menuOptions106 [3] = {102,216,216};  // V5.0 Ref 3.1 & 3.2 OHMs
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // (110) - Shunt / Reference / Voltages
   byte menuOptions110 [4] = {101, 112, 114, 116};
   //-------------------------------
-    byte menuOptions112 [2] = {110, 216};      // 110 - Shunt ohms
+    byte menuOptions112 [2] = {110, 216};      // 110 - Shunt OHMs
     byte menuOptions114 [2] = {110, 216};      // 110 - V5.0    Reference Voltage Measured
     byte menuOptions116 [2] = {110, 216};      // 110 - Voltage for Pre, Post & V5 Regulator 
 
@@ -262,14 +260,14 @@ byte menuOptions100 [4] = {MAINMENU, 101, 130, 148};
   //  System - Switch / Trim / Menu.
 //  byte menuOptions120 [4] = {SYSTEM, 122, 124, 126};
     //-------------------------------
-    byte menuOptions122 [1] = {SYSTEM};      // Switch
+    byte menuOptions122 [1] = {130};      // Switches * Btns
 //    byte menuOptions124 [1] = {120};      // Trim
 //    byte menuOptions126 [1] = {120};      // Menu
 
 
 //===============================
 // Control Range Limits (Left/Right)
-byte menuOptions130 [3] = {SYSTEM,131,132};      
+byte menuOptions130 [4] = {SYSTEM,131,132, 122};      
     
 //===============================
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -287,7 +285,7 @@ byte menuOptions130 [3] = {SYSTEM,131,132};
 
 //===============================
 // Reset Menu
-byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset
+byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset  (149 should be Y/N function)
 //===============================
 
     // =======================================
@@ -300,14 +298,14 @@ byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset
     byte menuOptions150 [1] = {INITMENU};           // Starting   [no click (select) out of 150]
     byte menuOptions151 [3] = {SPLASH};             // Splash     [no click (select) out of 151]
     
-    byte menuOptions152 [3] = {154,216,216};        // Vin pre 1.1 & 1.2 ohms
-    byte menuOptions154 [3] = {156,216,216};        // Vin pst 2.1 & 2.2 ohms
-    byte menuOptions156 [3] = {162,216,216};        // V5.0    3.1 & 3.2 ohms
+    byte menuOptions152 [3] = {154,216,216};        // Vin pre 1.1 & 1.2 OHMs
+    byte menuOptions154 [3] = {156,216,216};        // Vin pst 2.1 & 2.2 OHMs
+    byte menuOptions156 [3] = {162,216,216};        // V5.0    3.1 & 3.2 OHMs
 
-    byte menuOptions162 [2] = {164,216};            // Shunt ohms
+    byte menuOptions162 [2] = {164,216};            // Shunt OHMs
     byte menuOptions164 [2] = {172,216};            // V5.0    Reference Voltage 
 
-    byte menuOptions172 [1] = {182};                // Switch
+    byte menuOptions172 [1] = {182};                // Switches & Btns
 //    byte menuOptions174 [1] = {176};                // Trim
 //    byte menuOptions176 [1] = {182};                // Menu
 
@@ -362,7 +360,7 @@ byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset
 
       byte editJoyStick = 0;
 
-      byte menuOptions[5];
+      byte menuOptions[4];
       byte menuSize;
 
       enum MenuAction {

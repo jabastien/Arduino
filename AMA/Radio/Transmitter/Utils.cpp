@@ -119,6 +119,106 @@ void Utils::reverse(char stg [] ){
     }
 }
 
+
+//// ShowVar takes a format string of the form "ifs",
+//// where each character specifies the
+//// type of the argument in that position.
+////
+//// i = int
+//// f = float
+//// s = string (char *)
+////
+//// Following the format specification is a variable
+//// list of arguments. Each argument corresponds to
+//// a format character in the format string to which
+//// the szTypes parameter points
+//void Utils::ShowVar( char *szTypes, ... ) {
+//   va_list vl;
+//   int i;
+//
+// Serial.println( szTypes );
+//   // szTypes is the last argument specified; you must access
+//   // all others using the variable-argument macros.
+//   va_start( vl, szTypes );
+// 
+//   // Step through the list.
+//   for( i = 0; szTypes[i] != '\0'; ++i ) {
+//      union Printable_t {
+//         int i;
+//         float f;
+//         char *s;
+//      } Printable;
+// 
+//      switch( szTypes[i] ) { // Type to expect.
+//      case 'i':
+//         Printable.i = va_arg( vl, int );
+//         Serial.println( Printable.i );
+//      break;
+// 
+//      case 'f':
+//         Printable.f = va_arg( vl, double );
+//         Serial.println( Printable.f );
+//      break;
+// 
+//      case 's':
+//         Printable.s = va_arg( vl, char * );
+//         Serial.println( Printable.s );
+//      break;
+// 
+//      default:
+//      break;
+//   }
+//}
+//va_end( vl );
+//}
+ 
+//void setup(){
+//   Serial.begin(9600);
+//   ShowVar( "siff", "hi", 5, 6.34f, 4 );
+//}
+
+//// https://en.wikibooks.org/wiki/C%2B%2B_Programming/Code/Standard_C_Library/Functions/va_arg
+////  my_printf( "sdc", "This is a string", 29, 'X' );  
+//void my_printf( char *format, ... ) {
+//  va_list argptr;             
+//
+//  va_start( argptr, format );          
+//
+//  while( *format != '\0' ) {
+//    // string
+//    if( *format == 's' ) {
+//      char* s = va_arg( argptr, char * );
+//      char buffer[20];
+//      sprintf (buffer, "%s \0", s);
+//      //printf( "Printing a string: %s\n", s );
+//      Serial.print  ("String: ");
+//      Serial.println(buffer);
+//    }
+//    // character
+//    else if( *format == 'c' ) {
+//      char c = (char) va_arg( argptr, int );
+//      char buffer[20];
+//      sprintf (buffer, "%s \0", c);
+////    printf( "Printing a character: %c\n", c );
+//      Serial.print  ("Char: ");
+//      Serial.println(buffer);
+//      break;
+//    }
+//    // integer
+//    else if( *format == 'd' ) {
+//      int d = va_arg( argptr, int );
+////    printf( "Printing an integer: %d\n", d );
+//      Serial.print  ("Printing an integer: ");
+//      Serial.println(d);
+//    }          
+//
+//    *format++;
+//  }            
+//
+//  va_end( argptr );
+//}              
+
+// https://support.hpe.com/hpsc/doc/public/display?docId=emr_na-c02271549
 /*
 void Utils::ErrorPrint(String errorNum, uint8_t num, ...) {
 
