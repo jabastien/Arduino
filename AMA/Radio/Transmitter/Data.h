@@ -33,14 +33,14 @@ class Data
 
     void setJoyStick(byte, int);
 
-    void setJoyAux(byte, int);
-    int  getJoyAux(byte);
+    void setVolts(byte, int);
+    int  getVolts(byte);
 
-    double getCalcVolts(unsigned int, unsigned int, unsigned int);
+    double getCalcVolts(unsigned int, unsigned int, unsigned int, boolean);
 
-    double getPreVolts(void);
-    double getPstVolts(void);
-    double getV5Volts(void);
+    double getPreVolts(boolean);
+    double getPstVolts(boolean);
+    double getV5Volts(boolean);
     double getMilliAmps(void);
 
     void setUint16_tPointer(void *);
@@ -48,7 +48,8 @@ class Data
     void adjUint16_tNumber(int16_t);
     void adjUint16_tNumber(int8_t, int8_t);
 
-    MyControlsRangeMap& getMyControlsRangeMap(byte);
+    MyControlsRangeMap& getMyJoysticksRangeMap(byte);
+    MyControlsRangeMap& getMyAuxsRangeMap(byte);
 
     MyResistorMap& getMyResistorMap(void);
     MyVoltageMap&  getMyVoltageMap(void);
@@ -65,11 +66,14 @@ double avgE = 0.0;
 //double listE[2];
 //byte sizeE=2;
   
-    int aux[8];
+//    int aux[8];
+//    int aux[4];  //getVolts
+    int volts[4];
+    
+    MyControlsRangeMap myJoysticksRangeMap[4];
+    MyControlsRangeMap myAuxsRangeMap[4];
 
-    MyControlsRangeMap myControlsRangeMap[4];
-
-    MyControlsRangeMap myControlsRangeMap_single;
+ //   MyControlsRangeMap myJoysticksRangeMap_single;
     
     MyVoltageMap myVoltageMap;
     MyResistorMap  myResistorMap; 

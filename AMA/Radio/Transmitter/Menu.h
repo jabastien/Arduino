@@ -88,7 +88,7 @@ class Menu
     // ===========================================
     // * 100 - 149 = System (Resistors, Voltages)
     // ===========================================
-    void lcdSys100(void); // OHMs & Volts
+    void lcdSys100(void); // OHMs & Volts / Controls / Factory Reset
 
     void lcdSys101(void); // OHMs & Volts
     
@@ -100,7 +100,10 @@ class Menu
     void lcdSys110(void); // Volts for Shunt & 5V Ref
     void lcdSys112(void); // Volts Shunt OHMs 
     void lcdSys114(void); // Volts V5.0 Reference
+    
+    void lcdSys116(void); // Voltage for Pre, Post & V5 Regulator
 
+    void lcdSys119(void); // Aux[0-3]
 
     void lcdSys122(void); // Switch / Trim / Menu buttons
 
@@ -113,6 +116,8 @@ class Menu
 //  void lcdSys135(void); // Yoke     - Joystick range limits (Uses lcdSys134 , editJoystick 1)
 //  void lcdSys138(void); // Roll     - Joystick range limits (Uses lcdSys134 , editJoystick 2)
 //  void lcdSys139(void); // Pitch    - Joystick range limits (Uses lcdSys134 , editJoystick 3)
+
+    void lcdSys136(void); // AUX 0 Range Limit 
 
     void lcdSys148(void); // System Reset
 
@@ -141,7 +146,8 @@ class Menu
     void lcdFunc238(void); // EEPROM Read   --> move to 25x range
     void lcdFunc239(void); // EEPROM Write  --> move to 25x range
     
-    void lcdFunc240(void); // Controls Range 
+    void lcdFunc240(void); // Joystick Controls Range 
+    void lcdFunc241(void); // Aux Controls Range 
     // ===========================================
     // *       255 = Reserved for FUNCTION switch indicator 
     // ===========================================
@@ -240,8 +246,8 @@ byte menuOptions100 [4] = {MAINMENU, 101, 130, 148};
 //===============================
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // (101) - Ohms / Switches
-  byte menuOptions101 [3] = {SYSTEM, 102, 110};
+  // (101) - Ohms / Switches / Voltages
+  byte menuOptions101 [4] = {SYSTEM, 102, 110, 119};
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // (102) - Ohms
@@ -252,12 +258,14 @@ byte menuOptions100 [4] = {MAINMENU, 101, 130, 148};
     byte menuOptions106 [3] = {102,216,216};  // V5.0 Ref 3.1 & 3.2 OHMs
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // (110) - Shunt / Reference / Voltages
+  // (110) - Shunt / Reference
   byte menuOptions110 [4] = {101, 112, 114, 116};
   //-------------------------------
     byte menuOptions112 [2] = {110, 216};      // 110 - Shunt OHMs
     byte menuOptions114 [2] = {110, 216};      // 110 - V5.0    Reference Voltage Measured
-    byte menuOptions116 [2] = {110, 216};      // 110 - Voltage for Pre, Post & V5 Regulator 
+    byte menuOptions116 [1] = {110};           // 110 - Voltages for Pre, Post & V5 Regulator 
+  //-------------------------------
+  byte menuOptions119 [1] = {101};           // 101 - Aux[0-3]
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //  System - Switch / Trim / Menu.
@@ -315,7 +323,12 @@ byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset  (149 should be Y/
     byte menuOptions182 [2] = {183,240};            // Joystick range limits
     byte menuOptions183 [2] = {184,240};            // Joystick range limits
     byte menuOptions184 [2] = {185,240};            // Joystick range limits
-    byte menuOptions185 [2] = {CTLCHECK,240};       // Joystick range limits
+    byte menuOptions185 [2] = {186,240};            // Joystick range limits
+
+    byte menuOptions186 [2] = {187,241};            // Aux range limits 0
+    byte menuOptions187 [2] = {188,241};            // Aux range limits 1
+    byte menuOptions188 [2] = {189,241};            // Aux range limits 2
+    byte menuOptions189 [2] = {CTLCHECK,241};       // Aux range limits 3
 
 // Need to show voltages here???? or on the Resister screen???
     
@@ -349,10 +362,12 @@ byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset  (149 should be Y/
     // =======================================
     // =======================================
     // =======================================
+    // * 254 = Reserved for Error Display
     // * 255 = Reserved for FUNCTION switch indicator
     // =======================================
     // =======================================
     // =======================================  
+    byte menuOptions254 [0] = {/* Do NOT use: reserved */};
     byte menuOptions255 [0] = {/* Do NOT use: reserved */};
 
     
@@ -362,7 +377,7 @@ byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset  (149 should be Y/
     // ===========================================
     private:
 
-      byte editJoyStick = 0;
+      byte editControl = 0;
 
       byte menuOptions[4];
       byte menuSize;

@@ -122,12 +122,12 @@ template <class T> int EEPROM_readAnything(int ee, T& value)
 //  int eeAddress = 0;
 //
 //  EEPROM.get(eeAddress, myResistorMap);
-//  eeAddress += sizeof(myResistorMap); //Move address to the next byte after MyControlsRangeMap 'myControlsRangeMap'.
+//  eeAddress += sizeof(myResistorMap); //Move address to the next byte after MyControlsRangeMap 'myJoysticksRangeMap'.
 //
 //  //
-//  EEPROM.get(eeAddress, myControlsRangeMap);
-//  eeAddress += sizeof(myControlsRangeMap); //Move address to the next byte after myControlsRangeMap 'myControlsRangeMap'.
-//  //  eeAddress += sizeof(myControlsRangeMap); //Move address to the next byte after myControlsRangeMap 'myControlsRangeMap'.
+//  EEPROM.get(eeAddress, myJoysticksRangeMap);
+//  eeAddress += sizeof(myJoysticksRangeMap); //Move address to the next byte after myJoysticksRangeMap 'myJoysticksRangeMap'.
+//  //  eeAddress += sizeof(myJoysticksRangeMap); //Move address to the next byte after myJoysticksRangeMap 'myJoysticksRangeMap'.
 
 //}
 //
@@ -136,13 +136,13 @@ template <class T> int EEPROM_readAnything(int ee, T& value)
 //  int eeAddress = 0;
 //
 //  //
-//  EEPROM.put(eeAddress, myControlsRangeMap);
-//  eeAddress += sizeof(myControlsRangeMap); //Move address to the next byte after myControlsRangeMap 'myControlsRangeMap'.
+//  EEPROM.put(eeAddress, myJoysticksRangeMap);
+//  eeAddress += sizeof(myJoysticksRangeMap); //Move address to the next byte after myJoysticksRangeMap 'myJoysticksRangeMap'.
 //
 //  //
-//  //eeAddress += sizeof(myControlsRangeMap);
-//  EEPROM.put(eeAddress, myControlsRangeMap);
-//  eeAddress += sizeof(myControlsRangeMap); //Move address to the next byte after myControlsRangeMap 'myControlsRangeMap'.
+//  //eeAddress += sizeof(myJoysticksRangeMap);
+//  EEPROM.put(eeAddress, myJoysticksRangeMap);
+//  eeAddress += sizeof(myJoysticksRangeMap); //Move address to the next byte after myJoysticksRangeMap 'myJoysticksRangeMap'.
 //}
 
 // Private Methods /////////////////////////////////////////////////////////////

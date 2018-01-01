@@ -18,10 +18,10 @@ struct MyControlsMap {
 
 struct MyAux {
   const byte packetType = 0x02;
+  byte AUX0;
   byte AUX1;
   byte AUX2;
   byte AUX3;
-  byte AUX4;
 };
 
 struct MySwitchMap {
@@ -45,10 +45,19 @@ struct MyControlsRangeMap {
 // Centering Joystick
 // -------------------------------------------
   void setCenter(){
-    minimum = current;  
+    minimum = INT_MAX;  
     center = current;  
-    maximum = current;  
+    maximum = INT_MIN;  
     }
+
+//// -------------------------------------------
+//// Reverse Centering Joystick
+//// -------------------------------------------
+//  void setReverseCenter(){
+//    minimum = INT_MAX;  
+//    center = current;  
+//    maximum = INT_MIN;  
+//    }
 
 // -------------------------------------------
 // Set Min Max Values
@@ -59,11 +68,20 @@ struct MyControlsRangeMap {
     }
 
 // -------------------------------------------
+// Set Min Max Values
+// -------------------------------------------
+  void setMinMaxCenter(){
+    minimum = min(current, minimum);
+    maximum = max(current, maximum);
+    center  = minimum + ((maximum - minimum) / 2);
+    }
+
+// -------------------------------------------
 // Map Joystick Values for MyControlsMap
 // -------------------------------------------
 // Returns a full-range value for a joystick position that takes into account
 // the values of the outer extremes and the center of the joystick.
-  byte joystickRange(){
+  byte controlRange(){
     int value = constrain(current, minimum, maximum);
     
     if ( value < center )

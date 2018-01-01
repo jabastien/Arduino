@@ -32,8 +32,8 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);    // Initialization of the book (address, c
  *  50 -  99 = Models
  * 100 - 149 = System (Resistors, Voltages)
  * 150 - 199 = START/INIT
- * 200 - 254 = Functions
- * 
+ * 200 - 253 = Functions
+ *       254 = Error display
  *       255 = Reserved for FUNCTION switch indicator
  */
 
@@ -304,6 +304,27 @@ void Menu::menuDisplay(){
       
       break;
 
+      
+    // ---------------------------------------
+    case 116: // Voltage for Pre, Post & V5 Regulator
+      if (isMenuChange){ 
+        setMenu(menuSelected, menuOptions116, membersof(menuOptions116));
+      } 
+           
+      lcdSys116();
+      
+      break;
+
+    // ---------------------------------------
+    case 119: // Voltage for Pre, Post & V5 Regulator
+      if (isMenuChange){ 
+        setMenu(menuSelected, menuOptions119, membersof(menuOptions119));
+      } 
+           
+      lcdSys119();
+      
+      break;
+      
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // ---------------------------------------
     case 122: // Switch
@@ -355,7 +376,7 @@ void Menu::menuDisplay(){
         setMenu(menuSelected, menuOptions134, membersof(menuOptions134));
       }
       
-      editJoyStick = THROTTLE;
+      editControl = THROTTLE;
 
       lcdSys134();
       
@@ -368,7 +389,7 @@ void Menu::menuDisplay(){
         setMenu(menuSelected, menuOptions135, membersof(menuOptions135));
       }
       
-      editJoyStick = YAW;
+      editControl = YAW;
 
       lcdSys134();
       
@@ -381,7 +402,7 @@ void Menu::menuDisplay(){
         setMenu(menuSelected, menuOptions138, membersof(menuOptions138));
       }
       
-      editJoyStick = ROLL;
+      editControl = ROLL;
 
       lcdSys134();
       
@@ -394,7 +415,7 @@ void Menu::menuDisplay(){
         setMenu(menuSelected, menuOptions139, membersof(menuOptions139));
       }
       
-      editJoyStick = PITCH;
+      editControl = PITCH;
 
       lcdSys134();
       
@@ -508,7 +529,7 @@ void Menu::menuDisplay(){
         setMenu(menuSelected, menuOptions182, membersof(menuOptions182));
       }
       
-      editJoyStick = THROTTLE;
+      editControl = THROTTLE;
 
       lcdSys134();
       
@@ -520,7 +541,7 @@ void Menu::menuDisplay(){
         setMenu(menuSelected, menuOptions183, membersof(menuOptions183));
       }
       
-      editJoyStick = YAW;
+      editControl = YAW;
 
       lcdSys134();
       
@@ -532,7 +553,7 @@ void Menu::menuDisplay(){
         setMenu(menuSelected, menuOptions184, membersof(menuOptions184));
       }
       
-      editJoyStick = ROLL;
+      editControl = ROLL;
 
       lcdSys134();
       
@@ -544,12 +565,61 @@ void Menu::menuDisplay(){
         setMenu(menuSelected, menuOptions185, membersof(menuOptions185));
       }
       
-      editJoyStick = PITCH;
+      editControl = PITCH;
 
       lcdSys134();
       
       break;            
       
+    // ---------------------------------------
+    case 186: // AUX 0 range limits
+      if (isMenuChange){  
+        setMenu(menuSelected, menuOptions186, membersof(menuOptions186));
+      }
+      
+      editControl = 0; // AUX 0
+
+      lcdSys136();
+      
+      break;            
+      
+    // ---------------------------------------
+    case 187: // AUX 1 range limits
+      if (isMenuChange){  
+        setMenu(menuSelected, menuOptions187, membersof(menuOptions187));
+      }
+      
+      editControl = 1; // AUX 1
+
+      lcdSys136();
+      
+      break;            
+      
+    // ---------------------------------------
+    case 188: // AUX 2 range limits
+      if (isMenuChange){  
+        setMenu(menuSelected, menuOptions188, membersof(menuOptions188));
+      }
+      
+      editControl = 2; // AUX 1
+
+      lcdSys136();
+      
+      break;            
+
+          // ---------------------------------------
+    case 189: // AUX 3 range limits
+      if (isMenuChange){  
+        setMenu(menuSelected, menuOptions189, membersof(menuOptions189));
+      }
+      
+      editControl = 3; // AUX 1
+
+      lcdSys136();
+      
+      break;            
+      
+
     // ---------------------------------------
     // ---------------------------------------
     // ---------------------------------------
@@ -577,7 +647,7 @@ void Menu::menuDisplay(){
 // =======================================
 // =======================================
 // =======================================
-// * 200 - 254 = Functions
+// * 200 - 253 = Functions
 // =======================================
 // =======================================
 // =======================================
@@ -599,7 +669,7 @@ void Menu::menuDisplay(){
       //Serial.print  (F("Menu not found Error: " ));
       Serial.print  (F("-"));
       Serial.println(menuSelected);
-      error = ERR254;
+      error = ERR253;
       forceMenuChange(ERR_DISPLAY);
       break;
   }  
@@ -910,6 +980,11 @@ void Menu::funcDisplay(byte _keyPress){
       lcdFunc240();
       break;
 
+    // ---------------------------------------
+    case 241: // Controls Range
+      lcdFunc241();
+      break;
+
       
     // ---------------------------------------
     default:
@@ -994,7 +1069,7 @@ void Menu::setMenu(byte menuOpt, byte menuValues[], byte sizeIs) {
   if (menuValues[0] == FUNCTION) {
     Serial.print  (F("-"));
     Serial.println(menuOpt);
-    error = ERR253;
+    error = ERR252;
     forceMenuChange(ERR_DISPLAY);      
     return;
   }
@@ -1010,7 +1085,7 @@ void Menu::setMenu(byte menuOpt, byte menuValues[], byte sizeIs) {
 //    Serial.println(sizeIs);
 //    Serial.print  (F("-"));
 //    Serial.println(menuOpt);
-    error = ERR252;
+    error = ERR251;
     forceMenuChange(ERR_DISPLAY);       
     return;
   }
@@ -1396,6 +1471,10 @@ void Menu::lcdSys101() { // SYSTEM - OHMs & Volts
 
     lcd.setCursor(1, 2); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys101_Volts));
+
+    lcd.setCursor(1, 3); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys119_AUX));
+
   } 
 }
 
@@ -1561,6 +1640,9 @@ void Menu::lcdSys110() { // SYSTEM - Volts
 
     lcd.setCursor(1, 2); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys114_5Vref));
+
+    lcd.setCursor(1, 3); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys116_Volts));
   } 
 }
 
@@ -1644,10 +1726,88 @@ void Menu::lcdSys114() { // V5.1 Reference voltage
   }
 }
 
+// -------------------------------------------
+void Menu::lcdSys116() { // 110 - Voltage for Pre, Post & V5 Regulator 
+
+  if (isMenuChange){ 
+
+    lcd.setCursor(0, 0); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys116_Volts));
+
+    lcd.setCursor(0, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys116_Pre));
+    
+    lcd.setCursor(0, 2); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys116_Pst));
+    
+    lcd.setCursor(0, 3); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys116_V5R));
+  }
+
+
+    // Raw
+    lcd.setCursor(6, 1); //   row >    column ^
+    lcd.print(display.outputDigitsU16(data->getPreVolts(true)*10000, volts_x_xxxV));
+
+    lcd.setCursor(6, 2); //   row >    column ^
+    lcd.print(display.outputDigitsU16(data->getPstVolts(true)*10000, volts_x_xxxV));
+
+    lcd.setCursor(6, 3); //   row >    column ^
+    lcd.print(display.outputDigitsU16(data->getV5Volts(true)*10000, volts_x_xxxV));
+
+    // 
+    lcd.setCursor(13, 1); //   row >    column ^
+    lcd.print(display.outputDigitsU16(data->getPreVolts(false)*1000, volts_xx_xxV));
+
+    lcd.setCursor(13, 2); //   row >    column ^
+    lcd.print(display.outputDigitsU16(data->getPstVolts(false)*1000, volts_xx_xxV));
+
+    lcd.setCursor(13, 3); //   row >    column ^
+    lcd.print(display.outputDigitsU16(data->getV5Volts(false)*10000, volts_x_xxxV));    
+
+}
+
+// -------------------------------------------
+void Menu::lcdSys119() { // 101 - Aux[0-3]
+
+  if (isMenuChange){ 
+
+    lcd.setCursor(0, 0); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys119_AUXc));
+    lcd.print(" 0");
+
+    lcd.setCursor(0, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys119_AUXc));
+    lcd.print(" 1");
+    
+    lcd.setCursor(0, 2); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys119_AUXc));
+    lcd.print(" 2");
+    
+    lcd.setCursor(0, 3); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys119_AUXc));
+    lcd.print(" 3");
+  }
+
+
+  lcd.setCursor(13, 0); //   row >    column ^
+  lcd.print(display.outputDigitsU16(data->getMyAuxsRangeMap(0).controlRange(), digits8, 2));  
+
+  lcd.setCursor(13, 1); //   row >    column ^
+  lcd.print(display.outputDigitsU16(data->getMyAuxsRangeMap(1).controlRange(), digits8, 2));
+
+  lcd.setCursor(13, 2); //   row >    column ^
+  lcd.print(display.outputDigitsU16(data->getMyAuxsRangeMap(2).controlRange(), digits8, 2));
+
+  lcd.setCursor(13, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(data->getMyAuxsRangeMap(3).controlRange(), digits8, 2));    
+
+}
 
 // -------------------------------------------
 void Menu::lcdSys122() { // Switch  // Trim // Menu buttons
-
+//void Menu::lcdSys124() { // Trim
+//void Menu::lcdSys126() { // Menu buttons
   if (isMenuChange){ 
 
     // load DisplayMask[0-3] data pointers
@@ -1672,7 +1832,7 @@ void Menu::lcdSys122() { // Switch  // Trim // Menu buttons
     lcd.print(PGMSTR(lcd_param_lcdSys122_Switch));
 
     lcd.setCursor(11, 0); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_common_Pos));         
+    lcd.print(PGMSTR(lcd_param_lcdSys122_Pos));         
 
     lcd.setCursor(1, 2); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys124_Trim));
@@ -1696,91 +1856,6 @@ void Menu::lcdSys122() { // Switch  // Trim // Menu buttons
   lcd.setCursor(11, 3); //   row >    column ^
   lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
 }
-
-/*
-//// -------------------------------------------
-//void Menu::lcdSys124() { // Trim
-//  
-//  if (isMenuChange){ 
-//
-//    // load DisplayMask[0-3] data pointers
-//
-//    // 0
-//    //displayMask[0].doMaskInit(
-//
-//    // 1
-//    //displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &data->getMySwitchMap().trimBTN);
-//    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
-//
-//    // 2
-//    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().V5_32);
-//    // data->setUint16_tPointer(displayMask[2].getVoidPointer());
-//
-//    // 3
-//    //displayMask[2].doMaskInit(
-//
-//    lcd.setCursor(0, 0); //   row >    column ^
-//    lcd.print(PGMSTR(lcd_param_lcdSys124_Trim));
-//    
-//    lcd.setCursor(1, 1); //   row >    column ^
-//    lcd.print(PGMSTR(lcd_param_common_Digits));              
-//  
-//    lcd.setCursor(11, 1); //   row >    column ^
-//    lcd.print(PGMSTR(lcd_param_common_Pos));         
-//  
-//    lcd.setCursor(1, 2); //   row >    column ^
-//    lcd.print(PGMSTR(lcd_param_common_Values));       
-//  }
-//
-//
-//  // Display switches as bin (0's and 1's)
-//  lcd.setCursor(11, 2); //   row >    column ^
-//  lcd.print( display.outputBinary( data->getMySwitchMap().trimPins));
-//
-//}
-//
-//// -------------------------------------------
-//void Menu::lcdSys126() { // Menu buttons
-//  if (isMenuChange){ 
-//
-//    // load DisplayMask[0-3] data pointers
-//
-//    // 0
-//    //displayMask[0].doMaskInit(
-//
-//    // 1
-//    //displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &data->getMySwitchMap().menuSW);
-//    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
-//
-//    // 2
-//    //displayMask[2].doMaskInit(ohm_xx_xxxO, '#', 12, &data->getMyResistorMap().V5_32);
-//    // data->setUint16_tPointer(displayMask[2].getVoidPointer());
-//
-//    // 3
-//    //displayMask[2].doMaskInit(
-//
-//
-//    lcd.setCursor(0, 0); //   row >    column ^
-//    lcd.print(PGMSTR(lcd_param_lcdSys126_Menu));
-//    
-//    lcd.setCursor(1, 1); //   row >    column ^
-//    lcd.print(PGMSTR(lcd_param_common_Digits));              
-//  
-//    lcd.setCursor(11, 1); //   row >    column ^
-//    lcd.print(PGMSTR(lcd_param_common_Pos));         
-//  
-//    lcd.setCursor(1, 2); //   row >    column ^
-//    lcd.print(PGMSTR(lcd_param_common_Values));        
-//  }
-//
-//  
-//  // Display switches as bin (0's and 1's)
-//  lcd.setCursor(11, 2); //   row >    column ^
-//  lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
-//
-//}
-*/
-
 
 
 // -------------------------------------------
@@ -1843,7 +1918,7 @@ void Menu::lcdSys134() { // Joystick range limits  (Find MID point, release stic
     //displayMask[0].doMaskInit(
 
     // 1
-    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(editJoyStick));
+    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(editControl));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
@@ -1851,7 +1926,7 @@ void Menu::lcdSys134() { // Joystick range limits  (Find MID point, release stic
     // data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
     // 3
-    displayMask[3].doMaskInit(joyStickxxxx, '#', 1, &data->getMyControlsRangeMap(editJoyStick));
+    displayMask[3].doMaskInit(joyStickxxxx, '#', 1, &data->getMyJoysticksRangeMap(editControl));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
   } else {
@@ -1860,7 +1935,7 @@ void Menu::lcdSys134() { // Joystick range limits  (Find MID point, release stic
 
   if (isMenuChange || isFuncChange){    //lcd.print(PGMSTR(lcd_param_common_Joystick));
     lcd.setCursor(0, 0); //   row >    column ^
-    switch(editJoyStick){
+    switch(editControl){
       case THROTTLE:
         lcd.print(PGMSTR(lcd_param_lcdSys134_Throttle));
         break;
@@ -1882,7 +1957,7 @@ void Menu::lcdSys134() { // Joystick range limits  (Find MID point, release stic
     //lcd.print(PGMSTR(lcd_param_common_Joystick));
     if (menuAction == doFunc){
 
-        switch(editJoyStick){
+        switch(editControl){
           case THROTTLE:
           case PITCH:
             lcd.print(PGMSTR(lcd_param_common_UD));
@@ -1903,36 +1978,110 @@ void Menu::lcdSys134() { // Joystick range limits  (Find MID point, release stic
 
 
   // Display XMIT value as ###
-  MyControlsRangeMap myControlsRangeMap1 = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
+  MyControlsRangeMap myJoysticksRangeMap1 = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
 
   lcd.setCursor(16, 1); //   row >    column ^
   lcd.print(display.outputDigitsU16(      
-      // data->getJoyStick(myControlsRangeMap1)                 , //displayMask[1].getVoidPointer(),      
+      // data->getJoyStick(myJoysticksRangeMap1)                 , //displayMask[1].getVoidPointer(),      
       // data->getJoyStick(*(MyControlsRangeMap*)displayMask[1].getVoidPointer())                 , //displayMask[1].getVoidPointer(),    
-      myControlsRangeMap1.joystickRange(),
+      myJoysticksRangeMap1.controlRange(),
       displayMask[1].getMaskPMG(), 2));
 
   // ============================================
-  MyControlsRangeMap myControlsRangeMap3 = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
+  MyControlsRangeMap myJoysticksRangeMap3 = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
   
   // Display CURRENT as ####
   lcd.setCursor(1, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap3.current, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myJoysticksRangeMap3.current, displayMask[3].getMaskPMG(),1) );
 
   // Display MIN as ####
   lcd.setCursor(6, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap3.minimum, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myJoysticksRangeMap3.minimum, displayMask[3].getMaskPMG(),1) );
 
   // Display CENTER as ####
   lcd.setCursor(11, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap3.center, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myJoysticksRangeMap3.center, displayMask[3].getMaskPMG(),1) );
 
   // Display MAX as ####
   lcd.setCursor(16, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap3.maximum, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myJoysticksRangeMap3.maximum, displayMask[3].getMaskPMG(),1) );
   
 }
 
+// -------------------------------------------
+void Menu::lcdSys136() { // Aux range limits  (Find MID point, release stick and press 'Select')
+
+  if (isMenuChange){ 
+
+    // load DisplayMask[0-3] data pointers
+
+    // 0
+    //displayMask[0].doMaskInit(
+
+    // 1
+//    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(editControl));
+    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyAuxsRangeMap(editControl));    
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+    // 2
+//    displayMask[2].doMaskInit(joyStickxxxx, '#', 1, &data->getJoyStick(0));
+    // data->setUint16_tPointer(displayMask[2].getVoidPointer());
+
+    // 3
+    displayMask[3].doMaskInit(joyStickxxxx, '#', 1, &data->getMyAuxsRangeMap(editControl));
+    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
+
+  } else {
+      lcd.noBlink();  
+  }
+
+  if (isMenuChange || isFuncChange){    //lcd.print(PGMSTR(lcd_param_common_Joystick));
+      lcd.setCursor(0, 0); //   row >    column ^
+      lcd.print(PGMSTR(lcd_param_lcdSys119_AUXc));    
+      lcd.print(editControl);      
+    }
+ 
+    lcd.setCursor(1, 1); //   row >    column ^
+    if (menuAction == doFunc){
+          lcd.print("Full Range");
+    } else {
+      lcd.print(PGMSTR(lcd_param_common_Set));  
+      lcd.print("          ");  
+    }
+    
+    lcd.setCursor(1, 2); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_common_MCM));
+
+  // Display XMIT value as ###
+  MyControlsRangeMap myAuxsRangeMap1 = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
+
+  lcd.setCursor(16, 1); //   row >    column ^
+  lcd.print(display.outputDigitsU16(      
+      // data->getJoyStick(myAuxsRangeMap1)                 , //displayMask[1].getVoidPointer(),      
+      // data->getJoyStick(*(MyControlsRangeMap*)displayMask[1].getVoidPointer())                 , //displayMask[1].getVoidPointer(),    
+      myAuxsRangeMap1.controlRange(),
+      displayMask[1].getMaskPMG(), 2));
+
+  // ============================================
+  MyControlsRangeMap myAyxsRangeMap3 = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
+  
+  // Display CURRENT as ####
+  lcd.setCursor(1, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myAyxsRangeMap3.current, displayMask[3].getMaskPMG(),1) );
+
+  // Display MIN as ####
+  lcd.setCursor(6, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myAyxsRangeMap3.minimum, displayMask[3].getMaskPMG(),1) );
+
+  // Display CENTER as ####
+  lcd.setCursor(11, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myAyxsRangeMap3.center, displayMask[3].getMaskPMG(),1) );
+
+  // Display MAX as ####
+  lcd.setCursor(16, 3); //   row >    column ^
+  lcd.print(display.outputDigitsU16(myAyxsRangeMap3.maximum, displayMask[3].getMaskPMG(),1) );
+  
+}
 
 // -------------------------------------------
 void Menu::lcdSys148() { // Reset
@@ -2022,19 +2171,19 @@ void Menu::lcdInit192() { // Control check
 
   if (isMenuChange){ 
     // 0
-    displayMask[0].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(THROTTLE));
+    displayMask[0].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(THROTTLE));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
     
     // 1
-    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(YAW));
+    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(YAW));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
     
     // 2
-    displayMask[2].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(ROLL));
+    displayMask[2].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(ROLL));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
     
     // 3
-    displayMask[3].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(PITCH));
+    displayMask[3].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(PITCH));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     lcd.setCursor(0, 0); //   row >    column ^
@@ -2059,32 +2208,33 @@ void Menu::lcdInit192() { // Control check
 
 
   // Display XMIT value as ###
-  MyControlsRangeMap myControlsRangeMap;
+  MyControlsRangeMap myJoysticksRangeMap;
+  MyControlsRangeMap myAuxsRangeMap;
 
 // Left control
   lcd.setCursor(3, 2); //   row >    column ^
-  myControlsRangeMap = *(MyControlsRangeMap*)displayMask[0].getVoidPointer();
+  myJoysticksRangeMap = *(MyControlsRangeMap*)displayMask[0].getVoidPointer();
   lcd.print(display.outputDigitsU16( 
-      myControlsRangeMap.joystickRange(),
+      myJoysticksRangeMap.controlRange(),
       displayMask[0].getMaskPMG(), 2));
 
   lcd.setCursor(3, 3); //   row >    column ^
-  myControlsRangeMap = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
+  myJoysticksRangeMap = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
   lcd.print(display.outputDigitsU16( 
-      myControlsRangeMap.joystickRange(),
+      myJoysticksRangeMap.controlRange(),
       displayMask[0].getMaskPMG(), 2));
 
 // Right control
   lcd.setCursor(7, 3); //   row >    column ^
-  myControlsRangeMap = *(MyControlsRangeMap*)displayMask[2].getVoidPointer();
+  myJoysticksRangeMap = *(MyControlsRangeMap*)displayMask[2].getVoidPointer();
   lcd.print(display.outputDigitsU16( 
-      myControlsRangeMap.joystickRange(),
+      myJoysticksRangeMap.controlRange(),
       displayMask[0].getMaskPMG(), 2));
 
   lcd.setCursor(7, 2); //   row >    column ^
-  myControlsRangeMap = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
+  myJoysticksRangeMap = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
   lcd.print(display.outputDigitsU16( 
-      myControlsRangeMap.joystickRange(),
+      myJoysticksRangeMap.controlRange(),
       displayMask[0].getMaskPMG(), 2));
 
 
@@ -2149,7 +2299,7 @@ void Menu::lcdInit199() { // Show Error
     //displayMask[0].doMaskInit(
 
     // 1
-    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyControlsRangeMap(editJoyStick));
+    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(editControl));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
@@ -2157,7 +2307,7 @@ void Menu::lcdInit199() { // Show Error
     // data->setUint16_tPointer(displayMask[2].getVoidPointer());
 
     // 3
-    displayMask[3].doMaskInit(joyStickxxxx, '#', 1, &data->getMyControlsRangeMap(editJoyStick));
+    displayMask[3].doMaskInit(joyStickxxxx, '#', 1, &data->getMyJoysticksRangeMap(editControl));
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
   } else {
@@ -2166,7 +2316,7 @@ void Menu::lcdInit199() { // Show Error
 
   if (isMenuChange || isFuncChange){    //lcd.print(PGMSTR(lcd_param_common_Joystick));
     lcd.setCursor(0, 0); //   row >    column ^
-    switch(editJoyStick){
+    switch(editControl){
       case 0:
         lcd.print(PGMSTR(lcd_param_lcdSys134_Throttle));
         break;
@@ -2187,7 +2337,7 @@ void Menu::lcdInit199() { // Show Error
     //lcd.print(PGMSTR(lcd_param_common_Joystick));
     if (menuAction == doFunc){
 
-        switch(editJoyStick){
+        switch(editControl){
           case 0:
           case 3:
             lcd.print(PGMSTR(lcd_param_common_UD));
@@ -2208,33 +2358,33 @@ void Menu::lcdInit199() { // Show Error
 
 
   // Display XMIT value as ###
-  MyControlsRangeMap myControlsRangeMap1 = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
+  MyControlsRangeMap myJoysticksRangeMap1 = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
 
   lcd.setCursor(16, 1); //   row >    column ^
   lcd.print(display.outputDigitsU16(      
-      // data->getJoyStick(myControlsRangeMap1)                 , //displayMask[1].getVoidPointer(),      
+      // data->getJoyStick(myJoysticksRangeMap1)                 , //displayMask[1].getVoidPointer(),      
       // data->getJoyStick(*(MyControlsRangeMap*)displayMask[1].getVoidPointer())                 , //displayMask[1].getVoidPointer(),    
-      myControlsRangeMap1.joystickRange(),
+      myJoysticksRangeMap1.controlRange(),
       displayMask[1].getMaskPMG(), 2));
 
   // ============================================
-  MyControlsRangeMap myControlsRangeMap3 = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
+  MyControlsRangeMap myJoysticksRangeMap3 = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
   
   // Display CURRENT as ####
   lcd.setCursor(1, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap3.current, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myJoysticksRangeMap3.current, displayMask[3].getMaskPMG(),1) );
 
   // Display MIN as ####
   lcd.setCursor(6, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap3.minimum, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myJoysticksRangeMap3.minimum, displayMask[3].getMaskPMG(),1) );
 
   // Display CENTER as ####
   lcd.setCursor(11, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap3.center, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myJoysticksRangeMap3.center, displayMask[3].getMaskPMG(),1) );
 
   // Display MAX as ####
   lcd.setCursor(16, 3); //   row >    column ^
-  lcd.print(display.outputDigitsU16(myControlsRangeMap3.maximum, displayMask[3].getMaskPMG(),1) );
+  lcd.print(display.outputDigitsU16(myJoysticksRangeMap3.maximum, displayMask[3].getMaskPMG(),1) );
   
  */
 
@@ -2349,13 +2499,26 @@ void Menu::lcdFunc239() { // Y/N
 void Menu::lcdFunc240() { // Controls Range
 
   if (isFuncChange){   
-   data->getMyControlsRangeMap(editJoyStick).setCenter(); 
+   data->getMyJoysticksRangeMap(editControl).setCenter(); 
   }
 
-  data->getMyControlsRangeMap(editJoyStick).setMinMax();
+  data->getMyJoysticksRangeMap(editControl).setMinMax();
 
   lcdSys134();
   
+}
+
+// -------------------------------------------
+void Menu::lcdFunc241() { // Controls Range
+
+  if (isFuncChange){   
+   //data->getMyAuxsRangeMap(editControl).center = INT_MID;
+   data->getMyAuxsRangeMap(editControl).setCenter(); 
+  }
+  
+  data->getMyAuxsRangeMap(editControl).setMinMaxCenter(); 
+  
+  lcdSys136();  
 }
 
 //===========================================

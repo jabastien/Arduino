@@ -165,10 +165,10 @@ void loop() {
   // The calibration numbers used here should be measured
   // for your joysticks so they send the correct values.
   //------------------------------------------------------
-  data.getMyControlsRangeMap(THROTTLE).current  = analogRead(A0);
-  data.getMyControlsRangeMap(YAW).current       = analogRead(A1);
-  data.getMyControlsRangeMap(ROLL).current      = analogRead(A2);
-  data.getMyControlsRangeMap(PITCH).current     = analogRead(A3);
+  data.getMyJoysticksRangeMap(THROTTLE).current  = analogRead(A0);
+  data.getMyJoysticksRangeMap(YAW).current       = analogRead(A1);
+  data.getMyJoysticksRangeMap(ROLL).current      = analogRead(A2);
+  data.getMyJoysticksRangeMap(PITCH).current     = analogRead(A3);
 
   //------------------------------------------------------
   // 4051 (3x) Switch address
@@ -196,31 +196,28 @@ void loop() {
   //------------------------------------------------------
   // 4052 (x1) Read Analog
   //
-  // Aux Controls
-  // 0 = x0 = Aux0,
-  // 2 = x1 = Aux1,
-  // 4 = x2 = Aux2,
-  // 6 = x3 = Aux3
-  //
-  // Voltage Divides
-  // 1 = y0 = Post,
-  // 3 = y1 = Key
-  // 5 = y2 = 5V
-  // 7 = y3 = Pre  
+  // Aux Cntls --- Voltage Divides
+  // x0 = Aux0 --- y0 = Post,
+  // x1 = Aux1 --- y1 = Key
+  // x2 = Aux2 --- y2 = 5V
+  // x3 = Aux3 --- y3 = Pre  
   //------------------------------------------------------
   for (byte analogLoop = 0 ; analogLoop < 4; analogLoop++) {
     // Switch address for 4052 (1x)
     cd4052.setChannel(analogLoop);
-    data.setJoyAux((analogLoop * 2)    , cd4052.analogReadX());
-    data.setJoyAux((analogLoop * 2) + 1, cd4052.analogReadY());
-    }
 
+    // X - AUX values
+    data.getMyAuxsRangeMap(analogLoop).current  = cd4052.analogReadX();
+
+    // Y - Volt Values
+    data.setVolts(analogLoop, cd4052.analogReadY());
+    }
 
   //  --  MySwitchMap
   //myAux.AUX1 = analog[0];
-  //myAux.AUX2 = analog[2];
-  //myAux.AUX3 = analog[4];
-  //myAux.AUX4 = analog[8];
+  //myAux.AUX2 = analog[1];
+  //myAux.AUX3 = analog[2];
+  //myAux.AUX4 = analog[3];
 
   //------------------------------------------------------
   // Send our data
@@ -230,10 +227,9 @@ void loop() {
 
   //------------------------------------------------------
   // Button pressed?
-  keyPad.doKeys(data.getJoyAux(3));
+  keyPad.doKeys(data.getVolts(KEY));
   keyPress = keyPad.getKeyPressed();
 
-//Serial.println(keyPress);
   //------------------------------------------------------
   // Inc Frames Per Second
   //------------------------------------------------------

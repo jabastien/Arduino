@@ -40,8 +40,12 @@ Data::Data(){
 // =====================================
 
 
-MyControlsRangeMap& Data::getMyControlsRangeMap(byte control){
-  return myControlsRangeMap[control];
+MyControlsRangeMap& Data::getMyJoysticksRangeMap(byte control){
+  return myJoysticksRangeMap[control];
+}
+
+MyControlsRangeMap& Data::getMyAuxsRangeMap(byte control){
+  return myAuxsRangeMap[control];
 }
 
 MyVoltageMap& Data::getMyVoltageMap(){
@@ -56,35 +60,35 @@ MySwitchMap& Data::getMySwitchMap(){
   return mySwitchMap;
 }
 
-void Data::setJoyAux(byte b, int i){
-  aux[b] = i;
+void Data::setVolts(byte b, int i){
+  volts[b] = i;
 
-#ifdef DEBUG_JoyAux  
+#ifdef DEBUG_Volts  
   if (true){
-    Serial.print  ("setJoyAux ");
+    Serial.print  ("setVolts ");
     Serial.print  (b);
     Serial.print  (" ");
-    Serial.println(aux[b]);
+    Serial.println(volts[b]);
   }
 #endif
 }
 
-
-int  Data::getJoyAux(byte b){
-#ifdef DEBUG_JoyAux
+int  Data::getVolts(byte b){
+#ifdef DEBUG_Volts
   if (true){
-    Serial.print  ("getJoyAux ");
+    Serial.print  ("getVolts ");
     Serial.print  (b);
     Serial.print  (" ");
-    Serial.println(aux[b]);
+    Serial.println(volts[b]);
   }
 #endif
 
-  return aux[b];
+  return volts[b];
 }
+
 
 //double Data::getCalcVolts(unsigned int _value, unsigned int R1, unsigned int R2, byte expoFactor){
-double Data::getCalcVolts(unsigned int _value, unsigned int R1, unsigned int R2){
+double Data::getCalcVolts(unsigned int _value, unsigned int R1, unsigned int R2, boolean raw){
 
 //  double expoValue = 1;
 //  for (byte b = 0; b < expoFactor; b++){
@@ -94,9 +98,15 @@ double Data::getCalcVolts(unsigned int _value, unsigned int R1, unsigned int R2)
   double vpb = (double)myVoltageMap.voltPerBit / 1000000.0;  // change 4778 to 0.004778
   double value = _value;
 
+  
   //       Ein = (Eo/R2) * (R1+R2)
-  double   Ein = ((value * vpb) / R2 ) * (R1 + R2);
+  double   Ein = 0;
 
+  if (raw){
+    Ein = value * vpb;
+  }else{
+    Ein = ((value * vpb) / R2 ) * (R1 + R2);
+  }
 #ifdef DEBUG_CALCVOLTS
   if (false){
     if (false){
@@ -121,24 +131,23 @@ double Data::getCalcVolts(unsigned int _value, unsigned int R1, unsigned int R2)
   return Ein;
 }
 
-
-double Data::getPreVolts(){
-  return getCalcVolts(aux[PRE], myResistorMap.Vpre11, myResistorMap.Vpre12);
+double Data::getPreVolts(boolean raw){
+  return getCalcVolts(volts[PRE], myResistorMap.Vpre11, myResistorMap.Vpre12, raw);
 }
 
-double Data::getPstVolts(){
-  return getCalcVolts(aux[POST], myResistorMap.Vpst21, myResistorMap.Vpst22);
+double Data::getPstVolts(boolean raw){
+  return getCalcVolts(volts[POST], myResistorMap.Vpst21, myResistorMap.Vpst22, raw);
 }
 
-double Data::getV5Volts(){
-  return getCalcVolts(aux[V5], myResistorMap.V5_31, myResistorMap.V5_32);
+double Data::getV5Volts(boolean raw){
+  return getCalcVolts(volts[V5], myResistorMap.V5_31, myResistorMap.V5_32, raw);
 }  
 
 
 double Data::getMilliAmps(){
 
   /*
-////  return 0; // getCalcVolts(aux[7], myResistorMap.V5_31, myResistorMap.V5_32);
+////  return 0; // getCalcVolts(volts[7], myResistorMap.V5_31, myResistorMap.V5_32);
 
 //  cntE++;
 //  if (cntE > sizeE){
@@ -152,16 +161,16 @@ double Data::getMilliAmps(){
 //  Serial.print  (" : ");
 //  Serial.print  (getPstVolts());
   Serial.print  (" POST: ");
-  Serial.print  (aux[POST]);
+  Serial.print  (volts[POST]);
 
   Serial.print  (" PRE: ");
-  Serial.print  (aux[PRE]);
+  Serial.print  (volts[PRE]);
 
   Serial.print  (" bit diff: ");
-  Serial.print  (aux[PRE] - aux[POST]);
+  Serial.print  (volts[PRE] - volts[POST]);
         
   Serial.print  (" bit diff: ");
-  Serial.print  ((aux[PRE] - aux[1])*myResistorMap.shunt);
+  Serial.print  ((volts[PRE] - volts[1])*myResistorMap.shunt);
     // Voltage
   
   Serial.print  (" diff: ");

@@ -24,14 +24,14 @@ X - finish start/init screens
         - ROLL
     
 2 = display all input voltages...prior to control check...
-    - pre (this is the battery)
-    - post
-    - AMPS
-    - key
-    - aux 0
-    - aux 1
-    - aux 2
-    - aux 3
+    x pre (this is the battery)
+    x post
+    x AMPS
+    - key  (add to voltages screen)
+    x aux 0
+    x aux 1
+    x aux 2
+    x aux 3
             
 3 - control check (execute to ensure switch and joystick are NOT flight enabled.)
 
@@ -88,6 +88,25 @@ X - why tps < 144 (was +300)  (Update, FPS is now 575 on main menu.)
 15 - reduce size of Display.cpp & Display.h
 
 16 - remove Serial.print to reduce size (may be able to ture into #define DEBUG_.....
+
+? - Add to Transmitter
+    - Channel Scan
+    - Channel Set
+    - Dead Zone
+    - Expo
+    - GPS
+    - Mission Plan
+
+? - Add to Model
+    - Dip SW (reverse)
+    - Mix
+    - PDI (Drone Settings)
+    - Type
+      - Plane
+      - Drone
+      - Copter
+    - Copy
+    -Paste
 
 
 

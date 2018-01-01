@@ -66,7 +66,7 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 //#define DEBUG_FPS
 //#define DEBUG_KEY
 //#define DEBUG_MyControls
-//#define DEBUG_JoyAux
+//#define DEBUG_Volts
 
 
 
@@ -86,16 +86,16 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
   // 4052 (x1) Read Analog
   //
 //  // Aux Controls
-//#define AUX0 0  // 0 = x0 = Aux0,
-//#define AUX1 2  // 2 = x1 = Aux1,
-//#define AUX2 4  // 4 = x2 = Aux2,
-//#define AUX3 6  // 6 = x3 = Aux3
+//#define AUX0 0  // x0 = Aux0,
+//#define AUX1 1  // x1 = Aux1,
+//#define AUX2 2  // x2 = Aux2,
+//#define AUX3 3  // x3 = Aux3
 
 // Voltage
-#define POST 1  // 1 = y0 = Post,
-#define KEY  3  // 3 = y1 = Key
-#define V5   5  // 5 = y2 = 5V
-#define PRE  7  // 7 = y3 = Pre  
+#define POST 0  // y0 = Post,
+#define KEY  1  // y1 = Key
+#define V5   2  // y2 = 5V
+#define PRE  3  // y3 = Pre   
   
 /**************************************************************************************/
 /***************          date & time configurations               ********************/
@@ -150,17 +150,14 @@ c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atm
 // Common
 const PROGMEM char lcd_param_common_set [] = "(Set)";
 
-//const PROGMEM char lcd_param_common_Digits []  = "Digits";
-const PROGMEM char lcd_param_common_Pos    [] = "12345678";
-//const PROGMEM char lcd_param_common_Values [] = "Values";
-
 const PROGMEM char ERR [] = "Err:";
 #define ERR200 200  // Err: setMenu : Don't use for FUNCTIONS"
 #define ERR216 216  // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
-#define ERR239 239// need to complete this....
-#define ERR252 252  // setMenu menuOptions max size
-#define ERR253 253  // Err: setMenu : Don't use for FUNCTIONS
-#define ERR254 254  // Function not found Error: 
+#define ERR239 239/* need to complete this....(then delete?)*/
+#define ERR251 251  // setMenu menuOptions max size
+#define ERR252 252  // setMenu Error : Don't use for FUNCTIONS
+#define ERR253 253  // menuDisplay not found Error
+#define ERR254 254  // funcDisplay not found Error
 #define ERR255 255  // Attempt to use 255 in menu, not valid
 
 #define ERR_DISPLAY 199 // 
@@ -233,7 +230,7 @@ const PROGMEM char lcd_param_lcdSys106_R32 [] = "R3.2";
 // X112
 // lcdSys112
 // Shunt OHMs 
-const PROGMEM char lcd_param_lcdSys112_Shunt [] = "Shunt ohm";
+const PROGMEM char lcd_param_lcdSys112_Shunt [] = "Shunt OHM";
 const PROGMEM char lcd_param_lcdSys112_Rshnt [] = "Shunt";
 
 // X114
@@ -244,11 +241,27 @@ const PROGMEM char lcd_param_lcdSys114_5Vmes [] = "Measure";
 const PROGMEM char lcd_param_lcdSys114_5Vsys [] = "System";
 const PROGMEM char lcd_param_lcdSys114_v5bit [] = "Volt/Bit";
 
+// X116
+// lcdSys116
+// Pre, Post & V5 Regulator                        1234567890123456789
+const PROGMEM char lcd_param_lcdSys116_Volts [] = "Voltages";
+const PROGMEM char lcd_param_lcdSys116_Pre [] = "Pre";
+const PROGMEM char lcd_param_lcdSys116_Pst [] = "Post";
+const PROGMEM char lcd_param_lcdSys116_V5R [] = "5V Reg";
+
+// X119
+// lcdSys119
+// AUX                            1234567890123456789
+const PROGMEM char lcd_param_lcdSys119_AUX [] = "Aux";
+const PROGMEM char lcd_param_lcdSys119_AUXc []= "Aux: ";
+
 
 // X122
 // lcdSys122
 // Switch buttons
 const PROGMEM char lcd_param_lcdSys122_Switch [] = "Switch";
+const PROGMEM char lcd_param_lcdSys122_Pos    [] = "12345678";
+
 
 // X124
 // lcdSys124    
@@ -272,7 +285,7 @@ const PROGMEM char lcd_param_lcdSys134_SwitchesButtons    [] = "SWs & Btns";
 
 // X134
 // lcdSys134
-// Joystick range limits                            12345678901234567890
+// Joystick range limits                             12345678901234567890
 const PROGMEM char lcd_param_lcdSys134_Throttle [] = "Throttle";
 const PROGMEM char lcd_param_lcdSys134_YAW      [] = "Yaw";
 const PROGMEM char lcd_param_lcdSys134_ROLL     [] = "Roll";
@@ -302,7 +315,7 @@ const PROGMEM char lcd_param_lcdInit150_startUp [] = "Start up";
 // Splash   [no click 'select button' out to 151]
 const char  lcd_param_lcdInit151_qBytesWorld[] PROGMEM = "Q-Bytes World";
 const char  lcd_param_lcdInit151_deviceInfo [] PROGMEM = {"2.4G Transmitter"};
-const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.37"};
+const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.38"};
 
 // X192: 
 // lcdInit192
@@ -338,14 +351,14 @@ const PROGMEM char  digits32[]     = " #,###,###,###";
 
 const PROGMEM char  joyStickxxxx[] = "####";
 
-const PROGMEM char  volts_xx_xV[]  = " ##.#V";
+const PROGMEM char  volts_xx_xxV[]  = " ##.##V";
 const PROGMEM char  volts_x_xxxV[] = " #.###V";
 
 const PROGMEM char  volts_0_0xxxxxV[] = " 0.0#####V";
 
 //const PROGMEM char  ohm_xx_xxxO[] = "##,###^"; // K OHMs      //0xF4; //OHM  //  line[6] =  0xF4; //OHM
 //const PROGMEM char  ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(244),char(0)};
-const PROGMEM char  ohm_xx_xxxO[] = {'#','#','.','#','#','#',char(0xF4),char(0x00)};
+const PROGMEM char  ohm_xx_xxxO[] = {'#','#','.','#','#','#','K',char(0xF4),char(0x00)};
 
 //const PROGMEM char  ohm_x_xxxxO[] = "#.####^"; // milla OHMs  //0xF4; //OHM
 const PROGMEM char  ohm_x_xxxxO[] = {' ','#','.','#','#','#','#',char(0xF4),char(0x00)};
