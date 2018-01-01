@@ -125,6 +125,7 @@ class Menu
     
     void lcdInit192(void); // Control check
 
+    void lcdInit199(void); // Error, restart
 
     // ===========================================
     // * 200 - 254 = Functions
@@ -162,6 +163,8 @@ class Menu
     byte repeatCount = 0;
     
     byte menuSelected = INITMENU;
+
+    byte error;
     
     byte function = 0;
     boolean isMenuChange = true;
@@ -317,6 +320,7 @@ byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset  (149 should be Y/
 // Need to show voltages here???? or on the Resister screen???
     
     byte menuOptions192 [1] = {CTLCHECK};           // Control Check (make sure all surfaces & switches are homed. (Prevent flight by mistake) [no click (select) out of 192]
+    byte menuOptions199 [1] = {INITMENU};           // Error, run INIT
 
     // =======================================
     // =======================================

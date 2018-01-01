@@ -33,18 +33,19 @@ X - finish start/init screens
     - aux 2
     - aux 3
             
-3 = control check (execute to ensure switch and joystick are NOT flight enabled.)
+3 - control check (execute to ensure switch and joystick are NOT flight enabled.)
 
-4 - build menus
+X - build menus
     = Trans
     = Model
     = System
 
-? - cleanup all 'err', turn into PRGMEM vars and document data.
+X - cleanup all 'err', turn into PRGMEM vars and document data.
+      increased size from 18,800 to 20,056...(1,256)
 
-?  - bug in menu, able to arrow down one (1) when no items are available
+X  - bug in menu, able to arrow down one (1) when no items are available (Bug no longer found)
 
-? - Make Switch, Trim, & Menu into a re-usable method like JoyStick
+X - Make Switch, Trim, & Menu into a re-usable method like JoyStick
     It's already a Struct (MySwitchMap).
   
 5 - create key/volt display in System (after joystick and before control check) 

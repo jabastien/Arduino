@@ -96,7 +96,9 @@ void Menu::updateFPS(){
 void Menu::forceMenuChange(byte _menuItem){
   // Make sure FUNCTIONs don't use this method (bad things happen)
   if (_menuItem >= 200) {
-    Serial.print ("ERRxxx");//  (F("Err: setMenu : Don't use for FUNCTIONS"));
+    //  Err: setMenu : Don't use for FUNCTIONS"
+    error = ERR200;
+    forceMenuChange(ERR_DISPLAY);
     return;
   }
 
@@ -269,7 +271,6 @@ void Menu::menuDisplay(){
       break;
 
 
-// 110 Volts
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // ---------------------------------------
     case 110: // Shunt
@@ -303,7 +304,6 @@ void Menu::menuDisplay(){
       
       break;
 
-// 120 Switches      
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // ---------------------------------------
     case 122: // Switch
@@ -562,6 +562,18 @@ void Menu::menuDisplay(){
       
       break;
 
+    // ---------------------------------------
+    // ---------------------------------------
+    // ---------------------------------------
+    case 199: // ERR_DISPLAY
+      if (isMenuChange){  
+        setMenu(menuSelected, menuOptions199, membersof(menuOptions199));
+      }    
+      
+      lcdInit199();
+      
+      break;      
+
 // =======================================
 // =======================================
 // =======================================
@@ -584,10 +596,11 @@ void Menu::menuDisplay(){
 // =======================================    
     default:
       // catch all - N/A
-      Serial.print  (F("Menu not found Error: " ));
-      Serial.print  (menuSelected);
-      Serial.println(F(" - reset"));
-      forceMenuChange(INITMENU);
+      //Serial.print  (F("Menu not found Error: " ));
+      Serial.print  (F("-"));
+      Serial.println(menuSelected);
+      error = ERR254;
+      forceMenuChange(ERR_DISPLAY);
       break;
   }  
 
@@ -901,11 +914,12 @@ void Menu::funcDisplay(byte _keyPress){
     // ---------------------------------------
     default:
       // catch all - N/A
-      Serial.print  (F("Function not found Error: " ));
+      Serial.print  (F("-"));
       Serial.print  (function);
-      Serial.println(F(" - reset"));
-      //menuSelected = INITMENU;
-      forceMenuChange(INITMENU);
+      Serial.print  (F("-"));
+      Serial.println(menuSelected);
+      error = ERR254;
+      forceMenuChange(ERR_DISPLAY);      
       break;    
   }
 
@@ -978,19 +992,27 @@ void Menu::setMenu(byte menuOpt, byte menuValues[], byte sizeIs) {
   
   // Make sure FUNCTIONs don't use this method (bad things happen
   if (menuValues[0] == FUNCTION) {
-    Serial.print  (F("Err: setMenu : Don't use for FUNCTIONS"));
+    Serial.print  (F("-"));
+    Serial.println(menuOpt);
+    error = ERR253;
+    forceMenuChange(ERR_DISPLAY);      
     return;
   }
   
   // Make sure we don't have an error.
   if (sizeIs > sizeof(menuOptions)) {
-    Serial.print  (F("Error: setMenu "));
+    Serial.print  (F("-"));
     Serial.print  (sizeIs);
-    Serial.print  (F(" for "));
+    Serial.print  (F("-"));
     Serial.print  (menuOpt);
-    sizeIs = sizeof(menuOptions); // degrade to prevent Array Overflow error
-    Serial.print  (F(" s/b <= ")); // increase " byte menuOptions[x] " size
-    Serial.println(sizeIs);
+//    sizeIs = sizeof(menuOptions);
+//    Serial.print  (F("-"));
+//    Serial.println(sizeIs);
+//    Serial.print  (F("-"));
+//    Serial.println(menuOpt);
+    error = ERR252;
+    forceMenuChange(ERR_DISPLAY);       
+    return;
   }
   
   menuSize = sizeIs;
@@ -1675,6 +1697,7 @@ void Menu::lcdSys122() { // Switch  // Trim // Menu buttons
   lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
 }
 
+/*
 //// -------------------------------------------
 //void Menu::lcdSys124() { // Trim
 //  
@@ -1756,7 +1779,7 @@ void Menu::lcdSys122() { // Switch  // Trim // Menu buttons
 //  lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
 //
 //}
-
+*/
 
 
 
@@ -1923,10 +1946,9 @@ void Menu::lcdSys148() { // Reset
     }else{
       lcd.print(F("                "));
     }    
-    Serial.print("148 Finish Reset");
+    Serial.println("148 Finish Reset");
 
 }
-
 
 
 //===========================================
@@ -1936,7 +1958,9 @@ void Menu::lcdSys148() { // Reset
 // -------------------------------------------
 void Menu::lcdInit150() {  // Starting   [click (select) out to 150]
 
-    if (isMenuChange){ 
+    if (isMenuChange){
+      digitalWrite(1, LOW); // LED and Sound off
+       
       menuAction = doInit;  
   
       lcd.init();
@@ -1947,6 +1971,8 @@ void Menu::lcdInit150() {  // Starting   [click (select) out to 150]
       
       lcd.setCursor(6, 1);//   row >    column ^
       lcd.print(PGMSTR(lcd_param_lcdInit150_startUp));    
+
+      error = 0;
     }
   
   if (repeatCount > 1) { // ~delay(250);
@@ -2088,6 +2114,31 @@ void Menu::lcdInit192() { // Control check
 }
 
 
+// -------------------------------------------
+void Menu::lcdInit199() { // Show Error
+
+    lcd.setCursor(2, 2); //   row >    column ^
+    if ((repeatCount/2)%2 == 0){// If ODD.
+      // LCD
+      lcd.print(PGMSTR(ERR));
+      lcd.print(error);      
+      // Serial
+      Serial.print  (PGMSTR(ERR));
+      Serial.println(error);
+      // LED/Sound on
+      digitalWrite(1, HIGH); // LED and Sound on
+    }else{
+      lcd.print(F("       "));
+      // LED/Sound off
+      digitalWrite(1, LOW); // LED and Sound off
+    }
+
+  if (repeatCount > 12) { // ~delay(250);
+      forceMenuChange(INITMENU); //151
+  }    
+
+}
+
 /*
 
   if (isMenuChange){ 
@@ -2188,7 +2239,6 @@ void Menu::lcdInit192() { // Control check
  */
 
 
-
 //===========================================
 // Functions
 //===========================================
@@ -2246,7 +2296,8 @@ void Menu::lcdFunc216(byte _keyPress) { // Uint16_t number  (move to lcdFunc215 
 
     } else {
       // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
-      Serial.println(PGMSTR(ERR216_0));
+      error = ERR216;
+      forceMenuChange(ERR_DISPLAY);
     }
   }
   
@@ -2289,11 +2340,8 @@ void Menu::lcdFunc239() { // Y/N
 //    dataStore.factoryReset();
   }
   
-  if (repeatCount > 1) { // ~delay(250);
-    //menuSelected = 000; //INITMENU;
-    forceMenuChange(000000000);
-    // exit to INITMENU
-  }
+      error = ERR239;
+      forceMenuChange(ERR_DISPLAY);
 
 }
 
@@ -2314,12 +2362,7 @@ void Menu::lcdFunc240() { // Controls Range
 // Reserved
 //===========================================
 void Menu::lcdInit255() { // this is an error, 255 is reserved 
-  lcd.setCursor(6, 1);//   row >    column ^
-  lcd.print(PGMSTR(ERR255));   
-  Serial.println(PGMSTR(ERR255));
-
-  digitalWrite(1, HIGH); // LED and Sound on
-  while (true){
-    }
+  error = ERR255;  
+  forceMenuChange(ERR_DISPLAY);
 }
 

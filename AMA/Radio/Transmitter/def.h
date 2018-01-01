@@ -20,7 +20,6 @@
 const PROGMEM char   sampleMenu_back = "Back";
 PROGMEM const String sampleMenu_exit = "Exit";
 
-const String err = "Err:
 
 c:\users\davidq\appdata\local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atmel3.5.4-arduino2\avr\include\avr\pgmspace.h:408:0: note: this is the location of the previous definition
  # define PSTR(s) (__extension__({static const char __c[] PROGMEM = (s); &__c[0];}))
@@ -155,7 +154,16 @@ const PROGMEM char lcd_param_common_set [] = "(Set)";
 const PROGMEM char lcd_param_common_Pos    [] = "12345678";
 //const PROGMEM char lcd_param_common_Values [] = "Values";
 
+const PROGMEM char ERR [] = "Err:";
+#define ERR200 200  // Err: setMenu : Don't use for FUNCTIONS"
+#define ERR216 216  // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
+#define ERR239 239// need to complete this....
+#define ERR252 252  // setMenu menuOptions max size
+#define ERR253 253  // Err: setMenu : Don't use for FUNCTIONS
+#define ERR254 254  // Function not found Error: 
+#define ERR255 255  // Attempt to use 255 in menu, not valid
 
+#define ERR_DISPLAY 199 // 
 
 //                                              01234567890123456789 
 const PROGMEM char lcd_param_common_Joystick [] = "Joystick";
@@ -169,7 +177,6 @@ const PROGMEM char lcd_param_common_MCM  []  = "Read Min. Ctr. Max.";
 //                                 123456789012 
 
 const PROGMEM char lcd_param_lcdSys000_MainMenu []     = "Main Menu";
-const PROGMEM char ERR000 []     = "ERR000";
 
 
 //
@@ -295,7 +302,7 @@ const PROGMEM char lcd_param_lcdInit150_startUp [] = "Start up";
 // Splash   [no click 'select button' out to 151]
 const char  lcd_param_lcdInit151_qBytesWorld[] PROGMEM = "Q-Bytes World";
 const char  lcd_param_lcdInit151_deviceInfo [] PROGMEM = {"2.4G Transmitter"};
-const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.36"};
+const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.37"};
 
 // X192: 
 // lcdInit192
@@ -309,19 +316,18 @@ const PROGMEM char  lcd_param_lcdInit192_controlCheck_LR[]    = {"L/R"};
 
 //const PROGMEM char lcd_param_lcdInit192_volts [] = {"Volts"};
 
-
-
+// x199
 
 
 //
 // X216: 
 //                                   123456789012 
-const PROGMEM char ERR216_0 []   = "ERR216-0"; // Attempt to change number, "displayMask[menuCol].getMask()" or "displayMask[menuCol].getVoidPointer()" is NULL.
 
 //
 // X255: 
 //                                   123456789012 
-const PROGMEM char  ERR255 []     = "ERR255";
+
+
 
 // ===========================================
 // Display
