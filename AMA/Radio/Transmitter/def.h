@@ -249,11 +249,11 @@ const PROGMEM char lcd_param_lcdSys116_Pre [] = "Pre";
 const PROGMEM char lcd_param_lcdSys116_Pst [] = "Post";
 const PROGMEM char lcd_param_lcdSys116_V5R [] = "5V Reg";
 
-// X119
-// lcdSys119
+// X140
+// lcdSys140
 // AUX                            1234567890123456789
-const PROGMEM char lcd_param_lcdSys119_AUX [] = "Aux";
-const PROGMEM char lcd_param_lcdSys119_AUXc []= "Aux: ";
+const PROGMEM char lcd_param_lcdSys140_AUX [] = "Aux";
+const PROGMEM char lcd_param_lcdSys140_AUXc []= "Aux: ";
 
 
 // X122
@@ -295,8 +295,8 @@ const PROGMEM char lcd_param_common_UD [] = "Move up/down";
 const PROGMEM char lcd_param_common_LR [] = "Move left/right";
 
 
-// X148
-// lcdSys148
+// X149
+// lcdSys149
 // System Reset
 
 

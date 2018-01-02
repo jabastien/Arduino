@@ -103,23 +103,44 @@ class Menu
     
     void lcdSys116(void); // Voltage for Pre, Post & V5 Regulator
 
-    void lcdSys119(void); // Aux[0-3]
+
 
     void lcdSys122(void); // Switch / Trim / Menu buttons
 
 
-    void lcdSys130(void); // Throttle - Joystick range limits (Uses             editJoystick 0)  // s/b 134
-    void lcdSys131(void); // Throttle - Left Joystick range limits (Uses             editJoystick 0)  // s/b 134
-    void lcdSys132(void); // Throttle - Right Joystick range limits (Uses             editJoystick 0)  // s/b 134
+    void lcdSys130(void); // Controls - Aux / Joystick / Sw & Btn
+    
+      void lcdSys131(void); // Throttle - Joystick select Left/Right range limits
+      
+        void lcdSys132(void); // Joystick select Throttle / Yaw
+        void lcdSys133(void); // Joystick select Roll / Pitch
+  
+          void lcdSys134(void); // Edit - Throttle - Joystick range limits (Uses             editJoystick 0)    
+      //  void lcdSys135(void); // Edit - Yoke     - Joystick range limits (Uses lcdSys134 , editJoystick 1)
+      //  void lcdSys138(void); // Edit - Roll     - Joystick range limits (Uses lcdSys134 , editJoystick 2)
+      //  void lcdSys139(void); // Edit - Pitch    - Joystick range limits (Uses lcdSys134 , editJoystick 3)
 
-    void lcdSys134(void); // Throttle - Joystick range limits (Uses             editJoystick 0)  // s/b 134
-//  void lcdSys135(void); // Yoke     - Joystick range limits (Uses lcdSys134 , editJoystick 1)
-//  void lcdSys138(void); // Roll     - Joystick range limits (Uses lcdSys134 , editJoystick 2)
-//  void lcdSys139(void); // Pitch    - Joystick range limits (Uses lcdSys134 , editJoystick 3)
+  
+      void lcdSys140(void); // AUX [0-3](Display all)
+      void lcdSys141(void); // AUX [0]
+      void lcdSys142(void); // AUX [1]
+      void lcdSys143(void); // AUX [2]
+      void lcdSys144(void); // AUX [3]
+      void lcdSys145(void); // Edit - AUX [x] Range Limit Edit
 
-    void lcdSys136(void); // AUX 0 Range Limit 
+byte menuCarrotStart;
+/*    
+    void lcdSys141(void); // AUX - select 0/1 range limits
+    void lcdSys142(void); // AUX select 0 / 1
+    
+    void lcdSys143(void); // AUX select 2 / 3
 
-    void lcdSys148(void); // System Reset
+    void lcdSys135(void); // 0 - AUX range limits (Uses             editAUX 0)    
+//  void lcdSys136(void); // 1 - AUX range limits (Uses lcdSys144 , editAUX 1)
+//  void lcdSys137(void); // 2 - AUX range limits (Uses lcdSys144 , editAUX 2)
+//  void lcdSys138(void); // 3 - AUX range limits (Uses lcdSys144 , editAUX 3)
+ */
+    void lcdSys149(void); // System Reset
 
     
     // ===========================================
@@ -242,12 +263,12 @@ class Menu
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //===============================
 // System - Ohms or Voltage / Control Range / Reset 
-byte menuOptions100 [4] = {MAINMENU, 101, 130, 148};
+byte menuOptions100 [4] = {MAINMENU, 101, 130, 149};
 //===============================
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // (101) - Ohms / Switches / Voltages
-  byte menuOptions101 [4] = {SYSTEM, 102, 110, 119};
+  byte menuOptions101 [3] = {SYSTEM, 102, 110};
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // (102) - Ohms
@@ -265,7 +286,11 @@ byte menuOptions100 [4] = {MAINMENU, 101, 130, 148};
     byte menuOptions114 [2] = {110, 216};      // 110 - V5.0    Reference Voltage Measured
     byte menuOptions116 [1] = {110};           // 110 - Voltages for Pre, Post & V5 Regulator 
   //-------------------------------
-  byte menuOptions119 [1] = {101};           // 101 - Aux[0-3]
+  byte menuOptions140 [4] = {141, 142, 143, 144};           // 101 - Aux[0-3]
+  byte menuOptions141 [2] = {130, 241};           // 101 - Aux[0]
+  byte menuOptions142 [2] = {130, 241};           // 101 - Aux[1]
+  byte menuOptions143 [2] = {130, 241};           // 101 - Aux[2]
+  byte menuOptions144 [2] = {130, 241};           // 101 - Aux[3]
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //  System - Switch / Trim / Menu.
@@ -277,26 +302,26 @@ byte menuOptions100 [4] = {MAINMENU, 101, 130, 148};
 
 
 //===============================
-// Control Range Limits (Left/Right)
-byte menuOptions130 [4] = {SYSTEM,131,132, 122};      
-    
-//===============================
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // Left (Throttle or Yaw)
-    byte menuOptions131 [3] = {130,134,135};  
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      byte menuOptions134 [2] = {131,240};      // Throttle
-      byte menuOptions135 [2] = {131,240};      // Yaw
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // Right (Roll or Pitch)
-    byte menuOptions132 [3] = {130,138,139};      
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      byte menuOptions138 [2] = {132,240};      // Roll
-      byte menuOptions139 [2] = {132,240};      // Pitch
+byte menuOptions130 [4] = {SYSTEM,140,131, 122};// AUX, Joystick, Switches
+  //-------------------------------
+      
+  byte menuOptions131 [3] = {130,132,133}; // Control Range Limits (Left/Right)    
+      
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      byte menuOptions132 [3] = {131,134,135};  // Left (Throttle or Yaw)
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        byte menuOptions134 [2] = {132,240};      // Throttle
+        byte menuOptions135 [2] = {132,240};      // Yaw
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      byte menuOptions133 [3] = {131,138,139};  // Right (Roll or Pitch)
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        byte menuOptions138 [2] = {133,240};      // Roll
+        byte menuOptions139 [2] = {133,240};      // Pitch
+
 
 //===============================
 // Reset Menu
-byte menuOptions148 [2] = {SYSTEM,149};      // Factory Reset  (149 should be Y/N function)
+byte menuOptions149 [2] = {SYSTEM,SYSTEM};      // Factory Reset  (149 should be Y/N function)
 //===============================
 
     // =======================================

@@ -110,6 +110,8 @@ void Menu::menuDisplay(){
 
   // We always display the MENU
 
+  menuCarrotStart = 0;
+
   // Menu Switch\Case
   switch (menuSelected) {
 
@@ -315,16 +317,6 @@ void Menu::menuDisplay(){
       
       break;
 
-    // ---------------------------------------
-    case 119: // Voltage for Pre, Post & V5 Regulator
-      if (isMenuChange){ 
-        setMenu(menuSelected, menuOptions119, membersof(menuOptions119));
-      } 
-           
-      lcdSys119();
-      
-      break;
-      
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // ---------------------------------------
     case 122: // Switch
@@ -359,7 +351,7 @@ void Menu::menuDisplay(){
       lcdSys131();
       
       break; 
-
+      
     // ---------------------------------------
     case 132: // Joystick range limits
       if (isMenuChange){ 
@@ -367,6 +359,16 @@ void Menu::menuDisplay(){
       }
 
       lcdSys132();
+      
+      break; 
+
+    // ---------------------------------------
+    case 133: // Joystick range limits
+      if (isMenuChange){ 
+        setMenu(menuSelected, menuOptions133, membersof(menuOptions133));
+      }
+
+      lcdSys133();
       
       break; 
                      
@@ -420,15 +422,76 @@ void Menu::menuDisplay(){
       lcdSys134();
       
       break;
+
     
+    // ---------------------------------------
+    case 140: // AUX - Display all
+      if (isMenuChange){ 
+        setMenu(menuSelected, menuOptions140, membersof(menuOptions140));
+      } 
+           
+      lcdSys140();
+
+      menuCarrotStart = 1;
+      break;
+
+    // ---------------------------------------
+    case 141: // AUX 0 range limits
+      if (isMenuChange){  
+        setMenu(menuSelected, menuOptions141, membersof(menuOptions141));
+      }
+      
+      editControl = 0; // AUX 0
+
+      lcdSys145();
+      
+      break;            
+      
+    // ---------------------------------------
+    case 142: // AUX 1 range limits
+      if (isMenuChange){  
+        setMenu(menuSelected, menuOptions142, membersof(menuOptions142));
+      }
+      
+      editControl = 1; // AUX 1
+
+      lcdSys145();
+      
+      break;            
+      
+    // ---------------------------------------
+    case 143: // AUX 2 range limits
+      if (isMenuChange){  
+        setMenu(menuSelected, menuOptions143, membersof(menuOptions143));
+      }
+      
+      editControl = 2; // AUX 2
+
+      lcdSys145();
+      
+      break;            
+
+          // ---------------------------------------
+    case 144: // AUX 3 range limits
+      if (isMenuChange){  
+        setMenu(menuSelected, menuOptions144, membersof(menuOptions144));
+      }
+      
+      editControl = 3; // AUX 3
+
+      lcdSys145();
+      
+      break;      
+      
+      
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // ---------------------------------------
-    case 148: // Reset all values -> goto 249 after (bool Y/N check).
+    case 149: // Reset all values -> goto 249 after (bool Y/N check).
       if (isMenuChange){ 
-        setMenu(menuSelected, menuOptions148, membersof(menuOptions148));
+        setMenu(menuSelected, menuOptions149, membersof(menuOptions149));
       }       
       
-      lcdSys148();
+      lcdSys149();
       
       break;
 
@@ -579,7 +642,7 @@ void Menu::menuDisplay(){
       
       editControl = 0; // AUX 0
 
-      lcdSys136();
+      lcdSys145();
       
       break;            
       
@@ -591,7 +654,7 @@ void Menu::menuDisplay(){
       
       editControl = 1; // AUX 1
 
-      lcdSys136();
+      lcdSys145();
       
       break;            
       
@@ -603,7 +666,7 @@ void Menu::menuDisplay(){
       
       editControl = 2; // AUX 1
 
-      lcdSys136();
+      lcdSys145();
       
       break;            
 
@@ -615,7 +678,7 @@ void Menu::menuDisplay(){
       
       editControl = 3; // AUX 1
 
-      lcdSys136();
+      lcdSys145();
       
       break;            
       
@@ -745,12 +808,12 @@ void Menu::menuKeyboard(byte keyPress){
   // Do we need a carrot?
   if (menuSelected != MAINMENU  && utils.arraySizeBYTE(menuOptions) != 1){// Don't show carrot for MAINMENU
     // Clear prior carrot
-    for (byte b = 1; b <= 3 ; b++){
+    for (byte b = (1 - menuCarrotStart); b <= 3 ; b++){
       lcd.setCursor(0, b);//   row >    column ^
       lcd.print (" ");
     }
     // Show new Carrot
-    if (menuCol > 0){
+    if (menuCol > (0 - menuCarrotStart)){
       lcd.setCursor(0, menuCol);//   row >    column ^
       lcd.print (">");
     }
@@ -764,11 +827,11 @@ void Menu::menuChangeCheck(){
     return;
   }
   
-//  if (false){
-//    Serial.print (F(" Sel:"));
-//    Serial.print (menuSelected);
-//    Serial.println();
-//  }
+  if (true){
+    Serial.print (F(" Sel:"));
+    Serial.print (menuSelected);
+    Serial.println();
+  }
 
   lcd.noBlink();
   lcd.clear();
@@ -1472,8 +1535,6 @@ void Menu::lcdSys101() { // SYSTEM - OHMs & Volts
     lcd.setCursor(1, 2); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys101_Volts));
 
-    lcd.setCursor(1, 3); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdSys119_AUX));
 
   } 
 }
@@ -1768,24 +1829,24 @@ void Menu::lcdSys116() { // 110 - Voltage for Pre, Post & V5 Regulator
 }
 
 // -------------------------------------------
-void Menu::lcdSys119() { // 101 - Aux[0-3]
+void Menu::lcdSys140() { // 101 - Aux[0-3]
 
   if (isMenuChange){ 
 
-    lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdSys119_AUXc));
+    lcd.setCursor(1, 0); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys140_AUXc));
     lcd.print(" 0");
 
-    lcd.setCursor(0, 1); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdSys119_AUXc));
+    lcd.setCursor(1, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys140_AUXc));
     lcd.print(" 1");
     
-    lcd.setCursor(0, 2); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdSys119_AUXc));
+    lcd.setCursor(1, 2); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys140_AUXc));
     lcd.print(" 2");
     
-    lcd.setCursor(0, 3); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdSys119_AUXc));
+    lcd.setCursor(1, 3); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys140_AUXc));
     lcd.print(" 3");
   }
 
@@ -1858,18 +1919,19 @@ void Menu::lcdSys122() { // Switch  // Trim // Menu buttons
 }
 
 
+    
 // -------------------------------------------
-void Menu::lcdSys130() { // SYSTEM - Volts
+void Menu::lcdSys130() { // SYSTEM - Controls for Joystick / Aux / SwitchesButtons
 
   if (isMenuChange){ 
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys134_Cntl));
-  
+
     lcd.setCursor(1, 1); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdSys134_LeftCtlRng));
+    lcd.print(PGMSTR(lcd_param_lcdSys140_AUX));
 
     lcd.setCursor(1, 2); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdSys134_RightCtlRng));
+    lcd.print(PGMSTR(lcd_param_common_Joystick));
 
     lcd.setCursor(1, 3); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys134_SwitchesButtons));
@@ -1877,8 +1939,23 @@ void Menu::lcdSys130() { // SYSTEM - Volts
 }
 
 // -------------------------------------------
-void Menu::lcdSys131() { // SYSTEM - 
+void Menu::lcdSys131() { // SYSTEM - Controls for Joystick / Aux / SwitchesButtons
 
+  if (isMenuChange){ 
+    lcd.setCursor(0, 0); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_common_Joystick));
+
+    lcd.setCursor(1, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys134_LeftCtlRng));
+
+    lcd.setCursor(1, 2); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys134_RightCtlRng));
+  } 
+}
+
+
+// -------------------------------------------
+void Menu::lcdSys132() { // SYSTEM - Range control - Throttle/Yaw 
 
   if (isMenuChange){ 
     lcd.setCursor(0, 0); //   row >    column ^
@@ -1893,7 +1970,7 @@ void Menu::lcdSys131() { // SYSTEM -
 }
 
 // -------------------------------------------
-void Menu::lcdSys132() { // SYSTEM - 
+void Menu::lcdSys133() { // SYSTEM - Range control - Roll/Pitch
 
   if (isMenuChange){ 
     lcd.setCursor(0, 0); //   row >    column ^
@@ -1908,7 +1985,7 @@ void Menu::lcdSys132() { // SYSTEM -
 }
 
 // -------------------------------------------
-void Menu::lcdSys134() { // Joystick range limits  (Find MID point, release stick and press 'Select')
+void Menu::lcdSys134() { // Edit - Joystick range limits  (Find MID point, release stick and press 'Select') Throttle/Yaw/Roll/Pitch
 
   if (isMenuChange){ 
 
@@ -2009,7 +2086,7 @@ void Menu::lcdSys134() { // Joystick range limits  (Find MID point, release stic
 }
 
 // -------------------------------------------
-void Menu::lcdSys136() { // Aux range limits  (Find MID point, release stick and press 'Select')
+void Menu::lcdSys145() { // Edit - Aux range limits  (Find MID point, release stick and press 'Select')
 
   if (isMenuChange){ 
 
@@ -2037,7 +2114,7 @@ void Menu::lcdSys136() { // Aux range limits  (Find MID point, release stick and
 
   if (isMenuChange || isFuncChange){    //lcd.print(PGMSTR(lcd_param_common_Joystick));
       lcd.setCursor(0, 0); //   row >    column ^
-      lcd.print(PGMSTR(lcd_param_lcdSys119_AUXc));    
+      lcd.print(PGMSTR(lcd_param_lcdSys140_AUXc));    
       lcd.print(editControl);      
     }
  
@@ -2084,18 +2161,18 @@ void Menu::lcdSys136() { // Aux range limits  (Find MID point, release stick and
 }
 
 // -------------------------------------------
-void Menu::lcdSys148() { // Reset
+void Menu::lcdSys149() { // Reset
 
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys100_FactReset));
 
     lcd.setCursor(2, 2); //   row >    column ^
     if ((repeatCount/2)%2 == 0){// If ODD.
-      lcd.print(F("148 Finish Reset"));
+      lcd.print(F("149 Finish Reset"));
     }else{
       lcd.print(F("                "));
     }    
-    Serial.println("148 Finish Reset");
+    Serial.println("149 Finish Reset");
 
 }
 
@@ -2496,7 +2573,7 @@ void Menu::lcdFunc239() { // Y/N
 }
 
 // -------------------------------------------
-void Menu::lcdFunc240() { // Controls Range
+void Menu::lcdFunc240() { // Joystick Controls Range
 
   if (isFuncChange){   
    data->getMyJoysticksRangeMap(editControl).setCenter(); 
@@ -2509,7 +2586,7 @@ void Menu::lcdFunc240() { // Controls Range
 }
 
 // -------------------------------------------
-void Menu::lcdFunc241() { // Controls Range
+void Menu::lcdFunc241() { // Aux Controls Range
 
   if (isFuncChange){   
    //data->getMyAuxsRangeMap(editControl).center = INT_MID;
@@ -2518,7 +2595,7 @@ void Menu::lcdFunc241() { // Controls Range
   
   data->getMyAuxsRangeMap(editControl).setMinMaxCenter(); 
   
-  lcdSys136();  
+  lcdSys145();  
 }
 
 //===========================================
