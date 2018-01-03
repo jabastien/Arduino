@@ -315,19 +315,13 @@ const PROGMEM char lcd_param_lcdInit150_startUp [] = "Start up";
 // Splash   [no click 'select button' out to 151]
 const char  lcd_param_lcdInit151_qBytesWorld[] PROGMEM = "Q-Bytes World";
 const char  lcd_param_lcdInit151_deviceInfo [] PROGMEM = {"2.4G Transmitter"};
-const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.38"};
+const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.39"};
 
 // X192: 
 // lcdInit192
 // Control check
-const PROGMEM char  lcd_param_lcdInit192_controlCheck[]       = {"Control check"};
-//                                                                12345678901234567890
-//                                                                u/d xxx xxx xxxxxxxx
-const PROGMEM char  lcd_param_lcdInit192_controlCheck_LRXXX[] = {     "L   R  Switches"};
-const PROGMEM char  lcd_param_lcdInit192_controlCheck_UD[]    = {"U/D"};
-const PROGMEM char  lcd_param_lcdInit192_controlCheck_LR[]    = {"L/R"};
+const PROGMEM char  lcd_param_lcdInit192_controlHome[]      = {"Home All"};
 
-//const PROGMEM char lcd_param_lcdInit192_volts [] = {"Volts"};
 
 // x199
 

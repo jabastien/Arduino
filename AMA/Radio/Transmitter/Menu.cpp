@@ -2247,99 +2247,66 @@ void Menu::lcdInit151() { // Splash     [no click 'select button' out to 151]
 void Menu::lcdInit192() { // Control check
 
   if (isMenuChange){ 
-    // 0
-    displayMask[0].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(THROTTLE));
-    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
-    
-    // 1
-    displayMask[1].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(YAW));
-    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
-    
-    // 2
-    displayMask[2].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(ROLL));
-    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
-    
-    // 3
-    displayMask[3].doMaskInit(digits8, '#', 11, &data->getMyJoysticksRangeMap(PITCH));
-    // data->setUint16_tPointer(displayMask[1].getVoidPointer());
-
     lcd.setCursor(0, 0); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck));
-    lcd.setCursor(5, 1); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck_LRXXX));
-    lcd.setCursor(0, 2); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck_UD));
-    lcd.setCursor(0, 3); //   row >    column ^
-    lcd.print(PGMSTR(lcd_param_lcdInit192_controlCheck_LR));
+    lcd.print(PGMSTR(lcd_param_lcdInit192_controlHome));
   }
   
   // Display switches as bin (0's and 1's)
-  lcd.setCursor(12, 1); //   row >    column ^
+  lcd.setCursor(0, 1); //   row >    column ^
   lcd.print( display.outputBinary( data->getMySwitchMap().switchPins));
 
-  lcd.setCursor(12, 2); //   row >    column ^
+  lcd.setCursor(0, 2); //   row >    column ^
   lcd.print( display.outputBinary( data->getMySwitchMap().trimPins));
   
-  lcd.setCursor(12, 3); //   row >    column ^
+  lcd.setCursor(0, 3); //   row >    column ^
   lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
 
-
+  // Display AUX value as ###
+  for (byte b = 0 ; b <= 3; b++){
+    lcd.setCursor(11, b); //   row >    column ^
+    lcd.print(display.outputDigitsU16( 
+        data->getMyAuxsRangeMap(b).controlRange(),
+        digits8, 2));  
+  }
+      
   // Display XMIT value as ###
-  MyControlsRangeMap myJoysticksRangeMap;
-  MyControlsRangeMap myAuxsRangeMap;
-
-// Left control
-  lcd.setCursor(3, 2); //   row >    column ^
-  myJoysticksRangeMap = *(MyControlsRangeMap*)displayMask[0].getVoidPointer();
-  lcd.print(display.outputDigitsU16( 
-      myJoysticksRangeMap.controlRange(),
-      displayMask[0].getMaskPMG(), 2));
-
-  lcd.setCursor(3, 3); //   row >    column ^
-  myJoysticksRangeMap = *(MyControlsRangeMap*)displayMask[1].getVoidPointer();
-  lcd.print(display.outputDigitsU16( 
-      myJoysticksRangeMap.controlRange(),
-      displayMask[0].getMaskPMG(), 2));
-
-// Right control
-  lcd.setCursor(7, 3); //   row >    column ^
-  myJoysticksRangeMap = *(MyControlsRangeMap*)displayMask[2].getVoidPointer();
-  lcd.print(display.outputDigitsU16( 
-      myJoysticksRangeMap.controlRange(),
-      displayMask[0].getMaskPMG(), 2));
-
-  lcd.setCursor(7, 2); //   row >    column ^
-  myJoysticksRangeMap = *(MyControlsRangeMap*)displayMask[3].getVoidPointer();
-  lcd.print(display.outputDigitsU16( 
-      myJoysticksRangeMap.controlRange(),
-      displayMask[0].getMaskPMG(), 2));
-
-
+  // Aux controls
+  for (byte b = 0 ; b <= 3; b++){
+    lcd.setCursor(16, b); //   row >    column ^
+    lcd.print(display.outputDigitsU16( 
+        data->getMyJoysticksRangeMap(b).controlRange(),
+        digits8, 2));
+  }
 
 //  lcd.setCursor(1, 3);//   row >    column ^
 //  lcd.print(PGMSTR(lcd_param_lcdInit192_volts));
 //  data->getBatVolts();
 
 
-
-  
   if (repeatCount > 16) {
 
      // If Controls not home, wait.
-// DAQ finish this....
-// DAQ finish this....
-// DAQ finish this....     
-    if (true){
-//      menuAction = doMenu;
-//      //menuKeyboard(SELECT);
-//      menuSelected = MAINMENU; // Main
-//      menuChangeCheck();
-      forceMenuChange(MAINMENU);
+    if ( cntrlHome() ){  
+          forceMenuChange(MAINMENU);      
     }
   } 
   
 }
 
+boolean Menu::cntrlHome(){
+  byte diff = 5; //Within +/-X of center
+  for (byte b = 0; b <= 3; b++){
+    if (data->getMyAuxsRangeMap(b).controlRange() != 0){return false;}
+    if (data->getMyJoysticksRangeMap(b).controlRange()-diff > 128){return false;}
+    if (data->getMyJoysticksRangeMap(b).controlRange()+diff < 128){return false;}
+  }
+
+  if (data->getMySwitchMap().switchPins != 0){return false;}
+  if (data->getMySwitchMap().trimPins != 0){return false;}
+  if (data->getMySwitchMap().menuPins != 0){return false;}
+  
+  return true;
+}
 
 // -------------------------------------------
 void Menu::lcdInit199() { // Show Error

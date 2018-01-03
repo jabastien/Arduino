@@ -59,7 +59,7 @@ class Menu
     void setMenu(byte, byte [], byte);
     void setVisible(void);
 
- 
+    boolean cntrlHome();
     // ===========================================
     // *   0 -   1 = Main Menu(s)
     // ===========================================
