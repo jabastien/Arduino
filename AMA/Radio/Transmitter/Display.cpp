@@ -18,7 +18,6 @@
 // include this library's description file
 #include "Display.h"
 
-
 // ===========================================
 // Data
 // ===========================================
@@ -38,12 +37,14 @@ Display::Display(){
 // https://forum.arduino.cc/index.php?topic=439117.0
 // -------------------------------------------
 template <typename T> T Display::setSign (T number){ // Return value of 'T'
-  if (number < 0){ // Can't be negative.
-    number *= -1;
-    buffer[0] = '-';
-  }
-  else{
-    buffer[0] = ' ';
+  if (buffer[0] != '#'){
+    if (number < 0){ // Can't be negative.
+      number *= -1;
+      buffer[0] = '-';
+    }
+    else{
+      buffer[0] = ' ';
+    }
   }
   return number;
 }  // end of setSign
@@ -99,60 +100,74 @@ void Display::setBuffer(PGM_P pattern){
 // Digits
 // ===========================================
 
-// -------------------------------------------
-// Number can be between 0 and 255
-char * Display::outputDigitsU8(uint8_t number, PGM_P pattern){
+template <typename T> T Display::getDigit (T number, byte digit){ // Return value of 'T'
 
-  Display digits;
+  //digit--;
+  switch (digit) {
+    case 0:
+        return '0' + number / 1           - (number/10)          * 10;
+      break;
+    case 1:
+        return '0' + number / 10          - (number/100)         * 10;
+      break;
+    case 2:
+        return '0' + number / 100         - (number/1000)        * 10;
+      break;
+    case 3:
+        return '0' + number / 1000        - (number/10000)       * 10;
+      break;
+    case 4:
+        return '0' + number / 10000       - (number/100000)      * 10;
+      break;
+    case 5:
+        return '0' + number / 100000      - (number/1000000)     * 10;
+      break;
+    case 6:
+        return '0' + number / 1000000     - (number/10000000)    * 10;
+      break;
+    case 7:
+        return '0' + number / 10000000    - (number/100000000)   * 10;
+      break;
+    case 8:
+        return '0' + number / 100000000   - (number/1000000000)   * 10;
+      break;
+    case 9:
+        return '0' + number / 1000000000  - (number/10000000000)  * 10;
+      break;
+  }
+  return 'E';
+}  // end of setSign
 
+template <typename T> char * Display::outputDigitsX( T number, PGM_P pattern, byte maxDig, byte startDigit){
+
+  maxDig--;
+  
   setBuffer(pattern);
 
   number = setSign(number);
 
-  int digit = 0;
-
+  byte digit = startDigit;
   for (int pos = 0; buffer[pos] != '\0'; pos++)
     {
       if (buffer[pos] == '#'){
-        
-        // get member function pointer from array
-        Display::u8Digit f = digits.Display::u8Digit_Array [digit];
-        
-        // call the function
-        buffer[pos]=( (digits.*f) (number));
-        
+        buffer[pos]=getDigit (number, maxDig-digit);
         digit++;   
       }
     }  // end of for loop
+
   return buffer;  
+}
+    
+// -------------------------------------------
+// Number can be between 0 and 255
+char * Display::outputDigitsU8(uint8_t number, PGM_P pattern){
+ return outputDigitsX(number, pattern, 3, 0);
 }
 
 // -------------------------------------------
 // Number can be between -128 and 127
 char * Display::outputDigitsS8( int8_t number, PGM_P pattern){
-
-  Display digits;
-
-  setBuffer(pattern);
-
-  number = setSign(number);
-
-  int digit = 0;
-
-  for (int pos = 0; buffer[pos] != '\0'; pos++)
-    {
-      if (buffer[pos] == '#'){
-        
-        // get member function pointer from array
-        Display::s8Digit f = digits.Display::s8Digit_Array [digit];
-        
-        // call the function
-        buffer[pos]=( (digits.*f) (number));
-        
-        digit++;   
-      }
-    }  // end of for loop
-  return buffer;  
+ return outputDigitsX(number, pattern, 3, 0);
 }
 
 // -------------------------------------------
@@ -163,29 +178,7 @@ char * Display::outputDigitsU16(uint16_t number, PGM_P pattern){
 }
 
 char * Display::outputDigitsU16(uint16_t number, PGM_P pattern, uint8_t startDigit){
-
-  Display digits;
-
-  setBuffer(pattern);
-  
-//number = setSign(number);
-
-  int digit = startDigit;
-
-  for (int pos = 0; buffer[pos] != '\0'; pos++)
-    {
-      if (buffer[pos] == '#'){
-        
-        // get member function pointer from array
-        Display::u16Digit f = digits.Display::u16Digit_Array [digit];
-        
-        // call the function
-        buffer[pos]=( (digits.*f) (number));
-        digit++;   
-      }
-    }  // end of for loop
-    
-  return buffer;  
+ return outputDigitsX(number, pattern, 5, startDigit);
 }
 
 // -------------------------------------------
@@ -195,29 +188,7 @@ char * Display::outputDigitsS16( int16_t number, PGM_P pattern){
 }
 
 char * Display::outputDigitsS16( int16_t number, PGM_P pattern, uint8_t startDigit){
-
-  Display digits;
-
-  setBuffer(pattern);
-
-  number = setSign(number);
-
-  int digit = startDigit;
-
-  for (int pos = 0; buffer[pos] != '\0'; pos++)
-    {
-      if (buffer[pos] == '#'){
-        
-        // get member function pointer from array
-        Display::s16Digit f = digits.Display::s16Digit_Array [digit];
-        
-        // call the function
-        buffer[pos]=( (digits.*f) (number));
-        
-        digit++;   
-      }
-    }  // end of for loop
-  return buffer;  
+ return outputDigitsX(number, pattern, 5, startDigit);
 }
 
 

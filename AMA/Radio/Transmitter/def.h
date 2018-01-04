@@ -174,6 +174,7 @@ const PROGMEM char lcd_param_common_MCM  []  = "Read Min. Ctr. Max.";
 //                                 123456789012 
 
 const PROGMEM char lcd_param_lcdSys000_MainMenu []     = "Main Menu";
+const PROGMEM char lcd_param_lcdSys000_MainMenu_FPS []     = "FPS: ";
 
 
 //
@@ -278,8 +279,6 @@ const PROGMEM char lcd_param_lcdSys126_Menu [] = "Button";
 // lcdSys130
 // Joystick range limits                                 12345678901234567890
 const PROGMEM char lcd_param_lcdSys134_Cntl        [] = "Controls";
-const PROGMEM char lcd_param_lcdSys134_LeftCtlRng  [] = "Left Cntl Rng";
-const PROGMEM char lcd_param_lcdSys134_RightCtlRng [] = "Right Cntl Rng";
 const PROGMEM char lcd_param_lcdSys134_SwitchesButtons    [] = "SWs & Btns";
 
 
@@ -315,7 +314,7 @@ const PROGMEM char lcd_param_lcdInit150_startUp [] = "Start up";
 // Splash   [no click 'select button' out to 151]
 const char  lcd_param_lcdInit151_qBytesWorld[] PROGMEM = "Q-Bytes World";
 const char  lcd_param_lcdInit151_deviceInfo [] PROGMEM = {"2.4G Transmitter"};
-const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.39"};
+const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.40"};
 
 // X192: 
 // lcdInit192

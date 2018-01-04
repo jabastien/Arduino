@@ -59,6 +59,8 @@ class Menu
     void setMenu(byte, byte [], byte);
     void setVisible(void);
 
+    void lcdPrint(byte, byte, PGM_P);
+    
     boolean cntrlHome();
     // ===========================================
     // *   0 -   1 = Main Menu(s)
@@ -112,8 +114,8 @@ class Menu
     
       void lcdSys131(void); // Throttle - Joystick select Left/Right range limits
       
-        void lcdSys132(void); // Joystick select Throttle / Yaw
-        void lcdSys133(void); // Joystick select Roll / Pitch
+//        void lcdSys132(void); // Joystick select Throttle / Yaw
+ //       void lcdSys133(void); // Joystick select Roll / Pitch
   
           void lcdSys134(void); // Edit - Throttle - Joystick range limits (Uses             editJoystick 0)    
       //  void lcdSys135(void); // Edit - Yoke     - Joystick range limits (Uses lcdSys134 , editJoystick 1)
@@ -196,8 +198,6 @@ byte menuCarrotStart;
     byte function = 0;
     boolean isMenuChange = true;
     boolean isFuncChange = true;
-
-    //boolean isSetVisable = false;
    
     //===============================================================================
     //===============================================================================
@@ -272,51 +272,41 @@ byte menuOptions100 [4] = {MAINMENU, 101, 130, 149};
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // (102) - Ohms
-  byte menuOptions102 [4] = {101,104,105, 106};  // Pre, Pst & Ref Menu
+  byte menuOptions102 [4] = {104,105, 106, 112};  // Pre, Pst, Ref Menu & Shunt
   //-------------------------------
-    byte menuOptions104 [3] = {102,216,216};  // Vin  pre 1.1 & 1.2 OHMs
-    byte menuOptions105 [3] = {102,216,216};  // Vin  pst 2.1 & 2.2 OHMs
-    byte menuOptions106 [3] = {102,216,216};  // V5.0 Ref 3.1 & 3.2 OHMs
+    byte menuOptions104 [2] = {101, 216};  // Vin  pre 1.1 & 1.2 OHMs
+    byte menuOptions105 [2] = {101, 216};  // Vin  pst 2.1 & 2.2 OHMs
+    byte menuOptions106 [2] = {101, 216};  // V5.0 Ref 3.1 & 3.2 OHMs
+    byte menuOptions112 [2] = {101, 216};  // Shunt OHMs
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // (110) - Shunt / Reference
-  byte menuOptions110 [4] = {101, 112, 114, 116};
+  // (110) -  Reference
+  byte menuOptions110 [3] = {101, 114, 116};
   //-------------------------------
-    byte menuOptions112 [2] = {110, 216};      // 110 - Shunt OHMs
-    byte menuOptions114 [2] = {110, 216};      // 110 - V5.0    Reference Voltage Measured
-    byte menuOptions116 [1] = {110};           // 110 - Voltages for Pre, Post & V5 Regulator 
+    byte menuOptions114 [2] = {110, 216};      // 110 - V5.1 Reference Voltage Measured
+    byte menuOptions116 [1] = {110};           // 110 - All Voltages (Pre, Post & V5 Regulator)
   //-------------------------------
   byte menuOptions140 [4] = {141, 142, 143, 144};           // 101 - Aux[0-3]
-  byte menuOptions141 [2] = {130, 241};           // 101 - Aux[0]
-  byte menuOptions142 [2] = {130, 241};           // 101 - Aux[1]
-  byte menuOptions143 [2] = {130, 241};           // 101 - Aux[2]
-  byte menuOptions144 [2] = {130, 241};           // 101 - Aux[3]
+  byte menuOptions141 [2] = {130, 241};           // Aux[0]
+//  byte menuOptions142 [2] = {130, 241};           // Aux[1]
+//  byte menuOptions143 [2] = {130, 241};           // Aux[2]
+//  byte menuOptions144 [2] = {130, 241};           // Aux[3]
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  //  System - Switch / Trim / Menu.
-//  byte menuOptions120 [4] = {SYSTEM, 122, 124, 126};
+
     //-------------------------------
     byte menuOptions122 [1] = {130};      // Switches * Btns
-//    byte menuOptions124 [1] = {120};      // Trim
-//    byte menuOptions126 [1] = {120};      // Menu
-
 
 //===============================
 byte menuOptions130 [4] = {SYSTEM,140,131, 122};// AUX, Joystick, Switches
   //-------------------------------
       
-  byte menuOptions131 [3] = {130,132,133}; // Control Range Limits (Left/Right)    
-      
+  byte menuOptions131 [4] = {134,135,136,137}; // Control Range Limits (all)    
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      byte menuOptions132 [3] = {131,134,135};  // Left (Throttle or Yaw)
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        byte menuOptions134 [2] = {132,240};      // Throttle
-        byte menuOptions135 [2] = {132,240};      // Yaw
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      byte menuOptions133 [3] = {131,138,139};  // Right (Roll or Pitch)
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        byte menuOptions138 [2] = {133,240};      // Roll
-        byte menuOptions139 [2] = {133,240};      // Pitch
+        byte menuOptions134 [2] = {130, 240};      // Throttle
+//        byte menuOptions135 [2] = {130, 240};      // Yaw
+//        byte menuOptions136 [2] = {130, 240};      // Roll
+//        byte menuOptions137 [2] = {130, 240};      // Pitch
 
 
 //===============================
@@ -345,10 +335,10 @@ byte menuOptions149 [2] = {SYSTEM,SYSTEM};      // Factory Reset  (149 should be
 //    byte menuOptions174 [1] = {176};                // Trim
 //    byte menuOptions176 [1] = {182};                // Menu
 
-    byte menuOptions182 [2] = {183,240};            // Joystick range limits
-    byte menuOptions183 [2] = {184,240};            // Joystick range limits
-    byte menuOptions184 [2] = {185,240};            // Joystick range limits
-    byte menuOptions185 [2] = {186,240};            // Joystick range limits
+    byte menuOptions182 [2] = {183,240};            // Throttle - Joystick range limits
+    byte menuOptions183 [2] = {184,240};            // Yaw      - Joystick range limits
+    byte menuOptions184 [2] = {185,240};            // Roll     - Joystick range limits
+    byte menuOptions185 [2] = {186,240};            // Pitch    - Joystick range limits
 
     byte menuOptions186 [2] = {187,241};            // Aux range limits 0
     byte menuOptions187 [2] = {188,241};            // Aux range limits 1
