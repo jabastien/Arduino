@@ -943,11 +943,14 @@ void Menu::funcDisplay(byte _keyPress){
      *   232 = long Signed
      *   232 = long Un-signed
      *   
+     *   
+     *   237 - EEPROM erase
      *   238 - EEPROM Read
      *   239 - EEPROM Write
      *   
-     *   240 - Control Range set
-     *   
+     *   240 - Joystick Range set
+     *   241 - Aux Range set
+     *        *   
      *   25x - Function for check for Factory Reset
      *   25x - Function to do Factory Reset
      */
@@ -961,6 +964,11 @@ void Menu::funcDisplay(byte _keyPress){
     // ---------------------------------------
     case 216: // Double number
       lcdFunc216(_keyPress);
+      break;
+
+    // ---------------------------------------
+    case 237: // EEPROM erase      
+      lcdFunc237();
       break;
     // ---------------------------------------
     case 238: // EEPROM Read
@@ -1926,19 +1934,18 @@ void Menu::lcdSys145() { // Edit - Aux range limits  (Find MID point, release st
 }
 
 // -------------------------------------------
-void Menu::lcdSys149() { // Reset
+void Menu::lcdSys149() { // Factory reset - (Erase eeprom).
 
+  if (isMenuChange){ 
     lcd.setCursor(0, 0); //   row >    column ^
     lcd.print(PGMSTR(lcd_param_lcdSys100_FactReset));
 
-    lcd.setCursor(2, 2); //   row >    column ^
-    if ((repeatCount/2)%2 == 0){// If ODD.
-      lcd.print(F("149 Finish Reset"));
-    }else{
-      lcd.print(F("                "));
-    }    
-    Serial.println("149 Finish Reset");
+    lcd.setCursor(1, 1); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys149_FactResetYes));
 
+    lcd.setCursor(1, 2); //   row >    column ^
+    lcd.print(PGMSTR(lcd_param_lcdSys149_FactResetNo));
+  }
 }
 
 
@@ -2166,7 +2173,28 @@ void Menu::lcdFunc216(byte _keyPress) { // Uint16_t number  (move to lcdFunc215 
 */
 
 // -------------------------------------------
-void Menu::lcdFunc238() { // T/F
+void Menu::lcdFunc237() { // EEPROM erase
+  
+  // 1234567890123456789012345678901234567890
+  // Erasing all transmitter data!!!
+  // Reseting to Factory!
+
+  lcd.clear();
+  lcd.setCursor(9, 1); //   row >    column ^
+  lcdPrint(2, 2, lcd_param_lcdInit237_factoryReset); 
+  
+  // eeprom erease
+  dataStore.factoryReset();
+
+//  menuAction = doInit;
+//  function = 0;
+  Serial.println("INITMENU");
+  funcKeyboard(SELECT);
+  forceMenuChange(INITMENU);
+}
+
+// -------------------------------------------
+void Menu::lcdFunc238() { // EEPROM Read 
 
 
   // If Y, goto x239
@@ -2174,7 +2202,7 @@ void Menu::lcdFunc238() { // T/F
 }
 
 // -------------------------------------------
-void Menu::lcdFunc239() { // Y/N
+void Menu::lcdFunc239() { // EEPROM Write
   
 
 

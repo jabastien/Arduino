@@ -26,6 +26,7 @@
 
 #include "CustomChar.h"
 #include "Data.h"
+#include "DataStore.h"
 #include "Display.h"
 #include "DisplayMask.h"
 
@@ -166,6 +167,8 @@ byte menuCarrotStart;
     void lcdFunc216(byte); // 16 bit Unsigned
 //  void lcdFunc231(void); // 32 bit Signed
 //  void lcdFunc232(byte); // 32 bit Unsigned
+
+    void lcdFunc237(void); // EEPROM Erase  --> move to 25x range
     void lcdFunc238(void); // EEPROM Read   --> move to 25x range
     void lcdFunc239(void); // EEPROM Write  --> move to 25x range
     
@@ -311,7 +314,7 @@ byte menuOptions130 [4] = {SYSTEM,140,131, 122};// AUX, Joystick, Switches
 
 //===============================
 // Reset Menu
-byte menuOptions149 [2] = {SYSTEM,SYSTEM};      // Factory Reset  (149 should be Y/N function)
+byte menuOptions149 [3] = {SYSTEM, 237, SYSTEM};      // Factory Reset  (149 should be Y/N function)
 //===============================
 
     // =======================================
@@ -366,10 +369,12 @@ byte menuOptions149 [2] = {SYSTEM,SYSTEM};      // Factory Reset  (149 should be
     //byte menuOptions231 [1] = {FUNCTION};       // Function for number edit
     //byte menuOptions232 [1] = {FUNCTION};       // Function for number edit
 
+    //byte menuOptions237 [1] = {FUNCTION};       // Function for EEPROM erase
     //byte menuOptions238 [1] = {FUNCTION};       // Function for EEPROM read
     //byte menuOptions239 [1] = {FUNCTION};       // Function for EEPROM write
 
-    //byte menuOptions240 [1] = {FUNCTION};       // Function to do Control Range settings
+    //byte menuOptions240 [1] = {FUNCTION};       // Function to do Joystick Range settings
+    //byte menuOptions241 [1] = {FUNCTION};       // Function to do AUX Range settings
 
     //byte menuOptions25x [1] = {FUNCTION};       // Function for check for Factory Reset
     //byte menuOptions25x [1] = {FUNCTION};       // Function to do Factory Reset
@@ -383,9 +388,7 @@ byte menuOptions149 [2] = {SYSTEM,SYSTEM};      // Factory Reset  (149 should be
     // =======================================
     // =======================================  
     byte menuOptions254 [0] = {/* Do NOT use: reserved */};
-    byte menuOptions255 [0] = {/* Do NOT use: reserved */};
-
-    
+    byte menuOptions255 [0] = {/* Do NOT use: reserved */};    
 
     // ===========================================
     // library-accessible "private" interface
@@ -407,6 +410,7 @@ byte menuOptions149 [2] = {SYSTEM,SYSTEM};      // Factory Reset  (149 should be
       void clearDisplayMask(void);
       
       Data * data;   
+      DataStore dataStore = DataStore(data);
       DisplayMask displayMask[4];
 
     // ===========================================

@@ -297,7 +297,8 @@ const PROGMEM char lcd_param_common_LR [] = "Move left/right";
 // X149
 // lcdSys149
 // System Reset
-
+const PROGMEM char lcd_param_lcdSys149_FactResetYes [] = "Yes - ERASE All";
+const PROGMEM char lcd_param_lcdSys149_FactResetNo  [] = "No  - Get out!!!";
 
 
 // ===========================================
@@ -328,6 +329,12 @@ const PROGMEM char  lcd_param_lcdInit192_controlHome[]      = {"Home All"};
 //
 // X216: 
 //                                   123456789012 
+
+
+//
+// X237: 
+//                                   123456789012 
+const PROGMEM char  lcd_param_lcdInit237_factoryReset[]      = {"Resetting..."};
 
 //
 // X255: 
