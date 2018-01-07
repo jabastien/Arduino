@@ -38,7 +38,6 @@
 
 DataStore::DataStore(Data * _data){
   // initialize this instance's variables
-  //Serial.begin(115200); //Set the speed to 9600 bauds if you want.
   
   // do whatever is required to initialize the library
 
@@ -52,14 +51,14 @@ if(true){
   Serial.println(PGMSTR(dashes)); 
   Serial.println(PGMSTR(dashes)); 
 
-  Serial.print  ("Size of MyControlsMap: "); 
-  Serial.println(sizeof(MyControlsMap));
+  Serial.print  ("Size of MyJoysticks: "); 
+  Serial.println(sizeof(MyJoysticks));
 
   Serial.print  ("Size of MyAux: "); 
   Serial.println(sizeof(MyAux));
 
-  Serial.print  ("Size of MySwitchMap: "); 
-  Serial.println(sizeof(MySwitchMap));
+  Serial.print  ("Size of MySwitchesButtons: "); 
+  Serial.println(sizeof(MySwitchesButtons));
 
   Serial.print  ("Size of MyControlsRangeMap: "); 
   Serial.println(sizeof(MyControlsRangeMap));
@@ -97,54 +96,65 @@ void DataStore::factoryReset() {
   }
 }
 
-template <class T> int EEPROM_writeAnything(int ee, const T& value)
-{
-    const byte* p = (const byte*)(const void*)&value;
-    unsigned int i;
-    for (i = 0; i < sizeof(value); i++)
-          EEPROM.write(ee++, *p++);
-    return i;
+int eeAddrVer    = 000;
+int eeAddrJoyMap = 100;
+int eeAddrAuxMap = 200;
+
+int eeAddrResMap = 300;
+int eeAddrVltMap = 400;
+
+void DataStore::loadFromEEPROM(){
+Serial.println("loadFromEEPROM");
+
+EEPROM.get(eeAddrJoyMap + 000, data->getMyJoysticksRangeMap(0));
+EEPROM.get(eeAddrJoyMap + 020, data->getMyJoysticksRangeMap(1));
+EEPROM.get(eeAddrJoyMap + 040, data->getMyJoysticksRangeMap(2));
+EEPROM.get(eeAddrJoyMap + 060, data->getMyJoysticksRangeMap(3));
+
+EEPROM.get(eeAddrAuxMap + 000, data->getMyAuxsRangeMap(0));
+EEPROM.get(eeAddrAuxMap + 020, data->getMyAuxsRangeMap(1));
+EEPROM.get(eeAddrAuxMap + 040, data->getMyAuxsRangeMap(2));
+EEPROM.get(eeAddrAuxMap + 060, data->getMyAuxsRangeMap(3));
+
+EEPROM.get(eeAddrResMap, data->getMyResistorMap());
+EEPROM.get(eeAddrVltMap, data->getMyVoltageMap());
+
+Serial.println("loadFromEEPROM - done");
 }
 
-template <class T> int EEPROM_readAnything(int ee, T& value)
-{
-    byte* p = (byte*)(void*)&value;
-    unsigned int i;
-    for (i = 0; i < sizeof(value); i++)
-          *p++ = EEPROM.read(ee++);
-    return i;
+
+void DataStore::saveToEEPROM(){
+Serial.println("saveToEEPROM");
+  char buffer1[10];
+  strcpy_P(buffer1,lcd_param_lcdInit151_versionNum);  
+  EEPROM.put(eeAddrVer, buffer1);
+  
+  // Load all EEPROM data
+
+EEPROM.put(eeAddrJoyMap + 000, data->getMyJoysticksRangeMap(0));
+EEPROM.put(eeAddrJoyMap + 020, data->getMyJoysticksRangeMap(1));
+EEPROM.put(eeAddrJoyMap + 040, data->getMyJoysticksRangeMap(2));
+EEPROM.put(eeAddrJoyMap + 060, data->getMyJoysticksRangeMap(3));
+
+EEPROM.put(eeAddrAuxMap + 000, data->getMyAuxsRangeMap(0));
+EEPROM.put(eeAddrAuxMap + 020, data->getMyAuxsRangeMap(1));
+EEPROM.put(eeAddrAuxMap + 040, data->getMyAuxsRangeMap(2));
+EEPROM.put(eeAddrAuxMap + 060, data->getMyAuxsRangeMap(3));
+
+EEPROM.put(eeAddrResMap, data->getMyResistorMap());
+EEPROM.put(eeAddrVltMap, data->getMyVoltageMap());
+Serial.println("saveToEEPROM - done");
 }
 
+boolean DataStore::isVersionMatch(){
+  char buffer1[10];
+  strcpy_P(buffer1,lcd_param_lcdInit151_versionNum);
 
-
-//
-//void readEEPROM() {
-//  int eeAddress = 0;
-//
-//  EEPROM.get(eeAddress, myResistorMap);
-//  eeAddress += sizeof(myResistorMap); //Move address to the next byte after MyControlsRangeMap 'myJoysticksRangeMap'.
-//
-//  //
-//  EEPROM.get(eeAddress, myJoysticksRangeMap);
-//  eeAddress += sizeof(myJoysticksRangeMap); //Move address to the next byte after myJoysticksRangeMap 'myJoysticksRangeMap'.
-//  //  eeAddress += sizeof(myJoysticksRangeMap); //Move address to the next byte after myJoysticksRangeMap 'myJoysticksRangeMap'.
-
-//}
-//
-//
-//void writeEEPROM() {
-//  int eeAddress = 0;
-//
-//  //
-//  EEPROM.put(eeAddress, myJoysticksRangeMap);
-//  eeAddress += sizeof(myJoysticksRangeMap); //Move address to the next byte after myJoysticksRangeMap 'myJoysticksRangeMap'.
-//
-//  //
-//  //eeAddress += sizeof(myJoysticksRangeMap);
-//  EEPROM.put(eeAddress, myJoysticksRangeMap);
-//  eeAddress += sizeof(myJoysticksRangeMap); //Move address to the next byte after myJoysticksRangeMap 'myJoysticksRangeMap'.
-//}
-
+  char buffer2[10];
+  EEPROM.get(eeAddrVer, buffer2);
+  return !(strcmp(buffer2, buffer1));  
+}
+    
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library
 

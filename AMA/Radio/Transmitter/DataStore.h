@@ -18,6 +18,10 @@
   #include "WConstants.h"
 #endif
 
+
+#include <EEPROM.h>
+//#include <WProgram.h>  // for type definitions
+
 #include "Data.h"
 
 #include "config.h"
@@ -31,18 +35,20 @@ class DataStore
   // user-accessible "public" interface
   // ======================================
   public:
-    //DataStore();
     DataStore(Data *);
     void factoryReset(void);
     int eepromSize(void);
-     
+
+    void loadFromEEPROM(void);
+    void saveToEEPROM(void);
+    boolean isVersionMatch(void);
+          
   // ======================================
   // library-accessible "private" interface
   // ======================================
   private:
     Data * data;   
 
-    
   // ======================================
   // library-accessible "protected" interface
   // ======================================

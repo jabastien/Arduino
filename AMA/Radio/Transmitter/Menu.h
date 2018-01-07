@@ -38,8 +38,7 @@ class Menu
   // user-accessible "public" interface
   // ===========================================
   public:
-    //Menu();
-    Menu(Data *);
+    Menu(Data *, DataStore *);
 
     boolean isScreenRefreshNeeded(void);
     //void updateLCD(byte, int);
@@ -62,6 +61,8 @@ class Menu
 
     void lcdPrint(byte, byte, PGM_P);
     
+
+
     boolean cntrlHome();
     // ===========================================
     // *   0 -   1 = Main Menu(s)
@@ -410,7 +411,7 @@ byte menuOptions149 [3] = {SYSTEM, 237, SYSTEM};      // Factory Reset  (149 sho
       void clearDisplayMask(void);
       
       Data * data;   
-      DataStore dataStore = DataStore(data);
+      DataStore * dataStore;
       DisplayMask displayMask[4];
 
     // ===========================================

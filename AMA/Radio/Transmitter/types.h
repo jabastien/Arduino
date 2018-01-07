@@ -1,14 +1,15 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
-// Do not instance variables in this file.  It will create:
-//  error: redefinition of 'variable name'
-//  sketch\types.h:xx:xx: note: 'variable name' previously declared here
 
+/*  *** Do not instance variables in this file.  It will create: ***
+  error: redefinition of 'variable name'
+  sketch\types.h:xx:xx: note: 'variable name' previously declared here
+*/
 // ===========================================
 // Transmission Packages
 // ===========================================
-struct MyControlsMap {
+struct MyJoysticks {
   const byte packetType = 0x01;
   byte throttle; // A0
   byte yaw;      // A1
@@ -24,7 +25,7 @@ struct MyAux {
   byte AUX3;
 };
 
-struct MySwitchMap {
+struct MySwitchesButtons {
   const byte packetType = 0x03;
   byte switchPins;
   byte trimPins;
@@ -50,15 +51,6 @@ struct MyControlsRangeMap {
     maximum = INT_MIN;  
     }
 
-//// -------------------------------------------
-//// Reverse Centering Joystick
-//// -------------------------------------------
-//  void setReverseCenter(){
-//    minimum = INT_MAX;  
-//    center = current;  
-//    maximum = INT_MIN;  
-//    }
-
 // -------------------------------------------
 // Set Min Max Values
 // -------------------------------------------
@@ -77,7 +69,7 @@ struct MyControlsRangeMap {
     }
 
 // -------------------------------------------
-// Map Joystick Values for MyControlsMap
+// Map Joystick Values for MyJoysticks
 // -------------------------------------------
 // Returns a full-range value for a joystick position that takes into account
 // the values of the outer extremes and the center of the joystick.
@@ -94,22 +86,6 @@ struct MyControlsRangeMap {
   
 };
 
-
-/*
-struct foo {
-  int bar;
-  foo() : bar(3) {}   //look, a constructor
-  int getBar() 
-  { 
-    return bar; 
-  }
-};
-
-foo f;
-int y = f.getBar(); // y is 3
- */
-
-  
 // ===========================================
 // Volt divide Vars
 // Max votage size is 65,535.

@@ -36,8 +36,8 @@
 // Vars
 // ===========================================
 Data data = Data();
-DataStore dataStore = DataStore(&data);  //DataStore dataStore = DataStore();
-Menu menu = Menu(&data);
+DataStore dataStore = DataStore(&data);
+Menu menu = Menu(&data, &dataStore);
 Utils utils = Utils();
 
 // ===========================================
@@ -181,16 +181,16 @@ void loop() {
 
     // Switch
     readmask  = (switchCD4051.digitalReadC() << (digitalLoop % 8));
-    data.getMySwitchMap().switchPins = (data.getMySwitchMap().switchPins & pinmask) | readmask;
+    data.getMySwitchesButtons().switchPins = (data.getMySwitchesButtons().switchPins & pinmask) | readmask;
     
 
     // Trim
     readmask  = (trimCD4051.digitalReadC() << (digitalLoop % 8));
-    data.getMySwitchMap().trimPins = (data.getMySwitchMap().trimPins & pinmask) | readmask;
+    data.getMySwitchesButtons().trimPins = (data.getMySwitchesButtons().trimPins & pinmask) | readmask;
 
     // Menu
     readmask  = (menuCD4051.digitalReadC() << (digitalLoop % 8));
-    data.getMySwitchMap().menuPins = (data.getMySwitchMap().menuPins & pinmask) | readmask;
+    data.getMySwitchesButtons().menuPins = (data.getMySwitchesButtons().menuPins & pinmask) | readmask;
     }
 
   //------------------------------------------------------
@@ -213,7 +213,7 @@ void loop() {
     data.setVolts(analogLoop, cd4052.analogReadY());
     }
 
-  //  --  MySwitchMap
+  //  --  MySwitchesButtons
   //myAux.AUX1 = analog[0];
   //myAux.AUX2 = analog[1];
   //myAux.AUX3 = analog[2];

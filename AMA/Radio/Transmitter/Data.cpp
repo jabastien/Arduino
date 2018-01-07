@@ -56,8 +56,8 @@ MyResistorMap& Data::getMyResistorMap(){
   return myResistorMap;
 }
 
-MySwitchMap& Data::getMySwitchMap(){
-  return mySwitchMap;
+MySwitchesButtons& Data::getMySwitchesButtons(){
+  return mySwitchesButtons;
 }
 
 void Data::setVolts(byte b, int i){

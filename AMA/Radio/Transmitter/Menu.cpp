@@ -18,7 +18,6 @@
 
 //// include this library's description file
 #include "Menu.h"
-
 // ===========================================
 // I2C LCD
 // ===========================================
@@ -40,10 +39,10 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);    // Initialization of the book (address, c
 
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
-Menu::Menu(Data * _data){
+Menu::Menu(Data * _data, DataStore * _dataStore){
   // initialize this instance's variables
    data = _data;
-
+   dataStore = _dataStore;
   // do whatever is required to initialize the library
 
   clearDisplayMask(); // Inital load 
@@ -1706,7 +1705,7 @@ void Menu::lcdSys122() { // Switch  // Trim // Menu buttons
     //displayMask[0].doMaskInit(
 
     // 1
-    //displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &data->getMySwitchMap().switchSW);
+    //displayMask[1].doMaskInit(ohm_x_xxxxO, '#', 11, &data->getMySwitchesButtons().switchSW);
     // data->setUint16_tPointer(displayMask[1].getVoidPointer());
 
     // 2
@@ -1724,13 +1723,13 @@ void Menu::lcdSys122() { // Switch  // Trim // Menu buttons
 
   // Display switches as bin (0's and 1's)
   lcd.setCursor(11, 1); //   row >    column ^
-  lcd.print( display.outputBinary( data->getMySwitchMap().switchPins));
+  lcd.print( display.outputBinary( data->getMySwitchesButtons().switchPins));
 
   lcd.setCursor(11, 2); //   row >    column ^
-  lcd.print( display.outputBinary( data->getMySwitchMap().trimPins));
+  lcd.print( display.outputBinary( data->getMySwitchesButtons().trimPins));
 
   lcd.setCursor(11, 3); //   row >    column ^
-  lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
+  lcd.print( display.outputBinary( data->getMySwitchesButtons().menuPins));
 }
 
 
@@ -1863,6 +1862,8 @@ void Menu::lcdSys145() { // Edit - Aux range limits  (Find MID point, release st
 
   if (isMenuChange){ 
 
+    dataStore->saveToEEPROM();
+      
     // load DisplayMask[0-3] data pointers
 
     // 0
@@ -1977,36 +1978,30 @@ void Menu::lcdInit150() {  // Starting   [click (select) out to 150]
   }
 }
 
+
+
 // -------------------------------------------
 void Menu::lcdInit151() { // Splash     [no click 'select button' out to 151]
-
-    if (isMenuChange){ 
+    
+  if (isMenuChange){ 
   
-      menuAction = doInit;
+    menuAction = doInit;
 
     lcdPrint(0, 0, lcd_param_lcdInit151_qBytesWorld);
     lcdPrint(0, 1, lcd_param_lcdInit151_deviceInfo);
     lcdPrint(0, 2, lcd_param_lcdInit151_versionNum); 
-    }
-
-  // If first time run (no EEPROM data)   
-  if (true){ // Can delete this condition when (no EEPROM data) is completed.
-    lcd.setCursor(0, 3);//   row >    column ^
-    if ((repeatCount/2)%2 == 0){// If ODD.
-      lcd.print(F("Finish EEPROM..."));
-    }else{
-      lcd.print(F("                "));
-    }
   }
-  
-  if (repeatCount > 8) {//delay(2000);    
+
+  if (repeatCount > 8) {//delay(2000);       
     // If first time run (no EEPROM data)   
-    if (true){// DAQ finish this..(assume first time)..need to read the EEPROM data to know if it is 1st time
+    if (dataStore->isVersionMatch()){
+      // Load all EEPROM data
+      dataStore->loadFromEEPROM(); 
+      // Go to Control check before Main Menu 
+      forceMenuChange(CTLCHECK); // 192
+    } else {
       // First time run, initialize system
       forceMenuChange(FIRSTINIT); // 152
-    } else {
-      // Go to Control check before Main Menu 
-      forceMenuChange(CTLCHECK);  // 192
     }
   }
 }
@@ -2021,13 +2016,13 @@ void Menu::lcdInit192() { // Control check
   
   // Display switches as bin (0's and 1's)
   lcd.setCursor(0, 1); //   row >    column ^
-  lcd.print( display.outputBinary( data->getMySwitchMap().switchPins));
+  lcd.print( display.outputBinary( data->getMySwitchesButtons().switchPins));
 
   lcd.setCursor(0, 2); //   row >    column ^
-  lcd.print( display.outputBinary( data->getMySwitchMap().trimPins));
+  lcd.print( display.outputBinary( data->getMySwitchesButtons().trimPins));
   
   lcd.setCursor(0, 3); //   row >    column ^
-  lcd.print( display.outputBinary( data->getMySwitchMap().menuPins));
+  lcd.print( display.outputBinary( data->getMySwitchesButtons().menuPins));
   
   // Display XMIT value as ###
   for (byte b = 0 ; b <= 3; b++){
@@ -2046,7 +2041,7 @@ void Menu::lcdInit192() { // Control check
 
   if (repeatCount > 16) {
      // If Controls not home, wait.
-    if ( cntrlHome() ){  
+    if (cntrlHome()){
           forceMenuChange(MAINMENU);      
     }
   } 
@@ -2061,9 +2056,9 @@ boolean Menu::cntrlHome(){
     if (data->getMyJoysticksRangeMap(b).controlRange() + diff < 128){return false;}
   }
 
-  if (data->getMySwitchMap().switchPins != 0){return false;}
-  if (data->getMySwitchMap().trimPins != 0){return false;}
-  if (data->getMySwitchMap().menuPins != 0){return false;}
+  if (data->getMySwitchesButtons().switchPins != 0){return false;}
+  if (data->getMySwitchesButtons().trimPins != 0){return false;}
+  if (data->getMySwitchesButtons().menuPins != 0){return false;}
   
   return true;
 }
@@ -2184,13 +2179,14 @@ void Menu::lcdFunc237() { // EEPROM erase
   lcdPrint(2, 2, lcd_param_lcdInit237_factoryReset); 
   
   // eeprom erease
-  dataStore.factoryReset();
+  dataStore->factoryReset();
 
 //  menuAction = doInit;
 //  function = 0;
   Serial.println("INITMENU");
   funcKeyboard(SELECT);
   forceMenuChange(INITMENU);
+
 }
 
 // -------------------------------------------
@@ -2213,7 +2209,7 @@ void Menu::lcdFunc239() { // EEPROM Write
 
   // Read the eprom to see if it is clear
   if (false){// Read the eprom to see if it is clear
-//    dataStore.factoryReset();
+//    dataStore->factoryReset();
   }
   
       error = ERR239;

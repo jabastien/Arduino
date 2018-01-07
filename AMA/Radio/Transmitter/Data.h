@@ -53,7 +53,7 @@ class Data
 
     MyResistorMap& getMyResistorMap(void);
     MyVoltageMap&  getMyVoltageMap(void);
-    MySwitchMap&   getMySwitchMap(void);
+    MySwitchesButtons&   getMySwitchesButtons(void);
     
   // ===========================================
   // library-accessible "private" interface
@@ -61,13 +61,7 @@ class Data
   private:
 
 double avgE = 0.0;
-//byte cntE = 0;
-//
-//double listE[2];
-//byte sizeE=2;
-  
-//    int aux[8];
-//    int aux[4];  //getVolts
+
     int volts[4];
     
     MyControlsRangeMap myJoysticksRangeMap[4];
@@ -77,7 +71,8 @@ double avgE = 0.0;
     
     MyVoltageMap myVoltageMap;
     MyResistorMap  myResistorMap; 
-    MySwitchMap mySwitchMap;
+    
+    MySwitchesButtons mySwitchesButtons;
     
     MyAux myAux;
 

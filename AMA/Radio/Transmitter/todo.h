@@ -46,7 +46,7 @@ X - cleanup all 'err', turn into PRGMEM vars and document data.
 X  - bug in menu, able to arrow down one (1) when no items are available (Bug no longer found)
 
 X - Make Switch, Trim, & Menu into a re-usable method like JoyStick
-    It's already a Struct (MySwitchMap).
+    It's already a Struct (MySwitchesButtons).
   
 5 - create key/volt display in System (after joystick and before control check) 
 
