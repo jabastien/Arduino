@@ -60,7 +60,7 @@ class Data
   // ===========================================
   private:
 
-double avgE = 0.0;
+    double avgE = 0.0;
 
     int volts[4];
     

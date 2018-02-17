@@ -303,9 +303,6 @@ void Data::adjUint16_tNumber(int16_t number){
   Serial.println(number);
 }
 
-//  vKey =    v5_voltPerBit * analog[3];                                                                                 // Key
-
-
 // Private Methods /////////////////////////////////////////////////////////////
 // Functions only available to other functions in this library
 

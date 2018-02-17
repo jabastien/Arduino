@@ -516,104 +516,80 @@ void Menu::menuDisplay(){
       lcdSys122();
      
       break;
-      
+
     // ---------------------------------------
     
-    case 182: // Joystick range limits
+    case 182: // Joystick range limits 0
+    case 183: // Joystick range limits 1
+    case 184: // Joystick range limits 2
+    case 185: // Joystick range limits 3
+      editControl = abs(182 - menuSelected);
+
       if (isMenuChange){  
-        setMenu(menuSelected, menuOptions182, membersof(menuOptions182));
+        switch (editControl) {
+          // ---------------------------------------
+          case 0: //MAINMENU
+            setMenu(menuSelected, menuOptions182, membersof(menuOptions182));
+            break;
+          case 1: //MAINMENU
+            setMenu(menuSelected, menuOptions183, membersof(menuOptions183));
+            break;
+          case 2: //MAINMENU
+            setMenu(menuSelected, menuOptions184, membersof(menuOptions184));
+            break;
+          case 3: //MAINMENU
+            setMenu(menuSelected, menuOptions185, membersof(menuOptions185));
+            break;
+        }    
       }
-      
-      editControl = THROTTLE;
 
       lcdSys134();
       
       break;
-      
-    // ---------------------------------------
-    case 183: // Joystick range limits
-      if (isMenuChange){  
-        setMenu(menuSelected, menuOptions183, membersof(menuOptions183));
-      }
-      
-      editControl = YAW;
 
-      lcdSys134();
-      
-      break;
-      
-    // ---------------------------------------
-    case 184: // Joystick range limits
-      if (isMenuChange){  
-        setMenu(menuSelected, menuOptions184, membersof(menuOptions184));
-      }
-      
-      editControl = ROLL;
 
-      lcdSys134();
-      
-      break;
-      
-    // ---------------------------------------
-    case 185: // Joystick range limits
-      if (isMenuChange){  
-        setMenu(menuSelected, menuOptions185, membersof(menuOptions185));
-      }
-      
-      editControl = PITCH;
-
-      lcdSys134();
-      
-      break;            
-      
     // ---------------------------------------
     case 186: // AUX 0 range limits
-      if (isMenuChange){  
-        setMenu(menuSelected, menuOptions186, membersof(menuOptions186));
-      }
-      
-      editControl = 0; // AUX 0
-
-      lcdSys145();
-      
-      break;            
-      
-    // ---------------------------------------
     case 187: // AUX 1 range limits
-      if (isMenuChange){  
-        setMenu(menuSelected, menuOptions187, membersof(menuOptions187));
-      }
-      
-      editControl = 1; // AUX 1
-
-      lcdSys145();
-      
-      break;            
-      
-    // ---------------------------------------
     case 188: // AUX 2 range limits
-      if (isMenuChange){  
-        setMenu(menuSelected, menuOptions188, membersof(menuOptions188));
-      }
-      
-      editControl = 2; // AUX 1
-
-      lcdSys145();
-      
-      break;            
-
-          // ---------------------------------------
     case 189: // AUX 3 range limits
+    
+      editControl = abs(186 - menuSelected);
+
       if (isMenuChange){  
-        setMenu(menuSelected, menuOptions189, membersof(menuOptions189));
-      }
-      
-      editControl = 3; // AUX 1
+        switch (editControl) {
+          // ---------------------------------------
+          case 0: //MAINMENU
+            setMenu(menuSelected, menuOptions186, membersof(menuOptions186));
+            break;
+          case 1: //MAINMENU
+            setMenu(menuSelected, menuOptions187, membersof(menuOptions187));
+            break;
+          case 2: //MAINMENU
+            setMenu(menuSelected, menuOptions188, membersof(menuOptions188));
+            break;
+          case 3: //MAINMENU
+            setMenu(menuSelected, menuOptions189, membersof(menuOptions189));
+            break;
+        }    
+      }      
 
       lcdSys145();
       
       break;            
+
+    // ---------------------------------------
+    // ---------------------------------------
+    // ---------------------------------------
+    case 191: // Save to EEPROM
+      if (isMenuChange){  
+        setMenu(menuSelected, menuOptions191, membersof(menuOptions191));
+      }    
       
+      lcdInit191();
+      
+      break;
+
 
     // ---------------------------------------
     // ---------------------------------------
@@ -1862,8 +1838,7 @@ void Menu::lcdSys145() { // Edit - Aux range limits  (Find MID point, release st
 
   if (isMenuChange){ 
 
-    dataStore->saveToEEPROM();
-      
+     
     // load DisplayMask[0-3] data pointers
 
     // 0
@@ -2004,6 +1979,23 @@ void Menu::lcdInit151() { // Splash     [no click 'select button' out to 151]
       forceMenuChange(FIRSTINIT); // 152
     }
   }
+}
+
+// -------------------------------------------
+void Menu::lcdInit191() { // Save EEPROM data
+
+  if (isMenuChange){ 
+    lcd.setCursor(2, 2); //   row >    column ^
+    //lcd.print(PGMSTR(lcd_param_lcdInit192_controlHome));
+    lcd.print("Saving to EEPROM");
+
+    dataStore->saveToEEPROM();
+  }
+  
+  if (repeatCount > 8) {
+    // Go to Control check before Main Menu 
+    forceMenuChange(CTLCHECK); // 192
+  }  
 }
 
 // -------------------------------------------

@@ -17,11 +17,11 @@ X - finish start/init screens
     X - turn display bytes (01100011) as a return from Display.cpp  
 
     X - analog range for sticks (min/ctr/max)
-      - joystick range
-        - THROTTLE
-        - YAW
-        - PITCH
-        - ROLL
+      x- joystick range
+        x- THROTTLE
+        x- YAW
+        x- PITCH
+        x- ROLL
     
 2 = display all input voltages...prior to control check...
     x pre (this is the battery)
@@ -33,12 +33,12 @@ X - finish start/init screens
     x aux 2
     x aux 3
             
-3 - control check (execute to ensure switch and joystick are NOT flight enabled.)
+X - control check (execute to ensure switch and joystick are NOT flight enabled.)
 
 X - build menus
-    = Trans
-    = Model
-    = System
+    x= Trans
+    x= Model
+    x= System
 
 X - cleanup all 'err', turn into PRGMEM vars and document data.
       increased size from 18,800 to 20,056...(1,256)

@@ -63,7 +63,7 @@ byte keyPress;
 
 const uint64_t pipeOut = 0xE8E8F0F0E1LL;
 
-//RF24 radio(9, 10); // select  CE & CSN  pin
+RF24 radio(9, 10); // select  CE & CSN  pin
 
 // ===========================================
 // CD 405x
@@ -138,10 +138,10 @@ void setup(){
 
   
   //Start Radio
-  //  radio.begin();
-  //  radio.setAutoAck(false);
-  //  radio.setDataRate(RF24_250KBPS);
-  //  radio.openWritingPipe(pipeOut);
+    radio.begin();
+    radio.setAutoAck(false);
+    radio.setDataRate(RF24_250KBPS);
+    radio.openWritingPipe(pipeOut);
 
 //utils.ErrorPrint("abc",1,1);
 //utils.ErrorPrint("zxv",2,1,2);
@@ -223,8 +223,13 @@ void loop() {
   // Send our data
 
   // Set Joystick values (0-4) via Range limits  
-  //  radio.write(&myControls, sizeof(MyControls));
-
+//    radio.write(&myControls, sizeof(MyControls));
+    radio.write(&(data.getMyVoltageMap()),4);
+/*
+MyVoltageMap& Data::getMyVoltageMap(){
+  return myVoltageMap;
+}
+*/
   //------------------------------------------------------
   // Button pressed?
   keyPad.doKeys(data.getVolts(KEY));
@@ -240,6 +245,9 @@ void loop() {
   //------------------------------------------------------
 
   if (keyPress > 0) {
+//    Serial.print  (data.getVolts(KEY));
+//    Serial.print  (" ");
+//    Serial.println(keyPress);
        menu.updateLCD(keyPress);
   } else {
   if (menu.isScreenRefreshNeeded()) {

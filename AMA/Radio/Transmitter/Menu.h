@@ -41,7 +41,6 @@ class Menu
     Menu(Data *, DataStore *);
 
     boolean isScreenRefreshNeeded(void);
-    //void updateLCD(byte, int);
     void updateLCD(byte);
 
     void updateFPS(void);
@@ -60,8 +59,6 @@ class Menu
     void setVisible(void);
 
     void lcdPrint(byte, byte, PGM_P);
-    
-
 
     boolean cntrlHome();
     // ===========================================
@@ -107,22 +104,15 @@ class Menu
     
     void lcdSys116(void); // Voltage for Pre, Post & V5 Regulator
 
-
-
     void lcdSys122(void); // Switch / Trim / Menu buttons
-
 
     void lcdSys130(void); // Controls - Aux / Joystick / Sw & Btn
     
-      void lcdSys131(void); // Throttle - Joystick select Left/Right range limits
-      
-//        void lcdSys132(void); // Joystick select Throttle / Yaw
- //       void lcdSys133(void); // Joystick select Roll / Pitch
-  
-          void lcdSys134(void); // Edit - Throttle - Joystick range limits (Uses             editJoystick 0)    
-      //  void lcdSys135(void); // Edit - Yoke     - Joystick range limits (Uses lcdSys134 , editJoystick 1)
-      //  void lcdSys138(void); // Edit - Roll     - Joystick range limits (Uses lcdSys134 , editJoystick 2)
-      //  void lcdSys139(void); // Edit - Pitch    - Joystick range limits (Uses lcdSys134 , editJoystick 3)
+      void lcdSys131(void); // Throttle - Joystick select Left/Right range limits  
+        void lcdSys134(void); // Edit - Throttle - Joystick range limits (Uses             editJoystick 0)    
+    //  void lcdSys135(void); // Edit - Yoke     - Joystick range limits (Uses lcdSys134 , editJoystick 1)
+    //  void lcdSys138(void); // Edit - Roll     - Joystick range limits (Uses lcdSys134 , editJoystick 2)
+    //  void lcdSys139(void); // Edit - Pitch    - Joystick range limits (Uses lcdSys134 , editJoystick 3)
 
   
       void lcdSys140(void); // AUX [0-3](Display all)
@@ -132,18 +122,7 @@ class Menu
       void lcdSys144(void); // AUX [3]
       void lcdSys145(void); // Edit - AUX [x] Range Limit Edit
 
-byte menuCarrotStart;
-/*    
-    void lcdSys141(void); // AUX - select 0/1 range limits
-    void lcdSys142(void); // AUX select 0 / 1
-    
-    void lcdSys143(void); // AUX select 2 / 3
 
-    void lcdSys135(void); // 0 - AUX range limits (Uses             editAUX 0)    
-//  void lcdSys136(void); // 1 - AUX range limits (Uses lcdSys144 , editAUX 1)
-//  void lcdSys137(void); // 2 - AUX range limits (Uses lcdSys144 , editAUX 2)
-//  void lcdSys138(void); // 3 - AUX range limits (Uses lcdSys144 , editAUX 3)
- */
     void lcdSys149(void); // System Reset
 
     
@@ -153,6 +132,7 @@ byte menuCarrotStart;
     void lcdInit150(void); // Starting [click (select) out to 254]
     void lcdInit151(void); // Splash   [no click 'select button' out to 151]
     
+    void lcdInit191(void); // Save to EEPROM
     void lcdInit192(void); // Control check
 
     void lcdInit199(void); // Error, restart
@@ -308,9 +288,9 @@ byte menuOptions130 [4] = {SYSTEM,140,131, 122};// AUX, Joystick, Switches
   byte menuOptions131 [4] = {134,135,136,137}; // Control Range Limits (all)    
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         byte menuOptions134 [2] = {130, 240};      // Throttle
-//        byte menuOptions135 [2] = {130, 240};      // Yaw
-//        byte menuOptions136 [2] = {130, 240};      // Roll
-//        byte menuOptions137 [2] = {130, 240};      // Pitch
+//      byte menuOptions135 [2] = {130, 240};      // Yaw
+//      byte menuOptions136 [2] = {130, 240};      // Roll
+//      byte menuOptions137 [2] = {130, 240};      // Pitch
 
 
 //===============================
@@ -347,9 +327,11 @@ byte menuOptions149 [3] = {SYSTEM, 237, SYSTEM};      // Factory Reset  (149 sho
     byte menuOptions186 [2] = {187,241};            // Aux range limits 0
     byte menuOptions187 [2] = {188,241};            // Aux range limits 1
     byte menuOptions188 [2] = {189,241};            // Aux range limits 2
-    byte menuOptions189 [2] = {CTLCHECK,241};       // Aux range limits 3
+    byte menuOptions189 [2] = {191,241};            // Aux range limits 3
 
-// Need to show voltages here???? or on the Resister screen???
+
+    // 190 -- // Need to show voltages here???? or on the Resister screen???
+     byte menuOptions191 [1] = {CTLCHECK};       // Save data to EEPROM
     
     byte menuOptions192 [1] = {CTLCHECK};           // Control Check (make sure all surfaces & switches are homed. (Prevent flight by mistake) [no click (select) out of 192]
     byte menuOptions199 [1] = {INITMENU};           // Error, run INIT
@@ -413,6 +395,8 @@ byte menuOptions149 [3] = {SYSTEM, 237, SYSTEM};      // Factory Reset  (149 sho
       Data * data;   
       DataStore * dataStore;
       DisplayMask displayMask[4];
+
+      byte menuCarrotStart;
 
     // ===========================================
     // Screen RefreshTiming Vars
