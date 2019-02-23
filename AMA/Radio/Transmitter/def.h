@@ -315,7 +315,7 @@ const PROGMEM char lcd_param_lcdInit150_startUp [] = "Start up";
 // Splash   [no click 'select button' out to 151]
 const char  lcd_param_lcdInit151_qBytesWorld[] PROGMEM = "Q-Bytes World";
 const char  lcd_param_lcdInit151_deviceInfo [] PROGMEM = {"2.4G Transmitter"};
-const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.51"};
+const char  lcd_param_lcdInit151_versionNum [] PROGMEM = {"v1.1.52"};
 
 // X192: 
 // lcdInit192
