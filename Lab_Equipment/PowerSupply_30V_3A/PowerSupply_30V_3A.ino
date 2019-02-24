@@ -242,7 +242,9 @@ outAmp = adc1 * mxI;
   lcd.print("A ");
 
   // ===========================================================================================
-   
+  
+  setVolt = ((float)(int(setVolt * 1000))) / 1000; 
+  
   if (setVolt< 10.0){
     if (setVolt < 0.0)
       setVolt = 0.0;
@@ -265,7 +267,8 @@ outAmp = adc1 * mxI;
   lcd.print("A ");
   
   // ===========================================================================================
-  if (outVolt< 10.0){
+  outVolt = ((float)(int(outVolt * 1000))) / 1000; 
+  if (outVolt < 10.0){
     if (outVolt < 0.0)
       outVolt = 0.0;
     lcd.print(fmt.getFloat(outVolt, 1, 3));
